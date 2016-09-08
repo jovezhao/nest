@@ -22,6 +22,8 @@ public class RepositoryLoader<T extends EntityObject> implements IBuilder<T> {
             t = repository.getEntityById(id);
             EntityObjectCacheManager.put(t);
         }
+
+
         return t;
     }
 }
