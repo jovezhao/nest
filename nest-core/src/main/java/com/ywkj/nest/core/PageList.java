@@ -1,11 +1,14 @@
 package com.ywkj.nest.core;
 
+import java.util.List;
+
 /**
  * Created by Jove on 2016/9/9.
  */
 public class PageList<T> {
     private long totalCount;
     private long count;
+    private List<T> list;
 
     public long getTotalCount() {
         return totalCount;
@@ -29,5 +32,13 @@ public class PageList<T> {
             return totalCount / count;
         else
             return totalCount / count + 1;
+    }
+
+    public List<T> getList() {
+        return list;
+    }
+
+    public void setList(List<T> list) {
+        this.list = list;
     }
 }

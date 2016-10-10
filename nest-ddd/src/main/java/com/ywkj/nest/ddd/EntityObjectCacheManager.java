@@ -25,11 +25,13 @@ public class EntityObjectCacheManager {
     private static CacheClient cacheClient;
 
     public static void put(EntityObject entityObject) {
-        cacheClient.put(getCacheKey(entityObject), entityObject);
+        if (entityObject != null)
+            cacheClient.put(getCacheKey(entityObject), entityObject);
     }
 
     public static void remove(EntityObject entityObject) {
-        cacheClient.remove(getCacheKey(entityObject));
+        if (entityObject != null)
+            cacheClient.remove(getCacheKey(entityObject));
     }
 
     public static <T extends EntityObject> T get(Class<T> tClass, String id) {

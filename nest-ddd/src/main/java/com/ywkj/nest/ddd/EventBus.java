@@ -13,7 +13,7 @@ public class EventBus {
 
     private ILog logger = new LogAdapter(this.getClass());
     //通过注入的发布器策略指定事件总线通道，需要默认一种内存总线通道以提高系统内事件响应速度
-    @Autowired
+    //@Autowired
     private AbstractChannelProvider provider;
 
     public void setProvider(AbstractChannelProvider provider) {

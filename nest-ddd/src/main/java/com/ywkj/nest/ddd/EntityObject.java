@@ -52,6 +52,7 @@ public abstract class EntityObject implements Serializable {
             }
             if (t == null)
                 t = (T) Class.forName(clazz.getName()).newInstance();
+            t.setId(this.getId());
             t.setActor(this);
 
         } catch (Exception e) {
@@ -71,5 +72,13 @@ public abstract class EntityObject implements Serializable {
             tSet.add(t);
         }
         return tSet;
+    }
+
+    public void save() {
+        SpringUtils.getInstance(AbstractUnitOfWork.class).addEntityObject(this);
+    }
+
+    public void remove() {
+        SpringUtils.getInstance(AbstractUnitOfWork.class).removeEntityObject(this);
     }
 }

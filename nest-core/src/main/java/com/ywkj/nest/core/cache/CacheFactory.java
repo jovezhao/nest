@@ -24,13 +24,17 @@ public class CacheFactory {
     public CacheClient getCacheClient(String groupName) {
         if (strategies == null)
             strategies = new HashSet<>();
-        if (StringUtils.isEmpty(groupName)) groupName = "default";
+
         for (CacheGroupStrategy strategy : strategies) {
             if (groupName.equals(strategy.getName())) {
                 return new CacheClient(strategy.getName(), strategy);
             }
         }
 
-        throw new GeneralException("没有找到指定的缓存项", groupName);
+        CacheGroupStrategy defaultStrategy= new CacheGroupStrategy();
+        defaultStrategy.setName("default_strategy");
+        defaultStrategy.setIdleSeconds(1000);
+        defaultStrategy.setProvider(new DefaultCacheProvider());
+        return new CacheClient(defaultStrategy.getName(), defaultStrategy);
     }
 }

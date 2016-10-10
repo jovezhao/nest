@@ -1,5 +1,5 @@
 import com.ywkj.nest.core.utils.SpringUtils;
-import com.ywkj.nest.ddd.ApplicationServiceContext;
+import com.ywkj.nest.ddd.AbstractUnitOfWork;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +18,7 @@ public class DDDTest {
     @Autowired
     ApplicationContext applicationContext;
     @Autowired
-    ApplicationServiceContext appcontext;
+    AbstractUnitOfWork appcontext;
     @Before
     public void befor(){
         SpringUtils.setApplicationContext(applicationContext);

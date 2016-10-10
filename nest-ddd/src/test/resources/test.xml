@@ -17,5 +17,5 @@
     <bean name="defaultCacheProvider" class="com.ywkj.nest.core.cache.DefaultCacheProvider"></bean>
     <bean name="Person_Repository" class="PersonRepository"/>
     <bean name="Teacher_Repository" class="TeacherRepository"/>
-    <bean class="com.ywkj.nest.ddd.ApplicationServiceContext"/>
+    <bean class="com.ywkj.nest.ddd.AbstractUnitOfWork"/>
 </beans>
