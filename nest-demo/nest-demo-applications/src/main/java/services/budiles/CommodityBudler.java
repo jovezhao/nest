@@ -19,7 +19,7 @@ public class CommodityBudler implements IBuilder<Commodity> {
     }
 
     @Override
-    public Commodity build(Class<Commodity> commodityClass) throws BeanNotFoundException {
+    public Commodity build(Class<Commodity> commodityClass) {
         Commodity commodity = null;
 
         if (org.springframework.util.StringUtils.isEmpty(dto.getId())) {
