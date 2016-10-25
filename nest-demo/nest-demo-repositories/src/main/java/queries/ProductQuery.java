@@ -1,9 +1,8 @@
 package queries;
 
 import com.ywkj.nest.core.PageList;
-import domain.Commodity;
-import domain.Product;
-import org.springframework.beans.factory.annotation.Autowired;
+import models.Commodity;
+import models.Product;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

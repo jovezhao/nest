@@ -1,4 +1,4 @@
-package domain;
+package models;
 
 import com.ywkj.nest.ddd.AbstractRole;
 

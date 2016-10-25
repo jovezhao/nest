@@ -4,7 +4,7 @@
           xsi:schemaLocation="http://dozer.sourceforge.net
         http://dozer.sourceforge.net/schema/beanmapping.xsd">
     <mapping map-null="false">
-        <class-a>domain.Commodity</class-a>
+        <class-a>models.Commodity</class-a>
         <class-b>apis.ProductDto</class-b>
         <field>
             <a>actor.title</a>

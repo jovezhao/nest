@@ -1,7 +1,7 @@
 package queries;
 
 import com.ywkj.nest.core.PageList;
-import domain.Commodity;
+import models.Commodity;
 
 /**
  * Created by Jove on 2016/9/22.

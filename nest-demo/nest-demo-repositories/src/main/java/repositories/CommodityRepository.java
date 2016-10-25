@@ -1,12 +1,11 @@
 package repositories;
 
 import com.ywkj.nest.ddd.IRoleRepository;
-import domain.Commodity;
-import domain.Product;
+import models.Commodity;
+import models.Product;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**

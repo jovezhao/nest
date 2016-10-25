@@ -1,11 +1,10 @@
 package repositories;
 
 import com.ywkj.nest.ddd.IRepository;
-import domain.ShoppingCart;
+import models.ShoppingCart;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
-import java.util.Set;
 
 /**
  * Created by Jove on 2016/9/22.

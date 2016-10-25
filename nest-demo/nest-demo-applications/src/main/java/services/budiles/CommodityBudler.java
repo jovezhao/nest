@@ -3,10 +3,9 @@ package services.budiles;
 import apis.ProductDto;
 import com.ywkj.nest.core.identifier.IdentifierGenerator;
 import com.ywkj.nest.core.utils.MapUtils;
-import com.ywkj.nest.ddd.BeanNotFoundException;
 import com.ywkj.nest.ddd.IBuilder;
 import com.ywkj.nest.ddd.RepositoryLoader;
-import domain.Commodity;
+import models.Commodity;
 
 /**
  * Created by Jove on 2016/9/30.

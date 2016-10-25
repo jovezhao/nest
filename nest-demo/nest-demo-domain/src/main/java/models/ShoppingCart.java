@@ -1,7 +1,6 @@
-package domain;
+package models;
 
 import com.ywkj.nest.ddd.EntityObject;
-import com.ywkj.nest.ddd.ValueObject;
 
 import java.util.HashSet;
 import java.util.Set;
