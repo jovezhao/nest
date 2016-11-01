@@ -16,11 +16,10 @@
     </bean>
     <bean class="com.ywkj.nest.ddd.EventBus">
         <property name="provider">
-            <bean class="com.ywkj.nest.rabbitmq.RabbitChannelProvider">
-                <constructor-arg value="127.0.0.1" name="host"/>
-                <constructor-arg value="5612" name="port"/>
-                <constructor-arg value="user" name="user"/>
-                <constructor-arg value="pwd" name="pwd"/>
+            <bean class="com.ywkj.nest.kafka.KafkaChannelProvider">
+                <property name="brokers" value="192.168.0.244:9092"></property>
+                <property name="zkconnect" value="192.168.0.244:2181,192.168.0.244:2182,192.168.0.244:2183"></property>
+                <property name="prefetchCount" value="1"></property>
             </bean>
         </property>
     </bean>
