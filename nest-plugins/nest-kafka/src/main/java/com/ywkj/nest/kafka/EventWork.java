@@ -15,7 +15,7 @@ class EventWork {
         return eventName;
     }
     public  String getHandlerName(){
-        return  this.handler.getClass().getName();
+        return  this.handler.getClass().getSimpleName();
     }
 
     public boolean doWork(Object object) {
