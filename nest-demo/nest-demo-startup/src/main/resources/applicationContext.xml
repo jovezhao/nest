@@ -29,7 +29,7 @@
 
     <context:annotation-config/>
     <context:component-scan base-package="services"/>
-    <context:component-scan base-package="repositories"/>
+    <context:component-scan base-package="models"/>
     <context:component-scan base-package="queries"/>
 
 

@@ -66,7 +66,7 @@ public class KafkaChannelProvider extends AbstractChannelProvider {
         status = true;
         EventWork work = new EventWork(eventName, handler);
 
-        consumer = new KafkaConsumer(eventName, work, prefetchCount);
+        consumer = new KafkaConsumer(zkconnect, work, prefetchCount);
 
         Thread workThread = new Thread(consumer);
         workThread.start();

@@ -12,7 +12,7 @@ public abstract class AbstractRole<T extends EntityObject> extends EntityObject 
         return actor;
     }
 
-    public void setActor(T actor) {
+    void setActor(T actor) {
         this.actor = actor;
     }
 

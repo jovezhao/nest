@@ -1,7 +1,6 @@
-package repositories;
+package models;
 
 import com.ywkj.nest.ddd.IRepository;
-import models.Product;
 import org.springframework.stereotype.Repository;
 
 

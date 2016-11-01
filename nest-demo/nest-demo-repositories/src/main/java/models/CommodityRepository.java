@@ -1,8 +1,6 @@
-package repositories;
+package models;
 
 import com.ywkj.nest.ddd.IRoleRepository;
-import models.Commodity;
-import models.Product;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -16,12 +14,13 @@ public class CommodityRepository implements IRoleRepository<Commodity> {
     static HashMap<String, Commodity> hashMap = new HashMap<>();
 
     static {
-        Commodity commodity = new Commodity();
-        commodity.setPrice(100);
-        commodity.setId("commodityId");
+
+
         Product product = new Product();
         product.setPic("pppiiiccc");
-        commodity.setActor(product);
+        Commodity commodity =product.act(Commodity.class,null);
+        commodity.setPrice(100);
+        commodity.setId("commodityId");
         hashMap.put("commodityId", commodity);
     }
 
