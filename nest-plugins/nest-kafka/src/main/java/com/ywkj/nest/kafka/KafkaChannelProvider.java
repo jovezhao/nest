@@ -8,12 +8,14 @@ import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 
 import kafka.producer.ProducerConfig;
+import org.springframework.stereotype.Service;
 
 import java.util.Properties;
 
 /**
  * Created by Jove on 2016/7/27.
  */
+
 public class KafkaChannelProvider extends AbstractChannelProvider {
 
 
@@ -22,6 +24,30 @@ public class KafkaChannelProvider extends AbstractChannelProvider {
     private int prefetchCount;
     private volatile boolean status;
 
+
+    public String getZkconnect() {
+        return zkconnect;
+    }
+
+    public void setZkconnect(String zkconnect) {
+        this.zkconnect = zkconnect;
+    }
+
+    public String getBrokers() {
+        return brokers;
+    }
+
+    public void setBrokers(String brokers) {
+        this.brokers = brokers;
+    }
+
+    public int getPrefetchCount() {
+        return prefetchCount;
+    }
+
+    public void setPrefetchCount(int prefetchCount) {
+        this.prefetchCount = prefetchCount;
+    }
 
     @Override
     public void publish(String eventName, Object data) {
