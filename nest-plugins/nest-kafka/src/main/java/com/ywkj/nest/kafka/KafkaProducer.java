@@ -42,6 +42,7 @@ public class KafkaProducer {
         props.put("zk.connect", zkconnect);
         props.put("serializer.class", StringEncoder.class.getName());
         props.put("metadata.broker.list", brokers);
+
         ProducerConfig config = new ProducerConfig(props);
         Producer<String, String> producer = new Producer<String, String>(new ProducerConfig(props));
         return producer;

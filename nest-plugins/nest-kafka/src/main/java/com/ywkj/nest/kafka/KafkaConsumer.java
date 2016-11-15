@@ -40,6 +40,8 @@ public class KafkaConsumer implements Runnable {
     public void stop(){
         this.status=false;
     }
+
+
     @Override
     public void run() {
         status=true;
@@ -59,6 +61,7 @@ public class KafkaConsumer implements Runnable {
                     boolean flag = false;
                     try {
                         flag = work.doWork(dto);
+                        consumer.commitOffsets();
                     } catch (GeneralException e) {
                         //处理消息失败
                         logger.error(e);
@@ -78,9 +81,9 @@ public class KafkaConsumer implements Runnable {
 //        properties.put("group.id","spread-event-group");// 必须要使用别的组名称， 如果生产者和消费者都在同一组，则不能访问同一组内的topic数据
 
 
-        properties.put("auto.offset.reset", "smallest"); //必须要加，如果要读旧数据
-        properties.put("zookeeper.connect", "192.168.0.244:2181");
-        properties.put("group.id", "pv");
+//        properties.put("auto.offset.reset", "smallest"); //必须要加，如果要读旧数据
+        properties.put("zookeeper.connect", zkconnect);
+        properties.put("group.id", work.getHandlerName());
         properties.put("zookeeper.session.timeout.ms", "400");
         properties.put("zookeeper.sync.time.ms", "200");
         properties.put("auto.commit.interval.ms", "1000");

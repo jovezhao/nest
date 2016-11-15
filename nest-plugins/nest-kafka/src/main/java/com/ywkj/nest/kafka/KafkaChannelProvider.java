@@ -70,6 +70,7 @@ public class KafkaChannelProvider extends AbstractChannelProvider {
 
         Thread workThread = new Thread(consumer);
         workThread.start();
+//        workThread.run();
 
     }
 
