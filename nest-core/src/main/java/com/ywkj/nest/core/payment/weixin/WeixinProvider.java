@@ -1,10 +1,10 @@
 package com.ywkj.nest.core.payment.weixin;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 import com.ywkj.nest.core.exception.GeneralException;
 import com.ywkj.nest.core.payment.PaymentProvider;
 import com.ywkj.nest.core.payment.TradeOrder;
+import com.ywkj.nest.core.utils.JSONTools;
 import com.ywkj.nest.core.utils.encrypt.MD5Util;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -226,8 +226,7 @@ public class WeixinProvider implements PaymentProvider {
 
 
             result.put("sign", getSign());
-            Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-            return gson.toJson(result);
+            return JSONTools.toJsonString(result);
         }
 
         public String getSign() {
