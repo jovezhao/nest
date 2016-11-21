@@ -49,6 +49,7 @@ public abstract class AbstractUnitOfWork implements IUnitOfWork {
                         r.remove(entityObject);
                 }
             }
+            list.clear();
         } catch (Exception ex) {
             rollback();
         }
