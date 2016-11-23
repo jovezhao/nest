@@ -1,10 +1,10 @@
 package com.ywkj.nest.kafka;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 import com.ywkj.nest.core.exception.GeneralException;
 import com.ywkj.nest.core.log.ILog;
 import com.ywkj.nest.core.log.LogAdapter;
+import com.ywkj.nest.core.utils.JSONTools;
 import com.ywkj.nest.ddd.IEventHandler;
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
@@ -45,7 +45,7 @@ public class KafkaConsumer implements Runnable {
     @Override
     public void run() {
         status=true;
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        //Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         ConsumerConnector consumer = createConsumer();
         Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
         topicCountMap.put(work.getEventName(), 1); // 一次从主题中获取一个数据
@@ -57,7 +57,7 @@ public class KafkaConsumer implements Runnable {
                 ConsumerIterator<byte[], byte[]> iterator = stream.iterator();
                 while (iterator.hasNext()) {
                     String json = new String(iterator.next().message());
-                    EventDataDto dto = gson.fromJson(json, EventDataDto.class);
+                    EventDataDto dto = (EventDataDto) JSONTools.toObj(json, EventDataDto.class);
                     boolean flag = false;
                     try {
                         flag = work.doWork(dto);

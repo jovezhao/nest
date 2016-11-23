@@ -1,7 +1,5 @@
 package com.ywkj.nest.kafka;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.ywkj.nest.ddd.AbstractChannelProvider;
 import com.ywkj.nest.ddd.IEventHandler;
 import kafka.javaapi.producer.Producer;
