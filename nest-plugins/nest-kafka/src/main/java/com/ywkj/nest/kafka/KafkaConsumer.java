@@ -52,7 +52,7 @@ public class KafkaConsumer implements Runnable {
         while (status) { //循环读取队列中的数据
             Map<String, List<KafkaStream<byte[], byte[]>>> messageStreams = consumer.createMessageStreams(topicCountMap);
 
-//            for (KafkaStream<byte[], byte[]> stream : messageStreams.get(work.getEventName())) {
+            //for (KafkaStream<byte[], byte[]> stream : messageStreams.get(work.getEventName())) {
                 KafkaStream<byte[], byte[]> stream = messageStreams.get(work.getEventName()).get(0);// 获取每次接收到的这个数据
                 ConsumerIterator<byte[], byte[]> iterator = stream.iterator();
                 while (iterator.hasNext()) {
@@ -71,8 +71,9 @@ public class KafkaConsumer implements Runnable {
                     }
                 }
 
-            }
-//        }
+          //  }
+            consumer.shutdown();
+        }
     }
 
     private ConsumerConnector createConsumer() {

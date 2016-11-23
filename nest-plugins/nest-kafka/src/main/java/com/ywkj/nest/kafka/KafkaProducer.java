@@ -32,6 +32,8 @@ public class KafkaProducer {
         //Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         KeyedMessage<String, String> keyedMessage = new KeyedMessage<String, String>(eventName,JSONTools.toJsonString(object));
         producer.send(keyedMessage);
+
+        producer.close();
     }
 
     private Producer<String, String> createProducer() {
