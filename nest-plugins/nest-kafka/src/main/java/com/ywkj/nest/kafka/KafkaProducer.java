@@ -1,5 +1,7 @@
 package com.ywkj.nest.kafka;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ywkj.nest.core.utils.JSONTools;
 import kafka.common.Topic;
 import kafka.javaapi.producer.Producer;
@@ -29,8 +31,8 @@ public class KafkaProducer {
     public void publish(String eventName, Serializable object) {
         Producer<String, String> producer = createProducer();
 
-        //Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-        KeyedMessage<String, String> keyedMessage = new KeyedMessage<String, String>(eventName,JSONTools.toJsonString(object));
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        KeyedMessage<String, String> keyedMessage = new KeyedMessage<String, String>(eventName,gson.toJson(object));
         producer.send(keyedMessage);
 
         producer.close();
