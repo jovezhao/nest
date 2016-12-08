@@ -72,8 +72,9 @@ public class KafkaConsumer implements Runnable {
                 }
 
           //  }
-            consumer.shutdown();
+
         }
+        consumer.shutdown();
     }
 
     private ConsumerConnector createConsumer() {
