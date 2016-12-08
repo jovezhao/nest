@@ -26,7 +26,7 @@ public class EventBus {
      * @param event
      */
     public void publish(ServiceEvent event) {
-        logger.info("发布事件", event.getEventName(), event.getData());
+        logger.info("nimeia", event.getEventName(), event.getData());
         provider.publish(event.getEventName(), event.getData());
     }
 
