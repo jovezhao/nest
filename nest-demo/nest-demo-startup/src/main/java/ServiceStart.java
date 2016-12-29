@@ -24,18 +24,18 @@ public class ServiceStart {
                 "classpath*:applicationContext.xml"
         });
         SpringUtils.setApplicationContext(applicationContext);
-        EventBus eventBus = SpringUtils.getInstance(EventBus.class);
-        eventBus.publish(ServiceEvent.createEvent("test", "aaaa"));
-        testHandler handler = new testHandler();
-        eventBus.registerHandler(handler);
+//        EventBus eventBus = SpringUtils.getInstance(EventBus.class);
+//        eventBus.publish(ServiceEvent.createEvent("test", "aaaa"));
+//        testHandler handler = new testHandler();
+//        eventBus.registerHandler(handler);
 
 
-//
-//
-//        IProductService service = SpringUtils.getInstance(IProductService.class);
-//        // region 这里直接模拟客户端调用接口
-//        service.addInCart("commodityId");
-//        // endregion
+
+
+        IProductService service = SpringUtils.getInstance(IProductService.class);
+        // region 这里直接模拟客户端调用接口
+        service.addInCart("commodityId");
+        // endregion
 //
 //        // region 这里模拟查询列表
 //        PageList<ProductDto> productDtoPageList = service.getProducts("test", 0, 3);

@@ -17,7 +17,8 @@ public class SpringAspect {
             result = joinpoint.proceed();
             unitOfWork.commit();
 
-        } catch (Throwable throwable) {
+        }
+        catch (Throwable throwable) {
             throwable.printStackTrace();
             unitOfWork.rollback();
         }

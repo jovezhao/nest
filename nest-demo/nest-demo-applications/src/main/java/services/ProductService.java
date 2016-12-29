@@ -51,7 +51,7 @@ public class ProductService implements IProductService {
         cart.add(commodity, 1);
 
         cart.save();
-        eventBus.publish(ServiceEvent.createEvent("addInCart", commodityId));
+       eventBus.publish(ServiceEvent.createEvent("addInCart", commodityId));
     }
 
     @Override

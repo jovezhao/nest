@@ -4,10 +4,12 @@ import com.ywkj.nest.core.exception.CustomException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.Serializable;
+
 /**
  * Created by Jove on 2016-03-17.
  */
-public class LogAdapter implements ILog {
+public class LogAdapter implements ILog ,Serializable {
     Logger logger;
 
     public LogAdapter(Class clazz) {
