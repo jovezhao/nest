@@ -23,7 +23,7 @@
             </bean>
         </property>
     </bean>
-    <bean id="springAspect" class="SpringAspect"/>
+    <bean id="springAspect" class="com.ywkj.nest.ddd.SpringAspect"/>
     <bean class="TestUnitOfWork"/>
 
     <context:annotation-config/>

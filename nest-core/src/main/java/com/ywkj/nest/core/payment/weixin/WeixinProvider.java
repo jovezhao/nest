@@ -185,7 +185,7 @@ public class WeixinProvider implements PaymentProvider {
 
 
             ArrayList<String> list = new ArrayList<String>();
-            for (Entry<String, String> entry : this.entrySet()) {
+            for (Map.Entry<String, String> entry : this.entrySet()) {
                 if (entry.getValue() != "") {
 
                     list.add(entry.getKey() + "=" + entry.getValue() + "&");
@@ -207,7 +207,7 @@ public class WeixinProvider implements PaymentProvider {
         public String getData() {
             Document document = DocumentHelper.createDocument();
             Element root = DocumentHelper.createElement("xml");
-            for (Entry<String, String> p : this.entrySet()) {
+            for (Map.Entry<String, String> p : this.entrySet()) {
                 Element cp = DocumentHelper.createElement(p.getKey());
                 //cp.setText(p.getValue());
                 cp.addCDATA(p.getValue());

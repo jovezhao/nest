@@ -13,10 +13,7 @@ import org.dom4j.Node;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Jove on 2016-02-22.
@@ -98,7 +95,7 @@ public class AlipayProvider implements PaymentProvider {
 
 
             ArrayList<String> list = new ArrayList<String>();
-            for (Entry<String, String> entry : this.entrySet()) {
+            for (Map.Entry<String, String> entry : this.entrySet()) {
                 if (entry.getValue() != "") {
                     list.add(entry.getKey() + "=" + entry.getValue() + "&");
                 }

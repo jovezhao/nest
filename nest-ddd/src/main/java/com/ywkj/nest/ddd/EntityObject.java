@@ -47,7 +47,7 @@ public abstract class EntityObject implements Serializable {
         T t = null;
         try {
             if (!StringUtils.isEmpty(roleId)) {
-                IRoleRepository<T> repository = SpringUtils.getInstance(IRoleRepository.class);
+                IRoleRepository<T> repository = SpringUtils.getInstance(IRoleRepository.class, clazz.getSimpleName() + "_Repository");
                 t = repository.getEntityById(roleId);
             }
             if (t == null)
