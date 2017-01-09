@@ -37,8 +37,8 @@ public abstract class AbstractUnitOfWork implements IUnitOfWork {
                 Map.Entry<EntityObject, OperateEnum> entry = (Map.Entry) iter.next();
                 EntityObject entityObject = entry.getKey();
                 OperateEnum operate = entry.getValue();
-                //约定各实体仓储的实现在IOC容器中以"实体类名_Repository"为标识
-                IRepository r = SpringUtils.getInstance(IRepository.class, entityObject.getClass().getSimpleName() + "_Repository");
+//
+                IRepository r = RepositoryFactory.createEntityRepository(entityObject.getClass());
                 switch (operate) {
                     case save:
                         EntityObjectCacheManager.put(entityObject);
