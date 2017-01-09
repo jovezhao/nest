@@ -50,8 +50,10 @@ public abstract class EntityObject implements Serializable {
                 IRoleRepository<T> repository = SpringUtils.getInstance(IRoleRepository.class, clazz.getSimpleName() + "_Repository");
                 t = repository.getEntityById(roleId);
             }
-            if (t == null)
-                t = (T) Class.forName(clazz.getName()).newInstance();
+            if (t == null) {
+//                t = (T) Class.forName(clazz.getName()).newInstance();
+                t = EntityObjectFactory.create(clazz); //使用动态代理的方式生成实体。
+            }
             t.setId(this.getId());
             t.setActor(this);
 
