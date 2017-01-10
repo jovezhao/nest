@@ -50,7 +50,6 @@ public class ProductService implements IProductService {
         ShoppingCart cart = cartIBuilder.build(ShoppingCart.class);
         cart.add(commodity, 1);
 
-        cart.save();
        eventBus.publish(ServiceEvent.createEvent("addInCart", commodityId));
     }
 
@@ -72,6 +71,5 @@ public class ProductService implements IProductService {
     public void newProduct(ProductDto dto) throws BeanNotFoundException {
         IBuilder<Commodity> builder = new CommodityBudler(dto);
         Commodity commodity = builder.build(Commodity.class);
-        commodity.save();
     }
 }

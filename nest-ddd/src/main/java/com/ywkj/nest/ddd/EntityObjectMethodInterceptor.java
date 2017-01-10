@@ -40,8 +40,9 @@ public class EntityObjectMethodInterceptor implements MethodInterceptor, Seriali
             Field field = EntityObject.class.getDeclaredField("isLoad");
             field.setAccessible(true);
             if (!field.getBoolean(obj)) {
-                EntityObject entityObject = (EntityObject) obj;
-                entityObject.save();
+                Method method1=EntityObject.class.getDeclaredMethod("save");
+                method1.setAccessible(true);
+                method1.invoke(obj);
             }
         }
         return result;

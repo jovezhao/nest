@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 类型转换时使用
  * Created by Jove on 2016/9/26.
  */
 public class MapUtils {
