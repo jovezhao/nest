@@ -7,6 +7,7 @@ import com.ywkj.nest.ddd.EntityObjectFactory;
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
 import org.apache.ibatis.reflection.factory.ObjectFactory;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
@@ -29,6 +30,13 @@ public class NestObjectFactory extends DefaultObjectFactory {
                 arrayObject = constructorArgs.toArray(new Object[constructorArgs.size()]);
 
             T t = EntityObjectFactory.create(type, arrayClazz, arrayObject);
+            try {
+                Field field=EntityObject.class.getDeclaredField("isLoad");
+                field.setAccessible(true);
+                field.set(t,true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return t;
         } else {
             return super.create(type, constructorArgTypes, constructorArgs);

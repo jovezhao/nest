@@ -5,13 +5,14 @@ import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
 
 /**
  * Created by Jove on 2017/1/9.
  */
-public class EntityObjectMethodInterceptor implements MethodInterceptor,Serializable {
+public class EntityObjectMethodInterceptor implements MethodInterceptor, Serializable {
 
     private Enhancer enhancer = new Enhancer();
 
@@ -36,8 +37,12 @@ public class EntityObjectMethodInterceptor implements MethodInterceptor,Serializ
         Object result = proxy.invokeSuper(obj, args);
 
         if (method.getName().startsWith("set")) {
-            EntityObject entityObject = (EntityObject) obj;
-            entityObject.save();
+            Field field = EntityObject.class.getDeclaredField("isLoad");
+            field.setAccessible(true);
+            if (!field.getBoolean(obj)) {
+                EntityObject entityObject = (EntityObject) obj;
+                entityObject.save();
+            }
         }
         return result;
     }

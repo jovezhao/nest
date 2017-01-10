@@ -16,6 +16,8 @@ import java.util.Set;
  */
 public abstract class EntityObject implements Serializable {
 
+    private boolean isLoad;
+
     ILog logger = new LogAdapter(this.getClass());
     /**
      * 唯一ID
@@ -67,7 +69,7 @@ public abstract class EntityObject implements Serializable {
 
     public <T extends AbstractRole> Set<T> findRoles(Class<T> clazz) {
 
-        IRoleRepository<T> repository = SpringUtils.getInstance(IRoleRepository.class);
+        IRoleRepository<T> repository = RepositoryFactory.createRoleRepository(clazz);
         Set<String> ids = repository.getRoleIds(this.id);
         Set<T> tSet = new HashSet<>();
         for (String id : ids) {
