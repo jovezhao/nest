@@ -1,5 +1,6 @@
 package com.ywkj.nest.ddd;
 
+import com.ywkj.nest.core.identifier.IdentifierGenerator;
 import com.ywkj.nest.core.log.ILog;
 import com.ywkj.nest.core.log.LogAdapter;
 import com.ywkj.nest.core.utils.SpringUtils;
@@ -56,8 +57,10 @@ public abstract class EntityObject implements Serializable {
             if (t == null) {
 //                t = (T) Class.forName(clazz.getName()).newInstance();
                 t = EntityObjectFactory.create(clazz); //使用动态代理的方式生成实体。
+                String rid = new IdentifierGenerator().generate(clazz);
+                t.setId(rid);
             }
-            t.setId(this.getId());
+
             t.setActor(this);
 
         } catch (Exception e) {
@@ -79,8 +82,14 @@ public abstract class EntityObject implements Serializable {
         return tSet;
     }
 
-    private void save() {
+    @Deprecated
+    public void save() {
         SpringUtils.getInstance(AbstractUnitOfWork.class).addEntityObject(this);
+    }
+
+    @Deprecated
+    public void remove() {
+        delete();
     }
 
     public void delete() {

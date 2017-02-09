@@ -5,7 +5,7 @@ import com.ywkj.nest.core.utils.SpringUtils;
 /**
  * Created by Jove on 2017/1/9.
  */
-public class RepositoryFactory {
+class RepositoryFactory {
     public static <T extends EntityObject> IRepository<T> createEntityRepository(Class<T> tClass) {
         String className = tClass.getSimpleName();
         String repName = null;

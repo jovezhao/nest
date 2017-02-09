@@ -24,6 +24,7 @@ public class EntityObjectMethodInterceptor implements MethodInterceptor, Seriali
         // 设置需要创建子类的类
         enhancer.setSuperclass(clazz);
         enhancer.setCallback(this);
+
         if (constructorArgTypes == null || constructorArgs == null)
             return enhancer.create();
         else

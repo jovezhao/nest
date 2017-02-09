@@ -1,5 +1,8 @@
 import com.ywkj.nest.ddd.EntityObjectFactory;
 
+import com.ywkj.nest.ddd.IBuilder;
+import com.ywkj.nest.ddd.IRoleBuilder;
+import com.ywkj.nest.ddd.RoleRepositoryLoader;
 import org.junit.Test;
 
 /**
@@ -9,9 +12,9 @@ public class TestAutoSave {
 
     @Test
     public void autoSave() {
-        Person person = EntityObjectFactory.create(Person.class);
-        Teacher teacher= person.act(Teacher.class,null);
-        teacher.setSubject("fff");
+        IRoleBuilder<Teacher,Person> bu = new RoleRepositoryLoader<Teacher, Person>();
+        Teacher t = bu.build(Teacher.class,Person.class,"ss");
+
     }
 
 }

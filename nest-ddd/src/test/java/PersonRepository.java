@@ -40,6 +40,11 @@ class TeacherRepository implements IRoleRepository<Teacher> {
     }
 
     @Override
+    public String getActorIdByRoleId(String roleId) {
+        return null;
+    }
+
+    @Override
     public Teacher getEntityById(String id) {
         return list.get(id);
     }
