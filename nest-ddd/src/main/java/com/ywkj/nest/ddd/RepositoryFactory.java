@@ -6,23 +6,25 @@ import com.ywkj.nest.core.utils.SpringUtils;
  * Created by Jove on 2017/1/9.
  */
 class RepositoryFactory {
-    public static <T extends EntityObject> IRepository<T> createEntityRepository(Class<T> tClass) {
-        String className = tClass.getSimpleName();
-        String repName = null;
-        if (className.indexOf('$') > 0)
-            repName = className.substring(0, className.indexOf('$')) + "_Repository";
-        else
-            repName = className + "_Repository";
-        return SpringUtils.getInstance(IRepository.class, repName);
+    private static String getRepName(Class tClass) {
+        return tClass.getSimpleName().split("\\$")[0] + "_Repository";
     }
 
-    public static <T extends AbstractRole> IRoleRepository<T> createRoleRepository(Class<T> tClass) {
-        String className = tClass.getSimpleName();
-        String repName = null;
-        if (className.indexOf('$') > 0)
-            repName = className.substring(0, className.indexOf('$')) + "_Repository";
-        else
-            repName = className + "_Repository";
-        return SpringUtils.getInstance(IRoleRepository.class, repName);
+    public static IRepository createEntityRepository(Class clazz) {
+        if (clazz.equals(EntityObject.class)) return null;
+        String repName = getRepName(clazz);
+        IRepository repository = SpringUtils.getInstance(IRepository.class, repName);
+        if (repository == null)
+            return createEntityRepository(clazz.getSuperclass());
+        return repository;
+    }
+
+    public static IRoleRepository createRoleRepository(Class clazz) {
+        if (clazz.equals(EntityObject.class)) return null;
+        String repName = getRepName(clazz);
+        IRoleRepository repository = SpringUtils.getInstance(IRoleRepository.class, repName);
+        if (repository == null)
+            return createRoleRepository(clazz.getSuperclass());
+        return repository;
     }
 }

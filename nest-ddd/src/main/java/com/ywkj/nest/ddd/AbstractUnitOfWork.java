@@ -16,14 +16,24 @@ import java.util.Map;
 public abstract class AbstractUnitOfWork implements IUnitOfWork {
 
 
-    private HashMap<EntityObject, OperateEnum> list = new LinkedHashMap<>();
+    private static ThreadLocal<HashMap<EntityObject, OperateEnum>> threadLocal = new ThreadLocal<>();
+
+
+    private HashMap<EntityObject, OperateEnum> getmap(){
+        HashMap<EntityObject, OperateEnum> hashMap=threadLocal.get();
+        if(threadLocal.get()==null){
+            hashMap=new HashMap<>();
+            threadLocal.set(hashMap);
+        }
+        return hashMap;
+    }
 
     public void addEntityObject(EntityObject entityObject) {
-        list.put(entityObject, OperateEnum.save);
+        getmap().put(entityObject, OperateEnum.save);
     }
 
     public void removeEntityObject(EntityObject entityObject) {
-        list.put(entityObject, OperateEnum.remove);
+        getmap().put(entityObject, OperateEnum.remove);
     }
 
     protected abstract void beforeCommit();
@@ -32,12 +42,12 @@ public abstract class AbstractUnitOfWork implements IUnitOfWork {
 
         beforeCommit();
         try {
-            Iterator iter = list.entrySet().iterator();
+            Iterator iter = getmap().entrySet().iterator();
             while (iter.hasNext()) {
                 Map.Entry<EntityObject, OperateEnum> entry = (Map.Entry) iter.next();
                 EntityObject entityObject = entry.getKey();
                 OperateEnum operate = entry.getValue();
-//
+
                 IRepository r = RepositoryFactory.createEntityRepository(entityObject.getClass());
                 switch (operate) {
                     case save:
@@ -49,7 +59,7 @@ public abstract class AbstractUnitOfWork implements IUnitOfWork {
                         r.remove(entityObject);
                 }
             }
-            list.clear();
+            getmap().clear();
         } catch (Exception ex) {
             rollback();
         }

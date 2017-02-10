@@ -72,7 +72,7 @@ public class PageListPlugin implements Interceptor {
                 //获取当前要执行的Sql语句，也就是我们直接在Mapper映射语句中写的Sql语句
                 String sql = boundSql.getSql();
                 //给当前的page参数对象设置总记录数
-                this.setTotalRecord(pageParames,
+                this.setTotalRecord(boundSql,
                         mappedStatement, connection);
                 //获取分页Sql语句
                 String pageSql = this.getPageSql(pageParames, sql);
@@ -83,20 +83,23 @@ public class PageListPlugin implements Interceptor {
             return invocation.proceed();
         } else {
             //ResultSetHandler对返回的结果进行改造
+            if (tp.get() == null) return invocation.proceed();
+
             PageList p = new PageList();
             List list = (List) invocation.proceed();
             p.setList(list);
             p.setCount(tp.get().getCount());
             p.setTotalCount(tl.get());
-
+            tp.remove();
+            tl.remove();
             return p;
         }
     }
 
-    private void setTotalRecord(PageParames page, MappedStatement mappedStatement, Connection connection) {
+    private void setTotalRecord(BoundSql boundSql, MappedStatement mappedStatement, Connection connection) {
         //获取对应的BoundSql，这个BoundSql其实跟我们利用StatementHandler获取到的BoundSql是同一个对象。
         //delegate里面的boundSql也是通过mappedStatement.getBoundSql(paramObj)方法获取到的。
-        BoundSql boundSql = mappedStatement.getBoundSql(page);
+//        BoundSql boundSql = mappedStatement.getBoundSql(page);
         //获取到我们自己写在Mapper映射语句中对应的Sql语句
         String sql = boundSql.getSql();
         //通过查询Sql语句获取到对应的计算总记录数的sql语句
@@ -104,9 +107,9 @@ public class PageListPlugin implements Interceptor {
         //通过BoundSql获取对应的参数映射
         List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
         //利用Configuration、查询记录数的Sql语句countSql、参数映射关系parameterMappings和参数对象page建立查询记录数对应的BoundSql对象。
-        BoundSql countBoundSql = new BoundSql(mappedStatement.getConfiguration(), countSql, parameterMappings, page);
+        BoundSql countBoundSql = new BoundSql(mappedStatement.getConfiguration(), countSql, parameterMappings, boundSql.getParameterObject());
         //通过mappedStatement、参数对象page和BoundSql对象countBoundSql建立一个用于设定参数的ParameterHandler对象
-        ParameterHandler parameterHandler = new DefaultParameterHandler(mappedStatement, page, countBoundSql);
+        ParameterHandler parameterHandler = new DefaultParameterHandler(mappedStatement, boundSql.getParameterObject(), countBoundSql);
         //通过connection建立一个countSql对应的PreparedStatement对象。
         PreparedStatement pstmt = null;
         ResultSet rs = null;
