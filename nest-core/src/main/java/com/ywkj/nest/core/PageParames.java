@@ -4,25 +4,24 @@ package com.ywkj.nest.core;
  * Created by Jove on 2017/2/8.
  */
 public class PageParames {
-    private PageParames(long startIndex, int count) {
-        this.startIndex = startIndex;
-        this.count = count;
+    private PageParames(int pageIndex, int pageSize) {
+        this.pageIndex = pageIndex;
+        this.pageSize = pageSize;
     }
 
-    public static PageParames create(long startIndex, int pageSize) {
-        return new PageParames(startIndex, pageSize);
+    public static PageParames create(int pageIndex, int pageSize) {
+        return new PageParames(pageIndex, pageSize);
     }
 
-    private long startIndex;
-    private int count;
+    private int pageIndex;
+    private int pageSize;
 
 
-    public long getStartIndex() {
-        return startIndex;
+    public int getPageIndex() {
+        return pageIndex;
     }
 
-    public int getCount() {
-        return count;
+    public int getPageSize() {
+        return pageSize;
     }
-
 }

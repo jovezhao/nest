@@ -88,7 +88,7 @@ public class PageListPlugin implements Interceptor {
             PageList p = new PageList();
             List list = (List) invocation.proceed();
             p.setList(list);
-            p.setCount(tp.get().getCount());
+            p.setPageSize(tp.get().getPageSize());
             p.setTotalCount(tl.get());
             tp.remove();
             tl.remove();
@@ -141,7 +141,7 @@ public class PageListPlugin implements Interceptor {
 
     private String getPageSql(PageParames page, String sql) {
         StringBuffer sqlBuffer = new StringBuffer(sql);
-        sqlBuffer.append(" limit ").append(page.getStartIndex()).append(",").append(page.getCount());
+        sqlBuffer.append(" limit ").append((page.getPageIndex() - 1) * page.getPageSize()).append(",").append(page.getPageSize());
         return sqlBuffer.toString();
     }
 

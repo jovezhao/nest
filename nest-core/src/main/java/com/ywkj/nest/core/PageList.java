@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class PageList<T> implements List<T> {
     private long totalCount;
-    private long count;
+    private int pageSize;
     private List<T> list;
 
     public long getTotalCount() {
@@ -18,20 +18,20 @@ public class PageList<T> implements List<T> {
         this.totalCount = totalCount;
     }
 
-    public long getCount() {
-        return count;
+    public int getPageSize() {
+        return pageSize;
     }
 
-    public void setCount(long count) {
-        this.count = count;
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 
     public long getTotalPage() {
-        long residue = totalCount % count;
+        long residue = totalCount % pageSize;
         if (residue == 0)
-            return totalCount / count;
+            return totalCount / pageSize;
         else
-            return totalCount / count + 1;
+            return totalCount / pageSize + 1;
     }
 
     public List<T> getList() {
