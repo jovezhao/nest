@@ -9,13 +9,13 @@ public class PageParames {
         this.count = count;
     }
 
-    public static PageParames create(long startIndex, int count) {
-        return new PageParames(startIndex, count);
+    public static PageParames create(long startIndex, int pageSize) {
+        return new PageParames(startIndex, pageSize);
     }
 
     private long startIndex;
     private int count;
-    private int totalCount;
+
 
     public long getStartIndex() {
         return startIndex;
@@ -25,7 +25,4 @@ public class PageParames {
         return count;
     }
 
-    public int getTotalCount() {
-        return totalCount;
-    }
 }

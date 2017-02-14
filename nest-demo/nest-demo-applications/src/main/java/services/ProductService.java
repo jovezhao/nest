@@ -11,7 +11,6 @@ import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import queries.IProductQuery;
-import services.budiles.CommodityBudler;
 
 import java.util.List;
 
@@ -43,11 +42,11 @@ public class ProductService implements IProductService {
 
     public void addInCart(String commodityId) throws BeanNotFoundException {
         //获取具体的商品信息
-        IBuilder<Commodity> builder = new RepositoryLoader<>(commodityId);
-        Commodity commodity = builder.build(Commodity.class);
+        IBuilder<Commodity> builder = new RepositoryLoader<>();
+        Commodity commodity = builder.build(Commodity.class,commodityId);
         //通过用户获取用户的购物车
-        IBuilder<ShoppingCart> cartIBuilder = new RepositoryLoader<>(getUserId());
-        ShoppingCart cart = cartIBuilder.build(ShoppingCart.class);
+        IBuilder<ShoppingCart> cartIBuilder = new RepositoryLoader<>();
+        ShoppingCart cart = cartIBuilder.build(ShoppingCart.class,getUserId());
         cart.add(commodity, 1);
 
        eventBus.publish(ServiceEvent.createEvent("addInCart", commodityId));
@@ -69,7 +68,7 @@ public class ProductService implements IProductService {
 
     @Override
     public void newProduct(ProductDto dto) throws BeanNotFoundException {
-        IBuilder<Commodity> builder = new CommodityBudler(dto);
-        Commodity commodity = builder.build(Commodity.class);
+//        IBuilder<Commodity> builder = new CommodityBudler(dto);
+//        Commodity commodity = builder.build(Commodity.class);
     }
 }

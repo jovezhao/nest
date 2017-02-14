@@ -17,9 +17,9 @@ import java.util.Set;
  */
 public abstract class EntityObject implements Serializable {
 
-    private boolean isLoad;
+    private transient boolean isLoad;
 
-    ILog logger = new LogAdapter(this.getClass());
+    private transient ILog logger = new LogAdapter(this.getClass());
     /**
      * 唯一ID
      */
