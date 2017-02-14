@@ -5,7 +5,10 @@ package com.ywkj.nest.core;
  */
 public class PageParames {
     private PageParames(int pageIndex, int pageSize) {
-        this.pageIndex = pageIndex;
+        if (pageIndex < 1)
+            this.pageIndex = 1;
+        else
+            this.pageIndex = pageIndex;
         this.pageSize = pageSize;
     }
 

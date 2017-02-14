@@ -57,7 +57,7 @@ public class ProductService implements IProductService {
         PageList<Commodity> commodityPageList = productQuery.getProducts(title, startIndex, count);
 
         PageList<ProductDto> pageList = new PageList<>();
-        pageList.setCount(commodityPageList.getCount());
+        pageList.setPageSize(commodityPageList.getPageSize());
 
         pageList.setTotalCount(commodityPageList.getTotalCount());
 

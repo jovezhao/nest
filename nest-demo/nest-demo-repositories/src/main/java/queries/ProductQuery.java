@@ -18,7 +18,7 @@ public class ProductQuery implements IProductQuery {
     public PageList<Commodity> getProducts(String title, int startIndex, int count) {
             PageList<Commodity> pageList = new PageList<>();
         pageList.setTotalCount(100);
-        pageList.setCount(count);
+        pageList.setPageSize(count);
         List<Commodity> list = new ArrayList<>();
         Product product = new Product();
         product.setId("fff");
