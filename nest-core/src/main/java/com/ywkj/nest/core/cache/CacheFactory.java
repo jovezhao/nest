@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * 缓存工厂
  * Created by Jove on 2016-04-05.
  */
 public class CacheFactory {
