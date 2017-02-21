@@ -1,6 +1,7 @@
 package com.ywkj.nest.core;
 
 /**
+ * 分页参数
  * Created by Jove on 2017/2/8.
  */
 public class PageParames {
