@@ -3,6 +3,7 @@ package com.ywkj.nest.core;
 import java.util.*;
 
 /**
+ * 分页使用的对象
  * Created by Jove on 2016/9/9.
  */
 public class PageList<T> implements List<T> {

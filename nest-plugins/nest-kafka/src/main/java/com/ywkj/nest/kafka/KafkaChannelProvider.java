@@ -2,13 +2,6 @@ package com.ywkj.nest.kafka;
 
 import com.ywkj.nest.ddd.AbstractChannelProvider;
 import com.ywkj.nest.ddd.IEventHandler;
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
-
-import kafka.producer.ProducerConfig;
-import org.springframework.stereotype.Service;
-
-import java.util.Properties;
 
 /**
  * Created by Jove on 2016/7/27.
@@ -68,7 +61,6 @@ public class KafkaChannelProvider extends AbstractChannelProvider {
 
         Thread workThread = new Thread(consumer);
         workThread.start();
-//        workThread.run();
 
     }
 
