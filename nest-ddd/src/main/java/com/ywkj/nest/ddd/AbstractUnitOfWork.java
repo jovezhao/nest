@@ -61,9 +61,13 @@ public abstract class AbstractUnitOfWork implements IUnitOfWork {
             }
             getmap().clear();
         } catch (Exception ex) {
+
             rollback();
+            throw ex;
+        }finally {
+            afterCommit();
         }
-        afterCommit();
+
     }
 
 
