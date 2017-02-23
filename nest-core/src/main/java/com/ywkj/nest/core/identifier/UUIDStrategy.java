@@ -8,6 +8,6 @@ import java.util.UUID;
 public class UUIDStrategy implements IGeneratorStrategy {
     @Override
     public String generate() {
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString().replace("-","");
     }
 }
