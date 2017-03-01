@@ -15,8 +15,8 @@ public class RoleRepositoryLoader<T extends AbstractRole<U>, U extends EntityObj
             if (repository != null) {
                 String actorId = repository.getActorIdByRoleId(id);
 
-                IBuilder<U> builder = new RepositoryLoader<>();
-                U u = builder.build(uClass, actorId);
+                IBuilder<U> builder = new RepositoryLoader<>(uClass);
+                U u = builder.build(actorId);
                 t = u.act(tClass, id);
                 EntityObjectCacheManager.put(t);
             }

@@ -42,11 +42,11 @@ public class ProductService implements IProductService {
 
     public void addInCart(String commodityId) throws BeanNotFoundException {
         //获取具体的商品信息
-        IBuilder<Commodity> builder = new RepositoryLoader<>();
-        Commodity commodity = builder.build(Commodity.class,commodityId);
+        IBuilder<Commodity> builder = new RepositoryLoader<>(Commodity.class);
+        Commodity commodity = builder.build(commodityId);
         //通过用户获取用户的购物车
-        IBuilder<ShoppingCart> cartIBuilder = new RepositoryLoader<>();
-        ShoppingCart cart = cartIBuilder.build(ShoppingCart.class,getUserId());
+        IBuilder<ShoppingCart> cartIBuilder = new RepositoryLoader<>(ShoppingCart.class);
+        ShoppingCart cart = cartIBuilder.build(getUserId());
         cart.add(commodity, 1);
 
        eventBus.publish(ServiceEvent.createEvent("addInCart", commodityId));

@@ -28,8 +28,8 @@ public class EntityObjectFactory {
             eid = generator.generate(tClass);
             t = EntityObjectFactory.create(tClass);
         } else {
-            IBuilder<T> builder = new RepositoryLoader<>();
-            t = builder.build(tClass,eid);
+            IBuilder<T> builder = new RepositoryLoader<>(tClass);
+            t = builder.build(eid);
         }
         MapUtils.map(dto, t);
         return t;
