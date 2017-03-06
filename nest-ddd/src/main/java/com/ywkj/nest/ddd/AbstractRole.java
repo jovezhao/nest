@@ -1,7 +1,5 @@
 package com.ywkj.nest.ddd;
 
-import java.io.Serializable;
-
 /**
  * Created by Jove on 2016-03-31.
  */

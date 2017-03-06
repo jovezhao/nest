@@ -5,7 +5,7 @@
     <parent>
         <artifactId>nest-plugins</artifactId>
         <groupId>com.ywkj.nest</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,17 +15,23 @@
         <dependency>
             <groupId>com.ywkj.nest</groupId>
             <artifactId>nest-core</artifactId>
-            <version>${nest.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ywkj.nest</groupId>
             <artifactId>nest-ddd</artifactId>
-            <version>${nest.version}</version>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>com.rabbitmq</groupId>
             <artifactId>amqp-client</artifactId>
             <version>3.5.6</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

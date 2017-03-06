@@ -1,16 +1,11 @@
 package com.ywkj.nest.mybatis;
 
-import com.ywkj.nest.core.utils.ArrayUtils;
-import com.ywkj.nest.core.utils.ListUtils;
 import com.ywkj.nest.ddd.EntityObject;
 import com.ywkj.nest.ddd.EntityObjectFactory;
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
-import org.apache.ibatis.reflection.factory.ObjectFactory;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Created by Jove on 2017/1/9.

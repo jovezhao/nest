@@ -14,13 +14,13 @@ import java.util.List;
  */
 public class EntityObjectMethodInterceptor implements MethodInterceptor, Serializable {
 
-    private Enhancer enhancer = new Enhancer();
 
     public Object getProxy(Class clazz) {
         return getProxy(clazz, null, null);
     }
 
     public Object getProxy(Class clazz, Class[] constructorArgTypes, Object[] constructorArgs) {
+        Enhancer enhancer = new Enhancer();
         // 设置需要创建子类的类
         enhancer.setSuperclass(clazz);
         enhancer.setCallback(this);
@@ -41,7 +41,7 @@ public class EntityObjectMethodInterceptor implements MethodInterceptor, Seriali
             Field field = EntityObject.class.getDeclaredField("isLoad");
             field.setAccessible(true);
             if (!field.getBoolean(obj)) {
-                Method method1=EntityObject.class.getDeclaredMethod("save");
+                Method method1 = EntityObject.class.getDeclaredMethod("save");
                 method1.setAccessible(true);
                 method1.invoke(obj);
             }

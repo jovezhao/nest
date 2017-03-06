@@ -2,7 +2,6 @@ package com.ywkj.nest.kafka;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ywkj.nest.core.utils.JSONTools;
 import kafka.common.Topic;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
