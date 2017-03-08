@@ -82,15 +82,10 @@ public abstract class EntityObject implements Serializable {
         return tSet;
     }
 
-    @Deprecated
-    public void save() {
+    private void save() {
         SpringUtils.getInstance(AbstractUnitOfWork.class).addEntityObject(this);
     }
 
-    @Deprecated
-    public void remove() {
-        delete();
-    }
 
     public void delete() {
         SpringUtils.getInstance(AbstractUnitOfWork.class).removeEntityObject(this);

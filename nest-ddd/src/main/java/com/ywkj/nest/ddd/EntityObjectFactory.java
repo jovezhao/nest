@@ -1,9 +1,10 @@
 package com.ywkj.nest.ddd;
 
 import com.ywkj.nest.core.identifier.IdentifierGenerator;
-import com.ywkj.nest.core.utils.MapUtils;
+
 
 import java.lang.reflect.Field;
+import java.util.function.Consumer;
 
 /**
  * 实体工厂
@@ -20,7 +21,7 @@ public class EntityObjectFactory {
         return proxyImp;
     }
 
-    public static <T extends EntityObject> T createByDto(Class<T> tClass, Object dto, String id) {
+    public static <T extends EntityObject> T createByDto(Class<T> tClass,  String id,Consumer<T> consumer) {
         String eid = id;
         T t = null;
         if (org.springframework.util.StringUtils.isEmpty(id)) {
@@ -31,14 +32,16 @@ public class EntityObjectFactory {
             IBuilder<T> builder = new RepositoryLoader<>(tClass);
             t = builder.build(eid);
         }
-        MapUtils.map(dto, t);
+        consumer.accept(t);
         return t;
     }
+
     public static <T extends EntityObject> T createForLoad(Class<T> tClass) {
-        T t= create(tClass, (Class[])null, (Object[])null);
+        T t = create(tClass, (Class[]) null, (Object[]) null);
         beginLoad(t);
         return t;
     }
+
     public static void beginLoad(EntityObject entityObject) {
 
         try {
@@ -52,6 +55,7 @@ public class EntityObjectFactory {
         }
 
     }
+
     public static void endLoad(EntityObject entityObject) {
 
         try {
@@ -64,5 +68,14 @@ public class EntityObjectFactory {
             e.printStackTrace();
         }
 
+    }
+
+
+    public static <T extends EntityObject, R> T create(Class<T> tClass, Consumer<T> function) {
+
+        T t = createForLoad(tClass);
+        function.accept(t);
+        endLoad(t);
+        return t;
     }
 }
