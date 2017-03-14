@@ -36,8 +36,8 @@ public class EntityObjectMethodInterceptor implements MethodInterceptor, Seriali
                             MethodProxy proxy) throws Throwable {
 
         Object result = proxy.invokeSuper(obj, args);
-
-        if (method.getName().startsWith("set")) {
+        if(method.getModifiers()==1)
+        {
             Field field = EntityObject.class.getDeclaredField("isLoad");
             field.setAccessible(true);
             if (!field.getBoolean(obj)) {
@@ -46,6 +46,10 @@ public class EntityObjectMethodInterceptor implements MethodInterceptor, Seriali
                 method1.invoke(obj);
             }
         }
+
+//        if (method.getName().startsWith("set")) {
+//
+//        }
         return result;
     }
 
