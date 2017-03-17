@@ -14,7 +14,7 @@ public interface IRepository<T extends EntityObject> {
      * @param id
      * @return
      */
-    T getEntityById(String id);
+    void setEntityById(String id,T t);
 
     /**
      * 保存一个实体，如果已经存在的情况下覆盖已存在的内容
@@ -22,6 +22,7 @@ public interface IRepository<T extends EntityObject> {
      * @param t
      */
     void save(T t);
+
     void remove(T t);
 }
 

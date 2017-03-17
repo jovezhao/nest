@@ -50,12 +50,9 @@ public abstract class EntityObject implements Serializable {
         T t = null;
         try {
             if (!StringUtils.isEmpty(roleId)) {
-
-                IRoleRepository<T> repository = RepositoryFactory.createRoleRepository(clazz);
-                t = repository.getEntityById(roleId);
+                t = new RepositoryLoader<>(clazz).build(roleId);
             }
             if (t == null) {
-//                t = (T) Class.forName(clazz.getName()).newInstance();
                 t = EntityObjectFactory.create(clazz); //使用动态代理的方式生成实体。
                 String rid = new IdentifierGenerator().generate(clazz);
                 t.setId(rid);
@@ -72,11 +69,11 @@ public abstract class EntityObject implements Serializable {
 
     public <T extends AbstractRole> Set<T> findRoles(Class<T> clazz) {
 
-        IRoleRepository<T> repository = RepositoryFactory.createRoleRepository(clazz);
+        IRoleRepository<T> repository = (IRoleRepository<T>) RepositoryFactory.createEntityRepository(clazz);
         Set<String> ids = repository.getRoleIds(this.id);
         Set<T> tSet = new HashSet<>();
         for (String id : ids) {
-            T t = repository.getEntityById(id);
+            T t = this.act(clazz, id);
             tSet.add(t);
         }
         return tSet;

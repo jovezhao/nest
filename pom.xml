@@ -7,7 +7,7 @@
     <groupId>com.ywkj.nest</groupId>
     <artifactId>nest</artifactId>
     <packaging>pom</packaging>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <modules>
         <module>nest-core</module>
         <module>nest-ddd</module>

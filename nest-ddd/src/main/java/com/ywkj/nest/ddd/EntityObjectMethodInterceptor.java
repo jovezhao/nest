@@ -36,21 +36,22 @@ public class EntityObjectMethodInterceptor implements MethodInterceptor, Seriali
                             MethodProxy proxy) throws Throwable {
 
         Object result = proxy.invokeSuper(obj, args);
-        if (method.getModifiers() == 1) {
-            if (!method.getName().startsWith("get") || !method.getName().equals("delete")) {
-                Field field = EntityObject.class.getDeclaredField("isLoad");
-                field.setAccessible(true);
-                if (!field.getBoolean(obj)) {
-                    Method method1 = EntityObject.class.getDeclaredMethod("save");
-                    method1.setAccessible(true);
-                    method1.invoke(obj);
-                }
+
+//        if (method.getModifiers() == 1) {
+//            if (!method.getName().startsWith("get") || !method.getName().equals("delete")) {
+//
+//            }
+//        }
+
+        if (method.getName().startsWith("set")) {
+            Field field = EntityObject.class.getDeclaredField("isLoad");
+            field.setAccessible(true);
+            if (!field.getBoolean(obj)) {
+                Method method1 = EntityObject.class.getDeclaredMethod("save");
+                method1.setAccessible(true);
+                method1.invoke(obj);
             }
         }
-
-//        if (method.getName().startsWith("set")) {
-//
-//        }
         return result;
     }
 

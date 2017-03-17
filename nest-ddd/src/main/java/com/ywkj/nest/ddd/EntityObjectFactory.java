@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  * 实体工厂
  * Created by Jove on 2017/1/9.
  */
-public class EntityObjectFactory {
+ class EntityObjectFactory {
     public static <T> T create(Class<T> tClass) {
         return create(tClass, null, null);
     }
@@ -21,20 +21,7 @@ public class EntityObjectFactory {
         return proxyImp;
     }
 
-    public static <T extends EntityObject> T createByDto(Class<T> tClass,  String id,Consumer<T> consumer) {
-        String eid = id;
-        T t = null;
-        if (org.springframework.util.StringUtils.isEmpty(id)) {
-            IdentifierGenerator generator = new IdentifierGenerator();
-            eid = generator.generate(tClass);
-            t = EntityObjectFactory.create(tClass);
-        } else {
-            IBuilder<T> builder = new RepositoryLoader<>(tClass);
-            t = builder.build(eid);
-        }
-        consumer.accept(t);
-        return t;
-    }
+
 
     public static <T extends EntityObject> T createForLoad(Class<T> tClass) {
         T t = create(tClass, (Class[]) null, (Object[]) null);
