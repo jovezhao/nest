@@ -1,4 +1,6 @@
-package com.ywkj.nest.ddd;
+package com.ywkj.nest.ddd.builder;
+
+import com.ywkj.nest.ddd.EntityObject;
 
 /**
  * 用于仓储预加载时的实体构建器

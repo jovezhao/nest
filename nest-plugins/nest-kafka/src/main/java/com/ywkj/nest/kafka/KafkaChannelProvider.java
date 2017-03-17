@@ -1,7 +1,7 @@
 package com.ywkj.nest.kafka;
 
-import com.ywkj.nest.ddd.AbstractChannelProvider;
-import com.ywkj.nest.ddd.IEventHandler;
+import com.ywkj.nest.ddd.event.AbstractChannelProvider;
+import com.ywkj.nest.ddd.event.IEventHandler;
 
 /**
  * Created by Jove on 2016/7/27.

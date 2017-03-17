@@ -1,6 +1,6 @@
-package com.ywkj.nest.ddd;
+package com.ywkj.nest.ddd.builder;
 
-import com.ywkj.nest.core.identifier.IdentifierGenerator;
+import com.ywkj.nest.ddd.EntityObject;
 
 
 import java.lang.reflect.Field;

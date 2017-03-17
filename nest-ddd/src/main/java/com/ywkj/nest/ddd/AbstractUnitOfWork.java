@@ -1,12 +1,7 @@
 package com.ywkj.nest.ddd;
 
-import com.ywkj.nest.core.cache.CacheClient;
-import com.ywkj.nest.core.cache.CacheFactory;
-import com.ywkj.nest.core.utils.SpringUtils;
-
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -48,7 +43,7 @@ public abstract class AbstractUnitOfWork implements IUnitOfWork {
                 EntityObject entityObject = entry.getKey();
                 OperateEnum operate = entry.getValue();
 
-                IRepository r = RepositoryFactory.createEntityRepository(entityObject.getClass());
+                IRepository r = RepositoryManager.getEntityRepository(entityObject.getClass());
                 switch (operate) {
                     case save:
                         EntityObjectCacheManager.put(entityObject);

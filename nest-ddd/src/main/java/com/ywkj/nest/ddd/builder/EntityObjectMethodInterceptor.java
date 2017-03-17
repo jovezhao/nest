@@ -1,5 +1,6 @@
-package com.ywkj.nest.ddd;
+package com.ywkj.nest.ddd.builder;
 
+import com.ywkj.nest.ddd.EntityObject;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Created by Jove on 2017/1/9.
  */
-public class EntityObjectMethodInterceptor implements MethodInterceptor, Serializable {
+ class EntityObjectMethodInterceptor implements MethodInterceptor, Serializable {
 
 
     public Object getProxy(Class clazz) {
@@ -47,7 +48,7 @@ public class EntityObjectMethodInterceptor implements MethodInterceptor, Seriali
             Field field = EntityObject.class.getDeclaredField("isLoad");
             field.setAccessible(true);
             if (!field.getBoolean(obj)) {
-                Method method1 = EntityObject.class.getDeclaredMethod("save");
+                Method method1 = EntityObject.class.getDeclaredMethod("addToUnitOfWork");
                 method1.setAccessible(true);
                 method1.invoke(obj);
             }

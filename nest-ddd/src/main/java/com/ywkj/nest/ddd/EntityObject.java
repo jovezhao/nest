@@ -4,6 +4,8 @@ import com.ywkj.nest.core.identifier.IdentifierGenerator;
 import com.ywkj.nest.core.log.ILog;
 import com.ywkj.nest.core.log.LogAdapter;
 import com.ywkj.nest.core.utils.SpringUtils;
+import com.ywkj.nest.ddd.builder.FactoryBuilder;
+import com.ywkj.nest.ddd.builder.RepositoryLoader;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -53,9 +55,8 @@ public abstract class EntityObject implements Serializable {
                 t = new RepositoryLoader<>(clazz).build(roleId);
             }
             if (t == null) {
-                t = EntityObjectFactory.create(clazz); //使用动态代理的方式生成实体。
                 String rid = new IdentifierGenerator().generate(clazz);
-                t.setId(rid);
+                t = new FactoryBuilder<>(clazz).build(rid);
             }
 
             t.setActor(this);
@@ -69,7 +70,7 @@ public abstract class EntityObject implements Serializable {
 
     public <T extends AbstractRole> Set<T> findRoles(Class<T> clazz) {
 
-        IRoleRepository<T> repository = (IRoleRepository<T>) RepositoryFactory.createEntityRepository(clazz);
+        IRoleRepository<T> repository = (IRoleRepository<T>) RepositoryManager.getEntityRepository(clazz);
         Set<String> ids = repository.getRoleIds(this.id);
         Set<T> tSet = new HashSet<>();
         for (String id : ids) {
@@ -79,7 +80,7 @@ public abstract class EntityObject implements Serializable {
         return tSet;
     }
 
-    private void save() {
+    private void addToUnitOfWork() {
         SpringUtils.getInstance(AbstractUnitOfWork.class).addEntityObject(this);
     }
 

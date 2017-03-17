@@ -1,10 +1,8 @@
 package com.ywkj.nest.rabbitmq;
 
 
-import com.ywkj.nest.ddd.AbstractChannelProvider;
-import com.ywkj.nest.ddd.IEventHandler;
-
-import java.util.Properties;
+import com.ywkj.nest.ddd.event.AbstractChannelProvider;
+import com.ywkj.nest.ddd.event.IEventHandler;
 
 /**
  * Created by Jove on 2016-03-22.

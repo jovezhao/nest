@@ -7,7 +7,7 @@ import com.ywkj.nest.core.utils.SpringUtils;
 /**
  * Created by Jove on 2016/8/31.
  */
-public class EntityObjectCacheManager {
+ public class EntityObjectCacheManager {
     static {
         CacheFactory cacheFactory = SpringUtils.getInstance(CacheFactory.class);
         cacheClient = cacheFactory.getCacheClient("entityObject");

@@ -1,6 +1,6 @@
 package com.ywkj.nest.ddd;
 
-import java.util.Set;
+import com.ywkj.nest.ddd.builder.IBuilder;
 
 /**
  * 实体仓储定义

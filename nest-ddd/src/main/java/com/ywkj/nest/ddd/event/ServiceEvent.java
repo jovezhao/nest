@@ -1,4 +1,4 @@
-package com.ywkj.nest.ddd;
+package com.ywkj.nest.ddd.event;
 
 /**
  * 服务事件，用于创建一个事件

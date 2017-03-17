@@ -1,6 +1,6 @@
 package com.ywkj.nest.rabbitmq;
 
-import com.ywkj.nest.ddd.IEventHandler;
+import com.ywkj.nest.ddd.event.IEventHandler;
 
 class EventWork {
     String eventName;

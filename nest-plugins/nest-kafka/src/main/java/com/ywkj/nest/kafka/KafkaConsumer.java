@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.ywkj.nest.core.exception.GeneralException;
 import com.ywkj.nest.core.log.ILog;
 import com.ywkj.nest.core.log.LogAdapter;
-import com.ywkj.nest.ddd.IEventHandler;
+import com.ywkj.nest.ddd.event.IEventHandler;
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
 import kafka.consumer.ConsumerIterator;
