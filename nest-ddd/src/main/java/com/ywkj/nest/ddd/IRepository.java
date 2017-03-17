@@ -14,7 +14,7 @@ public interface IRepository<T extends EntityObject> {
      * @param id
      * @return
      */
-    void setEntityById(String id,T t);
+    T getEntityById(String id,IBuilder<T> builder);
 
     /**
      * 保存一个实体，如果已经存在的情况下覆盖已存在的内容

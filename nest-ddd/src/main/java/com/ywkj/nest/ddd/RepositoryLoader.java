@@ -16,14 +16,12 @@ public class RepositoryLoader<T extends EntityObject> implements IBuilder<T> {
 
     @Override
     public T build(String id) {
-        //先查询缓存中是否存在，如果不正在再从仓储获取
+        //先查询缓存中是否存在，如果不存在再从仓储获取
         T t = EntityObjectCacheManager.get(tClass, id);
         if (t == null) {
             IRepository<T> repository = RepositoryFactory.createEntityRepository(tClass);
-
-            t = EntityObjectFactory.create(tClass, p -> {
-                repository.setEntityById(id, p);
-            });
+            t = repository.getEntityById(id, new PreLoadBuilder<T>(tClass));
+            EntityObjectFactory.endLoad(t);
             if (t != null) {
                 EntityObjectCacheManager.put(t);
             }
