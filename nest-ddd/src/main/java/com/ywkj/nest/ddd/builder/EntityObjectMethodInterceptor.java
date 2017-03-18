@@ -8,6 +8,7 @@ import org.springframework.cglib.proxy.MethodProxy;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -38,13 +39,12 @@ import java.util.List;
 
         Object result = proxy.invokeSuper(obj, args);
 
-//        if (method.getModifiers() == 1) {
-//            if (!method.getName().startsWith("get") || !method.getName().equals("delete")) {
 //
-//            }
-//        }
+        String[] withoutMethod={
+                "hashCode","equals","toString","notify","notifyAll","wait"
+                ,"act","findRoles","delete"};
 
-        if (method.getName().startsWith("set")) {
+        if(method.getModifiers()==1 && !Arrays.asList(withoutMethod).contains(method.getName()) && !method.getName().startsWith("get") && !method.getName().startsWith("is")){
             Field field = EntityObject.class.getDeclaredField("isLoad");
             field.setAccessible(true);
             if (!field.getBoolean(obj)) {
@@ -53,6 +53,8 @@ import java.util.List;
                 method1.invoke(obj);
             }
         }
+
+
         return result;
     }
 

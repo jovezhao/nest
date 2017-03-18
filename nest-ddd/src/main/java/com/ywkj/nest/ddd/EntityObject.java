@@ -58,7 +58,6 @@ public abstract class EntityObject implements Serializable {
                 String rid = new IdentifierGenerator().generate(clazz);
                 t = new FactoryBuilder<>(clazz).build(rid);
             }
-
             t.setActor(this);
 
         } catch (Exception e) {
@@ -81,11 +80,15 @@ public abstract class EntityObject implements Serializable {
     }
 
     private void addToUnitOfWork() {
-        SpringUtils.getInstance(AbstractUnitOfWork.class).addEntityObject(this);
+        AbstractUnitOfWork unitOfWork = SpringUtils.getInstance(AbstractUnitOfWork.class);
+        if (unitOfWork != null)
+            unitOfWork.addEntityObject(this);
     }
 
 
     public void delete() {
-        SpringUtils.getInstance(AbstractUnitOfWork.class).removeEntityObject(this);
+        AbstractUnitOfWork unitOfWork = SpringUtils.getInstance(AbstractUnitOfWork.class);
+        if (unitOfWork != null)
+            unitOfWork.removeEntityObject(this);
     }
 }

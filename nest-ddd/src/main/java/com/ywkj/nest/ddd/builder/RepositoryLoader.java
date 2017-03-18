@@ -21,8 +21,8 @@ public class RepositoryLoader<T extends EntityObject> implements IBuilder<T> {
         if (t == null) {
             IRepository<T> repository = RepositoryManager.getEntityRepository(tClass);
             t = repository.getEntityById(id, new PreLoadBuilder<T>(tClass));
-            EntityObjectFactory.endLoad(t);
             if (t != null) {
+                EntityObjectFactory.endLoad(t);
                 EntityObjectCacheManager.put(t);
             }
         }
