@@ -40,8 +40,9 @@ public abstract class EntityObject implements Serializable {
     }
 
     /**
-     * //将自己扮演成一个具体的角色以执行一个操作
-     *
+     * 将自己扮演成一个具体的角色以执行一个操作
+     * 如果roleid为空时，将创建一个新的角色信息
+     * 如果指定的roleid在仓储中不存在，将新建一个角色供他使用
      * @param clazz  要扮演的角色的类型
      * @param roleId 如果不为空将通过仓储加载一个数据对象
      * @param <T>
@@ -51,12 +52,14 @@ public abstract class EntityObject implements Serializable {
 
         T t = null;
         try {
+
             if (!StringUtils.isEmpty(roleId)) {
                 t = new RepositoryLoader<>(clazz).build(roleId);
+            }else{
+                roleId=new IdentifierGenerator().generate(clazz);
             }
             if (t == null) {
-                String rid = new IdentifierGenerator().generate(clazz);
-                t = new FactoryBuilder<>(clazz).build(rid);
+                t = new FactoryBuilder<>(clazz).build(roleId);
             }
             t.setActor(this);
 
