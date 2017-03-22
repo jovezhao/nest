@@ -15,4 +15,11 @@ public class FactoryBuilder<T extends EntityObject> implements IBuilder<T> {
         t.setId(id);
         return t;
     }
+
+    @Override
+    public <U extends T> U build(Class<U> uClass, String id) {
+        U u = EntityObjectFactory.create(uClass);
+        u.setId(id);
+        return u;
+    }
 }

@@ -25,26 +25,26 @@ public class NestMapper {
     }
 
 
-    public <T> T map(Object o, Class<T> aClass) {
-        return mapper.map(o, aClass);
+    public <T> T map(Object source, Class<T> destinationClass) {
+        return mapper.map(source, destinationClass);
     }
 
-    public void map(Object o, Object o1) {
-        mapper.map(o, o1);
+    public void map(Object source, Object destination) {
+        mapper.map(source, destination);
     }
 
-    public <T> T map(Object o, Class<T> aClass, String s) {
-        return mapper.map(o, aClass, s);
+    public <T> T map(Object source, Class<T> destinationClass, String mapId) {
+        return mapper.map(source, destinationClass, mapId);
     }
 
-    public void map(Object o, Object o1, String s) {
-        mapper.map(o, o1, s);
+    public void map(Object source, Object destination, String mapId) {
+        mapper.map(source, destination, mapId);
     }
 
-    public <T> List<T> mapList(List oList, Class<T> aClass) {
+    public <T> List<T> mapList(List source, Class<T> destinationClass) {
         List<T> lst = new ArrayList<>();
-        for (Object o : oList) {
-            lst.add(mapper.map(o, aClass));
+        for (Object o : source) {
+            lst.add(mapper.map(o, destinationClass));
         }
         return lst;
     }

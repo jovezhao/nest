@@ -7,5 +7,7 @@ import com.ywkj.nest.ddd.EntityObject;
  * Created by Jove on 2016/8/30.
  */
 public interface IBuilder<T extends EntityObject> {
-    T build( String id);
+    T build(String id);
+
+    <U extends T> U build(Class<U> uClass, String id);
 }

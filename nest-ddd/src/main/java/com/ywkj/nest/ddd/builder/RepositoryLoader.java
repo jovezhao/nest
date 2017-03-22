@@ -30,5 +30,21 @@ public class RepositoryLoader<T extends EntityObject> implements IBuilder<T> {
 
         return t;
     }
+
+    @Override
+    public <U extends T> U build(Class<U> uClass, String id) {
+        //先查询缓存中是否存在，如果不存在再从仓储获取
+        U u = EntityObjectCacheManager.get(uClass, id);
+        if (u == null) {
+            IRepository<U> repository = RepositoryManager.getEntityRepository(tClass);
+            u = repository.getEntityById(id, new PreLoadBuilder<U>(uClass));
+            if (u != null) {
+                EntityObjectFactory.endLoad(u);
+                EntityObjectCacheManager.put(u);
+            }
+        }
+
+        return u;
+    }
 }
 
