@@ -12,6 +12,7 @@
         <module>nest-core</module>
         <module>nest-ddd</module>
         <module>nest-plugins</module>
+        <module>nest-pom</module>
     </modules>
 
     <properties>
