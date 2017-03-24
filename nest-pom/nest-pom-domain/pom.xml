@@ -11,9 +11,7 @@
 
     <artifactId>nest-pom-domain</artifactId>
 
+    <packaging>pom</packaging>
 
-    <dependencyManagement>
-
-    </dependencyManagement>
 
 </project>

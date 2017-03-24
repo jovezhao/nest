@@ -84,15 +84,13 @@ public abstract class EntityObject implements Serializable {
     }
 
     /**
-     * 获取一个默认的角色，如果仓储中不存在这个角色时将直接返回一个null
+     * 获取一个默认的角色，如果仓储中不存在这个角色时将创建一个角色
      * @param tClass
      * @param <T>
      * @return
      */
     public <T extends AbstractRole> T act(Class<T> tClass) {
-        Set<T> roles = findRoles(tClass);
-        if (roles != null && roles.size() != 0) return roles.iterator().next();
-        return null;
+        return act(tClass,this.getId());
     }
 
     private void addToUnitOfWork() {
