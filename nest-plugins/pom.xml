@@ -15,6 +15,7 @@
         <module>nest-rabbitmq</module>
         <module>nest-kafka</module>
         <module>nest-mybatis</module>
+        <module>nest-activemq</module>
     </modules>
 
 
