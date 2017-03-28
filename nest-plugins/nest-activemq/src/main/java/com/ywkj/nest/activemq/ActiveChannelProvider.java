@@ -18,23 +18,27 @@ public class ActiveChannelProvider extends AbstractChannelProvider {
     private int prefetchCount;
     private volatile boolean status;
 
+    Connection connection;
     private ActiveMQProducer producer;
     private ActiveMQConsumer consumer;
 
     public ActiveChannelProvider(String brokers, int prefetchCount) throws JMSException {
-        ConnectionFactory connectionFactory=new ActiveMQConnectionFactory(brokers);
-        Connection connection = connectionFactory.createConnection();
-        producer=new ActiveMQProducer(connection);
-        consumer=new ActiveMQConsumer(connection,prefetchCount);
+        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokers);
+        connection = connectionFactory.createConnection();
+        producer = new ActiveMQProducer(connection);
+        consumer = new ActiveMQConsumer(connection, prefetchCount);
     }
 
     @Override
     public void publish(String eventName, Object data) {
         EventDataDto dto = new EventDataDto(data);
-        producer.publish(eventName, dto);
+        try {
+            producer.publish(eventName, dto);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
 
     }
-
 
 
     @Override
@@ -49,7 +53,13 @@ public class ActiveChannelProvider extends AbstractChannelProvider {
 
     @Override
     public void stop() {
-        if (consumer != null)
-            consumer.stop();
+        try {
+            connection.close();
+            if (consumer != null)
+                consumer.stop();
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+
     }
 }

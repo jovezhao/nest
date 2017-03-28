@@ -20,10 +20,9 @@ class ActiveMQProducer {
     }
 
     public void publish(String eventName, Serializable object) throws JMSException {
-        Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         MessageProducer producer = session.createProducer(session.createTopic(eventName));
         producer.send(session.createTextMessage(JsonUtils.toJsonString(object)));
-        session.commit();
         producer.close();
         session.close();
 

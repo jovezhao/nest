@@ -21,6 +21,15 @@ public abstract class CustomException extends RuntimeException {
 	}
 
 	private Object[] parames;
+	private Object outParame;
+
+	public Object getOutParame() {
+		return outParame;
+	}
+
+	public void setOutParame(Object outParame) {
+		this.outParame = outParame;
+	}
 
 	public CustomException(String message, int code, Object... parames) {
 		super(message);
