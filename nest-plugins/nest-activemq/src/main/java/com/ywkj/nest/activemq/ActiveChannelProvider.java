@@ -25,6 +25,7 @@ public class ActiveChannelProvider extends AbstractChannelProvider {
 
     public ActiveChannelProvider(String brokers, int prefetchCount) {
         connectionFactory = new PooledConnectionFactory(brokers);
+        connectionFactory.start();
         producer = new ActiveMQProducer(connectionFactory);
         this.prefetchCount = prefetchCount;
     }

@@ -27,10 +27,7 @@ public class ActiveMQConsumer implements Runnable {
     }
 
     public void stop() {
-
         this.status = false;
-        destroy();
-
     }
 
     Connection connection = null;
@@ -61,14 +58,14 @@ public class ActiveMQConsumer implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        status = true;
-
+    private void doWork() {
         try {
             connection = connectionFactory.createConnection();//Consumer.A.VirtualTopic.TEST
+            if (connection != null)
+                connection.start();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            consumer = session.createConsumer(session.createQueue("Consumer." + work.getHandlerName() + "VirtualTopic." + work.getEventName()));
+            Destination queue = session.createQueue("Consumer." + work.getHandlerName() + ".VirtualTopic." + work.getEventName());
+            consumer = session.createConsumer(queue);
             consumer.setMessageListener(new MessageListener() {
                 @Override
                 public void onMessage(Message message) {
@@ -89,9 +86,28 @@ public class ActiveMQConsumer implements Runnable {
         } catch (JMSException ex) {
             destroy();
             if (status) {
-                run();
+                //发生错误时等待1秒再重新尝试
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                doWork();
             }
+        } catch (Exception ex) {
+            //其它异常发生，需要外部检查
+            ex.printStackTrace();
+            logger.fatal(ex);
         }
+    }
+
+    @Override
+    public void run() {
+        System.out.println("run now");
+
+        this.status = true;
+        doWork();
+
 
     }
 
