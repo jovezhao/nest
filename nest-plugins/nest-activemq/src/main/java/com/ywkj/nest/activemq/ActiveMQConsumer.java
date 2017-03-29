@@ -66,9 +66,9 @@ public class ActiveMQConsumer implements Runnable {
         status = true;
 
         try {
-            connection = connectionFactory.createConnection();
+            connection = connectionFactory.createConnection();//Consumer.A.VirtualTopic.TEST
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            consumer = session.createConsumer(session.createQueue(work.getEventName()));
+            consumer = session.createConsumer(session.createQueue("Consumer." + work.getHandlerName() + "VirtualTopic." + work.getEventName()));
             consumer.setMessageListener(new MessageListener() {
                 @Override
                 public void onMessage(Message message) {
