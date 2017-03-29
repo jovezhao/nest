@@ -2,10 +2,7 @@ package com.ywkj.nest.activemq;
 
 import com.ywkj.nest.core.utils.JsonUtils;
 
-import javax.jms.Connection;
-import javax.jms.JMSException;
-import javax.jms.MessageProducer;
-import javax.jms.Session;
+import javax.jms.*;
 import java.io.Serializable;
 
 /**
@@ -13,13 +10,14 @@ import java.io.Serializable;
  */
 class ActiveMQProducer {
 
-    Connection connection;
+    ConnectionFactory connectionFactory;
 
-    public ActiveMQProducer(Connection connection) {
-        this.connection = connection;
+    public ActiveMQProducer(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
     }
 
     public void publish(String eventName, Serializable object) throws JMSException {
+        Connection connection = connectionFactory.createConnection();
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         MessageProducer producer = session.createProducer(session.createTopic(eventName));
         producer.send(session.createTextMessage(JsonUtils.toJsonString(object)));

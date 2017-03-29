@@ -1,8 +1,10 @@
 package com.ywkj.nest.activemq;
 
+import com.ywkj.nest.core.exception.SystemException;
 import com.ywkj.nest.ddd.event.AbstractChannelProvider;
 import com.ywkj.nest.ddd.event.IEventHandler;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.pool.PooledConnectionFactory;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -17,16 +19,14 @@ public class ActiveChannelProvider extends AbstractChannelProvider {
 
     private int prefetchCount;
     private volatile boolean status;
-
-    Connection connection;
+    PooledConnectionFactory connectionFactory;
     private ActiveMQProducer producer;
     private ActiveMQConsumer consumer;
 
-    public ActiveChannelProvider(String brokers, int prefetchCount) throws JMSException {
-        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokers);
-        connection = connectionFactory.createConnection();
-        producer = new ActiveMQProducer(connection);
-        consumer = new ActiveMQConsumer(connection, prefetchCount);
+    public ActiveChannelProvider(String brokers, int prefetchCount) {
+        connectionFactory = new PooledConnectionFactory(brokers);
+        producer = new ActiveMQProducer(connectionFactory);
+        this.prefetchCount = prefetchCount;
     }
 
     @Override
@@ -36,6 +36,7 @@ public class ActiveChannelProvider extends AbstractChannelProvider {
             producer.publish(eventName, dto);
         } catch (JMSException e) {
             e.printStackTrace();
+            throw new SystemException(e);
         }
 
     }
@@ -43,8 +44,7 @@ public class ActiveChannelProvider extends AbstractChannelProvider {
 
     @Override
     public void subscribe(String eventName, IEventHandler handler) {
-
-
+        consumer = new ActiveMQConsumer(connectionFactory, new EventWork(eventName, handler), prefetchCount);
         status = true;
         Thread workThread = new Thread(consumer);
         workThread.start();
@@ -53,13 +53,8 @@ public class ActiveChannelProvider extends AbstractChannelProvider {
 
     @Override
     public void stop() {
-        try {
-            connection.close();
-            if (consumer != null)
-                consumer.stop();
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
-
+        connectionFactory.stop();
+        if (consumer != null)
+            consumer.stop();
     }
 }

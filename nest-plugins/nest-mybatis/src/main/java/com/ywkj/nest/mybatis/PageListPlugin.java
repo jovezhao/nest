@@ -35,7 +35,6 @@ public class PageListPlugin implements Interceptor {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         if (invocation.getTarget() instanceof StatementHandler) {
-
             //对于StatementHandler其实只有两个实现类，一个是RoutingStatementHandler，另一个是抽象类BaseStatementHandler，
             //BaseStatementHandler有三个子类，分别是SimpleStatementHandler，PreparedStatementHandler和CallableStatementHandler，
             //SimpleStatementHandler是用于处理Statement的，PreparedStatementHandler是处理PreparedStatement的，而CallableStatementHandler是
@@ -82,7 +81,7 @@ public class PageListPlugin implements Interceptor {
             }
 
             return invocation.proceed();
-        } else {
+        } else if (invocation.getTarget() instanceof ResultSetHandler){
             //ResultSetHandler对返回的结果进行改造
             if (tp.get() == null) return invocation.proceed();
 
@@ -95,6 +94,7 @@ public class PageListPlugin implements Interceptor {
             tl.remove();
             return p;
         }
+        return invocation.proceed();
     }
 
     private void setTotalRecord(BoundSql boundSql, MappedStatement mappedStatement, Connection connection) {
@@ -125,6 +125,8 @@ public class PageListPlugin implements Interceptor {
                 //给当前的参数page对象设置总记录数
                 tl.set(totalRecord);
 //                    page.setTotalRecord(totalRecord);
+            }else{
+                tl.set(0L);
             }
         } catch (SQLException e) {
             e.printStackTrace();
