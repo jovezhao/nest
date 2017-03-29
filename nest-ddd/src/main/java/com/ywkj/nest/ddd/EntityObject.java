@@ -43,6 +43,7 @@ public abstract class EntityObject implements Serializable {
      * 将自己扮演成一个具体的角色以执行一个操作
      * 如果roleid为空时，将创建一个新的角色信息
      * 如果指定的roleid在仓储中不存在，将新建一个角色供他使用
+     *
      * @param clazz  要扮演的角色的类型
      * @param roleId 如果不为空将通过仓储加载一个数据对象
      * @param <T>
@@ -55,8 +56,8 @@ public abstract class EntityObject implements Serializable {
 
             if (!StringUtils.isEmpty(roleId)) {
                 t = new RepositoryLoader<>(clazz).build(roleId);
-            }else{
-                roleId=new IdentifierGenerator().generate(clazz);
+            } else {
+                roleId = new IdentifierGenerator().generate(clazz);
             }
             if (t == null) {
                 t = new FactoryBuilder<>(clazz).build(roleId);
@@ -80,6 +81,16 @@ public abstract class EntityObject implements Serializable {
             tSet.add(t);
         }
         return tSet;
+    }
+
+    /**
+     * 获取一个默认的角色，如果仓储中不存在这个角色时将创建一个角色
+     * @param tClass
+     * @param <T>
+     * @return
+     */
+    public <T extends AbstractRole> T act(Class<T> tClass) {
+        return act(tClass,this.getId());
     }
 
     private void addToUnitOfWork() {

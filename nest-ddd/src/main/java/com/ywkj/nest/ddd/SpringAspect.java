@@ -10,7 +10,7 @@ public class SpringAspect {
     @Autowired
     IUnitOfWork unitOfWork;
 
-    public Object aroundMethod(ProceedingJoinPoint joinpoint) {
+    public Object aroundMethod(ProceedingJoinPoint joinpoint) throws Throwable {
         Object result=null;
 
         try {
@@ -21,6 +21,7 @@ public class SpringAspect {
         catch (Throwable throwable) {
             throwable.printStackTrace();
             unitOfWork.rollback();
+            throw  throwable;
         }
         return result;
     }

@@ -12,6 +12,7 @@
         <module>nest-core</module>
         <module>nest-ddd</module>
         <module>nest-plugins</module>
+        <module>nest-pom</module>
     </modules>
 
     <properties>
@@ -36,12 +37,12 @@
         <repository>
             <id>ypzdw-releases</id>
             <name>Nexus Release Repository</name>
-            <url>http://192.168.0.246:8081/nexus/content/repositories/releases/</url>
+            <url>http://125.71.215.141:8888/nexus/content/repositories/releases/</url>
         </repository>
         <snapshotRepository>
             <id>ypzdw-snapshots</id>
             <name>Nexus Snapshot Repository</name>
-            <url>http://192.168.0.246:8081/nexus/content/repositories/snapshots/</url>
+            <url>http://125.71.215.141:8888/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
     <build>
