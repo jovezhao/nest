@@ -63,7 +63,7 @@ public class ActiveMQConsumer implements Runnable {
             connection = connectionFactory.createConnection();//Consumer.A.VirtualTopic.TEST
             if (connection != null)
                 connection.start();
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
             Destination queue = session.createQueue("Consumer." + work.getHandlerName() + ".VirtualTopic." + work.getEventName());
             consumer = session.createConsumer(queue);
             consumer.setMessageListener(new MessageListener() {
@@ -75,6 +75,8 @@ public class ActiveMQConsumer implements Runnable {
                         boolean flag = work.doWork(dto);
                         if (flag)
                             message.acknowledge();
+
+
 
                     } catch (JMSException e) {
                         e.printStackTrace();

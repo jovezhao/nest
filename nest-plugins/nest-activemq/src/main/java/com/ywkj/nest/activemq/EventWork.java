@@ -21,7 +21,13 @@ class EventWork {
 
     public boolean doWork(Object object) {
         EventDataDto dataDto = (EventDataDto) object;
-        this.handler.handle(dataDto.getData());
-        return true;
+        try {
+            this.handler.handle(dataDto.getData());
+            return true;
+        }catch (Exception ex){
+            ex.printStackTrace();
+
+            return false;
+        }
     }
 }

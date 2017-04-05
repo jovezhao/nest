@@ -42,6 +42,7 @@ public class TestActiveMQ {
         System.in.read();
 
     }
+
     @Test
     public void doHand1() throws IOException {
         EventBus eventBus = new EventBus();
@@ -55,7 +56,8 @@ public class TestActiveMQ {
 
             @Override
             public void handle(Object data) {
-                System.out.println(data+"22222");
+                System.out.println(data + "22222");
+                throw new RuntimeException("测试");
             }
         });
         System.in.read();

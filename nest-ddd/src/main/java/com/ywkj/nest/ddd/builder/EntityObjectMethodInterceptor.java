@@ -14,6 +14,8 @@ import java.util.List;
 /**
  * Created by Jove on 2017/1/9.
  */
+
+
  class EntityObjectMethodInterceptor implements MethodInterceptor, Serializable {
 
 
@@ -51,6 +53,7 @@ import java.util.List;
                 Method method1 = EntityObject.class.getDeclaredMethod("addToUnitOfWork");
                 method1.setAccessible(true);
                 method1.invoke(obj);
+                System.out.println("调用"+method.getName());
             }
         }
 
