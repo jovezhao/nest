@@ -8,12 +8,12 @@ import com.google.gson.GsonBuilder;
  */
 public class JsonUtils {
     public static String toJsonString(Object object) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd").serializeNulls().create();
         return gson.toJson(object);
     }
 
     public static <T> T toObj(String jsonString, Class<T> tClass) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd").serializeNulls().create();
         return gson.fromJson(jsonString, tClass);
     }
 }

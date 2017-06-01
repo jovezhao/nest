@@ -27,6 +27,20 @@
         <artifactId>kafka_2.11</artifactId>
         <version>0.9.0.1</version>
         <scope>provided</scope>
+        <exclusions>
+            <exclusion>
+                <artifactId>slf4j-log4j12</artifactId>
+                <groupId>org.slf4j</groupId>
+            </exclusion>
+            <exclusion>
+                <artifactId>slf4j-api</artifactId>
+                <groupId>org.slf4j</groupId>
+            </exclusion>
+            <exclusion>
+                <artifactId>log4j</artifactId>
+                <groupId>log4j</groupId>
+            </exclusion>
+        </exclusions>
     </dependency>
     <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
     <dependency>

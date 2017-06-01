@@ -26,7 +26,7 @@ public class EventBus {
      * @param event
      */
     public void publish(ServiceEvent event) {
-        logger.info("nimeia", event.getEventName(), event.getData());
+        //添加一系列内存日志的处理方式
         provider.publish(event.getEventName(), event.getData());
     }
 
@@ -38,6 +38,7 @@ public class EventBus {
      * @param handler
      */
     public void registerHandler(IEventHandler handler) {
+
         provider.subscribe(handler.getEventName(), handler);
     }
 }

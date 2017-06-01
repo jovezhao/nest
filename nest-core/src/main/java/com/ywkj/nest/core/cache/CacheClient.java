@@ -17,18 +17,18 @@ public class CacheClient {
         provider = strategy.getProvider();
     }
 
-    /**
-     * 获取缓存项内容
-     *
-     * @param key
-     * @return
-     */
-    public Object get(String key) {
-        return provider.get(strategy.getName(), key);
-    }
+//    /**
+//     * 获取缓存项内容
+//     *
+//     * @param key
+//     * @return
+//     */
+//    public Object get(String key) {
+//        return provider.get(strategy.getName(), key);
+//    }
 
     public <T> T get(Class<T> clazz, String key) {
-        return (T) provider.get(strategy.getName(), key);
+        return provider.get(strategy.getName(), key,clazz);
     }
 
     /**
@@ -37,8 +37,8 @@ public class CacheClient {
      * @param keys
      * @return
      */
-    public Map<String, Object> get(String... keys) {
-        return provider.get(strategy.getName(), keys);
+    public <T> Map<String, T> get(Class<T> clazz, String... keys) {
+        return provider.get(strategy.getName(),clazz, keys);
     }
 
     /**

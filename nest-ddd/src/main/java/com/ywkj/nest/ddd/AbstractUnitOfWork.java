@@ -54,12 +54,12 @@ public abstract class AbstractUnitOfWork implements IUnitOfWork {
                         r.remove(entityObject);
                 }
             }
-            getmap().clear();
         } catch (Exception ex) {
 
             rollback();
             throw ex;
         }finally {
+            getmap().clear();
             afterCommit();
         }
 

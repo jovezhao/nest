@@ -8,10 +8,11 @@ import java.util.Properties;
  */
 public abstract class AbstractChannelProvider implements IEventPublish, IEventSubscribe {
 
-    /**
-     * 提供相关的配置项
-     */
-    protected Properties properties;
+//    /**
+//     * 提供相关的配置项
+//     */
+//    protected Properties properties;
+
 
 }
 

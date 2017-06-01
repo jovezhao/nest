@@ -30,4 +30,7 @@ public class StringUtils {
         htmlStr = m_space.replaceAll("").replaceAll("&nbsp;",""); // 过滤空格回车标签
         return htmlStr.trim(); // 返回文本字符串
     }
+    public static boolean isEmpty(String str){
+        return org.springframework.util.StringUtils.isEmpty(str);
+    }
 }

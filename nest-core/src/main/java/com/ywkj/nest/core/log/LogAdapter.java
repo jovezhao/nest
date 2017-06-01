@@ -1,8 +1,9 @@
 package com.ywkj.nest.core.log;
 
 import com.ywkj.nest.core.exception.CustomException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.io.Serializable;
 
@@ -13,7 +14,7 @@ public class LogAdapter implements ILog ,Serializable {
     Logger logger;
 
     public LogAdapter(Class clazz) {
-        logger = LogManager.getLogger(clazz);
+        logger = LoggerFactory.getLogger(clazz);
 
     }
 
@@ -33,7 +34,7 @@ public class LogAdapter implements ILog ,Serializable {
                     builder.append("\n").append(object.getClass()).append("|").append(object.toString());
                 }
             }
-            logger.debug(builder);
+            logger.debug(builder.toString());
         }
 
     }
@@ -54,7 +55,7 @@ public class LogAdapter implements ILog ,Serializable {
                     builder.append("\n").append(object.getClass()).append("|").append(object.toString());
                 }
             }
-            logger.info(builder);
+            logger.info(builder.toString());
         }
 
     }
@@ -74,7 +75,7 @@ public class LogAdapter implements ILog ,Serializable {
                 builder.append("\n").append(object.getClass()).append("|").append(object.toString());
             }
         }
-        logger.warn(builder);
+        logger.warn(builder.toString());
 
 
     }
@@ -96,7 +97,7 @@ public class LogAdapter implements ILog ,Serializable {
             }
         }
         String msg = builder.toString();
-        logger.error(builder, ex);
+        logger.error(builder.toString(), ex);
 
     }
 
@@ -117,7 +118,7 @@ public class LogAdapter implements ILog ,Serializable {
                 builder.append("\n").append(object.getClass()).append("|").append(object.toString());
             }
         }
-        logger.fatal(builder, ex);
+        logger.error(builder.toString(), ex);
 
     }
 

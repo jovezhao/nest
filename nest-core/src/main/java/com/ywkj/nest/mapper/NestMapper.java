@@ -1,9 +1,11 @@
 package com.ywkj.nest.mapper;
 
-import com.ywkj.nest.core.utils.SpringUtils;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
+import org.springframework.core.io.Resource;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,17 +15,23 @@ import java.util.List;
  */
 public class NestMapper {
 
+    private DozerBeanMapper mapper;
 
-    private Mapper mapper;
+    public void setMappingFiles(Resource[] mappingFiles) throws IOException {
+        if (mappingFiles != null) {
+            ArrayList mappings = new ArrayList(mappingFiles.length);
+            for (Resource mappingFile : mappingFiles) {
+                URL url = mappingFile.getURL();
+                mappings.add(url.toString());
+            }
 
+            mapper.setMappingFiles(mappings);
+        }
+    }
 
     public NestMapper() {
+        mapper = new DozerBeanMapper();
     }
-
-    public void setMappingFiles(List<String> mappingFiles) {
-        this.mapper = new DozerBeanMapper(mappingFiles);
-    }
-
 
     public <T> T map(Object source, Class<T> destinationClass) {
         return mapper.map(source, destinationClass);
@@ -34,6 +42,7 @@ public class NestMapper {
     }
 
     public <T> T map(Object source, Class<T> destinationClass, String mapId) {
+
         return mapper.map(source, destinationClass, mapId);
     }
 

@@ -33,7 +33,7 @@ class MQConsumer implements Runnable {
         while (status) {
             Channel channel = null;
             try {
-                //创建消息者
+                //创建通道
                 channel = connection.getConnection().createChannel();
                 channel.exchangeDeclare(work.getEventName(), "fanout", true, false, null);
                 channel.basicQos(prefetchCount);

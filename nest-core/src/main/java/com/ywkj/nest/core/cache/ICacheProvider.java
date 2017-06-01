@@ -18,7 +18,7 @@ public interface ICacheProvider {
 	 *            缓存组
 	 * @return 缓存中的对象
 	 */
-	Object get(String groupName, String key);
+	<T> T get(String groupName, String key,Class<T> clazz);
 
 	/**
 	 * 根据指定key集合，从缓存中获取对象Map
@@ -29,7 +29,7 @@ public interface ICacheProvider {
 	 *            对象的key集合
 	 * @return 缓存中的对象Map
 	 */
-	Map<String, Object> get(String groupName, String... keys);
+	<T> Map<String, T>  get(String groupName, Class<T> clazz, String... keys);
 
 	/**
 	 * 把对象以key的形式放入缓存（同名key覆盖）

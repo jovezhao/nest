@@ -16,7 +16,7 @@ import java.util.Map;
 class DefaultCacheProvider implements ICacheProvider {
     private CacheManager manager = CacheManager.create();
 
-    public Object get(String groupName, String key) {
+    public Object get(String groupName, String key,Class clazz) {
         if (!manager.cacheExists(groupName)) return null;
         Cache cache = manager.getCache(groupName);
         Element el = cache.get(key);
@@ -25,10 +25,10 @@ class DefaultCacheProvider implements ICacheProvider {
         return null;
     }
 
-    public Map<String, Object> get(String groupName, String... keys) {
+    public Map<String, Object> get(String groupName, Class clazz, String... keys) {
         Map<String, Object> result = new HashMap<String, Object>();
         for (String key : keys) {
-            Object val = get(groupName, key);
+            Object val = get(groupName, key,clazz);
             result.put(key, val);
         }
         return result;

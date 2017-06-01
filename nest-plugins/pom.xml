@@ -16,6 +16,7 @@
         <module>nest-kafka</module>
         <module>nest-mybatis</module>
         <module>nest-activemq</module>
+        <module>nest-redis</module>
     </modules>
 
 

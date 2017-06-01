@@ -22,6 +22,7 @@ class ActiveMQProducer {
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination topic = session.createTopic("VirtualTopic." + eventName);
         MessageProducer producer = session.createProducer(topic);
+        producer.setDeliveryMode(DeliveryMode.PERSISTENT);
         producer.send(session.createTextMessage(JsonUtils.toJsonString(object)));
         producer.close();
         session.close();
