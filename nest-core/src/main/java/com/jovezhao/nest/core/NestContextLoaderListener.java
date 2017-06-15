@@ -1,6 +1,6 @@
 package com.jovezhao.nest.core;
 
-import com.jovezhao.nest.core.utils.SpringUtils;
+import com.jovezhao.nest.utils.SpringUtils;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 

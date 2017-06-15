@@ -1,8 +1,8 @@
 package com.jovezhao.nest.ddd.event;
 
 
-import com.jovezhao.nest.core.log.ILog;
-import com.jovezhao.nest.core.log.LogAdapter;
+import com.jovezhao.nest.log.ILog;
+import com.jovezhao.nest.log.LogAdapter;
 
 
 /**

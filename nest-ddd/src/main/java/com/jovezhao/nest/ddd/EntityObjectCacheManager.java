@@ -1,8 +1,8 @@
 package com.jovezhao.nest.ddd;
 
-import com.jovezhao.nest.core.cache.CacheClient;
-import com.jovezhao.nest.core.cache.CacheFactory;
-import com.jovezhao.nest.core.utils.SpringUtils;
+import com.jovezhao.nest.cache.CacheClient;
+import com.jovezhao.nest.cache.CacheFactory;
+import com.jovezhao.nest.utils.SpringUtils;
 
 /**
  * Created by Jove on 2016/8/31.

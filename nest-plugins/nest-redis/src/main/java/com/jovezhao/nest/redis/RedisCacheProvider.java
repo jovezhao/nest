@@ -1,8 +1,8 @@
 package com.jovezhao.nest.redis;
 
-import com.jovezhao.nest.core.cache.ICacheProvider;
-import com.jovezhao.nest.core.utils.JsonUtils;
-import com.jovezhao.nest.core.utils.StringUtils;
+import com.jovezhao.nest.cache.ICacheProvider;
+import com.jovezhao.nest.utils.JsonUtils;
+import com.jovezhao.nest.utils.StringUtils;
 import org.apache.commons.collections.map.HashedMap;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;

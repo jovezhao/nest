@@ -2,8 +2,8 @@ package com.jovezhao.nest.rabbitmq;
 
 
 
-import com.jovezhao.nest.core.log.ILog;
-import com.jovezhao.nest.core.log.LogAdapter;
+import com.jovezhao.nest.log.ILog;
+import com.jovezhao.nest.log.LogAdapter;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 

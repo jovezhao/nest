@@ -1,6 +1,6 @@
 package com.jovezhao.nest.activemq;
 
-import com.jovezhao.nest.core.exception.SystemException;
+import com.jovezhao.nest.exception.SystemException;
 import com.jovezhao.nest.ddd.event.AbstractChannelProvider;
 import com.jovezhao.nest.ddd.event.IEventHandler;
 import org.apache.activemq.pool.PooledConnectionFactory;

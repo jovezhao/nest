@@ -3,9 +3,9 @@ package com.jovezhao.nest.kafka;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jovezhao.nest.core.exception.GeneralException;
-import com.jovezhao.nest.core.log.ILog;
-import com.jovezhao.nest.core.log.LogAdapter;
+import com.jovezhao.nest.exception.GeneralException;
+import com.jovezhao.nest.log.ILog;
+import com.jovezhao.nest.log.LogAdapter;
 import com.jovezhao.nest.ddd.event.IEventHandler;
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;

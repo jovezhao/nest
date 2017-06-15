@@ -1,9 +1,9 @@
 package com.jovezhao.nest.ddd;
 
-import com.jovezhao.nest.core.identifier.IdentifierGenerator;
-import com.jovezhao.nest.core.log.ILog;
-import com.jovezhao.nest.core.log.LogAdapter;
-import com.jovezhao.nest.core.utils.SpringUtils;
+import com.jovezhao.nest.identifier.IdentifierGenerator;
+import com.jovezhao.nest.log.ILog;
+import com.jovezhao.nest.log.LogAdapter;
+import com.jovezhao.nest.utils.SpringUtils;
 import com.jovezhao.nest.ddd.builder.FactoryBuilder;
 import com.jovezhao.nest.ddd.builder.RepositoryLoader;
 import org.springframework.util.StringUtils;
