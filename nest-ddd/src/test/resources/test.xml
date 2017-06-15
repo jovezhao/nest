@@ -14,7 +14,7 @@
         </property>
 
     </bean>
-    <bean name="defaultCacheProvider" class="com.jovezhao.nest.core.cache.DefaultCacheProvider"></bean>
+    <bean name="defaultCacheProvider" class="DefaultCacheProvider"></bean>
     <bean name="Person_Repository" class="PersonRepository"/>
     <bean name="Teacher_Repository" class="TeacherRepository"/>
     <bean class="com.jovezhao.nest.ddd.AbstractUnitOfWork"/>

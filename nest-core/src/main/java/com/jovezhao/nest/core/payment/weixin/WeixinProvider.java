@@ -1,19 +1,19 @@
 //package com.jovezhao.nest.core.payment.weixin;
 //
 //
-//import com.jovezhao.nest.core.exception.GeneralException;
+//import GeneralException;
 //import com.jovezhao.nest.core.payment.PaymentProvider;
 //import com.jovezhao.nest.core.payment.TradeOrder;
 //import com.jovezhao.nest.core.utils.JSONTools;
-//import com.jovezhao.nest.core.utils.encrypt.MD5Util;
+//import MD5Util;
 //import org.apache.http.HttpResponse;
 //import org.apache.http.client.HttpClient;
 //import org.apache.http.client.methods.HttpPost;
 //import org.apache.http.entity.StringEntity;
 //import org.apache.http.impl.client.DefaultHttpClient;
 //import org.apache.http.util.EntityUtils;
-//import com.jovezhao.nest.core.log.ILog;
-//import com.jovezhao.nest.core.log.LogAdapter;
+//import ILog;
+//import LogAdapter;
 //import org.dom4j.*;
 //import org.dom4j.io.SAXReader;
 //

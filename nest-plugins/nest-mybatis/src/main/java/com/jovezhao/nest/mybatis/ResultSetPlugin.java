@@ -1,9 +1,7 @@
 package com.jovezhao.nest.mybatis;
 
 import com.jovezhao.nest.ddd.EntityObject;
-import org.apache.ibatis.executor.resultset.DefaultResultSetHandler;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
-import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.*;
 
 import java.lang.reflect.Field;

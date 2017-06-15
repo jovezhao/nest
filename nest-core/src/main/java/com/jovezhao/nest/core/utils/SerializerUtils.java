@@ -2,8 +2,8 @@
 //
 //import com.google.gson.Gson;
 //import com.google.gson.GsonBuilder;
-//import com.jovezhao.nest.core.log.ILog;
-//import com.jovezhao.nest.core.log.LogAdapter;
+//import ILog;
+//import LogAdapter;
 //import org.json.JSONObject;
 //
 //import java.io.ByteArrayInputStream;
