@@ -1,4 +1,4 @@
-package com.jovezhao.nest.core;
+package com.jovezhao.nest.mybatis;
 
 import java.util.*;
 
