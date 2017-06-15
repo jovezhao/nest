@@ -1,6 +1,6 @@
 /**  
  * @Title: package-info.java
- * @Package com.ywkj.nest.core.org.examples.appdemo.org.examples.utils.encrypt
+ * @Package com.jovezhao.nest.core.org.examples.appdemo.org.examples.utils.encrypt
  * @Description: 加密解密工具包
  * @author xiangxj
  * @date 2015年11月24日 上午9:57:09
@@ -13,4 +13,4 @@
  * @date 2015年11月24日 上午9:57:09
  * @version 1.0
 */
-package com.ywkj.nest.core.utils.encrypt;
+package com.jovezhao.nest.core.utils.encrypt;

@@ -1,11 +1,11 @@
-//package com.ywkj.nest.core.payment.alipay;
+//package com.jovezhao.nest.core.payment.alipay;
 //
 //
-//import com.ywkj.nest.core.log.ILog;
-//import com.ywkj.nest.core.log.LogAdapter;
-//import com.ywkj.nest.core.payment.PaymentProvider;
-//import com.ywkj.nest.core.payment.TradeOrder;
-//import com.ywkj.nest.core.utils.encrypt.RSAEncrypt;
+//import com.jovezhao.nest.core.log.ILog;
+//import com.jovezhao.nest.core.log.LogAdapter;
+//import com.jovezhao.nest.core.payment.PaymentProvider;
+//import com.jovezhao.nest.core.payment.TradeOrder;
+//import com.jovezhao.nest.core.utils.encrypt.RSAEncrypt;
 //import org.dom4j.Document;
 //import org.dom4j.DocumentException;
 //import org.dom4j.DocumentHelper;

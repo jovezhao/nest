@@ -1,4 +1,4 @@
-package com.ywkj.nest.ddd.event;
+package com.jovezhao.nest.ddd.event;
 
 /**
  * 事件处理器接口

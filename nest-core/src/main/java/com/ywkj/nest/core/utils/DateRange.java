@@ -1,4 +1,4 @@
-//package com.ywkj.nest.core.utils;
+//package com.jovezhao.nest.core.utils;
 //
 //import org.apache.commons.lang3.builder.HashCodeBuilder;
 //

@@ -1,6 +1,6 @@
-package com.ywkj.nest.ddd.builder;
+package com.jovezhao.nest.ddd.builder;
 
-import com.ywkj.nest.ddd.*;
+import com.jovezhao.nest.ddd.*;
 
 /**
  * 如果加载一个角色时请使用RoleRepositoryLoader，否则不能加载伴演者相关信息

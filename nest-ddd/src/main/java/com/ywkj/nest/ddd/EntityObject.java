@@ -1,11 +1,11 @@
-package com.ywkj.nest.ddd;
+package com.jovezhao.nest.ddd;
 
-import com.ywkj.nest.core.identifier.IdentifierGenerator;
-import com.ywkj.nest.core.log.ILog;
-import com.ywkj.nest.core.log.LogAdapter;
-import com.ywkj.nest.core.utils.SpringUtils;
-import com.ywkj.nest.ddd.builder.FactoryBuilder;
-import com.ywkj.nest.ddd.builder.RepositoryLoader;
+import com.jovezhao.nest.core.identifier.IdentifierGenerator;
+import com.jovezhao.nest.core.log.ILog;
+import com.jovezhao.nest.core.log.LogAdapter;
+import com.jovezhao.nest.core.utils.SpringUtils;
+import com.jovezhao.nest.ddd.builder.FactoryBuilder;
+import com.jovezhao.nest.ddd.builder.RepositoryLoader;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;

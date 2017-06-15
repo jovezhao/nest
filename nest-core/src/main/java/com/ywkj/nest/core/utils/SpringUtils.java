@@ -1,7 +1,7 @@
-package com.ywkj.nest.core.utils;
+package com.jovezhao.nest.core.utils;
 
-import com.ywkj.nest.core.log.ILog;
-import com.ywkj.nest.core.log.LogAdapter;
+import com.jovezhao.nest.core.log.ILog;
+import com.jovezhao.nest.core.log.LogAdapter;
 import org.springframework.context.ApplicationContext;
 
 import java.util.HashSet;

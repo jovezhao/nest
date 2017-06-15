@@ -1,4 +1,4 @@
-//package com.ywkj.nest.core.payment.weixin;
+//package com.jovezhao.nest.core.payment.weixin;
 //
 ///**
 // * Created by Jove on 2016-02-23.

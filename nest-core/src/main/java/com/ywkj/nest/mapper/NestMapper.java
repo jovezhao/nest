@@ -1,4 +1,4 @@
-package com.ywkj.nest.mapper;
+package com.jovezhao.nest.mapper;
 
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;

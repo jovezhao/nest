@@ -1,4 +1,4 @@
-package com.ywkj.nest.core.exception;
+package com.jovezhao.nest.core.exception;
 
 /**
  * 自定义的异常

@@ -1,6 +1,6 @@
-package com.ywkj.nest.kafka;
+package com.jovezhao.nest.kafka;
 
-import com.ywkj.nest.ddd.event.IEventHandler;
+import com.jovezhao.nest.ddd.event.IEventHandler;
 
 class EventWork {
     String eventName;

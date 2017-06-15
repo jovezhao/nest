@@ -1,7 +1,7 @@
-import com.ywkj.nest.activemq.ActiveChannelProvider;
-import com.ywkj.nest.ddd.event.EventBus;
-import com.ywkj.nest.ddd.event.IEventHandler;
-import com.ywkj.nest.ddd.event.ServiceEvent;
+import com.jovezhao.nest.activemq.ActiveChannelProvider;
+import com.jovezhao.nest.ddd.event.EventBus;
+import com.jovezhao.nest.ddd.event.IEventHandler;
+import com.jovezhao.nest.ddd.event.ServiceEvent;
 import org.junit.Test;
 
 import java.io.IOException;

@@ -1,6 +1,6 @@
-package com.ywkj.nest.ddd.builder;
+package com.jovezhao.nest.ddd.builder;
 
-import com.ywkj.nest.ddd.EntityObject;
+import com.jovezhao.nest.ddd.EntityObject;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;

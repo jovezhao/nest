@@ -1,7 +1,7 @@
-package com.ywkj.nest.core.log;
+package com.jovezhao.nest.core.log;
 
 
-import com.ywkj.nest.core.exception.CustomException;
+import com.jovezhao.nest.core.exception.CustomException;
 
 /**
  * <p/>

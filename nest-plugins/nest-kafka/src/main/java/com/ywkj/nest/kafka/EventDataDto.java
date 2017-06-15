@@ -1,4 +1,4 @@
-package com.ywkj.nest.kafka;
+package com.jovezhao.nest.kafka;
 
 
 import java.io.Serializable;

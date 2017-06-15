@@ -1,4 +1,4 @@
-package com.ywkj.nest.rabbitmq;
+package com.jovezhao.nest.rabbitmq;
 
 
 import java.io.Serializable;

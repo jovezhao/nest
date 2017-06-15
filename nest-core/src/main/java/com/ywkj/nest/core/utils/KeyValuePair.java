@@ -5,7 +5,7 @@
 * @author：duanwei 
 * @date： 2015年7月2日 上午11:00:00  
 */
-package com.ywkj.nest.core.utils;
+package com.jovezhao.nest.core.utils;
 
 import java.io.Serializable;
 

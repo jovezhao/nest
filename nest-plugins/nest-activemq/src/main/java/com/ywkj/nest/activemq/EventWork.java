@@ -1,6 +1,6 @@
-package com.ywkj.nest.activemq;
+package com.jovezhao.nest.activemq;
 
-import com.ywkj.nest.ddd.event.IEventHandler;
+import com.jovezhao.nest.ddd.event.IEventHandler;
 
 class EventWork {
     String eventName;

@@ -1,9 +1,9 @@
-package com.ywkj.nest.rabbitmq;
+package com.jovezhao.nest.rabbitmq;
 
 
-import com.ywkj.nest.core.exception.GeneralException;
-import com.ywkj.nest.core.log.ILog;
-import com.ywkj.nest.core.log.LogAdapter;
+import com.jovezhao.nest.core.exception.GeneralException;
+import com.jovezhao.nest.core.log.ILog;
+import com.jovezhao.nest.core.log.LogAdapter;
 import org.springframework.util.SerializationUtils;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.QueueingConsumer;

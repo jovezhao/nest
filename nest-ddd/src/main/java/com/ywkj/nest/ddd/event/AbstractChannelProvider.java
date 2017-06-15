@@ -1,4 +1,4 @@
-package com.ywkj.nest.ddd.event;
+package com.jovezhao.nest.ddd.event;
 
 import java.util.Properties;
 

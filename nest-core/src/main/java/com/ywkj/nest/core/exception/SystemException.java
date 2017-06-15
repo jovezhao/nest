@@ -1,4 +1,4 @@
-package com.ywkj.nest.core.exception;
+package com.jovezhao.nest.core.exception;
 
 /**
  * 系统异常基类，用于把异常转换为运行时异常

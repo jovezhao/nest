@@ -1,9 +1,9 @@
-//package com.ywkj.nest.core.utils;
+//package com.jovezhao.nest.core.utils;
 //
 //import com.google.gson.Gson;
 //import com.google.gson.GsonBuilder;
-//import com.ywkj.nest.core.log.ILog;
-//import com.ywkj.nest.core.log.LogAdapter;
+//import com.jovezhao.nest.core.log.ILog;
+//import com.jovezhao.nest.core.log.LogAdapter;
 //import org.json.JSONObject;
 //
 //import java.io.ByteArrayInputStream;

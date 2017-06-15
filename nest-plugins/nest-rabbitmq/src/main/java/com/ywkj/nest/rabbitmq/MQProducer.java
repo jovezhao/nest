@@ -1,8 +1,8 @@
-package com.ywkj.nest.rabbitmq;
+package com.jovezhao.nest.rabbitmq;
 
 
-import com.ywkj.nest.core.log.ILog;
-import com.ywkj.nest.core.log.LogAdapter;
+import com.jovezhao.nest.core.log.ILog;
+import com.jovezhao.nest.core.log.LogAdapter;
 
 import java.io.Serializable;
 import com.rabbitmq.client.Channel;

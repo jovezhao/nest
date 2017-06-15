@@ -1,6 +1,6 @@
-package com.ywkj.nest.activemq;
+package com.jovezhao.nest.activemq;
 
-import com.ywkj.nest.core.utils.JsonUtils;
+import com.jovezhao.nest.core.utils.JsonUtils;
 
 import javax.jms.*;
 import java.io.Serializable;

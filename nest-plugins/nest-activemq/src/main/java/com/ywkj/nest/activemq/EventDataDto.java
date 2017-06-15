@@ -1,4 +1,4 @@
-package com.ywkj.nest.activemq;
+package com.jovezhao.nest.activemq;
 
 
 import java.io.Serializable;

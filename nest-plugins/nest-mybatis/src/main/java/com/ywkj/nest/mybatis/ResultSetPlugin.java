@@ -1,6 +1,6 @@
-package com.ywkj.nest.mybatis;
+package com.jovezhao.nest.mybatis;
 
-import com.ywkj.nest.ddd.EntityObject;
+import com.jovezhao.nest.ddd.EntityObject;
 import org.apache.ibatis.executor.resultset.DefaultResultSetHandler;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
 import org.apache.ibatis.mapping.MappedStatement;

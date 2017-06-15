@@ -1,10 +1,10 @@
-package com.ywkj.nest.activemq;
+package com.jovezhao.nest.activemq;
 
 
-import com.ywkj.nest.core.exception.SystemException;
-import com.ywkj.nest.core.log.ILog;
-import com.ywkj.nest.core.log.LogAdapter;
-import com.ywkj.nest.core.utils.JsonUtils;
+import com.jovezhao.nest.core.exception.SystemException;
+import com.jovezhao.nest.core.log.ILog;
+import com.jovezhao.nest.core.log.LogAdapter;
+import com.jovezhao.nest.core.utils.JsonUtils;
 
 import javax.jms.*;
 

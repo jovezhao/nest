@@ -1,4 +1,4 @@
-package com.ywkj.nest.ddd;
+package com.jovezhao.nest.ddd;
 
 /**
  * Created by Jove on 2016-03-31.

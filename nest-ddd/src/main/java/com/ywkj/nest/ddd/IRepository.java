@@ -1,6 +1,6 @@
-package com.ywkj.nest.ddd;
+package com.jovezhao.nest.ddd;
 
-import com.ywkj.nest.ddd.builder.IBuilder;
+import com.jovezhao.nest.ddd.builder.IBuilder;
 
 /**
  * 实体仓储定义

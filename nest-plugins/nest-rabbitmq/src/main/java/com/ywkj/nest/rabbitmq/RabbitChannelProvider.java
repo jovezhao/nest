@@ -1,8 +1,8 @@
-package com.ywkj.nest.rabbitmq;
+package com.jovezhao.nest.rabbitmq;
 
 
-import com.ywkj.nest.ddd.event.AbstractChannelProvider;
-import com.ywkj.nest.ddd.event.IEventHandler;
+import com.jovezhao.nest.ddd.event.AbstractChannelProvider;
+import com.jovezhao.nest.ddd.event.IEventHandler;
 
 /**
  * Created by Jove on 2016-03-22.

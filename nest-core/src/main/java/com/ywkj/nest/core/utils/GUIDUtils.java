@@ -5,7 +5,7 @@
 // * @author：duanwei
 // * @date： 2015年7月2日 上午10:58:48
 // */
-//package com.ywkj.nest.core.utils;
+//package com.jovezhao.nest.core.utils;
 //
 //
 //import java.text.SimpleDateFormat;

@@ -1,7 +1,7 @@
-package com.ywkj.nest.core.utils.encrypt;
+package com.jovezhao.nest.core.utils.encrypt;
 
-import com.ywkj.nest.core.log.ILog;
-import com.ywkj.nest.core.log.LogAdapter;
+import com.jovezhao.nest.core.log.ILog;
+import com.jovezhao.nest.core.log.LogAdapter;
 import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;

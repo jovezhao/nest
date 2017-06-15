@@ -1,6 +1,6 @@
-package com.ywkj.nest.ddd.builder;
+package com.jovezhao.nest.ddd.builder;
 
-import com.ywkj.nest.ddd.EntityObject;
+import com.jovezhao.nest.ddd.EntityObject;
 
 /**
  * 用于创建各种builder
