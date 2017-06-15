@@ -2,10 +2,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-    <bean class="com.ywkj.nest.core.cache.CacheFactory">
+    <bean class="com.jovezhao.nest.core.cache.CacheFactory">
         <property name="strategies">
             <set>
-                <bean class="com.ywkj.nest.core.cache.CacheGroupStrategy">
+                <bean class="com.jovezhao.nest.core.cache.CacheGroupStrategy">
                     <property name="name" value="entityObject"/>
                     <property name="idleSeconds" value="10"/>
                     <property name="provider" ref="defaultCacheProvider"/>
@@ -14,8 +14,8 @@
         </property>
 
     </bean>
-    <bean name="defaultCacheProvider" class="com.ywkj.nest.core.cache.DefaultCacheProvider"></bean>
+    <bean name="defaultCacheProvider" class="DefaultCacheProvider"></bean>
     <bean name="Person_Repository" class="PersonRepository"/>
     <bean name="Teacher_Repository" class="TeacherRepository"/>
-    <bean class="com.ywkj.nest.ddd.AbstractUnitOfWork"/>
+    <bean class="com.jovezhao.nest.ddd.AbstractUnitOfWork"/>
 </beans>

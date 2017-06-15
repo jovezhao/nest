@@ -1,6 +1,6 @@
-import com.ywkj.nest.ddd.EntityObject;
-import com.ywkj.nest.ddd.builder.FactoryBuilder;
-import com.ywkj.nest.ddd.builder.IBuilder;
+import com.jovezhao.nest.ddd.EntityObject;
+import com.jovezhao.nest.ddd.builder.FactoryBuilder;
+import com.jovezhao.nest.ddd.builder.IBuilder;
 
 /**
  * Created by zhaofujun on 2017/3/18.

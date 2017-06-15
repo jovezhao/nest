@@ -1,4 +1,4 @@
-import com.ywkj.nest.core.utils.StringUtils;
+import com.jovezhao.nest.core.utils.StringUtils;
 import org.junit.Test;
 
 /**
