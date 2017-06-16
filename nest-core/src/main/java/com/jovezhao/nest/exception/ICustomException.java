@@ -7,6 +7,7 @@ package com.jovezhao.nest.exception;
  */
 public interface ICustomException {
 
+    String getMessage();
 
     int getCode();
 

@@ -2,6 +2,7 @@ package com.jovezhao.nest.log;
 
 
 import com.jovezhao.nest.exception.CustomException;
+import com.jovezhao.nest.exception.ICustomException;
 
 /**
  * <p/>
@@ -21,6 +22,6 @@ public interface ILog {
     void debug(String message, Object... args);
     void info(String message, Object... args);
     void warn(String message, Object... args);
-    void error(CustomException ex);
+    void error(ICustomException ex);
     void fatal(Exception ex, Object... args);
 }

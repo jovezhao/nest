@@ -1,6 +1,7 @@
 package com.jovezhao.nest.log;
 
 import com.jovezhao.nest.exception.CustomException;
+import com.jovezhao.nest.exception.ICustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +86,7 @@ public class LogAdapter implements ILog ,Serializable {
      *
      * @param ex      系统异常
      */
-    public void error(CustomException ex) {
+    public void error(ICustomException ex) {
 
         StringBuilder builder = new StringBuilder();
         if (null != ex) {

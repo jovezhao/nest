@@ -5,7 +5,7 @@ package com.jovezhao.nest.exception;
  *
  * @author xiangxj
  */
-public class GeneralException extends CustomException  {
+public class GeneralException extends CustomRuntimeException {
     /**
      * 版本号
      */
