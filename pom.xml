@@ -12,6 +12,8 @@
         <module>nest-core</module>
         <module>nest-ddd</module>
         <module>nest-plugins</module>
+        <module>nest-starter</module>
+        <module>nest-starter-test</module>
     </modules>
 
     <properties>

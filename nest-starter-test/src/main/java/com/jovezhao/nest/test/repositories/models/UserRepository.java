@@ -1,0 +1,42 @@
+package com.jovezhao.nest.test.repositories.models;
+
+import com.jovezhao.nest.ddd.IRepository;
+import com.jovezhao.nest.ddd.builder.IBuilder;
+import com.jovezhao.nest.test.models.User;
+import com.jovezhao.nest.test.repositories.mappers.UserDMOMapper;
+import com.jovezhao.nest.test.repositories.mappers.dmo.UserDMO;
+import org.springframework.stereotype.Repository;
+
+import javax.annotation.Resource;
+
+/**
+ * Created by zhaofujun on 2017/6/16.
+ */
+@Repository("User_Repository")
+public class UserRepository implements IRepository<User> {
+    @Resource
+    UserDMOMapper userDMOMapper;
+
+    @Override
+    public User getEntityById(String id, IBuilder<User> builder) {
+        User user = builder.build(id);
+        UserDMO userDMO = userDMOMapper.selectByPrimaryKey(id);
+        user.setName(userDMO.getName());
+        return user;
+    }
+
+    @Override
+    public void save(User user) {
+
+        UserDMO userDMO = new UserDMO();
+        userDMO.setId(user.getId());
+        userDMO.setName(user.getName());
+        if (userDMOMapper.updateByPrimaryKey(userDMO) == 0)
+            userDMOMapper.insert(userDMO);
+    }
+
+    @Override
+    public void remove(User user) {
+
+    }
+}

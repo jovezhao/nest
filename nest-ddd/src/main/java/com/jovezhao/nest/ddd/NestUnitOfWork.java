@@ -8,7 +8,7 @@ import java.util.Map;
  * 实体上下文
  * Created by Jove on 2016/8/30.
  */
-public abstract class AbstractUnitOfWork implements IUnitOfWork {
+public  class NestUnitOfWork implements IUnitOfWork {
 
 
     private static ThreadLocal<HashMap<EntityObject, OperateEnum>> threadLocal = new ThreadLocal<>();
@@ -32,7 +32,12 @@ public abstract class AbstractUnitOfWork implements IUnitOfWork {
         getmap().put(entityObject, OperateEnum.remove);
     }
 
-    protected abstract void beforeCommit();
+    @Override
+    public void rollback() {
+
+    }
+
+    protected  void beforeCommit(){}
 
     public void commit() {
 
@@ -67,6 +72,6 @@ public abstract class AbstractUnitOfWork implements IUnitOfWork {
     }
 
 
-    protected abstract void afterCommit();
+    protected  void afterCommit(){}
 
 }

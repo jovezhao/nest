@@ -21,8 +21,8 @@ import java.util.Properties;
  * Created by Jove on 2017/2/8.
  */
 @Intercepts({
-        @Signature(method = "prepare", type = StatementHandler.class, args = {Connection.class}),
-//        @Signature(method = "prepare", type = StatementHandler.class, args = {Connection.class,Integer.class}),
+//        @Signature(method = "prepare", type = StatementHandler.class, args = {Connection.class}),
+        @Signature(method = "prepare", type = StatementHandler.class, args = {Connection.class,Integer.class}),
         @Signature(type = ResultSetHandler.class, method = "handleResultSets", args = {Statement.class})
 })
 public class PageListPlugin implements Interceptor {

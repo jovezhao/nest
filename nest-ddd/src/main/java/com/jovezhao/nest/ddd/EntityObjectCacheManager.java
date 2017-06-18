@@ -9,7 +9,7 @@ import com.jovezhao.nest.utils.SpringUtils;
  */
  public class EntityObjectCacheManager {
     static {
-        CacheFactory cacheFactory = SpringUtils.getInstance(CacheFactory.class);
+        CacheFactory cacheFactory = new CacheFactory();
         cacheClient = cacheFactory.getCacheClient("entityObject");
 
     }

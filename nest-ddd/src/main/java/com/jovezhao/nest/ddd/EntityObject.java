@@ -94,14 +94,14 @@ public abstract class EntityObject implements Serializable {
     }
 
     private void addToUnitOfWork() {
-        AbstractUnitOfWork unitOfWork = SpringUtils.getInstance(AbstractUnitOfWork.class);
+        IUnitOfWork unitOfWork = SpringUtils.getInstance(IUnitOfWork.class);
         if (unitOfWork != null)
             unitOfWork.addEntityObject(this);
     }
 
 
     public void delete() {
-        AbstractUnitOfWork unitOfWork = SpringUtils.getInstance(AbstractUnitOfWork.class);
+        IUnitOfWork unitOfWork = SpringUtils.getInstance(IUnitOfWork.class);
         if (unitOfWork != null)
             unitOfWork.removeEntityObject(this);
     }
