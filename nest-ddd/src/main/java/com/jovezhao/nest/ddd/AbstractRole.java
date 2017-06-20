@@ -3,17 +3,7 @@ package com.jovezhao.nest.ddd;
 /**
  * Created by Jove on 2016-03-31.
  */
-public abstract class AbstractRole<T extends EntityObject> extends EntityObject {
-    private T actor;
-
-    public T getActor() {
-        return actor;
-    }
-
-    void setActor(T actor) {
-        this.actor = actor;
-    }
-
+public abstract class AbstractRole<A extends EntityObject> extends BaseRole<A,StringIdentifier> {
 
 
 

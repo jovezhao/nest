@@ -11,7 +11,7 @@ public class RepositoryManager {
     }
 
     public static IRepository getEntityRepository(Class clazz) {
-        if (clazz.equals(EntityObject.class)) return null;
+        if (clazz.equals(BaseEntityObject.class)) return null;
         String repName = getRepName(clazz);
         IRepository repository = SpringUtils.getInstance(IRepository.class, repName);
         if (repository == null)

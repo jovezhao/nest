@@ -1,8 +1,9 @@
 package com.jovezhao.nest.ddd.builder;
 
-import com.jovezhao.nest.ddd.EntityObject;
+import com.jovezhao.nest.ddd.BaseEntityObject;
+import com.jovezhao.nest.ddd.Identifier;
 
-public class FactoryBuilder<T extends EntityObject> implements IBuilder<T> {
+public class FactoryBuilder<T extends BaseEntityObject> implements IBuilder<T> {
     Class<T> tClass;
 
     public FactoryBuilder(Class<T> tClass) {
@@ -10,14 +11,14 @@ public class FactoryBuilder<T extends EntityObject> implements IBuilder<T> {
     }
 
     @Override
-    public T build(String id) {
+    public T build(Identifier id) {
         T t = EntityObjectFactory.create(tClass);
         t.setId(id);
         return t;
     }
 
     @Override
-    public <U extends T> U build(Class<U> uClass, String id) {
+    public <U extends T> U build(Class<U> uClass, Identifier id) {
         U u = EntityObjectFactory.create(uClass);
         u.setId(id);
         return u;

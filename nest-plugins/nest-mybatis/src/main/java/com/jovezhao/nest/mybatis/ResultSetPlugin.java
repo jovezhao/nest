@@ -1,6 +1,6 @@
 package com.jovezhao.nest.mybatis;
 
-import com.jovezhao.nest.ddd.EntityObject;
+import com.jovezhao.nest.ddd.BaseEntityObject;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
 import org.apache.ibatis.plugin.*;
 
@@ -24,8 +24,8 @@ public class ResultSetPlugin implements Interceptor {
 
         List objects = (List) invocation.proceed();
         for (Object obj : objects) {
-            if (EntityObject.class.isAssignableFrom(obj.getClass())) {
-                Field field = EntityObject.class.getDeclaredField("isLoad");
+            if (BaseEntityObject.class.isAssignableFrom(obj.getClass())) {
+                Field field = BaseEntityObject.class.getDeclaredField("isLoad");
                 field.setAccessible(true);
                 field.set(obj, false);
 

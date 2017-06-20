@@ -1,6 +1,6 @@
 package com.jovezhao.nest.ddd.builder;
 
-import com.jovezhao.nest.ddd.EntityObject;
+import com.jovezhao.nest.ddd.BaseEntityObject;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
@@ -46,10 +46,10 @@ import java.util.Arrays;
                 ,"act","findRoles","delete"};
 
         if(method.getModifiers()==1 && !Arrays.asList(withoutMethod).contains(method.getName()) && !method.getName().startsWith("get") && !method.getName().startsWith("is")){
-            Field field = EntityObject.class.getDeclaredField("isLoad");
+            Field field = BaseEntityObject.class.getDeclaredField("isLoad");
             field.setAccessible(true);
             if (!field.getBoolean(obj)) {
-                Method method1 = EntityObject.class.getDeclaredMethod("addToUnitOfWork");
+                Method method1 = BaseEntityObject.class.getDeclaredMethod("addToUnitOfWork");
                 method1.setAccessible(true);
                 method1.invoke(obj);
                 System.out.println("调用"+method.getName());

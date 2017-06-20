@@ -6,8 +6,8 @@ package com.jovezhao.nest.ddd;
 public interface IUnitOfWork {
     void commit();
 
-    void addEntityObject(EntityObject entityObject);
+    void addEntityObject(BaseEntityObject entityObject);
 
-    void removeEntityObject(EntityObject entityObject);
+    void removeEntityObject(BaseEntityObject entityObject);
     void rollback();
 }

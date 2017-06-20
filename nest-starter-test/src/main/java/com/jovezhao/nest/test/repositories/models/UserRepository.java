@@ -1,6 +1,8 @@
 package com.jovezhao.nest.test.repositories.models;
 
 import com.jovezhao.nest.ddd.IRepository;
+import com.jovezhao.nest.ddd.Identifier;
+import com.jovezhao.nest.ddd.StringIdentifier;
 import com.jovezhao.nest.ddd.builder.IBuilder;
 import com.jovezhao.nest.test.models.User;
 import com.jovezhao.nest.test.repositories.mappers.UserDMOMapper;
@@ -18,9 +20,9 @@ public class UserRepository implements IRepository<User> {
     UserDMOMapper userDMOMapper;
 
     @Override
-    public User getEntityById(String id, IBuilder<User> builder) {
+    public User getEntityById(Identifier id, IBuilder<User> builder) {
         User user = builder.build(id);
-        UserDMO userDMO = userDMOMapper.selectByPrimaryKey(id);
+        UserDMO userDMO = userDMOMapper.selectByPrimaryKey(id.toString());
         user.setName(userDMO.getName());
         return user;
     }
@@ -29,7 +31,7 @@ public class UserRepository implements IRepository<User> {
     public void save(User user) {
 
         UserDMO userDMO = new UserDMO();
-        userDMO.setId(user.getId());
+        userDMO.setId(user.getId().toString());
         userDMO.setName(user.getName());
         if (userDMOMapper.updateByPrimaryKey(userDMO) == 0)
             userDMOMapper.insert(userDMO);

@@ -11,12 +11,12 @@ import java.util.Map;
 public  class NestUnitOfWork implements IUnitOfWork {
 
 
-    private static ThreadLocal<HashMap<EntityObject, OperateEnum>> threadLocal = new ThreadLocal<>();
+    private static ThreadLocal<HashMap<BaseEntityObject, OperateEnum>> threadLocal = new ThreadLocal<>();
     private static ThreadLocal<HashMap<String, Object>> threadLocalEvent = new ThreadLocal<>();
 
 
-    private HashMap<EntityObject, OperateEnum> getmap() {
-        HashMap<EntityObject, OperateEnum> hashMap = threadLocal.get();
+    private HashMap<BaseEntityObject, OperateEnum> getmap() {
+        HashMap<BaseEntityObject, OperateEnum> hashMap = threadLocal.get();
         if (threadLocal.get() == null) {
             hashMap = new HashMap<>();
             threadLocal.set(hashMap);
@@ -24,11 +24,11 @@ public  class NestUnitOfWork implements IUnitOfWork {
         return hashMap;
     }
 
-    public void addEntityObject(EntityObject entityObject) {
+    public void addEntityObject(BaseEntityObject entityObject) {
         getmap().put(entityObject, OperateEnum.save);
     }
 
-    public void removeEntityObject(EntityObject entityObject) {
+    public void removeEntityObject(BaseEntityObject entityObject) {
         getmap().put(entityObject, OperateEnum.remove);
     }
 
@@ -45,8 +45,8 @@ public  class NestUnitOfWork implements IUnitOfWork {
         try {
             Iterator iter = getmap().entrySet().iterator();
             while (iter.hasNext()) {
-                Map.Entry<EntityObject, OperateEnum> entry = (Map.Entry) iter.next();
-                EntityObject entityObject = entry.getKey();
+                Map.Entry<BaseEntityObject, OperateEnum> entry = (Map.Entry) iter.next();
+                BaseEntityObject entityObject = entry.getKey();
                 OperateEnum operate = entry.getValue();
 
                 IRepository r = RepositoryManager.getEntityRepository(entityObject.getClass());

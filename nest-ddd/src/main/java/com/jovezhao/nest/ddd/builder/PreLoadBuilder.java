@@ -1,6 +1,7 @@
 package com.jovezhao.nest.ddd.builder;
 
-import com.jovezhao.nest.ddd.EntityObject;
+import com.jovezhao.nest.ddd.BaseEntityObject;
+import com.jovezhao.nest.ddd.Identifier;
 
 import java.lang.reflect.Modifier;
 
@@ -9,7 +10,7 @@ import java.lang.reflect.Modifier;
  *
  * @param <T>
  */
- class PreLoadBuilder<T extends EntityObject> implements IBuilder<T> {
+ class PreLoadBuilder<T extends BaseEntityObject> implements IBuilder<T> {
     Class<T> tClass;
 
     public PreLoadBuilder(Class<T> tClass) {
@@ -17,7 +18,7 @@ import java.lang.reflect.Modifier;
     }
 
     @Override
-    public T build(String id) {
+    public T build(Identifier id) {
         if (Modifier.isAbstract(tClass.getModifiers()))  throw new RuntimeException(tClass+"是一个抽象类");
         T t = EntityObjectFactory.createForLoad(tClass);
         t.setId(id);
@@ -25,7 +26,7 @@ import java.lang.reflect.Modifier;
     }
 
     @Override
-    public <U extends T> U build(Class<U> uClass, String id) {
+    public <U extends T> U build(Class<U> uClass, Identifier id) {
         U u = EntityObjectFactory.createForLoad(uClass);
         u.setId(id);
         return u;
