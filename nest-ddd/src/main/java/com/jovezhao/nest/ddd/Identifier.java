@@ -7,7 +7,5 @@ import java.io.Serializable;
  */
 
 public abstract class Identifier implements Serializable {
-
-    @Override
-    public abstract String toString();
+    public abstract String toValue();
 }

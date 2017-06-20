@@ -1,7 +1,7 @@
 package com.jovezhao.nest.starter;
 
-import com.jovezhao.nest.ddd.IUnitOfWork;
-import com.jovezhao.nest.ddd.NestUnitOfWork;
+import com.jovezhao.nest.ddd.repository.IUnitOfWork;
+import com.jovezhao.nest.ddd.repository.NestUnitOfWork;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

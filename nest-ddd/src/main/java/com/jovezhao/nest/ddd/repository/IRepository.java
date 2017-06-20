@@ -1,5 +1,7 @@
-package com.jovezhao.nest.ddd;
+package com.jovezhao.nest.ddd.repository;
 
+import com.jovezhao.nest.ddd.BaseEntityObject;
+import com.jovezhao.nest.ddd.Identifier;
 import com.jovezhao.nest.ddd.builder.IBuilder;
 
 /**
@@ -14,7 +16,7 @@ public interface IRepository<T extends BaseEntityObject> {
      * @param id
      * @return
      */
-    T getEntityById(Identifier id,IBuilder<T> builder);
+    T getEntityById(Identifier id, IBuilder<T> builder);
 
     /**
      * 保存一个实体，如果已经存在的情况下覆盖已存在的内容

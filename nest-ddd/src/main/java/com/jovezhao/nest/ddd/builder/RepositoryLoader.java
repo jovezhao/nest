@@ -1,6 +1,9 @@
 package com.jovezhao.nest.ddd.builder;
 
 import com.jovezhao.nest.ddd.*;
+import com.jovezhao.nest.ddd.repository.EntityObjectCacheManager;
+import com.jovezhao.nest.ddd.repository.IRepository;
+import com.jovezhao.nest.ddd.repository.RepositoryManager;
 
 /**
  * 如果加载一个角色时请使用RoleRepositoryLoader，否则不能加载伴演者相关信息

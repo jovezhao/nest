@@ -1,8 +1,7 @@
 package com.jovezhao.nest.test.repositories.models;
 
-import com.jovezhao.nest.ddd.AbstractRole;
-import com.jovezhao.nest.ddd.IRepository;
-import com.jovezhao.nest.ddd.IRoleRepository;
+import com.jovezhao.nest.ddd.repository.IRepository;
+import com.jovezhao.nest.ddd.repository.IRoleRepository;
 import com.jovezhao.nest.ddd.Identifier;
 import com.jovezhao.nest.ddd.builder.IBuilder;
 import com.jovezhao.nest.test.models.Teacher;

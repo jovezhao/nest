@@ -1,4 +1,7 @@
-package com.jovezhao.nest.ddd;
+package com.jovezhao.nest.ddd.repository;
+
+import com.jovezhao.nest.ddd.BaseRole;
+import com.jovezhao.nest.ddd.Identifier;
 
 import java.util.Set;
 

@@ -1,6 +1,8 @@
-package com.jovezhao.nest.ddd;
+package com.jovezhao.nest.ddd.repository;
 
 import com.jovezhao.nest.cache.CacheContext;
+import com.jovezhao.nest.ddd.BaseEntityObject;
+import com.jovezhao.nest.ddd.Identifier;
 
 /**
  * Created by Jove on 2016/8/31.

@@ -9,6 +9,11 @@ public class StringIdentifier extends Identifier {
 
     @Override
     public String toString() {
+        return toValue();
+    }
+
+    @Override
+    public String toValue() {
         return id;
     }
 }
