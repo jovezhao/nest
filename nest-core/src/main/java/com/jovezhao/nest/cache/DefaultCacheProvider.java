@@ -14,6 +14,9 @@ import java.util.Map;
  * @author Jove
  */
 class DefaultCacheProvider implements ICacheProvider {
+
+
+
     private CacheManager manager = CacheManager.create();
 
     public Object get(String groupName, String key,Class clazz) {

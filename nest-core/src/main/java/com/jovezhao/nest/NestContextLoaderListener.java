@@ -1,4 +1,4 @@
-package com.jovezhao.nest.core;
+package com.jovezhao.nest;
 
 import com.jovezhao.nest.utils.SpringUtils;
 import org.springframework.web.context.ContextLoaderListener;

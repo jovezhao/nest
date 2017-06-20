@@ -2,11 +2,12 @@ package com.jovezhao.nest.cache;
 
 
 /**
- * 缓存组策略
+ * 缓存组配置
  *
  * @author Jove
  */
-public class CacheGroupStrategy {
+public class CacheItem {
+    private String coce;
     /**
      * 名称
      */
@@ -42,5 +43,13 @@ public class CacheGroupStrategy {
 
     public void setIdleSeconds(long idleSeconds) {
         this.idleSeconds = idleSeconds;
+    }
+
+    public String getCoce() {
+        return coce;
+    }
+
+    public void setCoce(String coce) {
+        this.coce = coce;
     }
 }
