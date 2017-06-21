@@ -1,5 +1,7 @@
 package com.jovezhao.nest.ddd.event;
 
+import java.io.Serializable;
+
 /**
  * Created by zhaofujun on 2017/6/21.
  */
@@ -10,7 +12,7 @@ public class EventBus {
      * @param eventName
      * @param eventData
      */
-    public static void publish(String eventName, Object eventData) {
+    public static void publish(String eventName, Serializable eventData) {
 
         // 1. 使用事件通道管理器查询通道信息
         EventChannelItem eventChannelItem = EventChannelManager.get(eventName);
@@ -19,12 +21,16 @@ public class EventBus {
 
     }
 
-    /**
+    /*
      * 订阅事件
      *
      * @param eventHandler
      */
     public static void registerHandler(EventHandler eventHandler) {
+
+        //1. 使用事件通道管理器查询通道信息
+        EventChannelItem eventChannelItem = EventChannelManager.get(eventHandler.getEventName());
+        eventChannelItem.getChannelProvider().subscribe(eventHandler);
 
     }
 }

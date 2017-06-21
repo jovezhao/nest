@@ -1,61 +1,29 @@
 package com.jovezhao.nest.ddd.event.provider.distribut;
 
-import com.jovezhao.nest.ddd.event.ChannelProvider;
-import com.jovezhao.nest.ddd.event.EventChannelManager;
+import com.jovezhao.nest.ddd.Identifier;
+
+import java.io.Serializable;
 
 /**
- * 服务事件，用于创建一个事件
- * Created by Jove on 2016-03-21.
+ * Created by zhaofujun on 2017/6/21.
  */
-public class EventData<T> {
+public class EventData implements Serializable {
+    private Serializable data;
+    private Identifier dataId;
 
-    public static <U> EventData<U> createEvent(String eventName, U data) {
-        EventData<U> event = new EventData<U>();
-        event.data = data;
-        event.eventName = eventName;
-        event.sendStatus = EventSendStatus.wait;
-        return event;
-    }
-
-    private EventData() {
-    }
-
-    private T data;
-    private String eventName;
-
-    public T getData() {
+    public Serializable getData() {
         return data;
     }
 
-    public String getEventName() {
-        return eventName;
+    public void setData(Serializable data) {
+        this.data = data;
     }
 
-    private EventSendStatus sendStatus;
-
-    public EventSendStatus getSendStatus() {
-        return sendStatus;
+    public Identifier getDataId() {
+        return dataId;
     }
 
-
-    public DistributedChannelProvider getChannelProvider() {
-        ChannelProvider channelProvider = EventChannelManager.get(eventName).getChannelProvider();
-        if (channelProvider instanceof DistributedChannelProvider)
-            return (DistributedChannelProvider) channelProvider;
-        return null;
-    }
-
-    public void commit() {
-        this.sendStatus = EventSendStatus.commited;
-        EventCommitManager.putEventData(this);
-        try {
-            getChannelProvider().commitMessage(this.getEventName(), this.getData());
-            this.sendStatus = EventSendStatus.success;
-        } catch (Exception ex) {
-            this.sendStatus = EventSendStatus.fail;
-        } finally {
-            EventCommitManager.putEventData(this);
-        }
+    public void setDataId(Identifier dataId) {
+        this.dataId = dataId;
     }
 }
-

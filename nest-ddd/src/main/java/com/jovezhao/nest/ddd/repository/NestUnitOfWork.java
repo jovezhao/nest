@@ -1,10 +1,7 @@
 package com.jovezhao.nest.ddd.repository;
 
 import com.jovezhao.nest.ddd.BaseEntityObject;
-import com.jovezhao.nest.ddd.event.provider.distribut.DistributedChannelProvider;
-import com.jovezhao.nest.ddd.event.provider.distribut.EventCommitManager;
-import com.jovezhao.nest.ddd.event.provider.distribut.EventData;
-import com.jovezhao.nest.ddd.event.provider.distribut.EventSendStatus;
+import com.jovezhao.nest.ddd.event.provider.distribut.DistributedEventInfo;
 
 import java.util.*;
 
@@ -83,10 +80,10 @@ public class NestUnitOfWork implements IUnitOfWork {
 
 
     //region 事件相关的处理方式
-    private static ThreadLocal<Queue<EventData>> threadLocalEvent = new ThreadLocal<>();
+    private static ThreadLocal<Queue<DistributedEventInfo>> threadLocalEvent = new ThreadLocal<>();
 
-    private Queue<EventData> getEvenQueue() {
-        Queue<EventData> eventQueue = threadLocalEvent.get();
+    private Queue<DistributedEventInfo> getEvenQueue() {
+        Queue<DistributedEventInfo> eventQueue = threadLocalEvent.get();
         if (eventQueue == null) {
             eventQueue = new ArrayDeque<>();
             threadLocalEvent.set(eventQueue);
@@ -95,17 +92,17 @@ public class NestUnitOfWork implements IUnitOfWork {
     }
 
     @Override
-    public void addEvent(EventData eventData) {
-        getEvenQueue().add(eventData);
+    public void addEvent(DistributedEventInfo distributedEventInfo) {
+        getEvenQueue().add(distributedEventInfo);
     }
 
     @Override
     public void eventCommit() {
-        EventData eventData = getEvenQueue().poll();
+        DistributedEventInfo distributedEventInfo = getEvenQueue().poll();
 
-        while (eventData != null) {
-            eventData.commit();
-            eventData = getEvenQueue().poll();
+        while (distributedEventInfo != null) {
+            distributedEventInfo.commit();
+            distributedEventInfo = getEvenQueue().poll();
         }
     }
     //endregion
