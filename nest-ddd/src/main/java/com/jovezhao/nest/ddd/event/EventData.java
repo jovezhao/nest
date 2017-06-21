@@ -1,4 +1,4 @@
-package com.jovezhao.nest.ddd.event.provider.distribut;
+package com.jovezhao.nest.ddd.event;
 
 import com.jovezhao.nest.ddd.Identifier;
 

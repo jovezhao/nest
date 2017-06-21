@@ -2,12 +2,13 @@ package com.jovezhao.nest.ddd.event.provider.distribut;
 
 import com.jovezhao.nest.ddd.event.ChannelProvider;
 import com.jovezhao.nest.ddd.event.EventChannelManager;
+import com.jovezhao.nest.ddd.event.EventData;
 import com.jovezhao.nest.ddd.identifier.IdGenerator;
 
 import java.io.Serializable;
 
 /**
- * 服务事件，用于创建一个事件
+ * 分布式事件信息
  * Created by Jove on 2016-03-21.
  */
 public class DistributedEventInfo {
@@ -16,7 +17,14 @@ public class DistributedEventInfo {
         return eventData;
     }
 
-    public static DistributedEventInfo createEvent(String eventName, Serializable data) {
+    /**
+     * 用于创建一个事件
+     *
+     * @param eventName
+     * @param data
+     * @return
+     */
+    public static DistributedEventInfo createEventInfo(String eventName, Serializable data) {
         DistributedEventInfo eventInfo = new DistributedEventInfo();
         eventInfo.eventData = new EventData();
         eventInfo.eventData.setData(data);
@@ -45,18 +53,22 @@ public class DistributedEventInfo {
     }
 
 
-    public DistributedChannelProvider getChannelProvider() {
+    /**
+     * 通过事件通道管理器查找当前事件使用的分布式通道
+     * 能进入到这里的事件一定都是分布式通道
+     *
+     * @return
+     */
+    public DistributedEventProducer getEventProducer() {
         ChannelProvider channelProvider = EventChannelManager.get(eventName).getChannelProvider();
-        if (channelProvider instanceof DistributedChannelProvider)
-            return (DistributedChannelProvider) channelProvider;
-        return null;
+        return (DistributedEventProducer) channelProvider.getEventProducer();
     }
 
     public void commit() {
         this.sendStatus = EventSendStatus.commited;
         EventCommitManager.putEventData(this);
         try {
-            getChannelProvider().commitMessage(this.getEventName(), this.getEventData());
+            getEventProducer().commitMessage(this.getEventName(), this.getEventData());
             this.sendStatus = EventSendStatus.success;
         } catch (Exception ex) {
             this.sendStatus = EventSendStatus.fail;
