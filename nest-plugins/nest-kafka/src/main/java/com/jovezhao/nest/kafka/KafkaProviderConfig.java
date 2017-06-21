@@ -1,4 +1,4 @@
-package com.jovezhao.nest.kafka.kafka;
+package com.jovezhao.nest.kafka;
 
 import com.jovezhao.nest.ddd.event.ProviderConfig;
 
@@ -7,15 +7,15 @@ import com.jovezhao.nest.ddd.event.ProviderConfig;
  * Created by zhaofujun on 2017/6/22.
  */
 public class KafkaProviderConfig extends ProviderConfig {
-    private String zkconnect;
+    private String zk;
     private String brokers;
 
-    public String getZkconnect() {
-        return zkconnect;
+    public String getZk() {
+        return zk;
     }
 
-    public void setZkconnect(String zkconnect) {
-        this.zkconnect = zkconnect;
+    public void setZk(String zk) {
+        this.zk = zk;
     }
 
     public String getBrokers() {

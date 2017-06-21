@@ -1,4 +1,4 @@
-package com.jovezhao.nest.kafka.kafka;
+package com.jovezhao.nest.kafka;
 
 import com.jovezhao.nest.ddd.event.EventConsumer;
 import com.jovezhao.nest.ddd.event.EventData;
@@ -26,7 +26,7 @@ public class KafkaEventConsumer extends EventConsumer<KafkaProviderConfig> {
 
 
 //        properties.put("auto.offset.reset", "smallest"); //必须要加，如果要读旧数据
-        properties.put("zookeeper.connect", this.getProviderConfig().getZkconnect());
+        properties.put("zookeeper.connect", this.getProviderConfig().getZk());
         properties.put("group.id", this.getEventHandler().getHandlerName());
         properties.put("zookeeper.session.timeout.ms", "400");
         properties.put("zookeeper.sync.time.ms", "200");

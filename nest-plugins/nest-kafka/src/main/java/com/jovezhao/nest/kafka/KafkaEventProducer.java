@@ -1,4 +1,4 @@
-package com.jovezhao.nest.kafka.kafka;
+package com.jovezhao.nest.kafka;
 
 import com.jovezhao.nest.ddd.event.provider.distribut.DistributedEventProducer;
 import com.jovezhao.nest.ddd.event.EventData;
@@ -19,7 +19,7 @@ public class KafkaEventProducer extends DistributedEventProducer<KafkaProviderCo
     public void commitMessage(String eventName, EventData eventData) {
         Properties props = new Properties();
 
-        props.put("zk.connect", this.getProviderConfig().getZkconnect());
+        props.put("zk.connect", this.getProviderConfig().getZk());
         props.put("serializer.class", StringEncoder.class.getName());
         props.put("metadata.broker.list", this.getProviderConfig().getBrokers());
 
