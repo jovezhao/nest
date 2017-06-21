@@ -123,4 +123,12 @@ public class RedisCacheProvider implements ICacheProvider {
         jedis.close();
         return result;
     }
+
+    @Override
+    public String[] getKeys(String groupName) {
+        Jedis jedis = jedisPool.getResource();
+        String keys = jedis.get(getGroupKey(groupName));
+        jedis.close();
+        return keys.split(",");
+    }
 }

@@ -73,4 +73,11 @@ public interface ICacheProvider {
 	 * @return true=存在，false=不存在
 	 */
 	boolean containsKey(String groupName, String key);
+
+	/**
+	 * 获取本组所有缓存键
+	 * @param groupName
+	 * @return
+	 */
+	String[] getKeys(String groupName);
 }

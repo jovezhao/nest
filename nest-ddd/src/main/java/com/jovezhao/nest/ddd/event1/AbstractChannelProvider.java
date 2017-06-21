@@ -1,6 +1,4 @@
-package com.jovezhao.nest.ddd.event;
-
-import java.util.Properties;
+package com.jovezhao.nest.ddd.event1;
 
 /**
  * 事件通道提供者

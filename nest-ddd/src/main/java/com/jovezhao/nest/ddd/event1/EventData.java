@@ -1,13 +1,13 @@
-package com.jovezhao.nest.ddd.event;
+package com.jovezhao.nest.ddd.event1;
 
 /**
  * 服务事件，用于创建一个事件
  * Created by Jove on 2016-03-21.
  */
-public class ServiceEvent<T> {
+public class EventData<T> {
 
-    public static <U> ServiceEvent<U>  createEvent(String eventName, U data) {
-        ServiceEvent<U> event = new ServiceEvent<U>();
+    public static <U> EventData<U> createEvent(String eventName, U data) {
+        EventData<U> event = new EventData<U>();
         event.data = data;
         event.eventName = eventName;
         return event;

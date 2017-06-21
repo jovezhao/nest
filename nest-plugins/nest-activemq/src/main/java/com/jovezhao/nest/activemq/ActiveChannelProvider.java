@@ -1,8 +1,8 @@
 package com.jovezhao.nest.activemq;
 
 import com.jovezhao.nest.exception.SystemException;
-import com.jovezhao.nest.ddd.event.AbstractChannelProvider;
-import com.jovezhao.nest.ddd.event.IEventHandler;
+import com.jovezhao.nest.ddd.event1.AbstractChannelProvider;
+import com.jovezhao.nest.ddd.event1.IEventHandler;
 import org.apache.activemq.pool.PooledConnectionFactory;
 
 import javax.jms.JMSException;

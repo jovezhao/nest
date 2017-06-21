@@ -1,6 +1,6 @@
 package com.jovezhao.nest.rabbitmq;
 
-import com.jovezhao.nest.ddd.event.IEventHandler;
+import com.jovezhao.nest.ddd.event1.IEventHandler;
 
 class EventWork {
     String eventName;

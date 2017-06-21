@@ -1,7 +1,7 @@
 import com.jovezhao.nest.activemq.ActiveChannelProvider;
-import com.jovezhao.nest.ddd.event.EventBus;
-import com.jovezhao.nest.ddd.event.IEventHandler;
-import com.jovezhao.nest.ddd.event.ServiceEvent;
+import com.jovezhao.nest.ddd.event1.EventBus;
+import com.jovezhao.nest.ddd.event1.IEventHandler;
+import com.jovezhao.nest.ddd.event1.EventData;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class TestActiveMQ {
         EventBus eventBus = new EventBus();
         eventBus.setProvider(new ActiveChannelProvider("failover:(tcp://192.168.2.6:61616,tcp://192.168.2.6:61617)?randomize=true", 1));
         for (int i = 0; i < 100; i++) {
-            eventBus.publish(ServiceEvent.createEvent("event", "test" + i));
+            eventBus.publish(EventData.createEvent("event1", "test" + i));
 
         }
 
@@ -32,7 +32,7 @@ public class TestActiveMQ {
         eventBus.registerHandler(new IEventHandler() {
             @Override
             public String getEventName() {
-                return "event";
+                return "event1";
             }
 
             @Override
@@ -53,7 +53,7 @@ public class TestActiveMQ {
         eventBus.registerHandler(new IEventHandler() {
             @Override
             public String getEventName() {
-                return "event";
+                return "event1";
             }
 
             @Override

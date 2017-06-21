@@ -1,7 +1,7 @@
 package com.jovezhao.nest.kafka;
 
-import com.jovezhao.nest.ddd.event.AbstractChannelProvider;
-import com.jovezhao.nest.ddd.event.IEventHandler;
+import com.jovezhao.nest.ddd.event1.AbstractChannelProvider;
+import com.jovezhao.nest.ddd.event1.IEventHandler;
 
 /**
  * Created by Jove on 2016/7/27.

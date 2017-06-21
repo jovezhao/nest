@@ -1,51 +1,55 @@
 package com.jovezhao.nest.ddd.repository;
 
 import com.jovezhao.nest.ddd.BaseEntityObject;
+import com.jovezhao.nest.ddd.event.provider.distribut.DistributedChannelProvider;
+import com.jovezhao.nest.ddd.event.provider.distribut.EventCommitManager;
+import com.jovezhao.nest.ddd.event.provider.distribut.EventData;
+import com.jovezhao.nest.ddd.event.provider.distribut.EventSendStatus;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 实体上下文
  * Created by Jove on 2016/8/30.
  */
-public  class NestUnitOfWork implements IUnitOfWork {
+public class NestUnitOfWork implements IUnitOfWork {
 
 
-    private static ThreadLocal<HashMap<BaseEntityObject, OperateEnum>> threadLocal = new ThreadLocal<>();
-    private static ThreadLocal<HashMap<String, Object>> threadLocalEvent = new ThreadLocal<>();
+    private static ThreadLocal<HashMap<BaseEntityObject, OperateEnum>> threadLocalEntity = new ThreadLocal<>();
 
 
-    private HashMap<BaseEntityObject, OperateEnum> getmap() {
-        HashMap<BaseEntityObject, OperateEnum> hashMap = threadLocal.get();
-        if (threadLocal.get() == null) {
+    private HashMap<BaseEntityObject, OperateEnum> getEntityMap() {
+        HashMap<BaseEntityObject, OperateEnum> hashMap = threadLocalEntity.get();
+        if (threadLocalEntity.get() == null) {
             hashMap = new HashMap<>();
-            threadLocal.set(hashMap);
+            threadLocalEntity.set(hashMap);
         }
         return hashMap;
     }
 
+
     public void addEntityObject(BaseEntityObject entityObject) {
-        getmap().put(entityObject, OperateEnum.save);
+        getEntityMap().put(entityObject, OperateEnum.save);
     }
 
     public void removeEntityObject(BaseEntityObject entityObject) {
-        getmap().put(entityObject, OperateEnum.remove);
+        getEntityMap().put(entityObject, OperateEnum.remove);
     }
+
 
     @Override
     public void rollback() {
 
     }
 
-    protected  void beforeCommit(){}
+    protected void beforeCommit() {
+    }
 
-    public void commit() {
+    public void entityCommit() {
 
         beforeCommit();
         try {
-            Iterator iter = getmap().entrySet().iterator();
+            Iterator iter = getEntityMap().entrySet().iterator();
             while (iter.hasNext()) {
                 Map.Entry<BaseEntityObject, OperateEnum> entry = (Map.Entry) iter.next();
                 BaseEntityObject entityObject = entry.getKey();
@@ -67,13 +71,42 @@ public  class NestUnitOfWork implements IUnitOfWork {
             rollback();
             throw ex;
         } finally {
-            getmap().clear();
+            getEntityMap().clear();
             afterCommit();
         }
 
     }
 
 
-    protected  void afterCommit(){}
+    protected void afterCommit() {
+    }
 
+
+    //region 事件相关的处理方式
+    private static ThreadLocal<Queue<EventData>> threadLocalEvent = new ThreadLocal<>();
+
+    private Queue<EventData> getEvenQueue() {
+        Queue<EventData> eventQueue = threadLocalEvent.get();
+        if (eventQueue == null) {
+            eventQueue = new ArrayDeque<>();
+            threadLocalEvent.set(eventQueue);
+        }
+        return eventQueue;
+    }
+
+    @Override
+    public void addEvent(EventData eventData) {
+        getEvenQueue().add(eventData);
+    }
+
+    @Override
+    public void eventCommit() {
+        EventData eventData = getEvenQueue().poll();
+
+        while (eventData != null) {
+            eventData.commit();
+            eventData = getEvenQueue().poll();
+        }
+    }
+    //endregion
 }

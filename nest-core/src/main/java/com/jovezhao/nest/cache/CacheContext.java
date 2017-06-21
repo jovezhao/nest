@@ -19,6 +19,7 @@ public class CacheContext {
 
     /**
      * 通过缓存代号来获取一个缓存上下文
+     *
      * @param cacheCode
      * @return
      */
@@ -90,4 +91,7 @@ public class CacheContext {
         return provider.containsKey(cacheItem.getName(), key);
     }
 
+    public String[] getKeys() {
+        return provider.getKeys(cacheItem.getName());
+    }
 }

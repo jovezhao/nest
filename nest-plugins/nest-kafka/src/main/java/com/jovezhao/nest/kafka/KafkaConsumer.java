@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.jovezhao.nest.exception.GeneralException;
 import com.jovezhao.nest.log.ILog;
 import com.jovezhao.nest.log.LogAdapter;
-import com.jovezhao.nest.ddd.event.IEventHandler;
+import com.jovezhao.nest.ddd.event1.IEventHandler;
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
 import kafka.consumer.ConsumerIterator;
@@ -81,7 +81,7 @@ public class KafkaConsumer implements Runnable {
     private ConsumerConnector createConsumer() {
         Properties properties = new Properties();
 //        properties.put("zookeeper.connect", zkconnect);//声明zk
-//        properties.put("group.id","spread-event-group");// 必须要使用别的组名称， 如果生产者和消费者都在同一组，则不能访问同一组内的topic数据
+//        properties.put("group.id","spread-event1-group");// 必须要使用别的组名称， 如果生产者和消费者都在同一组，则不能访问同一组内的topic数据
 
 
 //        properties.put("auto.offset.reset", "smallest"); //必须要加，如果要读旧数据
@@ -89,17 +89,17 @@ public class KafkaConsumer implements Runnable {
         properties.put("group.id", work.getHandlerName());
         properties.put("zookeeper.session.timeout.ms", "400");
         properties.put("zookeeper.sync.time.ms", "200");
-        properties.put("auto.commit.interval.ms", "1000");
+        properties.put("auto.entityCommit.interval.ms", "1000");
 
         return Consumer.createJavaConsumerConnector(new ConsumerConfig(properties));
     }
 
 
     public static void main(String[] args) {
-        EventWork work = new EventWork("spread-event", new IEventHandler() {
+        EventWork work = new EventWork("spread-event1", new IEventHandler() {
             @Override
             public String getEventName() {
-                return "spread-event";
+                return "spread-event1";
             }
 
             @Override
