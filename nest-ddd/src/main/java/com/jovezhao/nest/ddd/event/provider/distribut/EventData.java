@@ -13,7 +13,11 @@ public class EventData<T> {
         EventData<U> event = new EventData<U>();
         event.data = data;
         event.eventName = eventName;
+        event.sendStatus = EventSendStatus.wait;
         return event;
+    }
+
+    private EventData() {
     }
 
     private T data;

@@ -16,7 +16,6 @@ public abstract class DistributedChannelProvider implements ChannelProvider {
         // 等到工作单元提交完成后再向消息中间件提交消息
         IUnitOfWork unitOfWork = SpringUtils.getInstance(IUnitOfWork.class);
         EventData eventData = EventData.createEvent(eventName, object);
-        eventData.setSendStatus(EventSendStatus.wait);
         unitOfWork.addEvent(eventData);
     }
 
