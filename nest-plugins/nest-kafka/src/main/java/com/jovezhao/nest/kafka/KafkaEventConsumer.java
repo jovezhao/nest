@@ -28,9 +28,9 @@ public class KafkaEventConsumer extends DistributedEventConsumer<KafkaProviderCo
 //        properties.put("auto.offset.reset", "smallest"); //必须要加，如果要读旧数据
         properties.put("zookeeper.connect", this.getProviderConfig().getZk());
         properties.put("group.id", this.getEventHandler().getHandlerName());
-        properties.put("zookeeper.session.timeout.ms", "400");
-        properties.put("zookeeper.sync.time.ms", "200");
-        properties.put("auto.entityCommit.interval.ms", "1000");
+        properties.put("zookeeper.session.timeout.ms", 400);
+        properties.put("zookeeper.sync.time.ms", 200);
+        properties.put("auto.commit.enable", false);
 
         return Consumer.createJavaConsumerConnector(new ConsumerConfig(properties));
     }
@@ -48,7 +48,6 @@ public class KafkaEventConsumer extends DistributedEventConsumer<KafkaProviderCo
         topicCountMap.put(this.getEventHandler().getEventName(), 1); // 一次从主题中获取一个数据
         Map<String, List<KafkaStream<byte[], byte[]>>> messageStreams = consumer.createMessageStreams(topicCountMap);
 
-        //for (KafkaStream<byte[], byte[]> stream : messageStreams.get(work.getEventName())) {
         KafkaStream<byte[], byte[]> stream = messageStreams.get(this.getEventHandler().getEventName()).get(0);// 获取每次接收到的这个数据
         ConsumerIterator<byte[], byte[]> iterator = stream.iterator();
         while (iterator.hasNext()) {
@@ -57,6 +56,7 @@ public class KafkaEventConsumer extends DistributedEventConsumer<KafkaProviderCo
             EventDataProcessor processor = new EventDataProcessor(eventData, this.getEventHandler());
             processor.process();
         }
+        consumer.commitOffsets();
 
         Thread.sleep(500);
 
