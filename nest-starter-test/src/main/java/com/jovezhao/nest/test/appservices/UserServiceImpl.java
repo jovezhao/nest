@@ -5,6 +5,7 @@ import com.jovezhao.nest.ddd.builder.IBuilder;
 import com.jovezhao.nest.ddd.builder.RepositoryLoader;
 import com.jovezhao.nest.ddd.event.EventBus;
 import com.jovezhao.nest.starter.AppService;
+import com.jovezhao.nest.test.api.TestDto;
 import com.jovezhao.nest.test.api.UserService;
 import com.jovezhao.nest.test.models.Teacher;
 import com.jovezhao.nest.test.models.User;
@@ -23,7 +24,10 @@ public class UserServiceImpl implements UserService {
 
        Teacher teacher= user.act(Teacher.class, new StringIdentifier("tttt"));
         teacher.setClassName("className");
-        EventBus.publish("event1", "test");
+
+        TestDto dto=new TestDto();
+        dto.setAbs("ffffffff");
+        EventBus.publish("event1", dto);
 
         return user.getName() + user.getId();
     }

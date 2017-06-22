@@ -3,7 +3,10 @@ package com.jovezhao.nest.test;
 import com.jovezhao.nest.activemq.ActiveMQChannelProvider;
 import com.jovezhao.nest.activemq.ActiveMQProviderConfig;
 import com.jovezhao.nest.ddd.event.*;
+import com.jovezhao.nest.ddd.event.provider.distribut.EventData;
+import com.jovezhao.nest.test.api.TestDto;
 import com.jovezhao.nest.test.api.UserService;
+import com.jovezhao.nest.utils.JsonUtils;
 import com.jovezhao.nest.utils.SpringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -26,31 +29,42 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String[] args) throws Exception {
-        ChannelProvider channelProvider = new ActiveMQChannelProvider();
-        ActiveMQProviderConfig providerConfig = new ActiveMQProviderConfig();
-        providerConfig.setBrokers("tcp://127.0.0.1:61616");
-        channelProvider.setProviderConfig(providerConfig);
+//        ChannelProvider channelProvider = new ActiveMQChannelProvider();
+//        ActiveMQProviderConfig providerConfig = new ActiveMQProviderConfig();
+//        providerConfig.setBrokers("tcp://127.0.0.1:61616");
+//        channelProvider.setProviderConfig(providerConfig);
+//
+//        EventChannelItem eventChannelItem = new EventChannelItem();
+//        eventChannelItem.setEventName("event1");
+//        eventChannelItem.setChannelProvider(channelProvider);
+//        EventChannelManager.put(eventChannelItem);
+//
+//
+//        EventBus.registerHandler(new EventHandler<TestDto>() {
+//
+//            @Override
+//            public String getEventName() {
+//                return "event1";
+//            }
+//
+//            @Override
+//            public void handle(TestDto data) throws Exception {
+//                System.out.println("fffffff::"+data.getAbs());
+//            }
+//        });
+//
+//        userService.changeName("new name");
 
-        EventChannelItem eventChannelItem = new EventChannelItem();
-        eventChannelItem.setEventName("event1");
-        eventChannelItem.setChannelProvider(channelProvider);
-        EventChannelManager.put(eventChannelItem);
 
+        EventData<TestDto> eventData = new EventData<>();
+        TestDto testDto = new TestDto();
+        testDto.setAbs("abs");
+        eventData.setDataId("id");
+        eventData.setData(testDto);
 
-        EventBus.registerHandler(new EventHandler<String>() {
+        String s = JsonUtils.toJsonString(eventData);
 
-            @Override
-            public String getEventName() {
-                return "event1";
-            }
-
-            @Override
-            public void handle(String data) throws Exception {
-                System.out.println("fffffff"+data);
-            }
-        });
-
-        userService.changeName("new name");
-
+        EventData<TestDto> dto=JsonUtils.toObj(s,EventData.class);
+        TestDto data = dto.getData();
     }
 }
