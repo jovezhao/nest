@@ -2,6 +2,7 @@ package com.jovezhao.nest.rabbitmq;
 
 import com.jovezhao.nest.ddd.event.provider.distribut.DistributedEventProducer;
 import com.jovezhao.nest.ddd.event.provider.distribut.EventData;
+import com.jovezhao.nest.utils.JsonUtils;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -27,7 +28,8 @@ public class RabbitMQEventProducer extends DistributedEventProducer<RabbitMQProv
 
         Channel channel = connection.createChannel();
         channel.exchangeDeclare(eventName, "fanout", true, false, null);
-        channel.basicPublish(eventName, "", MessageProperties.PERSISTENT_TEXT_PLAIN, SerializationUtils.serialize(eventData));
+
+        channel.basicPublish(eventName, "", MessageProperties.PERSISTENT_TEXT_PLAIN, JsonUtils.toJsonString(eventData).getBytes());
         channel.close();
         connection.close();
 
