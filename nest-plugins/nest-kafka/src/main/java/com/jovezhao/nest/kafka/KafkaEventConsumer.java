@@ -3,6 +3,7 @@ package com.jovezhao.nest.kafka;
 import com.jovezhao.nest.ddd.event.EventConsumer;
 import com.jovezhao.nest.ddd.event.EventData;
 import com.jovezhao.nest.ddd.event.EventDataProcessor;
+import com.jovezhao.nest.ddd.event.provider.distribut.DistributedEventConsumer;
 import com.jovezhao.nest.utils.JsonUtils;
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
@@ -18,7 +19,7 @@ import java.util.Properties;
 /**
  * Created by zhaofujun on 2017/6/22.
  */
-public class KafkaEventConsumer extends EventConsumer<KafkaProviderConfig> {
+public class KafkaEventConsumer extends DistributedEventConsumer<KafkaProviderConfig> {
     private ConsumerConnector createConsumer() {
         Properties properties = new Properties();
 //        properties.put("zookeeper.connect", zkconnect);//声明zk

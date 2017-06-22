@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
  * Created by zhaofujun on 2017/6/21.
  */
 public abstract class ChannelProvider<T extends ProviderConfig> {
-    List<EventConsumer> eventConsumers = new ArrayList<>();
+    private List<EventConsumer> eventConsumers = new ArrayList<>();
 
     protected abstract EventConsumer getEventConsumer();
 
@@ -24,17 +24,12 @@ public abstract class ChannelProvider<T extends ProviderConfig> {
         eventProducer.sendMessage(eventName, object);
     }
 
-    public void subscribe(EventHandler eventHandler) {
+    public void subscribe(EventHandler eventHandler){
         EventConsumer eventConsumer = getEventConsumer();
+        eventConsumer.setProviderConfig(this.providerConfig);
         eventConsumer.setEventHandler(eventHandler);
-        eventConsumer.setProviderConfig(providerConfig);
-
-        Thread eventThread = new Thread(eventConsumer);
-        eventThread.setName(eventHandler.getEventName());
-        eventThread.start();
-
+        eventConsumer.start();
         eventConsumers.add(eventConsumer);
-
     }
 
     private T providerConfig;
@@ -48,7 +43,7 @@ public abstract class ChannelProvider<T extends ProviderConfig> {
     }
 
 
-    public void displose() {
+    public void dispose() {
         eventConsumers.forEach(p -> p.stop());
     }
 }

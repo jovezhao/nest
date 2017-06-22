@@ -1,6 +1,6 @@
 package com.jovezhao.nest.ddd.event;
 
-import com.jovezhao.nest.ddd.event.provider.spring.SpringEventChannelProvider;
+import com.jovezhao.nest.ddd.event.provider.dft.DefaultEventChannelProvider;
 import com.jovezhao.nest.utils.SpringUtils;
 import org.apache.commons.collections.map.HashedMap;
 
@@ -21,7 +21,7 @@ public class EventChannelManager {
         // 添加SpringEventChannelProvider为默认通道
         EventChannelItem defaultItem = new EventChannelItem();
         defaultItem.setEventName(defaultCode);
-        defaultItem.setChannelProvider(new SpringEventChannelProvider());
+        defaultItem.setChannelProvider(new DefaultEventChannelProvider());
 
         put(defaultItem);
         //通过spring ioc中获取所有EventChannelItem类型的bean来填充itemMap

@@ -2,10 +2,8 @@ package com.jovezhao.nest.ddd.event;
 
 /**
  * 事件消费者,消费者使用一个独立线程来监听，并且提供停止监听的方法
- *
- * @param <T>
  */
-public abstract class EventConsumer<T extends ProviderConfig> implements Runnable {
+public abstract class EventConsumer<T extends ProviderConfig> {
     private T providerConfig;
 
     public T getProviderConfig() {
@@ -29,28 +27,19 @@ public abstract class EventConsumer<T extends ProviderConfig> implements Runnabl
         return eventHandler;
     }
 
-    @Override
-    public void run() {
-        init();
+    protected void start() {
 
-        running = true;
-        while (running) {
-            // 开始消费
-            consume();
-            // 结束消费后开始执行下一次的
-        }
-        dispose();
     }
-    protected abstract void init();
 
-    protected abstract void consume();
+    protected void init() {
+    }
 
-    protected abstract void dispose();
-
-    private volatile boolean running;
+    protected void consume() {
+    }
 
     public void stop() {
-        this.running = false;
     }
 
+    protected void dispose() {
+    }
 }

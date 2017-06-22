@@ -24,4 +24,5 @@ public class KafkaChannelProvider extends ChannelProvider<KafkaProviderConfig> {
         producer.setProviderConfig(this.getProviderConfig());
         return producer;
     }
+
 }
