@@ -18,7 +18,7 @@ public class DefaultEventProducer extends EventProducer {
     }
 
     @Override
-    public void sendMessage(String eventName, Serializable object) {
+    protected void sendMessage(String eventName, Serializable object) {
         DefaultEventData eventData = new DefaultEventData(object, eventName);
         ObserverEventObject eventObject = new ObserverEventObject(eventData);
         eventSource.send(eventObject);

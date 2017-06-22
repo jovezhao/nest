@@ -1,7 +1,6 @@
-package com.jovezhao.nest.ddd.event;
+package com.jovezhao.nest.ddd.event.provider.distribut;
 
 import com.jovezhao.nest.ddd.Identifier;
-
 import java.io.Serializable;
 
 /**

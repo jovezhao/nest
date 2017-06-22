@@ -20,6 +20,7 @@ public class DefaultEventConsumer extends EventConsumer {
         eventSource.addEventListener(new DefaultEventListener(this));
     }
 
+
     @Override
     public void stop() {
         eventSource.clearAllListener();

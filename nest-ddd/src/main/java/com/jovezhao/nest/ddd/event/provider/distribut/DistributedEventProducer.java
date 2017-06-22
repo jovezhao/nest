@@ -1,6 +1,5 @@
 package com.jovezhao.nest.ddd.event.provider.distribut;
 
-import com.jovezhao.nest.ddd.event.EventData;
 import com.jovezhao.nest.ddd.event.EventProducer;
 import com.jovezhao.nest.ddd.event.ProviderConfig;
 import com.jovezhao.nest.ddd.repository.IUnitOfWork;
@@ -12,8 +11,9 @@ import java.io.Serializable;
  * Created by zhaofujun on 2017/6/21.
  */
 public abstract class DistributedEventProducer<T extends ProviderConfig> extends EventProducer<T> {
+
     @Override
-    public void sendMessage(String eventName, Serializable object) {
+    protected void sendMessage(String eventName, Serializable object)  {
         // 发布式的消息提供者需要考虑到消息最终一致性问题
         // 需要使用工作单元来记录待发送的消息
         // 等到工作单元提交完成后再向消息中间件提交消息
@@ -22,6 +22,6 @@ public abstract class DistributedEventProducer<T extends ProviderConfig> extends
         unitOfWork.addEvent(distributedEventInfo);
     }
 
-    public abstract void commitMessage(String eventName, EventData eventData);
+    protected abstract void commitMessage(String eventName, EventData eventData) throws Exception;
 
 }

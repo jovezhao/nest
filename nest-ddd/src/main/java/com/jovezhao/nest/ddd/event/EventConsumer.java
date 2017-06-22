@@ -31,15 +31,10 @@ public abstract class EventConsumer<T extends ProviderConfig> {
 
     }
 
-    protected void init() {
-    }
 
-    protected void consume() {
-    }
+
 
     public void stop() {
     }
 
-    protected void dispose() {
-    }
 }

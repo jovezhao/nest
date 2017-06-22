@@ -17,5 +17,5 @@ public abstract class EventProducer<T extends ProviderConfig> {
         this.providerConfig = providerConfig;
     }
 
-    public abstract void sendMessage(String eventName, Serializable object);
+    protected abstract void sendMessage(String eventName, Serializable object);
 }

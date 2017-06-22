@@ -1,9 +1,8 @@
 package com.jovezhao.nest.kafka;
 
-import com.jovezhao.nest.ddd.event.EventConsumer;
-import com.jovezhao.nest.ddd.event.EventData;
-import com.jovezhao.nest.ddd.event.EventDataProcessor;
+import com.jovezhao.nest.ddd.event.provider.distribut.EventDataProcessor;
 import com.jovezhao.nest.ddd.event.provider.distribut.DistributedEventConsumer;
+import com.jovezhao.nest.ddd.event.provider.distribut.EventData;
 import com.jovezhao.nest.utils.JsonUtils;
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
@@ -44,7 +43,7 @@ public class KafkaEventConsumer extends DistributedEventConsumer<KafkaProviderCo
     }
 
     @Override
-    protected void consume() {
+    protected void consume() throws Exception {
         Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
         topicCountMap.put(this.getEventHandler().getEventName(), 1); // 一次从主题中获取一个数据
         Map<String, List<KafkaStream<byte[], byte[]>>> messageStreams = consumer.createMessageStreams(topicCountMap);
@@ -59,6 +58,7 @@ public class KafkaEventConsumer extends DistributedEventConsumer<KafkaProviderCo
             processor.process();
         }
 
+        Thread.sleep(500);
 
     }
 

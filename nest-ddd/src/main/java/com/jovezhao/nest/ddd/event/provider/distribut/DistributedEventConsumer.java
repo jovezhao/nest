@@ -1,7 +1,10 @@
 package com.jovezhao.nest.ddd.event.provider.distribut;
 
+import com.jovezhao.nest.ddd.Identifier;
 import com.jovezhao.nest.ddd.event.EventConsumer;
 import com.jovezhao.nest.ddd.event.ProviderConfig;
+
+import java.io.Serializable;
 
 /**
  * Created by zhaofujun on 2017/6/22.
@@ -11,21 +14,37 @@ public abstract class DistributedEventConsumer<T extends ProviderConfig> extends
 
     @Override
     public void run() {
-        init();
+
+        try {
+            init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         running = true;
         while (running) {
             // 开始消费
-            consume();
+            try {
+                consume();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             // 结束消费后开始执行下一次的
         }
-        dispose();
+
+
+        try {
+            dispose();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    protected abstract void init();
+    protected abstract void init() throws Exception;
 
+    protected abstract void consume() throws Exception;
 
-    protected abstract void dispose();
+    protected abstract void dispose() throws Exception;
 
     private volatile boolean running;
 

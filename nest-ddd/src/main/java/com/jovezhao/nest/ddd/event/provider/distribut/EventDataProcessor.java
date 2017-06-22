@@ -1,4 +1,8 @@
-package com.jovezhao.nest.ddd.event;
+package com.jovezhao.nest.ddd.event.provider.distribut;
+
+import com.jovezhao.nest.ddd.event.EventHandler;
+import com.jovezhao.nest.ddd.event.provider.distribut.DistributedEventConsumer;
+import com.jovezhao.nest.ddd.event.provider.distribut.EventData;
 
 /**
  * 幂等处理事件消息

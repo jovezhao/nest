@@ -2,7 +2,6 @@ package com.jovezhao.nest.ddd.event.provider.distribut;
 
 import com.jovezhao.nest.ddd.event.ChannelProvider;
 import com.jovezhao.nest.ddd.event.EventChannelManager;
-import com.jovezhao.nest.ddd.event.EventData;
 import com.jovezhao.nest.ddd.identifier.IdGenerator;
 
 import java.io.Serializable;

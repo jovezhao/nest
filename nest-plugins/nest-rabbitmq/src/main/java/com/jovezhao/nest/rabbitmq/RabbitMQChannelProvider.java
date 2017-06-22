@@ -1,24 +1,20 @@
-package com.jovezhao.nest.kafka;
+package com.jovezhao.nest.rabbitmq;
 
 import com.jovezhao.nest.ddd.event.ChannelProvider;
 import com.jovezhao.nest.ddd.event.EventConsumer;
 import com.jovezhao.nest.ddd.event.EventProducer;
 
 /**
- * 使用Kafka的消息通道
- * Created by zhaofujun on 2017/6/21.
+ * Created by zhaofujun on 2017/6/22.
  */
-public class KafkaChannelProvider extends ChannelProvider<KafkaProviderConfig> {
-
-
+public class RabbitMQChannelProvider extends ChannelProvider<RabbitMQProviderConfig> {
     @Override
     protected EventConsumer getEventConsumer() {
-        return new KafkaEventConsumer();
+        return new RebbitMQEventConsumer();
     }
 
     @Override
     public EventProducer getEventProducer() {
-        return new KafkaEventProducer();
+        return new RabbitMQEventProducer();
     }
-
 }

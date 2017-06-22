@@ -1,7 +1,7 @@
 package com.jovezhao.nest.kafka;
 
 import com.jovezhao.nest.ddd.event.provider.distribut.DistributedEventProducer;
-import com.jovezhao.nest.ddd.event.EventData;
+import com.jovezhao.nest.ddd.event.provider.distribut.EventData;
 import com.jovezhao.nest.utils.JsonUtils;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
