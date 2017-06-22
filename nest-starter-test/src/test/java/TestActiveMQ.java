@@ -1,5 +1,4 @@
 import com.jovezhao.nest.activemq.ActiveMQChannelProvider;
-
 import com.jovezhao.nest.activemq.ActiveMQProviderConfig;
 import com.jovezhao.nest.ddd.event.*;
 import org.junit.Before;
@@ -14,8 +13,6 @@ public class TestActiveMQ {
 
     @Before
     public void before() {
-
-
 
         ChannelProvider channelProvider = new ActiveMQChannelProvider();
         ActiveMQProviderConfig providerConfig = new ActiveMQProviderConfig();

@@ -21,11 +21,6 @@ import java.util.Properties;
 public class KafkaEventConsumer extends DistributedEventConsumer<KafkaProviderConfig> {
     private ConsumerConnector createConsumer() {
         Properties properties = new Properties();
-//        properties.put("zookeeper.connect", zkconnect);//声明zk
-//        properties.put("group.id","spread-event1-group");// 必须要使用别的组名称， 如果生产者和消费者都在同一组，则不能访问同一组内的topic数据
-
-
-//        properties.put("auto.offset.reset", "smallest"); //必须要加，如果要读旧数据
         properties.put("zookeeper.connect", this.getProviderConfig().getZk());
         properties.put("group.id", this.getEventHandler().getHandlerName());
         properties.put("zookeeper.session.timeout.ms", 400);

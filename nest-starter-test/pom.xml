@@ -22,7 +22,11 @@
             <artifactId>nest-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.jovezhao.nest</groupId>
+            <artifactId>nest-activemq</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

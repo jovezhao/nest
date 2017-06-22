@@ -17,8 +17,8 @@ public class EventDataProcessor {
         this.eventHandler = eventHandler;
     }
 
-    public void process() {
-        if (EventRecordManager.isProcess(eventData.getDataId().toValue()))
+    public void process() throws Exception{
+        if (EventRecordManager.isProcess(eventData.getDataId()))
             return;
         //从消息日志中查看是否有处理过本消息，如果已经处理则直接跳出
         eventHandler.handle(eventData.getData());

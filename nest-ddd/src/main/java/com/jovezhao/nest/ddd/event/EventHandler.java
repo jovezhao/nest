@@ -15,7 +15,7 @@ public interface EventHandler<T extends Serializable> {
      *
      * @param data
      */
-    void handle(T data);
+    void handle(T data) throws Exception;
 
     default String getHandlerName() {
         return this.getClass().getSimpleName();

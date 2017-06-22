@@ -25,6 +25,7 @@ public class NestAspect {
         try {
             result = joinPoint.proceed();
             unitOfWork.entityCommit();
+            unitOfWork.eventCommit();
 
         } catch (Throwable throwable) {
             throwable.printStackTrace();

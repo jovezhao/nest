@@ -20,7 +20,11 @@ public class DefaultEventListener extends ObserverEventListener {
         DefaultEventData eventData = (DefaultEventData) e.getSource();
         if (eventData.getEventName().equals(this.eventConsumer.getEventHandler().getEventName())) {
             //需要处理的事件
-            this.eventConsumer.getEventHandler().handle(eventData.getEventData());
+            try {
+                this.eventConsumer.getEventHandler().handle(eventData.getEventData());
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
     }
 }

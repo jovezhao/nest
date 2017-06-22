@@ -16,12 +16,12 @@ public class DefaultEventChannelProvider extends ChannelProvider {
 
    
     @Override
-    protected EventConsumer getEventConsumer() {
+    protected EventConsumer createEventConsumer() {
         return new DefaultEventConsumer(eventSource);
     }
 
     @Override
-    public EventProducer getEventProducer() {
+    public EventProducer createEventProducer() {
         return new DefaultEventProducer(eventSource);
     }
 

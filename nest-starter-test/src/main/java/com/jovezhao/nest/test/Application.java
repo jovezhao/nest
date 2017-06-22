@@ -1,7 +1,8 @@
 package com.jovezhao.nest.test;
 
-import com.jovezhao.nest.ddd.event.EventBus;
-import com.jovezhao.nest.ddd.event.EventHandler;
+import com.jovezhao.nest.activemq.ActiveMQChannelProvider;
+import com.jovezhao.nest.activemq.ActiveMQProviderConfig;
+import com.jovezhao.nest.ddd.event.*;
 import com.jovezhao.nest.test.api.UserService;
 import com.jovezhao.nest.utils.SpringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,32 +26,31 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String[] args) throws Exception {
+        ChannelProvider channelProvider = new ActiveMQChannelProvider();
+        ActiveMQProviderConfig providerConfig = new ActiveMQProviderConfig();
+        providerConfig.setBrokers("tcp://127.0.0.1:61616");
+        channelProvider.setProviderConfig(providerConfig);
+
+        EventChannelItem eventChannelItem = new EventChannelItem();
+        eventChannelItem.setEventName("event1");
+        eventChannelItem.setChannelProvider(channelProvider);
+        EventChannelManager.put(eventChannelItem);
+
+
         EventBus.registerHandler(new EventHandler<String>() {
+
             @Override
             public String getEventName() {
-                return "test";
+                return "event1";
             }
 
             @Override
-            public void handle(String data) {
-                System.out.println("do "+data);
-            }
-        });
-        EventBus.registerHandler(new EventHandler<String>() {
-            @Override
-            public String getEventName() {
-                return "test";
-            }
-
-            @Override
-            public void handle(String data) {
-                System.out.println("do 22"+data);
+            public void handle(String data) throws Exception {
+                System.out.println("fffffff"+data);
             }
         });
 
-        EventBus.publish("test","data");
-        System.out.println(userService.changeName("no config"));
-        EventBus.publish("test","data22");
+        userService.changeName("new name");
 
     }
 }

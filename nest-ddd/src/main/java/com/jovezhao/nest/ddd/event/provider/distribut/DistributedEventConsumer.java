@@ -30,6 +30,11 @@ public abstract class DistributedEventConsumer<T extends ProviderConfig> extends
                 e.printStackTrace();
             }
             // 结束消费后开始执行下一次的
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
 

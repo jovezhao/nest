@@ -12,12 +12,12 @@ public class KafkaChannelProvider extends ChannelProvider<KafkaProviderConfig> {
 
 
     @Override
-    protected EventConsumer getEventConsumer() {
+    protected EventConsumer createEventConsumer() {
         return new KafkaEventConsumer();
     }
 
     @Override
-    public EventProducer getEventProducer() {
+    public EventProducer createEventProducer() {
         return new KafkaEventProducer();
     }
 

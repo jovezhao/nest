@@ -1,5 +1,6 @@
 package com.jovezhao.nest.ddd.event;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +15,10 @@ import java.util.concurrent.Executors;
 public abstract class ChannelProvider<T extends ProviderConfig> {
     private List<EventConsumer> eventConsumers = new ArrayList<>();
 
-    protected abstract EventConsumer getEventConsumer();
 
-    public abstract EventProducer getEventProducer();
+    protected abstract EventConsumer createEventConsumer();
+
+    public abstract EventProducer createEventProducer();
 
     public void sendMessage(String eventName, Serializable object) {
         EventProducer eventProducer = getEventProducer();
@@ -24,8 +26,8 @@ public abstract class ChannelProvider<T extends ProviderConfig> {
         eventProducer.sendMessage(eventName, object);
     }
 
-    public void subscribe(EventHandler eventHandler){
-        EventConsumer eventConsumer = getEventConsumer();
+    public void subscribe(EventHandler eventHandler) {
+        EventConsumer eventConsumer = createEventConsumer();
         eventConsumer.setProviderConfig(this.providerConfig);
         eventConsumer.setEventHandler(eventHandler);
         eventConsumer.start();
@@ -45,6 +47,14 @@ public abstract class ChannelProvider<T extends ProviderConfig> {
 
     public void dispose() {
         eventConsumers.forEach(p -> p.stop());
+    }
+
+    private EventProducer eventProducer;
+
+    public EventProducer getEventProducer() {
+        if (eventProducer == null)
+            eventProducer = createEventProducer();
+        return eventProducer;
     }
 }
 

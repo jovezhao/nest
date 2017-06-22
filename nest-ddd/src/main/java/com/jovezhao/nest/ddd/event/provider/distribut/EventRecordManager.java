@@ -13,7 +13,7 @@ public class EventRecordManager {
     }
 
     public static void putEventData(EventData eventData) {
-        eventContext.put(eventData.getDataId().toValue(), eventData);
+        eventContext.put(eventData.getDataId(), eventData);
     }
 
     public static boolean isProcess(String dataId) {

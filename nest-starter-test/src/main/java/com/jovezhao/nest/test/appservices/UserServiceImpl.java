@@ -3,6 +3,7 @@ package com.jovezhao.nest.test.appservices;
 import com.jovezhao.nest.ddd.StringIdentifier;
 import com.jovezhao.nest.ddd.builder.IBuilder;
 import com.jovezhao.nest.ddd.builder.RepositoryLoader;
+import com.jovezhao.nest.ddd.event.EventBus;
 import com.jovezhao.nest.starter.AppService;
 import com.jovezhao.nest.test.api.UserService;
 import com.jovezhao.nest.test.models.Teacher;
@@ -22,6 +23,8 @@ public class UserServiceImpl implements UserService {
 
        Teacher teacher= user.act(Teacher.class, new StringIdentifier("tttt"));
         teacher.setClassName("className");
+        EventBus.publish("event1", "test");
+
         return user.getName() + user.getId();
     }
 

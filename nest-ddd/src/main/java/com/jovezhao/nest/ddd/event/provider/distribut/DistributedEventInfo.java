@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 分布式事件信息
  * Created by Jove on 2016-03-21.
  */
-public class DistributedEventInfo {
+public class DistributedEventInfo implements Serializable{
 
     public EventData getEventData() {
         return eventData;
@@ -27,7 +27,7 @@ public class DistributedEventInfo {
         DistributedEventInfo eventInfo = new DistributedEventInfo();
         eventInfo.eventData = new EventData();
         eventInfo.eventData.setData(data);
-        eventInfo.eventData.setDataId(IdGenerator.getInstance().generate(EventData.class));
+        eventInfo.eventData.setDataId(IdGenerator.getInstance().generate(EventData.class).toValue());
         eventInfo.eventName = eventName;
         eventInfo.sendStatus = EventSendStatus.wait;
 

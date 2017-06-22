@@ -1,20 +1,23 @@
-package com.jovezhao.nest.rabbitmq;
+package com.jovezhao.nest.activemq;
 
 import com.jovezhao.nest.ddd.event.ChannelProvider;
 import com.jovezhao.nest.ddd.event.EventConsumer;
 import com.jovezhao.nest.ddd.event.EventProducer;
 
 /**
- * Created by zhaofujun on 2017/6/22.
+ * Created by Jove on 2016/7/27.
  */
-public class RabbitMQChannelProvider extends ChannelProvider<RabbitMQProviderConfig> {
+
+public class ActiveMQChannelProvider extends ChannelProvider<ActiveMQProviderConfig> {
+
+
     @Override
     protected EventConsumer createEventConsumer() {
-        return new RebbitMQEventConsumer();
+        return new ActiveMQEventConsumer();
     }
 
     @Override
     public EventProducer createEventProducer() {
-        return new RabbitMQEventProducer();
+        return new ActiveMQEventProducer();
     }
 }
