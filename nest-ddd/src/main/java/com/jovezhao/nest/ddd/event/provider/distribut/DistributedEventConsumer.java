@@ -25,7 +25,8 @@ public abstract class DistributedEventConsumer<T extends ProviderConfig> extends
         while (running) {
             // 开始消费
             try {
-                consume();
+                EventDataProcessor dataProcessor=new EventDataProcessor(this.getEventHandler());
+                consume(dataProcessor);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -35,6 +36,7 @@ public abstract class DistributedEventConsumer<T extends ProviderConfig> extends
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
         }
 
 
@@ -47,7 +49,7 @@ public abstract class DistributedEventConsumer<T extends ProviderConfig> extends
 
     protected abstract void init() throws Exception;
 
-    protected abstract void consume() throws Exception;
+    protected abstract void consume(EventDataProcessor processor) throws Exception;
 
     protected abstract void dispose() throws Exception;
 

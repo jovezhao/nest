@@ -2,13 +2,14 @@ package com.jovezhao.nest.ddd.event;
 
 import java.io.Serializable;
 
-public interface EventHandler<T extends Serializable> {
+public interface EventHandler<T> {
     /**
      * 事件名称
      *
      * @return
      */
     String getEventName();
+    Class<T> getTClass();
 
     /**
      * 处理器回调执行

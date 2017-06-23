@@ -27,7 +27,7 @@ public class RebbitMQEventConsumer extends DistributedEventConsumer<RabbitMQProv
     }
 
     @Override
-    protected void consume() throws Exception {
+    protected void consume(EventDataProcessor processor) throws Exception {
         int prefetchCount = 5;
         Channel channel = connection.createChannel();
         channel.exchangeDeclare(this.getEventHandler().getEventName(), "fanout", true, false, null);
@@ -45,8 +45,7 @@ public class RebbitMQEventConsumer extends DistributedEventConsumer<RabbitMQProv
 
 
             String json = new String(delivery.getBody());
-            EventData eventData = JsonUtils.toObj(json, EventData.class);
-            EventDataProcessor processor = new EventDataProcessor(eventData, this.getEventHandler());
+            processor.setEventData(json);
             try {
                 processor.process();
                 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);

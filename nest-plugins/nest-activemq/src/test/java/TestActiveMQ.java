@@ -40,9 +40,15 @@ public class TestActiveMQ {
     public void register() throws IOException {
         EventBus.registerHandler(new EventHandler<String>() {
 
+
             @Override
             public String getEventName() {
                 return "event1";
+            }
+
+            @Override
+            public Class<String> getTClass() {
+                return String.class;
             }
 
             @Override

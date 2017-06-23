@@ -56,7 +56,7 @@ public class Application implements CommandLineRunner {
 //        userService.changeName("new name");
 
 
-        EventData<TestDto> eventData = new EventData<>();
+        EventData eventData = new EventData();
         TestDto testDto = new TestDto();
         testDto.setAbs("abs");
         eventData.setDataId("id");
@@ -64,7 +64,7 @@ public class Application implements CommandLineRunner {
 
         String s = JsonUtils.toJsonString(eventData);
 
-        EventData<TestDto> dto=JsonUtils.toObj(s,EventData.class);
-        TestDto data = dto.getData();
+        EventData dto=JsonUtils.toObj(s,EventData.class);
+        TestDto data = (TestDto) dto.getData();
     }
 }

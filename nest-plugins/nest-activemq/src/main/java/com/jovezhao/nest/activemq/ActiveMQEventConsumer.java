@@ -22,14 +22,13 @@ public class ActiveMQEventConsumer extends DistributedEventConsumer<ActiveMQProv
     }
 
     @Override
-    protected void consume() throws Exception {
+    protected void consume(EventDataProcessor processor) throws Exception {
         Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
         Destination queue = session.createQueue("Consumer." + this.getEventHandler().getHandlerName() + ".VirtualTopic." + this.getEventHandler().getEventName());
         MessageConsumer consumer = session.createConsumer(queue);
         TextMessage textMessage = (TextMessage) consumer.receive();
 
-        EventData eventData = JsonUtils.toObj(textMessage.getText(), EventData.class);
-        EventDataProcessor processor = new EventDataProcessor(eventData, this.getEventHandler());
+        processor.setEventData(textMessage.getText());
 
         try {
             processor.process();
@@ -38,7 +37,6 @@ public class ActiveMQEventConsumer extends DistributedEventConsumer<ActiveMQProv
             consumer.close();
             session.close();
         }
-
 
 
     }

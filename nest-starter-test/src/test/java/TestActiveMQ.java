@@ -43,6 +43,11 @@ public class TestActiveMQ {
             }
 
             @Override
+            public Class<String> getTClass() {
+                return String.class;
+            }
+
+            @Override
             public void handle(String data) throws Exception {
                 System.out.println(data);
             }

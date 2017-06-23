@@ -38,7 +38,7 @@ public class KafkaEventConsumer extends DistributedEventConsumer<KafkaProviderCo
     }
 
     @Override
-    protected void consume() throws Exception {
+    protected void consume(EventDataProcessor processor) throws Exception {
         Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
         topicCountMap.put(this.getEventHandler().getEventName(), 1); // 一次从主题中获取一个数据
         Map<String, List<KafkaStream<byte[], byte[]>>> messageStreams = consumer.createMessageStreams(topicCountMap);
@@ -47,8 +47,7 @@ public class KafkaEventConsumer extends DistributedEventConsumer<KafkaProviderCo
         ConsumerIterator<byte[], byte[]> iterator = stream.iterator();
         while (iterator.hasNext()) {
             String json = new String(iterator.next().message());
-            EventData eventData = JsonUtils.toObj(json, EventData.class);
-            EventDataProcessor processor = new EventDataProcessor(eventData, this.getEventHandler());
+            processor.setEventData(json);
             processor.process();
         }
         consumer.commitOffsets();

@@ -3,6 +3,8 @@ package com.jovezhao.nest.utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.Serializable;
+
 /**
  * Created by zhaofujun on 2017/3/3.
  */
