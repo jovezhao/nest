@@ -1,5 +1,7 @@
 package com.jovezhao.nest.ddd.event.provider.distribut;
 
-public class StringEventData extends EventData<String>{
+import com.google.gson.JsonObject;
 
-}
+//public class StringEventData extends EventData<JsonObject>{
+//
+//}

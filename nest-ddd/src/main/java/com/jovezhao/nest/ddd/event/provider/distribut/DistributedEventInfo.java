@@ -3,6 +3,7 @@ package com.jovezhao.nest.ddd.event.provider.distribut;
 import com.jovezhao.nest.ddd.event.ChannelProvider;
 import com.jovezhao.nest.ddd.event.EventChannelManager;
 import com.jovezhao.nest.ddd.identifier.IdGenerator;
+import com.jovezhao.nest.utils.JsonUtils;
 
 import java.io.Serializable;
 
@@ -10,7 +11,7 @@ import java.io.Serializable;
  * 分布式事件信息
  * Created by Jove on 2016-03-21.
  */
-public class DistributedEventInfo implements Serializable{
+public class DistributedEventInfo implements Serializable {
 
     public EventData getEventData() {
         return eventData;
@@ -26,7 +27,7 @@ public class DistributedEventInfo implements Serializable{
     public static DistributedEventInfo createEventInfo(String eventName, Serializable data) {
         DistributedEventInfo eventInfo = new DistributedEventInfo();
         eventInfo.eventData = new EventData();
-        eventInfo.eventData.setData(data);
+        eventInfo.eventData.setData(JsonUtils.toJsonString(data));
         eventInfo.eventData.setDataId(IdGenerator.getInstance().generate(EventData.class).toValue());
         eventInfo.eventName = eventName;
         eventInfo.sendStatus = EventSendStatus.wait;

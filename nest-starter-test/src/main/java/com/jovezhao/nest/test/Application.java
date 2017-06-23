@@ -29,42 +29,38 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String[] args) throws Exception {
-//        ChannelProvider channelProvider = new ActiveMQChannelProvider();
-//        ActiveMQProviderConfig providerConfig = new ActiveMQProviderConfig();
-//        providerConfig.setBrokers("tcp://127.0.0.1:61616");
-//        channelProvider.setProviderConfig(providerConfig);
-//
-//        EventChannelItem eventChannelItem = new EventChannelItem();
-//        eventChannelItem.setEventName("event1");
-//        eventChannelItem.setChannelProvider(channelProvider);
-//        EventChannelManager.put(eventChannelItem);
-//
-//
-//        EventBus.registerHandler(new EventHandler<TestDto>() {
-//
-//            @Override
-//            public String getEventName() {
-//                return "event1";
-//            }
-//
-//            @Override
-//            public void handle(TestDto data) throws Exception {
-//                System.out.println("fffffff::"+data.getAbs());
-//            }
-//        });
-//
-//        userService.changeName("new name");
+        ChannelProvider channelProvider = new ActiveMQChannelProvider();
+        ActiveMQProviderConfig providerConfig = new ActiveMQProviderConfig();
+        providerConfig.setBrokers("tcp://127.0.0.1:61616");
+        channelProvider.setProviderConfig(providerConfig);
+
+        EventChannelItem eventChannelItem = new EventChannelItem();
+        eventChannelItem.setEventName("event1");
+        eventChannelItem.setChannelProvider(channelProvider);
+        EventChannelManager.put(eventChannelItem);
 
 
-        EventData eventData = new EventData();
-        TestDto testDto = new TestDto();
-        testDto.setAbs("abs");
-        eventData.setDataId("id");
-        eventData.setData(testDto);
+        EventBus.registerHandler(new EventHandler<TestDto>() {
 
-        String s = JsonUtils.toJsonString(eventData);
+            @Override
+            public String getEventName() {
+                return "event1";
+            }
 
-        EventData dto=JsonUtils.toObj(s,EventData.class);
-        TestDto data = (TestDto) dto.getData();
+            @Override
+            public Class<TestDto> getTClass() {
+                return TestDto.class;
+            }
+
+            @Override
+            public void handle(TestDto data) throws Exception {
+                System.out.println("fffffff::"+data.getAbs());
+            }
+        });
+
+        userService.changeName("new name");
+
+
+
     }
 }

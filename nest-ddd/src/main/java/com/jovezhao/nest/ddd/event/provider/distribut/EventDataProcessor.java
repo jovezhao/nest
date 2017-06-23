@@ -3,14 +3,12 @@ package com.jovezhao.nest.ddd.event.provider.distribut;
 import com.jovezhao.nest.ddd.event.EventHandler;
 import com.jovezhao.nest.utils.JsonUtils;
 
-import java.io.Serializable;
-
 /**
  * 幂等处理事件消息
  * Created by zhaofujun on 2017/6/22.
  */
 public class EventDataProcessor {
-    private StringEventData eventData;
+    private EventData eventData;
     private EventHandler eventHandler;
 
     public EventDataProcessor(EventHandler eventHandler) {
@@ -19,7 +17,7 @@ public class EventDataProcessor {
     }
 
     public void setEventData(String eventData) {
-        this.eventData = JsonUtils.toObj(eventData,StringEventData.class);
+        this.eventData = JsonUtils.toObj(eventData,EventData.class);
     }
 
     public void process() throws Exception {

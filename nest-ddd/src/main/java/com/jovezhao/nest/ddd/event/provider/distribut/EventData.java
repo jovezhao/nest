@@ -9,15 +9,15 @@ import java.io.Serializable;
 /**
  * Created by zhaofujun on 2017/6/21.
  */
-public class EventData<T> implements Serializable {
-    private T data;
+public class EventData implements Serializable {
+    private String data;
     private String dataId;
 
-    public T getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public void setData(String data) {
         this.data = data;
     }
 
