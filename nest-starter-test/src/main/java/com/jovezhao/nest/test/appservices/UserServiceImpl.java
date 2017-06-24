@@ -26,9 +26,7 @@ public class UserServiceImpl implements UserService {
        Teacher teacher= user.act(Teacher.class, new StringIdentifier("tttt"));
         teacher.setClassName("className");
 
-        TestDto dto=new TestDto();
-        dto.setAbs("ffffffff");
-        EventBus.publish("event1", dto);
+
 
 
         return user.getName() + user.getId();

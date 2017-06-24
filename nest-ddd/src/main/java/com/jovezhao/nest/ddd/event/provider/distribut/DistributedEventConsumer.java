@@ -2,6 +2,8 @@ package com.jovezhao.nest.ddd.event.provider.distribut;
 
 import com.jovezhao.nest.ddd.event.EventConsumer;
 import com.jovezhao.nest.ddd.event.ProviderConfig;
+import com.jovezhao.nest.log.Log;
+import com.jovezhao.nest.log.LogAdapter;
 
 /**
  * 分布式消费者抽象类
@@ -10,6 +12,7 @@ import com.jovezhao.nest.ddd.event.ProviderConfig;
  */
 public abstract class DistributedEventConsumer<T extends ProviderConfig> extends EventConsumer<T> implements Runnable {
 
+    private Log log = new LogAdapter(this.getClass());
 
     @Override
     public void run() {
@@ -24,7 +27,7 @@ public abstract class DistributedEventConsumer<T extends ProviderConfig> extends
         while (running) {
             // 开始消费
             try {
-                MessageProcessor dataProcessor=new MessageProcessor(this.getEventHandler());
+                MessageProcessor dataProcessor = new MessageProcessor(this.getEventHandler());
                 consume(dataProcessor);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -33,7 +36,7 @@ public abstract class DistributedEventConsumer<T extends ProviderConfig> extends
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.warn(e);
             }
 
         }

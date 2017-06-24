@@ -3,6 +3,7 @@ package com.jovezhao.nest.test;
 import com.jovezhao.nest.activemq.ActiveMQChannelProvider;
 import com.jovezhao.nest.activemq.ActiveMQProviderConfig;
 import com.jovezhao.nest.ddd.event.*;
+import com.jovezhao.nest.exception.CustomException;
 import com.jovezhao.nest.test.api.TestDto;
 import com.jovezhao.nest.test.api.UserService;
 import org.mybatis.spring.annotation.MapperScan;
@@ -28,15 +29,15 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String[] args) throws Exception {
-        ChannelProvider channelProvider = new ActiveMQChannelProvider();
-        ActiveMQProviderConfig providerConfig = new ActiveMQProviderConfig();
-        providerConfig.setBrokers("tcp://127.0.0.1:61616");
-        channelProvider.setProviderConfig(providerConfig);
-
-        EventConfigItem eventConfigItem = new EventConfigItem();
-        eventConfigItem.setEventName("event1");
-        eventConfigItem.setChannelProvider(channelProvider);
-        EventConfigManager.put(eventConfigItem);
+//        ChannelProvider channelProvider = new ActiveMQChannelProvider();
+//        ActiveMQProviderConfig providerConfig = new ActiveMQProviderConfig();
+//        providerConfig.setBrokers("tcp://127.0.0.1:61616");
+//        channelProvider.setProviderConfig(providerConfig);
+//
+//        EventConfigItem eventConfigItem = new EventConfigItem();
+//        eventConfigItem.setEventName("event1");
+//        eventConfigItem.setChannelProvider(channelProvider);
+//        EventConfigManager.put(eventConfigItem);
 
 
         EventBus.registerHandler(new EventHandler<TestDto>() {
@@ -53,12 +54,17 @@ public class Application implements CommandLineRunner {
 
             @Override
             public void handle(TestDto data) throws Exception {
-                System.out.println("fffffff::"+data.getAbs());
+
+                System.out.println("fffffff::" + data.getAbs());
+                throw new CustomException(10, "fff"){};
             }
         });
 
-        userService.changeName("new 55");
+        TestDto dto = new TestDto();
+        dto.setAbs("ffffffff");
+        EventBus.publish("event1", dto);
 
+        userService.changeName("new 55");
 
 
     }

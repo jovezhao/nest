@@ -25,6 +25,12 @@ public class LogAdapter implements Log,Serializable {
 
         logger.error(ex.getMessage(), ex);
     }
+     @Override
+    public void warn(Exception ex) {
+
+        logger.error(ex.getMessage(), ex);
+    }
+
 
     @Override
     public void info(String format, Object... arguments) {

@@ -19,6 +19,7 @@ public interface Log{
      * @param ex
      */
     void warn(SystemException ex);
+    void warn(Exception ex);
 
     /**
      * 运行时产生的重要业务数据记录，如调用外部系统的参数传递及响应内容等
