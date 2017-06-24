@@ -38,11 +38,7 @@ class DefaultCacheProvider implements ICacheProvider {
 
     public void put(String groupName, String key, Object value, long idleSeconds) {
         if (!manager.cacheExists(groupName)) {
-            try {
-                manager.addCache(groupName);
-            } catch (ObjectExistsException ex) {
-                ex.printStackTrace();
-            }
+            manager.addCache(groupName);
         }
         Cache cache = manager.getCache(groupName);
         synchronized (value) {

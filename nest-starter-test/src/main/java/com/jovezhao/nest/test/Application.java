@@ -3,22 +3,21 @@ package com.jovezhao.nest.test;
 import com.jovezhao.nest.activemq.ActiveMQChannelProvider;
 import com.jovezhao.nest.activemq.ActiveMQProviderConfig;
 import com.jovezhao.nest.ddd.event.*;
-import com.jovezhao.nest.ddd.event.provider.distribut.EventData;
 import com.jovezhao.nest.test.api.TestDto;
 import com.jovezhao.nest.test.api.UserService;
-import com.jovezhao.nest.utils.JsonUtils;
-import com.jovezhao.nest.utils.SpringUtils;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.io.Serializable;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Created by zhaofujun on 2017/6/17.
  */
+
 @SpringBootApplication
+@MapperScan(basePackages = "com.jovezhao.")
 public class Application implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -34,10 +33,10 @@ public class Application implements CommandLineRunner {
         providerConfig.setBrokers("tcp://127.0.0.1:61616");
         channelProvider.setProviderConfig(providerConfig);
 
-        EventChannelItem eventChannelItem = new EventChannelItem();
-        eventChannelItem.setEventName("event1");
-        eventChannelItem.setChannelProvider(channelProvider);
-        EventChannelManager.put(eventChannelItem);
+        EventConfigItem eventConfigItem = new EventConfigItem();
+        eventConfigItem.setEventName("event1");
+        eventConfigItem.setChannelProvider(channelProvider);
+        EventConfigManager.put(eventConfigItem);
 
 
         EventBus.registerHandler(new EventHandler<TestDto>() {
@@ -58,7 +57,7 @@ public class Application implements CommandLineRunner {
             }
         });
 
-        userService.changeName("new name");
+        userService.changeName("new 55");
 
 
 

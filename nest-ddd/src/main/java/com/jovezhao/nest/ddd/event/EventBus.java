@@ -1,7 +1,6 @@
 package com.jovezhao.nest.ddd.event;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * Created by zhaofujun on 2017/6/21.
@@ -16,9 +15,9 @@ public class EventBus {
     public static void publish(String eventName, Serializable eventData) {
 
         // 1. 使用事件通道管理器查询通道信息
-        EventChannelItem eventChannelItem = EventChannelManager.get(eventName);
+        EventConfigItem eventConfigItem = EventConfigManager.get(eventName);
         // 2. 使用事件通道发送消息
-        eventChannelItem.getChannelProvider().sendMessage(eventName,eventData);
+        eventConfigItem.getChannelProvider().sendMessage(eventName,eventData);
     }
 
     /*
@@ -29,8 +28,8 @@ public class EventBus {
     public static void registerHandler(EventHandler eventHandler) {
 
         //1. 使用事件通道管理器查询通道信息
-        EventChannelItem eventChannelItem = EventChannelManager.get(eventHandler.getEventName());
-        eventChannelItem.getChannelProvider().subscribe(eventHandler);
+        EventConfigItem eventConfigItem = EventConfigManager.get(eventHandler.getEventName());
+        eventConfigItem.getChannelProvider().subscribe(eventHandler);
 
     }
 }

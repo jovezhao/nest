@@ -1,9 +1,13 @@
 package com.jovezhao.nest.ddd.event.provider.distribut;
 
 import com.jovezhao.nest.ddd.event.ChannelProvider;
-import com.jovezhao.nest.ddd.event.EventChannelManager;
+import com.jovezhao.nest.ddd.event.EventConfigManager;
 import com.jovezhao.nest.ddd.identifier.IdGenerator;
+import com.jovezhao.nest.exception.SystemException;
+import com.jovezhao.nest.log.Log;
+import com.jovezhao.nest.log.LogAdapter;
 import com.jovezhao.nest.utils.JsonUtils;
+
 
 import java.io.Serializable;
 
@@ -13,8 +17,10 @@ import java.io.Serializable;
  */
 public class DistributedEventInfo implements Serializable {
 
-    public EventData getEventData() {
-        return eventData;
+    protected Log log=new LogAdapter(this.getClass());
+
+    public MessageData getMessageData() {
+        return messageData;
     }
 
     /**
@@ -26,9 +32,9 @@ public class DistributedEventInfo implements Serializable {
      */
     public static DistributedEventInfo createEventInfo(String eventName, Serializable data) {
         DistributedEventInfo eventInfo = new DistributedEventInfo();
-        eventInfo.eventData = new EventData();
-        eventInfo.eventData.setData(JsonUtils.toJsonString(data));
-        eventInfo.eventData.setDataId(IdGenerator.getInstance().generate(EventData.class).toValue());
+        eventInfo.messageData = new MessageData();
+        eventInfo.messageData.setMessage(JsonUtils.toJsonString(data));
+        eventInfo.messageData.setMessageId(IdGenerator.getInstance().generate(MessageData.class).toValue());
         eventInfo.eventName = eventName;
         eventInfo.sendStatus = EventSendStatus.wait;
 
@@ -38,7 +44,7 @@ public class DistributedEventInfo implements Serializable {
     private DistributedEventInfo() {
     }
 
-    private EventData eventData;
+    private MessageData messageData;
     private String eventName;
     private EventSendStatus sendStatus;
 
@@ -60,7 +66,7 @@ public class DistributedEventInfo implements Serializable {
      * @return
      */
     public DistributedEventProducer getEventProducer() {
-        ChannelProvider channelProvider = EventChannelManager.get(eventName).getChannelProvider();
+        ChannelProvider channelProvider = EventConfigManager.get(eventName).getChannelProvider();
         return (DistributedEventProducer) channelProvider.getEventProducer();
     }
 
@@ -68,10 +74,11 @@ public class DistributedEventInfo implements Serializable {
         this.sendStatus = EventSendStatus.commited;
         EventCommitManager.putEventData(this);
         try {
-            getEventProducer().commitMessage(this.getEventName(), this.getEventData());
+            getEventProducer().commitMessage(this.getEventName(), this.getMessageData());
             this.sendStatus = EventSendStatus.success;
-        } catch (Exception ex) {
+        } catch (SystemException ex) {
             this.sendStatus = EventSendStatus.fail;
+            log.warn(ex);
         } finally {
             EventCommitManager.putEventData(this);
         }

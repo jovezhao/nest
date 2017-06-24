@@ -1,3 +1,5 @@
+import com.jovezhao.nest.exception.CustomException;
+import com.jovezhao.nest.exception.SystemException;
 import com.jovezhao.nest.utils.JsonUtils;
 import com.jovezhao.nest.utils.StringUtils;
 import org.junit.Test;
@@ -7,31 +9,32 @@ import org.junit.Test;
  */
 
 public class TestStringUtils {
-    class Dto {
-        private String dataId;
-        private String data;
+    class TestCustomException extends CustomException {
 
-        public String getDataId() {
-            return dataId;
-        }
-
-        public void setDataId(String dataId) {
-            this.dataId = dataId;
-        }
-
-        public String getData() {
-            return data;
-        }
-
-        public void setData(String data) {
-            this.data = data;
+        public TestCustomException(int errorCode, String message, Object... arguments) {
+            super(errorCode, message, arguments);
         }
     }
 
     @Test
     public void testJson() {
-        String json = "{\"data\":{\"abs\":\"ffffffff\"},\"dataId\":\"c4b318e2a71ae48a99beeb7e71c4589ac\"}\n";
-        Dto dto = JsonUtils.toObj(json, Dto.class);
+        try {
+            throw new Exception("测试");
+        } catch (CustomException ex) {
+            //业务处理异常，
+            System.out.println("CustomException" + ex);
+            throw ex;
+        } catch (SystemException ex) {
+            //系统异常
+            System.out.println("SystemException：" + ex);
+            throw ex;
+        } catch (Throwable ex) {
+            //其它异常以系统异常抛出
+            System.out.println("Throwable" + ex);
+            throw new SystemException("系统异常", ex);
+        } finally {
+            System.out.println("finally");
+        }
     }
 
     @Test

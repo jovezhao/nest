@@ -1,14 +1,14 @@
 package com.jovezhao.nest.utils;
 
-import com.jovezhao.nest.log.ILog;
-import com.jovezhao.nest.log.LogAdapter;
+import com.jovezhao.nest.exception.SystemException;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class SpringUtils {
-    static ILog logger = new LogAdapter(SpringUtils.class);
 
     private volatile static ApplicationContext applicationContext;
 
@@ -16,56 +16,30 @@ public class SpringUtils {
         SpringUtils.applicationContext = applicationContext;
     }
 
-
-    public static <T> T getInstance(Class<T> beanType, String bean) {
-        try {
-
-            return applicationContext.getBean(bean,beanType);
-        } catch (Exception ex) {
-            logger.warn("没有找到指定的bean", bean);
-            return null;
-        }
-
+    public static ApplicationContext getApplicationContext() {
+        if (SpringUtils.applicationContext == null)
+            throw new SystemException("SpringUtils未初始化，请调用SpringUtils.setApplicationContext()方法初始化");
+        return SpringUtils.applicationContext;
     }
 
-    public static <T, U extends T> T getInstance(Class<T> beanType, String bean, Class<U> defaultType) {
-        try {
-            T t = applicationContext.getBean(bean,beanType);
-            if (t == null)
-                t = applicationContext.getBean(defaultType);
-            return t;
-        } catch (Exception ex) {
-            logger.warn("没有找到指定的bean", bean);
-            return null;
-        }
+    public static <T> T getInstance(Class<T> beanType, String bean) {
+
+        return getApplicationContext().getBean(bean, beanType);
 
     }
 
     public static <T> T getInstance(Class<T> beanType) {
-        return applicationContext.getBean(beanType);
+        return getApplicationContext().getBean(beanType);
     }
 
-    /**
-     * 获取指定类型的实例，当找不到指定类型的bean时使用默认类型
-     * @param beanType 指定类型
-     * @param defaultType 默认类型
-     * @param <T>
-     * @param <U>
-     * @return
-     */
-    public static <T, U extends T> T getInstance(Class<T> beanType, Class<U> defaultType) {
-        T t = applicationContext.getBean(beanType);
-        if (t == null)
-            t = applicationContext.getBean(defaultType);
-        return t;
-    }
 
     public static <T> Set<T> getInstances(Class<T> beanType) {
-        return new HashSet<T>(applicationContext.getBeansOfType(beanType).values());
+        return new HashSet<T>(getApplicationContext().getBeansOfType(beanType).values());
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> T getByBeanName(String beanName) {
-        return (T) applicationContext.getBean(beanName);
+    public static <T> Map<String, T> getBeansOfType(Class<T> beanType) throws BeansException {
+        return getApplicationContext().getBeansOfType(beanType);
     }
+
+
 }

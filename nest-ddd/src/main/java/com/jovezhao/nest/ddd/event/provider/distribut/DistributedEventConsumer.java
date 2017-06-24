@@ -1,12 +1,11 @@
 package com.jovezhao.nest.ddd.event.provider.distribut;
 
-import com.jovezhao.nest.ddd.Identifier;
 import com.jovezhao.nest.ddd.event.EventConsumer;
 import com.jovezhao.nest.ddd.event.ProviderConfig;
 
-import java.io.Serializable;
-
 /**
+ * 分布式消费者抽象类
+ * 需要具体的消息中间件来实现
  * Created by zhaofujun on 2017/6/22.
  */
 public abstract class DistributedEventConsumer<T extends ProviderConfig> extends EventConsumer<T> implements Runnable {
@@ -25,7 +24,7 @@ public abstract class DistributedEventConsumer<T extends ProviderConfig> extends
         while (running) {
             // 开始消费
             try {
-                EventDataProcessor dataProcessor=new EventDataProcessor(this.getEventHandler());
+                MessageProcessor dataProcessor=new MessageProcessor(this.getEventHandler());
                 consume(dataProcessor);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -49,7 +48,7 @@ public abstract class DistributedEventConsumer<T extends ProviderConfig> extends
 
     protected abstract void init() throws Exception;
 
-    protected abstract void consume(EventDataProcessor processor) throws Exception;
+    protected abstract void consume(MessageProcessor processor) throws Exception;
 
     protected abstract void dispose() throws Exception;
 

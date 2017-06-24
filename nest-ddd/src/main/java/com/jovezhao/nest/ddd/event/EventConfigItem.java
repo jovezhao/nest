@@ -1,6 +1,10 @@
 package com.jovezhao.nest.ddd.event;
 
-public class EventChannelItem{
+/**
+ * 事件配置项
+ * 用于定义事件与通道之间的关系，一个事件只能使用一个通道，
+ */
+public class EventConfigItem {
     private String eventName;
     private ChannelProvider channelProvider;
 

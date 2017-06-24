@@ -8,6 +8,7 @@ import com.jovezhao.nest.utils.SpringUtils;
 import java.io.Serializable;
 
 /**
+ * 分布式生产者
  * Created by zhaofujun on 2017/6/21.
  */
 public abstract class DistributedEventProducer<T extends ProviderConfig> extends EventProducer<T> {
@@ -22,6 +23,6 @@ public abstract class DistributedEventProducer<T extends ProviderConfig> extends
         unitOfWork.addEvent(distributedEventInfo);
     }
 
-    protected abstract void commitMessage(String eventName, EventData eventData) throws Exception;
+    protected abstract void commitMessage(String eventName, MessageData messageData);
 
 }

@@ -1,7 +1,9 @@
 package com.jovezhao.nest.ddd.event;
 
-import java.io.Serializable;
-
+/**
+ * 事件处理器
+ * @param <T>
+ */
 public interface EventHandler<T> {
     /**
      * 事件名称

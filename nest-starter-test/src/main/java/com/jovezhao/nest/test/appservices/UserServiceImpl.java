@@ -4,6 +4,7 @@ import com.jovezhao.nest.ddd.StringIdentifier;
 import com.jovezhao.nest.ddd.builder.IBuilder;
 import com.jovezhao.nest.ddd.builder.RepositoryLoader;
 import com.jovezhao.nest.ddd.event.EventBus;
+import com.jovezhao.nest.exception.CustomException;
 import com.jovezhao.nest.starter.AppService;
 import com.jovezhao.nest.test.api.TestDto;
 import com.jovezhao.nest.test.api.UserService;
@@ -28,6 +29,7 @@ public class UserServiceImpl implements UserService {
         TestDto dto=new TestDto();
         dto.setAbs("ffffffff");
         EventBus.publish("event1", dto);
+
 
         return user.getName() + user.getId();
     }

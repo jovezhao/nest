@@ -3,6 +3,7 @@ package com.jovezhao.nest.test.repositories.models;
 import com.jovezhao.nest.ddd.repository.IRepository;
 import com.jovezhao.nest.ddd.Identifier;
 import com.jovezhao.nest.ddd.builder.IBuilder;
+import com.jovezhao.nest.exception.CustomException;
 import com.jovezhao.nest.test.models.User;
 import com.jovezhao.nest.test.repositories.mappers.UserDMOMapper;
 import com.jovezhao.nest.test.repositories.mappers.dmo.UserDMO;
@@ -28,12 +29,12 @@ public class UserRepository implements IRepository<User> {
 
     @Override
     public void save(User user) {
-
         UserDMO userDMO = new UserDMO();
         userDMO.setId(user.getId().toString());
         userDMO.setName(user.getName());
         if (userDMOMapper.updateByPrimaryKey(userDMO) == 0)
             userDMOMapper.insert(userDMO);
+
     }
 
     @Override

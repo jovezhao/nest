@@ -1,9 +1,7 @@
 package com.jovezhao.nest.kafka;
 
-import com.jovezhao.nest.ddd.event.provider.distribut.EventDataProcessor;
+import com.jovezhao.nest.ddd.event.provider.distribut.MessageProcessor;
 import com.jovezhao.nest.ddd.event.provider.distribut.DistributedEventConsumer;
-import com.jovezhao.nest.ddd.event.provider.distribut.EventData;
-import com.jovezhao.nest.utils.JsonUtils;
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
 import kafka.consumer.ConsumerIterator;
@@ -38,7 +36,7 @@ public class KafkaEventConsumer extends DistributedEventConsumer<KafkaProviderCo
     }
 
     @Override
-    protected void consume(EventDataProcessor processor) throws Exception {
+    protected void consume(MessageProcessor processor) throws Exception {
         Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
         topicCountMap.put(this.getEventHandler().getEventName(), 1); // 一次从主题中获取一个数据
         Map<String, List<KafkaStream<byte[], byte[]>>> messageStreams = consumer.createMessageStreams(topicCountMap);
@@ -47,7 +45,7 @@ public class KafkaEventConsumer extends DistributedEventConsumer<KafkaProviderCo
         ConsumerIterator<byte[], byte[]> iterator = stream.iterator();
         while (iterator.hasNext()) {
             String json = new String(iterator.next().message());
-            processor.setEventData(json);
+            processor.setMessageData(json);
             processor.process();
         }
         consumer.commitOffsets();

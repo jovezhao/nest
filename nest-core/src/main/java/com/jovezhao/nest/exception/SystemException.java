@@ -1,15 +1,16 @@
 package com.jovezhao.nest.exception;
 
 /**
- * 系统异常基类，用于把异常转换为运行时异常
- *
- * @author Jove
+ * 用于不可控但往往会影响业务流程的异常，常见于网络原因或第三方系统出现故障。
+ * Created by zhaofujun on 2017/6/23.
  */
 public class SystemException extends RuntimeException {
 
-    public SystemException(Exception exception) {
-        super(exception.getMessage(), exception.getCause());
+    public SystemException(String message) {
+        super(message);
     }
 
+    public SystemException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
-

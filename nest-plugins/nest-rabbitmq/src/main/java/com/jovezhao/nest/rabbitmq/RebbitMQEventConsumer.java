@@ -1,9 +1,7 @@
 package com.jovezhao.nest.rabbitmq;
 
 import com.jovezhao.nest.ddd.event.provider.distribut.DistributedEventConsumer;
-import com.jovezhao.nest.ddd.event.provider.distribut.EventData;
-import com.jovezhao.nest.ddd.event.provider.distribut.EventDataProcessor;
-import com.jovezhao.nest.utils.JsonUtils;
+import com.jovezhao.nest.ddd.event.provider.distribut.MessageProcessor;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -27,7 +25,7 @@ public class RebbitMQEventConsumer extends DistributedEventConsumer<RabbitMQProv
     }
 
     @Override
-    protected void consume(EventDataProcessor processor) throws Exception {
+    protected void consume(MessageProcessor processor) throws Exception {
         int prefetchCount = 5;
         Channel channel = connection.createChannel();
         channel.exchangeDeclare(this.getEventHandler().getEventName(), "fanout", true, false, null);
@@ -45,7 +43,7 @@ public class RebbitMQEventConsumer extends DistributedEventConsumer<RabbitMQProv
 
 
             String json = new String(delivery.getBody());
-            processor.setEventData(json);
+            processor.setMessageData(json);
             try {
                 processor.process();
                 channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);

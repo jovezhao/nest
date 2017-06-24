@@ -1,6 +1,7 @@
 package com.jovezhao.nest.ddd.repository;
 
 import com.jovezhao.nest.ddd.BaseEntityObject;
+import com.jovezhao.nest.exception.SystemException;
 import com.jovezhao.nest.utils.SpringUtils;
 
 /**
@@ -17,6 +18,9 @@ public class RepositoryManager {
         IRepository repository = SpringUtils.getInstance(IRepository.class, repName);
         if (repository == null)
             return getEntityRepository(clazz.getSuperclass());
+
+        if(repository==null)
+            throw new SystemException("没有找到"+clazz.getName()+"对应的仓储bean");
         return repository;
     }
 

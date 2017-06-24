@@ -6,8 +6,6 @@ import com.jovezhao.nest.ddd.identifier.IdGenerator;
 import com.jovezhao.nest.ddd.repository.IRoleRepository;
 import com.jovezhao.nest.ddd.repository.IUnitOfWork;
 import com.jovezhao.nest.ddd.repository.RepositoryManager;
-import com.jovezhao.nest.log.ILog;
-import com.jovezhao.nest.log.LogAdapter;
 import com.jovezhao.nest.utils.SpringUtils;
 import org.springframework.util.StringUtils;
 
@@ -21,7 +19,6 @@ import java.util.Set;
 public abstract class BaseEntityObject<T extends Identifier> implements Serializable {
     private transient boolean isLoad;
 
-    private transient ILog logger = new LogAdapter(this.getClass());
     /**
      * 唯一ID
      */
@@ -52,7 +49,6 @@ public abstract class BaseEntityObject<T extends Identifier> implements Serializ
     public <T extends BaseRole> T act(Class<T> clazz, Identifier roleId) {
 
         T t = null;
-        try {
 
             if (!StringUtils.isEmpty(roleId)) {
                 t = new RepositoryLoader<>(clazz).build(roleId);
@@ -64,9 +60,6 @@ public abstract class BaseEntityObject<T extends Identifier> implements Serializ
             }
             t.setActor(this);
 
-        } catch (Exception e) {
-            logger.fatal(e, clazz, roleId);
-        }
 
         return t;
     }

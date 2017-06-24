@@ -4,7 +4,7 @@ package com.jovezhao.nest.test.repositories.mappers;
 import com.jovezhao.nest.test.repositories.mappers.dmo.UserDMO;
 import org.apache.ibatis.annotations.Mapper;
 
-@Mapper
+
 public interface UserDMOMapper {
     int deleteByPrimaryKey(String id);
 

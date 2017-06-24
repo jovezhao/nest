@@ -1,7 +1,7 @@
 package com.jovezhao.nest.kafka;
 
 import com.jovezhao.nest.ddd.event.provider.distribut.DistributedEventProducer;
-import com.jovezhao.nest.ddd.event.provider.distribut.EventData;
+import com.jovezhao.nest.ddd.event.provider.distribut.MessageData;
 import com.jovezhao.nest.utils.JsonUtils;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
@@ -16,7 +16,7 @@ import java.util.Properties;
 public class KafkaEventProducer extends DistributedEventProducer<KafkaProviderConfig> {
 
     @Override
-    public void commitMessage(String eventName, EventData eventData) {
+    public void commitMessage(String eventName, MessageData messageData) {
         Properties props = new Properties();
 
         props.put("zk.connect", this.getProviderConfig().getZk());
@@ -24,7 +24,7 @@ public class KafkaEventProducer extends DistributedEventProducer<KafkaProviderCo
         props.put("metadata.broker.list", this.getProviderConfig().getBrokers());
 
         Producer<String, String> producer = new Producer<String, String>(new ProducerConfig(props));
-        KeyedMessage<String, String> keyedMessage = new KeyedMessage<String, String>(eventName, JsonUtils.toJsonString(eventData));
+        KeyedMessage<String, String> keyedMessage = new KeyedMessage<String, String>(eventName, JsonUtils.toJsonString(messageData));
         producer.send(keyedMessage);
 
         producer.close();

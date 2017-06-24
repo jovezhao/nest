@@ -1,9 +1,7 @@
 package com.jovezhao.nest.activemq;
 
 import com.jovezhao.nest.ddd.event.provider.distribut.DistributedEventConsumer;
-import com.jovezhao.nest.ddd.event.provider.distribut.EventData;
-import com.jovezhao.nest.ddd.event.provider.distribut.EventDataProcessor;
-import com.jovezhao.nest.utils.JsonUtils;
+import com.jovezhao.nest.ddd.event.provider.distribut.MessageProcessor;
 import org.apache.activemq.pool.PooledConnectionFactory;
 
 import javax.jms.*;
@@ -22,13 +20,13 @@ public class ActiveMQEventConsumer extends DistributedEventConsumer<ActiveMQProv
     }
 
     @Override
-    protected void consume(EventDataProcessor processor) throws Exception {
+    protected void consume(MessageProcessor processor) throws Exception {
         Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
         Destination queue = session.createQueue("Consumer." + this.getEventHandler().getHandlerName() + ".VirtualTopic." + this.getEventHandler().getEventName());
         MessageConsumer consumer = session.createConsumer(queue);
         TextMessage textMessage = (TextMessage) consumer.receive();
 
-        processor.setEventData(textMessage.getText());
+        processor.setMessageData(textMessage.getText());
 
         try {
             processor.process();

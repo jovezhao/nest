@@ -22,10 +22,10 @@ public class TestActiveMQ {
         providerConfig.setBrokers("tcp://127.0.0.1:61616");
         channelProvider.setProviderConfig(providerConfig);
 
-        EventChannelItem eventChannelItem = new EventChannelItem();
-        eventChannelItem.setEventName("event1");
-        eventChannelItem.setChannelProvider(channelProvider);
-        EventChannelManager.put(eventChannelItem);
+        EventConfigItem eventConfigItem = new EventConfigItem();
+        eventConfigItem.setEventName("event1");
+        eventConfigItem.setChannelProvider(channelProvider);
+        EventConfigManager.put(eventConfigItem);
 
     }
 

@@ -7,7 +7,6 @@ import com.jovezhao.nest.ddd.event.provider.distribut.DistributedEventInfo;
  * Created by Jove on 2016/9/28.
  */
 public interface IUnitOfWork {
-    void entityCommit();
 
     void addEntityObject(BaseEntityObject entityObject);
 
@@ -15,7 +14,7 @@ public interface IUnitOfWork {
 
     void addEvent(DistributedEventInfo distributedEventInfo);
 
-    void eventCommit();
 
+    void commit();
     void rollback();
 }

@@ -2,7 +2,12 @@ package com.jovezhao.nest.ddd.repository;
 
 import com.jovezhao.nest.ddd.BaseEntityObject;
 import com.jovezhao.nest.ddd.event.provider.distribut.DistributedEventInfo;
+import com.jovezhao.nest.exception.SystemException;
+import com.jovezhao.nest.log.Log;
+import com.jovezhao.nest.log.LogAdapter;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
 import java.util.*;
 
 /**
@@ -11,9 +16,10 @@ import java.util.*;
  */
 public class NestUnitOfWork implements IUnitOfWork {
 
+    private Log log = new LogAdapter(NestUnitOfWork.class);
 
-    private static ThreadLocal<HashMap<BaseEntityObject, OperateEnum>> threadLocalEntity = new ThreadLocal<>();
-
+    //region 仓储相关的处理方式
+    private ThreadLocal<HashMap<BaseEntityObject, OperateEnum>> threadLocalEntity = new ThreadLocal<>();
 
     private HashMap<BaseEntityObject, OperateEnum> getEntityMap() {
         HashMap<BaseEntityObject, OperateEnum> hashMap = threadLocalEntity.get();
@@ -34,53 +40,33 @@ public class NestUnitOfWork implements IUnitOfWork {
     }
 
 
-    @Override
-    public void rollback() {
-
-    }
-
-    protected void beforeCommit() {
-    }
-
     public void entityCommit() {
 
-        beforeCommit();
-        try {
-            Iterator iter = getEntityMap().entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry<BaseEntityObject, OperateEnum> entry = (Map.Entry) iter.next();
-                BaseEntityObject entityObject = entry.getKey();
-                OperateEnum operate = entry.getValue();
+        Iterator iter = getEntityMap().entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<BaseEntityObject, OperateEnum> entry = (Map.Entry) iter.next();
+            BaseEntityObject entityObject = entry.getKey();
+            OperateEnum operate = entry.getValue();
 
-                IRepository r = RepositoryManager.getEntityRepository(entityObject.getClass());
-                switch (operate) {
-                    case save:
-                        EntityObjectCacheManager.put(entityObject);
-                        r.save(entityObject);
-                        break;
-                    case remove:
-                        EntityObjectCacheManager.put(entityObject);
-                        r.remove(entityObject);
-                }
+            IRepository r = RepositoryManager.getEntityRepository(entityObject.getClass());
+            switch (operate) {
+                case save:
+                    EntityObjectCacheManager.put(entityObject);
+                    r.save(entityObject);
+                    break;
+                case remove:
+                    EntityObjectCacheManager.put(entityObject);
+                    r.remove(entityObject);
             }
-        } catch (Exception ex) {
-
-            rollback();
-            throw ex;
-        } finally {
-            getEntityMap().clear();
-            afterCommit();
         }
 
+
     }
 
-
-    protected void afterCommit() {
-    }
-
+    //endregion
 
     //region 事件相关的处理方式
-    private static ThreadLocal<Queue<DistributedEventInfo>> threadLocalEvent = new ThreadLocal<>();
+    private ThreadLocal<Queue<DistributedEventInfo>> threadLocalEvent = new ThreadLocal<>();
 
     private Queue<DistributedEventInfo> getEvenQueue() {
         Queue<DistributedEventInfo> eventQueue = threadLocalEvent.get();
@@ -96,7 +82,8 @@ public class NestUnitOfWork implements IUnitOfWork {
         getEvenQueue().add(distributedEventInfo);
     }
 
-    @Override
+
+
     public void eventCommit() {
         DistributedEventInfo distributedEventInfo = getEvenQueue().poll();
 
@@ -106,4 +93,31 @@ public class NestUnitOfWork implements IUnitOfWork {
         }
     }
     //endregion
+
+    @Override
+    @Transactional
+    public void commit() {
+        try {
+            entityCommit();
+        } catch (Exception ex) {
+            //发生异常时，清空待发送的事件
+            getEvenQueue().clear();
+            throw new SystemException("提交仓储失败", ex);
+        } finally {
+            getEntityMap().clear();
+        }
+        try {
+            eventCommit();
+        }finally {
+
+        }
+    }
+
+    @Override
+    public void rollback() {
+        //清理待提交的实体和待发送的事件信息
+        getEntityMap().clear();
+        getEvenQueue().clear();
+
+    }
 }

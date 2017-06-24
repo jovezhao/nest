@@ -3,6 +3,7 @@ package com.jovezhao.nest.ddd.event.provider.distribut;
 import com.jovezhao.nest.cache.CacheContext;
 
 /**
+ * 事件记录管理器
  * Created by zhaofujun on 2017/6/22.
  */
 public class EventRecordManager {
@@ -12,8 +13,8 @@ public class EventRecordManager {
         eventContext = CacheContext.getContextByCode("eventRecord");
     }
 
-    public static void putEventData(EventData eventData) {
-        eventContext.put(eventData.getDataId(), eventData);
+    public static void putEventData(MessageData messageData) {
+        eventContext.put(messageData.getMessageId(), messageData);
     }
 
     public static boolean isProcess(String dataId) {
