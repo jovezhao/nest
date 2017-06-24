@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 
 @SpringBootApplication
-@MapperScan(basePackages = "com.jovezhao.")
+@MapperScan("com.jovezhao.nest.test.repositories.mappers")
 public class Application implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);

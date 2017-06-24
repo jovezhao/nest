@@ -4,7 +4,7 @@ import com.jovezhao.nest.ddd.BaseEntityObject;
 import com.jovezhao.nest.ddd.Identifier;
 
 public class FactoryBuilder<T extends BaseEntityObject> implements IBuilder<T> {
-    Class<T> tClass;
+    private Class<T> tClass;
 
     public FactoryBuilder(Class<T> tClass) {
         this.tClass = tClass;

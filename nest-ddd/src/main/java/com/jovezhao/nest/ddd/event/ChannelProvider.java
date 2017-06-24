@@ -22,7 +22,7 @@ public abstract class ChannelProvider<T extends ProviderConfig> {
 
     public void sendMessage(String eventName, Serializable object) {
         EventProducer eventProducer = getEventProducer();
-        eventProducer.setProviderConfig(providerConfig);
+        eventProducer.setProviderConfig(this.providerConfig);
         eventProducer.sendMessage(eventName, object);
     }
 

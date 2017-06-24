@@ -7,10 +7,8 @@ import com.jovezhao.nest.ddd.Identifier;
 /**
  * Created by Jove on 2016/8/31.
  */
- public class EntityObjectCacheManager {
-    static {
-        cacheContext = CacheContext.getContextByCode("entityObject");
-    }
+public class EntityObjectCacheManager {
+
 
     private static String getCacheKey(BaseEntityObject entityObject) {
         return entityObject.getClass().getName() + "_" + entityObject.getId();
@@ -22,17 +20,24 @@ import com.jovezhao.nest.ddd.Identifier;
 
     private static CacheContext cacheContext;
 
+    public synchronized static CacheContext getCacheContext() {
+        if (cacheContext == null) {
+            cacheContext = CacheContext.getContextByCode("entityObject");
+        }
+        return cacheContext;
+    }
+
     public static void put(BaseEntityObject entityObject) {
         if (entityObject != null)
-            cacheContext.put(getCacheKey(entityObject), entityObject);
+            getCacheContext().put(getCacheKey(entityObject), entityObject);
     }
 
     public static void remove(BaseEntityObject entityObject) {
         if (entityObject != null)
-            cacheContext.remove(getCacheKey(entityObject));
+            getCacheContext().remove(getCacheKey(entityObject));
     }
 
     public static <T extends BaseEntityObject> T get(Class<T> tClass, Identifier id) {
-        return cacheContext.get(tClass, id.toString());
+        return getCacheContext().get(tClass, id.toString());
     }
 }
