@@ -14,7 +14,12 @@ public class DefaultEventChannelProvider extends ChannelProvider {
 
     private ObserverEventSource eventSource=new ObserverEventSource();
 
-   
+
+    @Override
+    public void init() {
+
+    }
+
     @Override
     protected EventConsumer createEventConsumer() {
         return new DefaultEventConsumer(eventSource);

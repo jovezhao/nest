@@ -17,23 +17,12 @@ public class TestStringUtils {
     }
 
     @Test
-    public void testJson() {
-        try {
-            throw new Exception("测试");
-        } catch (CustomException ex) {
-            //业务处理异常，
-            System.out.println("CustomException" + ex);
-            throw ex;
-        } catch (SystemException ex) {
-            //系统异常
-            System.out.println("SystemException：" + ex);
-            throw ex;
-        } catch (Throwable ex) {
-            //其它异常以系统异常抛出
-            System.out.println("Throwable" + ex);
-            throw new SystemException("系统异常", ex);
-        } finally {
-            System.out.println("finally");
+    public void testJson()  {
+        try{
+
+        }finally {
+            int a=3/0;
+            System.out.println("fffff");
         }
     }
 

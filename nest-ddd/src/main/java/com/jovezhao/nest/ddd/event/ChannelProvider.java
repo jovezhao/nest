@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 public abstract class ChannelProvider<T extends ProviderConfig> {
     private List<EventConsumer> eventConsumers = new ArrayList<>();
 
+    public abstract void init();
 
     protected abstract EventConsumer createEventConsumer();
 

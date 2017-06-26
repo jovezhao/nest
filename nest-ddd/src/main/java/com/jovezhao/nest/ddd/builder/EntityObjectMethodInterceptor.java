@@ -1,6 +1,8 @@
 package com.jovezhao.nest.ddd.builder;
 
 import com.jovezhao.nest.ddd.BaseEntityObject;
+import com.jovezhao.nest.log.Log;
+import com.jovezhao.nest.log.LogAdapter;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
@@ -9,14 +11,19 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * Created by Jove on 2017/1/9.
  */
 
 
+/**
+ * 实体方法拦截器
+ */
  class EntityObjectMethodInterceptor implements MethodInterceptor, Serializable {
 
+     private Log log=new LogAdapter(this.getClass());
     // 实现MethodInterceptor接口方法
     public Object intercept(Object obj, Method method, Object[] args,
                             MethodProxy proxy) throws Throwable {
@@ -35,7 +42,7 @@ import java.util.Arrays;
                 Method method1 = BaseEntityObject.class.getDeclaredMethod("addToUnitOfWork");
                 method1.setAccessible(true);
                 method1.invoke(obj);
-                System.out.println("调用"+method.getName());
+                log.debug("领域实体发生更改，调用方法{}",method.getName());
             }
         }
 

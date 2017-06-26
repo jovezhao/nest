@@ -4,6 +4,8 @@ import com.jovezhao.nest.activemq.ActiveMQChannelProvider;
 import com.jovezhao.nest.activemq.ActiveMQProviderConfig;
 import com.jovezhao.nest.ddd.event.*;
 import com.jovezhao.nest.exception.CustomException;
+import com.jovezhao.nest.log.Log;
+import com.jovezhao.nest.log.LogAdapter;
 import com.jovezhao.nest.test.api.TestDto;
 import com.jovezhao.nest.test.api.UserService;
 import org.mybatis.spring.annotation.MapperScan;
@@ -29,43 +31,45 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String[] args) throws Exception {
-//        ChannelProvider channelProvider = new ActiveMQChannelProvider();
-//        ActiveMQProviderConfig providerConfig = new ActiveMQProviderConfig();
-//        providerConfig.setBrokers("tcp://127.0.0.1:61616");
-//        channelProvider.setProviderConfig(providerConfig);
-//
-//        EventConfigItem eventConfigItem = new EventConfigItem();
-//        eventConfigItem.setEventName("event1");
-//        eventConfigItem.setChannelProvider(channelProvider);
-//        EventConfigManager.put(eventConfigItem);
+        ChannelProvider channelProvider = new ActiveMQChannelProvider();
+
+        ActiveMQProviderConfig providerConfig = new ActiveMQProviderConfig();
+        providerConfig.setBrokers("tcp://127.0.0.1:61616");
+        channelProvider.setProviderConfig(providerConfig);
+        channelProvider.init();
+
+        EventConfigItem eventConfigItem = new EventConfigItem();
+        eventConfigItem.setEventName("event1");
+        eventConfigItem.setChannelProvider(channelProvider);
+        EventConfigManager.put(eventConfigItem);
 
 
-        EventBus.registerHandler(new EventHandler<TestDto>() {
+        EventBus.registerHandler(new TestHandler());
+        EventBus.registerHandler(new TestHandler());
 
-            @Override
-            public String getEventName() {
-                return "event1";
-            }
-
-            @Override
-            public Class<TestDto> getTClass() {
-                return TestDto.class;
-            }
-
-            @Override
-            public void handle(TestDto data) throws Exception {
-
-                System.out.println("fffffff::" + data.getAbs());
-                throw new CustomException(10, "fff"){};
-            }
-        });
-
-        TestDto dto = new TestDto();
-        dto.setAbs("ffffffff");
-        EventBus.publish("event1", dto);
 
         userService.changeName("new 55");
 
 
+    }
+
+    public class TestHandler implements EventHandler<TestDto> {
+        private Log log = new LogAdapter(this.getClass());
+
+        @Override
+        public String getEventName() {
+            return "event1";
+        }
+
+        @Override
+        public Class<TestDto> getTClass() {
+            return TestDto.class;
+        }
+
+        @Override
+        public void handle(TestDto data) throws Exception {
+            log.info(data.getAbs());
+            //System.out.println("fffffff::" + data.getAbs());
+        }
     }
 }

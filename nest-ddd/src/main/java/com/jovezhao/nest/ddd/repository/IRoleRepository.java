@@ -5,7 +5,16 @@ import com.jovezhao.nest.ddd.Identifier;
 
 import java.util.Set;
 
-public interface IRoleRepository<T extends BaseRole> {
+/**
+ * 角色仓储
+ * @param <T>
+ */
+public interface IRoleRepository<T extends BaseRole> extends IRepository<T>{
+    /**
+     *
+     * @param actorId
+     * @return
+     */
     Set<Identifier> getRoleIds(Identifier actorId);
     Identifier getActorIdByRoleId(Identifier roleId);
 }

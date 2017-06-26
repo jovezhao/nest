@@ -28,15 +28,10 @@ public class KafkaEventConsumer extends DistributedEventConsumer<KafkaProviderCo
         return Consumer.createJavaConsumerConnector(new ConsumerConfig(properties));
     }
 
-    ConsumerConnector consumer;
-
-    @Override
-    protected void init() {
-        consumer = createConsumer();
-    }
 
     @Override
     protected void consume(MessageProcessor processor) throws Exception {
+        ConsumerConnector consumer = createConsumer();
         Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
         topicCountMap.put(this.getEventHandler().getEventName(), 1); // 一次从主题中获取一个数据
         Map<String, List<KafkaStream<byte[], byte[]>>> messageStreams = consumer.createMessageStreams(topicCountMap);
@@ -51,12 +46,8 @@ public class KafkaEventConsumer extends DistributedEventConsumer<KafkaProviderCo
         consumer.commitOffsets();
 
         Thread.sleep(500);
-
-    }
-
-    @Override
-    protected void dispose() {
         consumer.shutdown();
+
     }
 
 

@@ -2,6 +2,7 @@ package com.jovezhao.nest.ddd.event.provider.distribut;
 
 import com.jovezhao.nest.ddd.event.EventConsumer;
 import com.jovezhao.nest.ddd.event.ProviderConfig;
+import com.jovezhao.nest.exception.SystemException;
 import com.jovezhao.nest.log.Log;
 import com.jovezhao.nest.log.LogAdapter;
 
@@ -17,11 +18,6 @@ public abstract class DistributedEventConsumer<T extends ProviderConfig> extends
     @Override
     public void run() {
 
-        try {
-            init();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         running = true;
         while (running) {
@@ -42,18 +38,11 @@ public abstract class DistributedEventConsumer<T extends ProviderConfig> extends
         }
 
 
-        try {
-            dispose();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
-    protected abstract void init() throws Exception;
 
     protected abstract void consume(MessageProcessor processor) throws Exception;
 
-    protected abstract void dispose() throws Exception;
 
     private volatile boolean running;
 
@@ -65,7 +54,6 @@ public abstract class DistributedEventConsumer<T extends ProviderConfig> extends
     @Override
     protected void start() {
         Thread eventThread = new Thread(this);
-        eventThread.setName(this.getEventHandler().getEventName());
         eventThread.start();
     }
 }

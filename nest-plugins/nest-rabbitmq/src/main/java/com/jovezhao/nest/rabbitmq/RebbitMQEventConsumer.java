@@ -11,21 +11,16 @@ import com.rabbitmq.client.QueueingConsumer;
  * Created by zhaofujun on 2017/6/22.
  */
 public class RebbitMQEventConsumer extends DistributedEventConsumer<RabbitMQProviderConfig> {
-    Connection connection;
+    ConnectionFactory connectionFactory;
 
-    @Override
-    protected void init() throws Exception {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setAutomaticRecoveryEnabled(true);
-        factory.setHost(this.getProviderConfig().getHost());
-        factory.setPort(this.getProviderConfig().getPort());
-        factory.setUsername(this.getProviderConfig().getUser());
-        factory.setPassword(this.getProviderConfig().getPwd());
-        connection = factory.newConnection();
+    public RebbitMQEventConsumer(ConnectionFactory connectionFactory) {
+        this.connectionFactory=connectionFactory;
     }
+
 
     @Override
     protected void consume(MessageProcessor processor) throws Exception {
+        Connection connection = connectionFactory.newConnection();
         int prefetchCount = 5;
         Channel channel = connection.createChannel();
         channel.exchangeDeclare(this.getEventHandler().getEventName(), "fanout", true, false, null);
@@ -52,11 +47,10 @@ public class RebbitMQEventConsumer extends DistributedEventConsumer<RabbitMQProv
             }
 
         }
+        channel.close();
+        connection.close();
         Thread.sleep(500);
     }
 
-    @Override
-    protected void dispose() throws Exception {
-        connection.close();
-    }
+
 }

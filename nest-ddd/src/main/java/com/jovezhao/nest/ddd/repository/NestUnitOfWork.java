@@ -7,7 +7,6 @@ import com.jovezhao.nest.log.Log;
 import com.jovezhao.nest.log.LogAdapter;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Transient;
 import java.util.*;
 
 /**
@@ -51,11 +50,11 @@ public class NestUnitOfWork implements IUnitOfWork {
             IRepository r = RepositoryManager.getEntityRepository(entityObject.getClass());
             switch (operate) {
                 case save:
-                    EntityObjectCacheManager.put(entityObject);
+                    EntityCacheManager.put(entityObject);
                     r.save(entityObject);
                     break;
                 case remove:
-                    EntityObjectCacheManager.put(entityObject);
+                    EntityCacheManager.put(entityObject);
                     r.remove(entityObject);
             }
         }

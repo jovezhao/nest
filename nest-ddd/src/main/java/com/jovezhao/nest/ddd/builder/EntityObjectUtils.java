@@ -8,26 +8,44 @@ import java.lang.reflect.Field;
 import java.util.function.Consumer;
 
 /**
- * 实体工厂
+ * 实体工具
  * Created by Jove on 2017/1/9.
  */
-class EntityObjectFactory {
+class EntityObjectUtils {
+    /**
+     * 使用cglib创建一个被代理的实体
+     * 代理的主要作用用于监测自身属性变化时将自身提交到工作单元等待持久化
+     *
+     * @param tClass
+     * @param <T>
+     * @return
+     */
     public static <T extends BaseEntityObject> T create(Class<T> tClass) {
-        return create(tClass, null, null);
+        Enhancer enhancer = new Enhancer();
+        // 设置需要创建子类的类
+        enhancer.setSuperclass(tClass);
+        enhancer.setCallback(new EntityObjectMethodInterceptor());
+        return (T) enhancer.create();
     }
 
     public static <T extends BaseEntityObject> T create(Class<T> tClass, Class[] constructorArgTypes, Object[] constructorArgs) {
-        T proxyImp = newInstance(tClass, constructorArgTypes, constructorArgs);
-        return proxyImp;
+        Enhancer enhancer = new Enhancer();
+        // 设置需要创建子类的类
+        enhancer.setSuperclass(tClass);
+        enhancer.setCallback(new EntityObjectMethodInterceptor());
+
+        if (constructorArgTypes == null || constructorArgs == null)
+            return (T) enhancer.create();
+        else
+            return (T) enhancer.create(constructorArgTypes, constructorArgs);
     }
 
 
-    public static <T extends BaseEntityObject> T createForLoad(Class<T> tClass) {
-        T t = create(tClass, (Class[]) null, (Object[]) null);
-        beginLoad(t);
-        return t;
-    }
-
+    /**
+     * 修改实体为加载状态，加载状态的实体属性发生变化时不提交到工作单元
+     *
+     * @param entityObject
+     */
     public static void beginLoad(BaseEntityObject entityObject) {
 
         try {
@@ -40,6 +58,11 @@ class EntityObjectFactory {
 
     }
 
+    /**
+     * 修改实体为加载完成状态，完成状态的实体属性发生变化时自将提交到工作单元
+     *
+     * @param entityObject
+     */
     public static void endLoad(BaseEntityObject entityObject) {
 
         try {
@@ -52,25 +75,4 @@ class EntityObjectFactory {
 
     }
 
-
-    /**
-     * 使用cglib创建一个实体对象，并且监控对象的属性变化
-     *
-     * @param tClass
-     * @param constructorArgTypes
-     * @param constructorArgs
-     * @param <T>
-     * @return
-     */
-    private static <T extends BaseEntityObject> T newInstance(Class<T> tClass, Class[] constructorArgTypes, Object[] constructorArgs) {
-        Enhancer enhancer = new Enhancer();
-        // 设置需要创建子类的类
-        enhancer.setSuperclass(tClass);
-        enhancer.setCallback(new EntityObjectMethodInterceptor());
-
-        if (constructorArgTypes == null || constructorArgs == null)
-            return (T) enhancer.create();
-        else
-            return (T) enhancer.create(constructorArgTypes, constructorArgs);
-    }
 }

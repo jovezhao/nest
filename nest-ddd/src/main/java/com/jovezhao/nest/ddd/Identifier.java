@@ -3,6 +3,7 @@ package com.jovezhao.nest.ddd;
 import java.io.Serializable;
 
 /**
+ * 实体标识
  * Created by zhaofujun on 2017/6/20.
  */
 

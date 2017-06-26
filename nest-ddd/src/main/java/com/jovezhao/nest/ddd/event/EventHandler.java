@@ -21,6 +21,8 @@ public interface EventHandler<T> {
     void handle(T data) throws Exception;
 
     default String getHandlerName() {
-        return this.getClass().getSimpleName();
+
+        String[] arrayName= this.getClass().getName().split("\\.");
+        return arrayName[arrayName.length-1];
     }
 }

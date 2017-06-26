@@ -14,17 +14,17 @@ import com.rabbitmq.client.MessageProperties;
  */
 public class RabbitMQEventProducer extends DistributedEventProducer<RabbitMQProviderConfig> {
 
+    private ConnectionFactory connectionFactory;
+
+    public RabbitMQEventProducer(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
 
     @Override
     public void commitMessage(String eventName, MessageData messageData) {
         try {
-            ConnectionFactory factory = new ConnectionFactory();
-            factory.setAutomaticRecoveryEnabled(true);
-            factory.setHost(this.getProviderConfig().getHost());
-            factory.setPort(this.getProviderConfig().getPort());
-            factory.setUsername(this.getProviderConfig().getUser());
-            factory.setPassword(this.getProviderConfig().getPwd());
-            Connection connection = factory.newConnection();
+
+            Connection connection = connectionFactory.newConnection();
 
             Channel channel = connection.createChannel();
             channel.exchangeDeclare(eventName, "fanout", true, false, null);

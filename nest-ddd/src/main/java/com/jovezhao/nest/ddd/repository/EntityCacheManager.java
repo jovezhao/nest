@@ -5,9 +5,10 @@ import com.jovezhao.nest.ddd.BaseEntityObject;
 import com.jovezhao.nest.ddd.Identifier;
 
 /**
+ * 实体缓存管理器
  * Created by Jove on 2016/8/31.
  */
-public class EntityObjectCacheManager {
+public class EntityCacheManager {
 
 
     private static String getCacheKey(BaseEntityObject entityObject) {

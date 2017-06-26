@@ -14,7 +14,7 @@ spring:
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false
-#
-#nest:
-#  mybaits:
-#    mappers: com.jovezhao.nest.test.repositories.mappers
+
+logging:
+  level:
+    root: info

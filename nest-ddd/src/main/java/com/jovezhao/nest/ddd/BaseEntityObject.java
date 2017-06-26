@@ -1,6 +1,6 @@
 package com.jovezhao.nest.ddd;
 
-import com.jovezhao.nest.ddd.builder.FactoryBuilder;
+import com.jovezhao.nest.ddd.builder.FromScratchLoader;
 import com.jovezhao.nest.ddd.builder.RepositoryLoader;
 import com.jovezhao.nest.ddd.identifier.IdGenerator;
 import com.jovezhao.nest.ddd.repository.IRoleRepository;
@@ -51,12 +51,12 @@ public abstract class BaseEntityObject<T extends Identifier> implements Serializ
         T t = null;
 
             if (!StringUtils.isEmpty(roleId)) {
-                t = new RepositoryLoader<>(clazz).build(roleId);
+                t = new RepositoryLoader<>(clazz).create(roleId);
             } else {
                 roleId = IdGenerator.getInstance().generate(clazz);
             }
             if (t == null) {
-                t = new FactoryBuilder<>(clazz).build(roleId);
+                t = new FromScratchLoader<>(clazz).create(roleId);
             }
             t.setActor(this);
 
