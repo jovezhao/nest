@@ -11,7 +11,6 @@
 
     <artifactId>nest-core</artifactId>
 
-
     <dependencies>
         <dependency>
             <groupId>net.sf.ehcache</groupId>
