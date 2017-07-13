@@ -37,6 +37,9 @@ public class EntityCacheManager {
         if (entityObject != null)
             getCacheContext().remove(getCacheKey(entityObject));
     }
+    public static void removeAll(){
+        getCacheContext().removeAll();
+    }
 
     public static <T extends BaseEntityObject> T get(Class<T> tClass, Identifier id) {
         return getCacheContext().get(tClass, id.toString());
