@@ -17,3 +17,6 @@ modules/logs
 .settings
 .classpath
 #hu lue wenjian
+.gradle/
+build/
+**/build/

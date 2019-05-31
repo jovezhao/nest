@@ -1,2 +1,0 @@
-#provides=nest-ddd
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.jovezhao.nest.starter.NestAutoConfiguration
