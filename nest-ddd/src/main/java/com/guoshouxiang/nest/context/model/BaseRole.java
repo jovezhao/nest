@@ -7,7 +7,5 @@ public abstract class BaseRole<A extends BaseEntity,U extends Identifier> extend
         return actor;
     }
 
-    void setActor(A actor) {
-        this.actor = actor;
-    }
+
 }

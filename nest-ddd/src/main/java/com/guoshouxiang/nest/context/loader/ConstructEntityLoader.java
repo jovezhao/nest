@@ -1,7 +1,9 @@
 package com.guoshouxiang.nest.context.loader;
 
 
+import com.guoshouxiang.nest.SystemException;
 import com.guoshouxiang.nest.context.model.BaseEntity;
+import com.guoshouxiang.nest.context.model.BaseRole;
 import com.guoshouxiang.nest.context.model.Identifier;
 import com.guoshouxiang.nest.utils.EntityUtils;
 import net.sf.cglib.proxy.Enhancer;
@@ -32,6 +34,9 @@ public class ConstructEntityLoader<T extends BaseEntity> implements EntityLoader
     }
 
     public <U extends T> U create(Class<U> uClass, Identifier id) {
+
+        if (uClass.isAssignableFrom(BaseRole.class))
+            throw new SystemException("角色不能直接通过实体加载器创建，请通过实体act方法扮演");
         Enhancer enhancer = new Enhancer();
         // 设置需要创建子类的类
         enhancer.setSuperclass(uClass);
