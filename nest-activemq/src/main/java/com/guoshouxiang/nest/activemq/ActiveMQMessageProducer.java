@@ -2,6 +2,7 @@ package com.guoshouxiang.nest.activemq;
 
 import com.guoshouxiang.nest.context.event.message.MessageInfo;
 import com.guoshouxiang.nest.context.event.channel.distribute.DistributeMessageProducer;
+import com.guoshouxiang.nest.utils.JsonUtils;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
@@ -23,7 +24,7 @@ public class ActiveMQMessageProducer extends DistributeMessageProducer {
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             Topic topic = session.createTopic("VirtualTopic."+messageGroup);
             MessageProducer producer = session.createProducer(topic);
-            producer.send(session.createTextMessage(messageInfo.toString()));
+            producer.send(session.createTextMessage(JsonUtils.toJsonString(messageInfo)));
             producer.close();
             session.close();
             connection.close();
