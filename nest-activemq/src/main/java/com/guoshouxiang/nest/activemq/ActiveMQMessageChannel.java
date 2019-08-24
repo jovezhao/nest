@@ -29,4 +29,9 @@ public class ActiveMQMessageChannel extends DistributeMessageChannel {
             messageConsumer = new ActiveMQMessageConsumer(beanFinder, brokers);
         return messageConsumer;
     }
+
+    public ActiveMQMessageChannel(BeanFinder beanFinder, String brokers) {
+        this.beanFinder = beanFinder;
+        this.brokers = brokers;
+    }
 }
