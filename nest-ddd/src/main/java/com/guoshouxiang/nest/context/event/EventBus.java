@@ -26,6 +26,14 @@ public class EventBus {
         messageProducer.send(baseEvent.getEventCode(), messageInfo);
     }
 
+    public void publish(EventData eventData) {
+
+        MessageChannel messageChannel = messageChannelFactory.createByEventCode(eventData.getEventCode());
+        MessageProducer messageProducer = messageChannel.getMessageProducer();
+        MessageInfo messageInfo = MessageConverter.fromEvent(eventData);
+        messageProducer.send(eventData.getEventCode(), messageInfo);
+    }
+
 
 
     public void registerHandler(EventHandler eventHandler) {
