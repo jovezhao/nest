@@ -15,10 +15,12 @@ public class RedisCacheProvider implements CacheProvider {
 
     private JedisPool jedisPool;
 
-    public RedisCacheProvider(JedisPoolConfig jedisPoolConfig) {
-        jedisPool = new JedisPool(jedisPoolConfig);
+//    public RedisCacheProvider(JedisPoolConfig jedisPoolConfig) {
+//        jedisPool = new JedisPool(jedisPoolConfig);
+//    }
+    public RedisCacheProvider(JedisPool jedisPool) {
+        this.jedisPool = jedisPool;
     }
-
     @Override
     public String getCode() {
         return CODE;

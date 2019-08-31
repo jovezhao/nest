@@ -1,5 +1,7 @@
 package com.guoshouxiang.nest.context;
 
+import com.guoshouxiang.nest.cache.CacheClient;
+import com.guoshouxiang.nest.cache.CacheClientFactory;
 import com.guoshouxiang.nest.configuration.ConfigurationManager;
 import com.guoshouxiang.nest.configuration.EventConfiguration;
 import com.guoshouxiang.nest.container.BeanFinder;
@@ -10,6 +12,8 @@ import com.guoshouxiang.nest.context.model.BaseEntity;
 import com.guoshouxiang.nest.context.model.Identifier;
 import com.guoshouxiang.nest.context.repository.Repository;
 import com.guoshouxiang.nest.context.repository.RepositoryFactory;
+import com.guoshouxiang.nest.utils.EntityCacheUtils;
+import com.guoshouxiang.nest.utils.EntityUtils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,7 +49,7 @@ public class ContextUnitOfWork {
         entityMap.put(baseEntity, EntityOperateEnum.remove);
     }
 
-    private void entityCommit() {
+    private void commitEntity() {
         entityMap.forEach((p, q) -> {
             Repository repository = RepositoryFactory.create(p.getClass());
             switch (q) {
@@ -64,7 +68,7 @@ public class ContextUnitOfWork {
         messageBacklogs.add(new MessageBacklog(eventCode, messageInfo));
     }
 
-    private void messageCommit() {
+    private void commitMessage() {
         BeanFinder beanFinder = ServiceContext.getCurrent().getBeanFinder();
         messageBacklogs.forEach(p -> {
             ConfigurationManager configurationManager = new ConfigurationManager(beanFinder);
@@ -78,9 +82,11 @@ public class ContextUnitOfWork {
         ServiceContext serviceContext = ServiceContext.getCurrent();
         serviceContext.getApplication().beforeCommit(serviceContext);
         try {
-            entityCommit();
-            messageCommit();
+            commitEntity();
+            commitMessage();
+            cacheCommit();
         } catch (Exception ex) {
+            removeCache();
             throw new SystemException(("提交工作单元时失败"), ex);
         } finally {
             //清空工作单元中的内容
@@ -88,6 +94,31 @@ public class ContextUnitOfWork {
             messageBacklogs.clear();
         }
         serviceContext.getApplication().committed(serviceContext);
+    }
+
+
+    private void cacheCommit() {
+
+        CacheClientFactory cacheClientFactory = new CacheClientFactory(ServiceContext.getCurrent().getBeanFinder());
+        CacheClient cacheClient = cacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
+        entityMap.forEach((p, q) -> {
+            switch (q) {
+                case save:
+                    cacheClient.put(EntityCacheUtils.getCacheKey(p), p);
+                    break;
+                case remove:
+                    cacheClient.remove(EntityCacheUtils.getCacheKey(p));
+            }
+        });
+    }
+
+    private void removeCache() {
+        CacheClientFactory cacheClientFactory = new CacheClientFactory(ServiceContext.getCurrent().getBeanFinder());
+        CacheClient cacheClient = cacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
+        entityMap.forEach((p, q) -> {
+            cacheClient.remove(EntityCacheUtils.getCacheKey(p));
+
+        });
     }
 
 
