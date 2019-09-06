@@ -53,7 +53,7 @@ public abstract class BaseEntity<T extends Identifier> implements Serializable {
         return true;
     }
 
-    public void remove(){
+    public void delete(){
         ServiceContext.getCurrent()
                 .getContextUnitOfWork().removeEntityObject(this);
     }
