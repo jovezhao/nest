@@ -1,7 +1,9 @@
 package com.guoshouxiang.nest.context;
 
+import com.alibaba.ttl.TransmittableThreadLocal;
+
 public class ServiceContextManager {
-    private static ThreadLocal<ServiceContext> serviceContextThreadLocal = new ThreadLocal<>();
+    private static TransmittableThreadLocal<ServiceContext> serviceContextThreadLocal = new TransmittableThreadLocal<>();
 
     public static void set(ServiceContext serviceContext) {
         serviceContextThreadLocal.set(serviceContext);
