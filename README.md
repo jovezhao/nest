@@ -184,11 +184,11 @@
 ```JAVA
 package com.kupanda.kuxuebangbang.sms.context.configure;
 
-import com.guoshouxiang.nest.configuration.CacheConfiguration;
-import com.guoshouxiang.nest.configuration.ConfigurationManager;
-import com.guoshouxiang.nest.container.BeanFinder;
-import com.guoshouxiang.nest.redis.RedisCacheProvider;
-import com.guoshouxiang.nest.utils.EntityCacheUtils;
+import CacheConfiguration;
+import ConfigurationManager;
+import BeanFinder;
+import RedisCacheProvider;
+import EntityCacheUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -298,9 +298,9 @@ public class RedisConfiguration {
 ```JAVA
 package com.kupanda.kuxuebangbang.wechat.applet.distribution.api.configure;
 
-import com.guoshouxiang.nest.activemq.ActiveMQMessageChannel;
-import com.guoshouxiang.nest.configuration.EventConfiguration;
-import com.guoshouxiang.nest.container.BeanFinder;
+import ActiveMQMessageChannel;
+import EventConfiguration;
+import BeanFinder;
 import com.kupanda.kuxuebangbang.sms.event.SendSmsEvent;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -340,7 +340,7 @@ public class MQConfigure {
 ```JAVA
 package com.kupanda.kuxuebangbang.wechat.applet.distribution.api.configure;
 
-import com.guoshouxiang.nest.context.event.EventBus;
+import EventBus;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -371,7 +371,7 @@ public class DefaultCommandLineRunner implements ApplicationContextAware {
 
 package com.kupanda.kuxuebangbang.sms.event;
 
-import com.guoshouxiang.nest.context.event.BaseEvent;
+import BaseEvent;
 import com.kupanda.kuxuebangbang.sms.event.domain.SendSmsHandlerData;
 
 /**
@@ -397,7 +397,7 @@ public class SendSmsEvent extends BaseEvent<SendSmsHandlerData> {
 ```JAVA
 package com.kupanda.kuxuebangbang.sms.event.domain;
 
-import com.guoshouxiang.nest.context.event.EventData;
+import EventData;
 import com.kupanda.kuxuebangbang.sms.event.domain.base.EventType;
 import com.kupanda.kuxuebangbang.sms.event.domain.base.Platform;
 import com.kupanda.kuxuebangbang.sms.event.domain.base.SmsType;
@@ -512,8 +512,8 @@ public class SecurityServiceImpl implements SecurityService {
 ```JAVA
 package com.kupanda.kuxuebangbang.sms.context.event;
 
-import com.guoshouxiang.nest.context.event.EventArgs;
-import com.guoshouxiang.nest.context.event.EventHandler;
+import EventArgs;
+import EventHandler;
 import com.kupanda.kuxuebangbang.sms.context.appservice.SmsService;
 import com.kupanda.kuxuebangbang.sms.context.domain.SaveSmsVo;
 import com.kupanda.kuxuebangbang.sms.context.strategy.ChuangLanSMSStrategy;
@@ -562,8 +562,8 @@ public class SendSmsHandler implements EventHandler<SendSmsHandlerData> {
 ```JAVA
 package com.kupanda.kuxuebangbang.sms.context.appservice.impl.repository;
 
-import com.guoshouxiang.nest.context.model.BaseEntity;
-import com.guoshouxiang.nest.context.model.StringIdentifier;
+import BaseEntity;
+import StringIdentifier;
 import com.kupanda.kuxuebangbang.common.identifier.NumIdentifier;
 import com.kupanda.kuxuebangbang.sms.context.domain.EventType;
 import lombok.Data;
@@ -667,11 +667,11 @@ public class Sms extends BaseEntity<NumIdentifier> {
 ```JAVA
 package com.kupanda.kuxuebangbang.sms.context.appservice.impl.repository.model;
 
-import com.guoshouxiang.nest.context.loader.EntityLoader;
-import com.guoshouxiang.nest.context.model.Identifier;
-import com.guoshouxiang.nest.context.repository.Repository;
-import com.guoshouxiang.nest.utils.EntityUtils;
-import com.guoshouxiang.nest.utils.JsonUtils;
+import EntityLoader;
+import Identifier;
+import Repository;
+import EntityUtils;
+import JsonUtils;
 import com.kupanda.kuxuebangbang.common.bean.DmoToEntityConverter;
 import com.kupanda.kuxuebangbang.common.bean.EntityToDmoConverter;
 import com.kupanda.kuxuebangbang.sms.context.appservice.impl.repository.Sms;
@@ -756,8 +756,8 @@ public class SmsRepository implements Repository<Sms> {
 ```JAVA
 package com.kupanda.kuxuebangbang.sms.context.appservice.impl;
 
-import com.guoshouxiang.nest.context.EntityFactory;
-import com.guoshouxiang.nest.spring.AppService;
+import EntityFactory;
+import AppService;
 import com.kupanda.kuxuebangbang.common.identifier.NumIdentifier;
 import com.kupanda.kuxuebangbang.sms.context.appservice.SmsService;
 import com.kupanda.kuxuebangbang.sms.context.appservice.impl.repository.Sms;

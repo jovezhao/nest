@@ -6,19 +6,19 @@
     <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
 
 
-    <bean name="beanContainerProvider" class="com.guoshouxiang.nest.spring.SpringBeanContainerProvider"></bean>
-    <bean name="nestAspect" class="com.guoshouxiang.nest.spring.NestAspect"></bean>
-    <bean class="com.guoshouxiang.nest.spring.test.Application" init-method="run"/>
-    <bean class="com.guoshouxiang.nest.spring.test.appservices.TestAppservices"></bean>
-    <bean class="com.guoshouxiang.nest.NestApplication">
+    <bean name="beanContainerProvider" class="com.zhaofujun.nest.spring.SpringBeanContainerProvider"></bean>
+    <bean name="nestAspect" class="com.zhaofujun.nest.spring.NestAspect"></bean>
+    <bean class="com.zhaofujun.nest.spring.test.Application" init-method="run"/>
+    <bean class="com.zhaofujun.nest.spring.test.appservices.TestAppservices"></bean>
+    <bean class="com.zhaofujun.nest.NestApplication">
         <constructor-arg ref="beanContainerProvider"/>
     </bean>
-    <bean class="com.guoshouxiang.nest.context.event.EventBus">
+    <bean class="com.zhaofujun.nest.context.event.EventBus">
         <constructor-arg ref="beanContainerProvider"/>
     </bean>
 
-    <bean class="com.guoshouxiang.nest.spring.test.PwdChangedEventHandler"></bean>
-    <bean class="com.guoshouxiang.nest.spring.test.repositories.UserRepository"></bean>
+    <bean class="com.zhaofujun.nest.spring.test.PwdChangedEventHandler"></bean>
+    <bean class="com.zhaofujun.nest.spring.test.repositories.UserRepository"></bean>
 
     <aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>
 </beans>
