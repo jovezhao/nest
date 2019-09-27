@@ -48,7 +48,7 @@ public class RockerMQMessageConsumer extends DistributeMessageConsumer {
                         String tag = messageExt.getTags();
                         String msgId = messageExt.getMsgId();
                         String msg = new String(messageExt.getBody());
-                        //System.err.println("rockerMQ消费相应msgId:{},topic:{},msgBody:{},tag:{}",msgId,topic,msg,tag);
+                        log.debug("rockerMQ消费相应msgId:{},topic:{},msgBody:{},tag:{}",msgId,topic,msg,tag);
                         MessageInfo messageInfo = JsonUtils.toObj(msg, MessageInfo.class);
                         onReceivedMessage(messageInfo, eventHandler, context);
                     }
