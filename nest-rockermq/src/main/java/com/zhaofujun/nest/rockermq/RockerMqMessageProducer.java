@@ -19,33 +19,24 @@ import java.io.UnsupportedEncodingException;
  **/
 public class RockerMqMessageProducer extends DistributeMessageProducer {
 
-    private String brokers;
-
-    private String groupName;
-
-    private String nameSpace;
-
-    private boolean vipChannelEnable = false;
+    private RockerMqProperties rockerMqProperties;
 
     private DefaultMQProducer producer;
 
-    public RockerMqMessageProducer(String brokers, String groupName, String nameSpace, boolean vipChannelEnable) {
-        this.brokers = brokers;
-        this.groupName = groupName;
-        this.nameSpace = nameSpace;
-        this.vipChannelEnable = vipChannelEnable;
+    public RockerMqMessageProducer(RockerMqProperties rockerMqProperties) {
+        this.rockerMqProperties=rockerMqProperties;
     }
 
     void init() throws MQClientException {
         if (null != producer) {
             return;
         }
-        producer = new DefaultMQProducer(groupName);
-        producer.setNamesrvAddr(brokers);
-        if (!StringUtils.isEmpty(nameSpace)) {
-            producer.setNamespace(nameSpace);
+        producer = new DefaultMQProducer(this.rockerMqProperties.getGroupName());
+        producer.setNamesrvAddr(this.rockerMqProperties.getBrokers());
+        if (!StringUtils.isEmpty(this.rockerMqProperties.getNameSpace())) {
+            producer.setNamespace(this.rockerMqProperties.getNameSpace());
         }
-        producer.setVipChannelEnabled(vipChannelEnable);
+        producer.setVipChannelEnabled(this.rockerMqProperties.getVipChannelEnable());
         producer.setCreateTopicKey(MixAll.AUTO_CREATE_TOPIC_KEY_TOPIC);
         producer.start();
     }

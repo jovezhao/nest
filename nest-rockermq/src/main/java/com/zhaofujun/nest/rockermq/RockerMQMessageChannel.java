@@ -15,30 +15,21 @@ public class RockerMQMessageChannel extends DistributeMessageChannel {
 
     public static final String Code = "ROCKERMQ_CHANNEL";
 
-    private String brokers;
-
-    private String groupName;
-
-    private String nameSpace;
-
-    private boolean vipChannelEnable=false;
+    private RockerMqProperties rockerMqProperties;
 
     private RockerMqMessageProducer producer;
 
     private RockerMQMessageConsumer consumer;
 
-    public RockerMQMessageChannel(BeanFinder beanFinder, String brokers, String groupName, String nameSpace, boolean vipChannelEnable) {
+    public RockerMQMessageChannel(BeanFinder beanFinder,RockerMqProperties rockerMqProperties) {
         this.beanFinder = beanFinder;
-        this.brokers = brokers;
-        this.groupName = groupName;
-        this.nameSpace = nameSpace;
-        this.vipChannelEnable = vipChannelEnable;
+        this.rockerMqProperties=rockerMqProperties;
     }
 
     @Override
     public DistributeMessageProducer getMessageProducer() {
         if(null ==producer){
-            producer=new RockerMqMessageProducer(brokers,groupName,nameSpace,vipChannelEnable);
+            producer=new RockerMqMessageProducer(this.rockerMqProperties);
         }
 
         return producer;
@@ -48,7 +39,7 @@ public class RockerMQMessageChannel extends DistributeMessageChannel {
     public DistributeMessageConsumer getMessageConsumer() {
 
         if(null==consumer){
-            consumer=new RockerMQMessageConsumer(beanFinder,brokers,groupName,nameSpace,vipChannelEnable);
+            consumer=new RockerMQMessageConsumer(this.beanFinder,this.rockerMqProperties);
         }
 
         return consumer;

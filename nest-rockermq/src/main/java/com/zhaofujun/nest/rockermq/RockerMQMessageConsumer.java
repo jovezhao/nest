@@ -8,14 +8,11 @@ import com.zhaofujun.nest.utils.JsonUtils;
 import com.zhaofujun.nest.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
-
-import java.util.List;
 
 /**
  *
@@ -23,33 +20,24 @@ import java.util.List;
 @Slf4j
 public class RockerMQMessageConsumer extends DistributeMessageConsumer {
 
-    private String brokers;
+    private RockerMqProperties rockerMqProperties;
 
-    private String groupName;
-
-    private String nameSpace;
-
-    private boolean vipChannelEnable = false;
-
-    public RockerMQMessageConsumer(BeanFinder beanFinder, String brokers, String groupName, String nameSpace, boolean vipChannelEnable) {
+    public RockerMQMessageConsumer(BeanFinder beanFinder,RockerMqProperties rockerMqProperties) {
         super(beanFinder);
-        this.brokers = brokers;
-        this.groupName = groupName;
-        this.nameSpace = nameSpace;
-        this.vipChannelEnable = vipChannelEnable;
+        this.rockerMqProperties=rockerMqProperties;
     }
 
 
     @Override
     public void subscribe(EventHandler eventHandler) {
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(groupName);
-        consumer.setNamesrvAddr(brokers);
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(this.rockerMqProperties.getGroupName());
+        consumer.setNamesrvAddr((this.rockerMqProperties.getBrokers()));
         //设置消费者端消息拉取策略，表示从哪里开始消费
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-        if (!StringUtils.isEmpty(nameSpace)) {
-            consumer.setNamespace(nameSpace);
+        if (!StringUtils.isEmpty((this.rockerMqProperties.getNameSpace()))) {
+            consumer.setNamespace((this.rockerMqProperties.getNameSpace()));
         }
-        consumer.setVipChannelEnabled(vipChannelEnable);
+        consumer.setVipChannelEnabled((this.rockerMqProperties.getVipChannelEnable()));
         try {
 
             consumer.subscribe(eventHandler.getEventCode(), "*");
