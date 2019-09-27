@@ -25,28 +25,29 @@ public class RockerMqMessageProducer extends DistributeMessageProducer {
 
     private String nameSpace;
 
-    private boolean vipChannelEnable=false;
+    private boolean vipChannelEnable = false;
 
-    private   DefaultMQProducer producer;
+    private DefaultMQProducer producer;
 
-    public RockerMqMessageProducer(String brokers,String groupName,String nameSpace,boolean vipChannelEnable) {
+    public RockerMqMessageProducer(String brokers, String groupName, String nameSpace, boolean vipChannelEnable) {
         this.brokers = brokers;
-        this.groupName=groupName;
-        this.nameSpace=nameSpace;
-        this.vipChannelEnable=vipChannelEnable;
+        this.groupName = groupName;
+        this.nameSpace = nameSpace;
+        this.vipChannelEnable = vipChannelEnable;
     }
 
     void init() throws MQClientException {
-        if(null!=producer){
-           return;
+        if (null != producer) {
+            return;
         }
-        producer=new DefaultMQProducer(groupName);
+        producer = new DefaultMQProducer(groupName);
         producer.setNamesrvAddr(brokers);
-        if(!StringUtils.isEmpty(nameSpace)){
+        if (!StringUtils.isEmpty(nameSpace)) {
             producer.setNamespace(nameSpace);
         }
         producer.setVipChannelEnabled(vipChannelEnable);
         producer.setCreateTopicKey(MixAll.AUTO_CREATE_TOPIC_KEY_TOPIC);
+        producer.start();
     }
 
 
@@ -54,15 +55,12 @@ public class RockerMqMessageProducer extends DistributeMessageProducer {
     public void commit(String messageGroup, MessageInfo messageInfo) {
 
         try {
-            init();
-            producer.start();
+            this.init();
             String body = JsonUtils.toJsonString(messageInfo);
-            Message message=new Message(messageGroup,body.getBytes(RemotingHelper.DEFAULT_CHARSET));
+            Message message = new Message(messageGroup, body.getBytes(RemotingHelper.DEFAULT_CHARSET));
             producer.send(message);
         } catch (MQClientException | RemotingException | MQBrokerException | InterruptedException | UnsupportedEncodingException e) {
             e.printStackTrace();
-        }finally {
-            producer.shutdown();
         }
     }
 }
