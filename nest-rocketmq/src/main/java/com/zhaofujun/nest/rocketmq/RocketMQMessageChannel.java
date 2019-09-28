@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.rockermq;
+package com.zhaofujun.nest.rocketmq;
 
 import com.zhaofujun.nest.container.BeanFinder;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
@@ -8,20 +8,20 @@ import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProd
 /**
  *
  **/
-public class RockerMQMessageChannel extends DistributeMessageChannel {
+public class RocketMQMessageChannel extends DistributeMessageChannel {
 
 
     private BeanFinder beanFinder;
 
     public static final String Code = "ROCKERMQ_CHANNEL";
 
-    private RockerMqProperties rockerMqProperties;
+    private RocketMqProperties rockerMqProperties;
 
-    private RockerMqMessageProducer producer;
+    private RocketMqMessageProducer producer;
 
-    private RockerMQMessageConsumer consumer;
+    private RocketMQMessageConsumer consumer;
 
-    public RockerMQMessageChannel(BeanFinder beanFinder,RockerMqProperties rockerMqProperties) {
+    public RocketMQMessageChannel(BeanFinder beanFinder,RocketMqProperties rockerMqProperties) {
         this.beanFinder = beanFinder;
         this.rockerMqProperties=rockerMqProperties;
     }
@@ -29,7 +29,7 @@ public class RockerMQMessageChannel extends DistributeMessageChannel {
     @Override
     public DistributeMessageProducer getMessageProducer() {
         if(null ==producer){
-            producer=new RockerMqMessageProducer(this.rockerMqProperties);
+            producer=new RocketMqMessageProducer(this.rockerMqProperties);
         }
 
         return producer;
@@ -39,7 +39,7 @@ public class RockerMQMessageChannel extends DistributeMessageChannel {
     public DistributeMessageConsumer getMessageConsumer() {
 
         if(null==consumer){
-            consumer=new RockerMQMessageConsumer(this.beanFinder,this.rockerMqProperties);
+            consumer=new RocketMQMessageConsumer(this.beanFinder,this.rockerMqProperties);
         }
 
         return consumer;

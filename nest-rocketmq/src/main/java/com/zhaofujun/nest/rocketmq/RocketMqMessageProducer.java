@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.rockermq;
+package com.zhaofujun.nest.rocketmq;
 
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
@@ -17,13 +17,13 @@ import java.io.UnsupportedEncodingException;
 /**
  *
  **/
-public class RockerMqMessageProducer extends DistributeMessageProducer {
+public class RocketMqMessageProducer extends DistributeMessageProducer {
 
-    private RockerMqProperties rockerMqProperties;
+    private RocketMqProperties rockerMqProperties;
 
     private DefaultMQProducer producer;
 
-    public RockerMqMessageProducer(RockerMqProperties rockerMqProperties) {
+    public RocketMqMessageProducer(RocketMqProperties rockerMqProperties) {
         this.rockerMqProperties=rockerMqProperties;
     }
 

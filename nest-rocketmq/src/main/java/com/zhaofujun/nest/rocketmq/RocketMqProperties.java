@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.rockermq;
+package com.zhaofujun.nest.rocketmq;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RockerMqProperties {
+public class RocketMqProperties {
 
     private String brokers;
 

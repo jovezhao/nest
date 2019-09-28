@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.rockermq;
+package com.zhaofujun.nest.rocketmq;
 
 import com.zhaofujun.nest.container.BeanFinder;
 import com.zhaofujun.nest.context.event.EventHandler;
@@ -18,11 +18,11 @@ import org.apache.rocketmq.common.message.MessageExt;
  *
  **/
 @Slf4j
-public class RockerMQMessageConsumer extends DistributeMessageConsumer {
+public class RocketMQMessageConsumer extends DistributeMessageConsumer {
 
-    private RockerMqProperties rockerMqProperties;
+    private RocketMqProperties rockerMqProperties;
 
-    public RockerMQMessageConsumer(BeanFinder beanFinder,RockerMqProperties rockerMqProperties) {
+    public RocketMQMessageConsumer(BeanFinder beanFinder,RocketMqProperties rockerMqProperties) {
         super(beanFinder);
         this.rockerMqProperties=rockerMqProperties;
     }

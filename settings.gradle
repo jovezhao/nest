@@ -9,6 +9,5 @@ include(':nest-spring-boot-starter')
 include(':nest-ioc')
 include(':nest-mybatis-pagination-plugin')
 include 'nest-redis'
-include 'nest-rockermq'
-include 'nest-rockermq'
+include 'nest-rocketmq'
 
