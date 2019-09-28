@@ -10,4 +10,5 @@ include(':nest-ioc')
 include(':nest-mybatis-pagination-plugin')
 include 'nest-redis'
 include 'nest-rocketmq'
+include 'nest-rabbitmq'
 
