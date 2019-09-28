@@ -52,8 +52,6 @@ public class RockerMqMessageProducer extends DistributeMessageProducer {
             producer.send(message);
         } catch (MQClientException | RemotingException | MQBrokerException | InterruptedException | UnsupportedEncodingException e) {
             e.printStackTrace();
-        }finally {
-            destruction();
         }
     }
 
