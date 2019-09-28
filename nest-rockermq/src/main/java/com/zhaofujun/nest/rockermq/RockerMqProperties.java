@@ -21,4 +21,9 @@ public class RockerMqProperties {
     private String nameSpace;
 
     private Boolean vipChannelEnable=false;
+
+    /**
+     * 同时消费信息数
+     */
+    private int consumeMessageBatchMaxSize=1;
 }

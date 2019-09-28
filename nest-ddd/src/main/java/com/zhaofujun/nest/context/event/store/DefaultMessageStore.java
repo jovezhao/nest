@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.context.event.store;
 
+import com.zhaofujun.nest.cache.CacheClient;
 import com.zhaofujun.nest.cache.provider.CacheProvider;
 import com.zhaofujun.nest.cache.provider.DefaultCacheProvider;
 import com.zhaofujun.nest.configuration.CacheConfiguration;
@@ -21,6 +22,7 @@ public class DefaultMessageStore implements MessageStore {
 
     @Override
     public void save(MessageRecord messageRecord) {
+
         CacheConfiguration cacheConfiguration = this.cacheConfiguration();
         CacheProvider cacheProvider = this.cacheProvider(cacheConfiguration.getProviderCode());
         cacheProvider.put(this.groupName(cacheConfiguration),messageRecord.getId(), JsonUtils.toJsonString(messageRecord),cacheConfiguration.getIdleSeconds());
@@ -35,15 +37,16 @@ public class DefaultMessageStore implements MessageStore {
 
     @Override
     public boolean isSucceed(String messageId, String handlerName) {
+
+
         CacheConfiguration cacheConfiguration = this.cacheConfiguration();
         CacheProvider cacheProvider = this.cacheProvider(cacheConfiguration.getProviderCode());
-        MessageRecord messageRecord = cacheProvider.get(this.groupName(cacheConfiguration), messageId, MessageRecord.class);
+        MessageRecord messageRecord = cacheProvider.get(this.groupName(cacheConfiguration),messageId,MessageRecord.class);
         if(null !=messageRecord){
             return false;
         }
         return true;
     }
-
 
     /**
      * 获取缓存配置

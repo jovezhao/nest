@@ -38,6 +38,7 @@ public class RockerMQMessageConsumer extends DistributeMessageConsumer {
             consumer.setNamespace((this.rockerMqProperties.getNameSpace()));
         }
         consumer.setVipChannelEnabled((this.rockerMqProperties.getVipChannelEnable()));
+        consumer.setConsumeMessageBatchMaxSize(this.rockerMqProperties.getConsumeMessageBatchMaxSize());
         try {
 
             consumer.subscribe(eventHandler.getEventCode(), "*");
