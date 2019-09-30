@@ -1,0 +1,19 @@
+dependencies {
+    compile project(':nest-ddd')
+    // https://mvnrepository.com/artifact/org.apache.rocketmq/rocketmq-common
+
+    compile 'org.apache.rocketmq:rocketmq-common:4.5.2'
+    // https://mvnrepository.com/artifact/org.apache.rocketmq/rocketmq-client
+    compile 'org.apache.rocketmq:rocketmq-client:4.5.2'
+    compile 'org.slf4j:slf4j-api:2.0.0-alpha0'
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.10'
+    testCompileOnly 'org.projectlombok:lombok:1.18.10'
+
+
+}
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}

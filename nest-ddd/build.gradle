@@ -7,4 +7,7 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.25'
     compile 'net.sf.ehcache:ehcache-core:2.6.6'
     compile 'com.google.code.gson:gson:2.8.5'
+    // https://mvnrepository.com/artifact/com.alibaba/transmittable-thread-local
+    compile 'com.alibaba:transmittable-thread-local:2.11.0'
+
 }
