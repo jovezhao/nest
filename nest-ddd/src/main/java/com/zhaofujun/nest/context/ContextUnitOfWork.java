@@ -86,6 +86,7 @@ public class ContextUnitOfWork {
             cacheCommit();
         } catch (Exception ex) {
             removeCache();
+            ex.printStackTrace();
             throw new SystemException(("提交工作单元时失败"), ex);
         } finally {
             //清空工作单元中的内容
