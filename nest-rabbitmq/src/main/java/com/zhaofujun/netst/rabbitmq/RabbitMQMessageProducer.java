@@ -1,13 +1,12 @@
 package com.zhaofujun.netst.rabbitmq;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.MessageProperties;
+import com.rabbitmq.client.*;
 import com.zhaofujun.nest.SystemException;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.utils.JsonUtils;
+
+import java.util.Map;
 
 /**
  *
@@ -20,6 +19,14 @@ public class RabbitMQMessageProducer extends DistributeMessageProducer {
 
     private  Channel channel=null;
 
+    private BuiltinExchangeType exchangeType;
+
+    private String exchangeName;
+
+    private String routingKey;
+
+    private Map<String,Object> arguments;
+
     public RabbitMQMessageProducer(RabbitMQProviderConfig rabbitMQProviderConfig){
         this.connectionFactory=new ConnectionFactory();
         this.connectionFactory.setAutomaticRecoveryEnabled(true);
@@ -27,6 +34,10 @@ public class RabbitMQMessageProducer extends DistributeMessageProducer {
         this.connectionFactory.setPort(rabbitMQProviderConfig.getPort());
         this.connectionFactory.setUsername(rabbitMQProviderConfig.getUser());
         this.connectionFactory.setPassword(rabbitMQProviderConfig.getPwd());
+        this.exchangeType=rabbitMQProviderConfig.getExchangeType();
+        this.exchangeName=rabbitMQProviderConfig.getExchangeName();
+        this.routingKey=rabbitMQProviderConfig.getRoutingKey();
+        this.arguments=rabbitMQProviderConfig.getArguments();
     }
 
 
@@ -35,8 +46,10 @@ public class RabbitMQMessageProducer extends DistributeMessageProducer {
         try {
             connection = connectionFactory.newConnection();
             channel= connection.createChannel();
-            channel.exchangeDeclare(messageGroup,"fanout",true,false,null);
-            channel.basicPublish(messageGroup, "", MessageProperties.PERSISTENT_TEXT_PLAIN, JsonUtils.toJsonString(messageInfo).getBytes());
+            channel.exchangeDeclare(this.exchangeName,this.exchangeType,true,false,null);
+            channel.queueBind(messageGroup,this.exchangeName,this.routingKey);
+            channel.queueDeclare(messageGroup,true,false,false,this.arguments);
+            channel.basicPublish(this.exchangeName, this.routingKey, MessageProperties.PERSISTENT_TEXT_PLAIN, JsonUtils.toJsonString(messageInfo).getBytes());
         } catch (Exception e) {
             e.printStackTrace();
             throw new SystemException("发送RabbitMQ消息失败", e);

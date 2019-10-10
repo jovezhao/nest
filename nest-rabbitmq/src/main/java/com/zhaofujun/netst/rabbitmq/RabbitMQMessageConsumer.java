@@ -8,6 +8,7 @@ import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.utils.JsonUtils;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  *
@@ -22,6 +23,14 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
 
     private RabbitMQProviderConfig rabbitMQProviderConfig;
 
+    private BuiltinExchangeType exchangeType;
+
+    private String exchangeName;
+
+    private String routingKey;
+
+    private Map<String,Object> arguments;
+
     public RabbitMQMessageConsumer(BeanFinder beanFinder,RabbitMQProviderConfig rabbitMQProviderConfig) {
         super(beanFinder);
         this.connectionFactory=new ConnectionFactory();
@@ -30,6 +39,10 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
         this.connectionFactory.setPort(rabbitMQProviderConfig.getPort());
         this.connectionFactory.setUsername(rabbitMQProviderConfig.getUser());
         this.connectionFactory.setPassword(rabbitMQProviderConfig.getPwd());
+        this.exchangeType=rabbitMQProviderConfig.getExchangeType();
+        this.exchangeName=rabbitMQProviderConfig.getExchangeName();
+        this.routingKey=rabbitMQProviderConfig.getRoutingKey();
+        this.arguments=rabbitMQProviderConfig.getArguments();
         this.rabbitMQProviderConfig=rabbitMQProviderConfig;
     }
 
@@ -39,11 +52,11 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
         try {
             connection = connectionFactory.newConnection();
             channel = connection.createChannel();
-            channel.exchangeDeclare(eventHandler.getEventCode(), "fanout", true, false, null);
+            channel.exchangeDeclare(eventHandler.getEventCode(), this.exchangeType, true, false, this.arguments);
             channel.basicQos(rabbitMQProviderConfig.getPrefetchCount());
             //申明消息队列
-            channel.queueDeclare(eventHandler.getEventCode(), true, false, false, null);
-            channel.queueBind(eventHandler.getEventCode(), eventHandler.getEventCode(), "");
+            channel.queueDeclare(eventHandler.getEventCode(), true, false, false, this.arguments);
+            channel.queueBind(eventHandler.getEventCode(), this.exchangeName, this.routingKey);
             DefaultConsumer  consumer=new DefaultConsumer(channel){
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
