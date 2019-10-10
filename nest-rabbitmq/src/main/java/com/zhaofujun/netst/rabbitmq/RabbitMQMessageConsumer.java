@@ -52,7 +52,8 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
         try {
             connection = connectionFactory.newConnection();
             channel = connection.createChannel();
-            channel.exchangeDeclare(eventHandler.getEventCode(), this.exchangeType, true, false, this.arguments);
+            //申明交换机
+            channel.exchangeDeclare(this.exchangeName, this.exchangeType, true, false, this.arguments);
             channel.basicQos(rabbitMQProviderConfig.getPrefetchCount());
             //申明消息队列
             channel.queueDeclare(eventHandler.getEventCode(), true, false, false, this.arguments);
