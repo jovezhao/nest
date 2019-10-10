@@ -35,7 +35,7 @@ public class RabbitMQProviderConfig  {
     /**
      * 交换机名称
      */
-    private String exchangeName;
+    private String exchangeName="default-exchange";
 
     /**
      * 路由KEY
