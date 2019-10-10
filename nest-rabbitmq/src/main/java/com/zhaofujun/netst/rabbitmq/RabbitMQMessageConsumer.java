@@ -1,6 +1,7 @@
 package com.zhaofujun.netst.rabbitmq;
 
 import com.rabbitmq.client.*;
+import com.zhaofujun.nest.SystemException;
 import com.zhaofujun.nest.container.BeanFinder;
 import com.zhaofujun.nest.context.event.EventHandler;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
@@ -9,6 +10,7 @@ import com.zhaofujun.nest.utils.JsonUtils;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -44,14 +46,20 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
         this.routingKey=rabbitMQProviderConfig.getRoutingKey();
         this.arguments=rabbitMQProviderConfig.getArguments();
         this.rabbitMQProviderConfig=rabbitMQProviderConfig;
+        try {
+            this.connection = connectionFactory.newConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SystemException("创建RabbitMQ客户端链接失败",e);
+        }
+
     }
 
     @Override
     public void subscribe(EventHandler eventHandler) {
 
         try {
-            connection = connectionFactory.newConnection();
-            channel = connection.createChannel();
+            this.channel = connection.createChannel();
             //申明交换机
             channel.exchangeDeclare(this.exchangeName, this.exchangeType, true, false, this.arguments);
             channel.basicQos(rabbitMQProviderConfig.getPrefetchCount());

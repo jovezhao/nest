@@ -16,6 +16,10 @@ public class RabbitMQMessageChannel extends DistributeMessageChannel {
 
     private RabbitMQProviderConfig rabbitMQProviderConfig;
 
+    private DistributeMessageProducer distributeMessageProducer;
+
+    private DistributeMessageConsumer distributeMessageConsumer;
+
     public RabbitMQMessageChannel(BeanFinder beanFinder,RabbitMQProviderConfig rabbitMQProviderConfig){
         this.beanFinder=beanFinder;
         this.rabbitMQProviderConfig=rabbitMQProviderConfig;
@@ -23,13 +27,18 @@ public class RabbitMQMessageChannel extends DistributeMessageChannel {
 
     @Override
     public DistributeMessageProducer getMessageProducer() {
-        RabbitMQMessageProducer rabbitMQMessageProducer=new RabbitMQMessageProducer(this.rabbitMQProviderConfig);
-        return rabbitMQMessageProducer;
+        if(null == this.distributeMessageProducer){
+            this.distributeMessageProducer=new RabbitMQMessageProducer(this.rabbitMQProviderConfig);
+        }
+        return distributeMessageProducer;
     }
 
     @Override
     public DistributeMessageConsumer getMessageConsumer() {
-        RabbitMQMessageConsumer rabbitMQMessageConsumer=new RabbitMQMessageConsumer(beanFinder,this.rabbitMQProviderConfig);
-        return rabbitMQMessageConsumer;
+        if(null ==this.distributeMessageConsumer){
+            this.distributeMessageConsumer=new RabbitMQMessageConsumer(beanFinder,this.rabbitMQProviderConfig);
+        }
+
+        return distributeMessageConsumer;
     }
 }

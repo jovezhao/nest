@@ -6,7 +6,9 @@ import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProd
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.utils.JsonUtils;
 
+import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -38,23 +40,27 @@ public class RabbitMQMessageProducer extends DistributeMessageProducer {
         this.exchangeName=rabbitMQProviderConfig.getExchangeName();
         this.routingKey=rabbitMQProviderConfig.getRoutingKey();
         this.arguments=rabbitMQProviderConfig.getArguments();
+        try {
+            connection = connectionFactory.newConnection();
+        } catch (Exception e) {
+            throw new SystemException("创建RabbitMQ链接失败", e);
+        }
+
     }
 
 
     @Override
     public void commit(String messageGroup, MessageInfo messageInfo) {
         try {
-            connection = connectionFactory.newConnection();
+
             channel= connection.createChannel();
             channel.exchangeDeclare(this.exchangeName,this.exchangeType,true,false,this.arguments);
-            channel.queueBind(messageGroup,this.exchangeName,this.routingKey);
             channel.queueDeclare(messageGroup,true,false,false,this.arguments);
+            channel.queueBind(messageGroup,this.exchangeName,this.routingKey);
             channel.basicPublish(this.exchangeName, this.routingKey, MessageProperties.PERSISTENT_TEXT_PLAIN, JsonUtils.toJsonString(messageInfo).getBytes());
         } catch (Exception e) {
             e.printStackTrace();
             throw new SystemException("发送RabbitMQ消息失败", e);
-        } finally {
-            destruction();
         }
     }
 
@@ -62,7 +68,6 @@ public class RabbitMQMessageProducer extends DistributeMessageProducer {
     public void destruction() {
         try {
             channel.close();
-            connection.close();
         } catch (Exception e) {
             e.printStackTrace();
             throw new SystemException("关闭RabbitMQ消息通道和链接失败", e);
