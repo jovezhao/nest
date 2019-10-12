@@ -10,7 +10,6 @@ import com.zhaofujun.nest.utils.JsonUtils;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -61,7 +60,6 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
         try {
             this.channel = connection.createChannel();
             //申明交换机
-            channel.exchangeDeclare(this.exchangeName, this.exchangeType, true, false, this.arguments);
             channel.basicQos(rabbitMQProviderConfig.getPrefetchCount());
             //申明消息队列
             channel.queueDeclare(eventHandler.getEventCode(), true, false, false, this.arguments);
