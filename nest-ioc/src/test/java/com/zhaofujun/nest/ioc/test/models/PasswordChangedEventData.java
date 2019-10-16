@@ -3,7 +3,12 @@ package com.zhaofujun.nest.ioc.test.models;
 import com.zhaofujun.nest.context.event.EventData;
 
 public class PasswordChangedEventData extends EventData {
+    public static final String EVENT_CODE = "PASSWORD_CHANGED";
 
+    @Override
+    public String getEventCode() {
+        return EVENT_CODE;
+    }
     private String newPassword;
     private String oldPassword;
     private String userId;

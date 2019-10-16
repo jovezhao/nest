@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.ioc;
 
+import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.context.ServiceContext;
 import com.zhaofujun.nest.SystemException;
 import com.zhaofujun.nest.ioc.annotation.Service;
@@ -14,10 +15,10 @@ import java.util.Arrays;
 
 public class ApplicationServiceInterceptor implements MethodInterceptor, Serializable {
 
-    private BeanContainer beanContainer;
+    private NestApplication application;
 
-    public ApplicationServiceInterceptor(BeanContainer beanContainer) {
-        this.beanContainer = beanContainer;
+    public ApplicationServiceInterceptor(NestApplication application) {
+        this.application = application;
     }
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -34,7 +35,7 @@ public class ApplicationServiceInterceptor implements MethodInterceptor, Seriali
         ServiceContext serviceContext = null;
         if (tagProxy) {
             //执行之前
-            serviceContext = ServiceContext.newInstance(method.getDeclaringClass(), beanContainer);
+            serviceContext = ServiceContext.newInstance(method.getDeclaringClass(), application);
         }
 
         Object result = null;

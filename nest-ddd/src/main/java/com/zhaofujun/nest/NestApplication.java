@@ -30,7 +30,10 @@ public class NestApplication {
 
         onStarted();
     }
-
+    public ServiceContext newInstance(Class serviceClass) {
+        ServiceContext serviceContext = ServiceContext.newInstance(serviceClass, this);
+        return serviceContext;
+    }
     public BeanFinder getBeanFinder() {
         return this.containerProvider;
     }
