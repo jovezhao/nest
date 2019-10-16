@@ -1,4 +1,4 @@
-package com.zhaofujun.netst.rabbitmq;
+package com.zhaofujun.nest.rabbitmq;
 
 
 import com.rabbitmq.client.BuiltinExchangeType;
