@@ -5,6 +5,8 @@ import com.zhaofujun.nest.container.BeanFinder;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ConfigurationManager {
 
@@ -19,13 +21,24 @@ public class ConfigurationManager {
 
     }
 
+
+    /**
+     * 获取所有的缓存配置
+     * @return
+     */
+    public Set<CacheConfiguration> getCacheConfiguration(){
+        Set<CacheConfiguration> collect = cacheConfigurations.entrySet().stream().map(n -> {
+            return n.getValue();
+        }).collect(Collectors.toSet());
+
+        return collect;
+    }
+
     /**
      * 基本配置（BeanContainerProvider）
      * 缓存组配置 CacheConfiguration
      * 事件组配置 EventConfiguration
      */
-
-
     public CacheConfiguration getCacheConfigurationByCode(String code) {
 
         CacheConfiguration cacheConfiguration = cacheConfigurations.get(code);
