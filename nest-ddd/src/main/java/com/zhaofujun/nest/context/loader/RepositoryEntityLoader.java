@@ -25,7 +25,7 @@ public class RepositoryEntityLoader<T extends BaseEntity> implements EntityLoade
 
     public RepositoryEntityLoader(Class<T> tClass) {
         this.tClass = tClass;
-        BeanFinder beanFinder = ServiceContext.getCurrent().getBeanFinder();
+        BeanFinder beanFinder = ServiceContext.getCurrent().getApplication().getBeanFinder();
         CacheClientFactory cacheClientFactory = new CacheClientFactory(beanFinder);
         cacheClient = cacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
     }

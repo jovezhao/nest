@@ -7,15 +7,13 @@ public class ServiceContext {
 
     private Class serviceClass;
     private ContextUnitOfWork contextUnitOfWork;
-    private BeanFinder beanFinder;
     private NestApplication application;
 
 
-    public ServiceContext(Class serviceClass, BeanFinder beanFinder) {
-        this.beanFinder = beanFinder;
+    public ServiceContext(Class serviceClass, NestApplication application) {
         this.serviceClass = serviceClass;
         this.contextUnitOfWork = new ContextUnitOfWork();
-        this.application = beanFinder.getInstance(NestApplication.class);
+        this.application =application;
     }
 
 
@@ -27,8 +25,8 @@ public class ServiceContext {
         return ServiceContextManager.get();
     }
 
-    public static ServiceContext newInstance(Class serviceClass, BeanFinder beanFinder) {
-        ServiceContext serviceContext = new ServiceContext(serviceClass, beanFinder);
+    public static ServiceContext newInstance(Class serviceClass, NestApplication application) {
+        ServiceContext serviceContext = new ServiceContext(serviceClass,application);
         ServiceContextManager.set(serviceContext);
 
         serviceContext.getApplication().onServiceContextCreated(serviceContext);
@@ -39,10 +37,6 @@ public class ServiceContext {
         return contextUnitOfWork;
     }
 
-
-    public BeanFinder getBeanFinder() {
-        return beanFinder;
-    }
 
     public NestApplication getApplication() {
         return application;

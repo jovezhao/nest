@@ -12,7 +12,7 @@ public class RepositoryFactory {
 
         if (entityClass.equals(BaseEntity.class)) return new DefaultRepository();
 
-        BeanFinder beanFinder = ServiceContext.getCurrent().getBeanFinder();
+        BeanFinder beanFinder = ServiceContext.getCurrent().getApplication().getBeanFinder();
         Repository repository = beanFinder.getInstances(Repository.class)
                 .stream()
                 .filter(p -> p.getEntityClass().equals(entityClass))
