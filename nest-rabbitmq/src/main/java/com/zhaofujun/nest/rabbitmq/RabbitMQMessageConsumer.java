@@ -62,7 +62,7 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
             //申明交换机
             channel.basicQos(rabbitMQProviderConfig.getPrefetchCount());
             //申明消息队列
-            channel.queueDeclare(eventHandler.getEventCode(), false, false, false, this.arguments);
+            channel.queueDeclare(eventHandler.getEventCode(), false, false, false, null);
             channel.queueBind(eventHandler.getEventCode(), this.exchangeName, this.routingKey);
             DefaultConsumer  consumer=new DefaultConsumer(channel){
                 @Override
