@@ -55,7 +55,7 @@ public class RabbitMQMessageProducer extends DistributeMessageProducer {
 
             channel= connection.createChannel();
             channel.exchangeDeclare(this.exchangeName,this.exchangeType,true,false,this.arguments);
-            channel.queueDeclare(messageGroup,true,false,false,this.arguments);
+            channel.queueDeclare(messageGroup,false,false,false,this.arguments);
             channel.queueBind(messageGroup,this.exchangeName,this.routingKey);
             channel.basicPublish(this.exchangeName, this.routingKey, MessageProperties.PERSISTENT_TEXT_PLAIN, JsonUtils.toJsonString(messageInfo).getBytes());
         } catch (Exception e) {

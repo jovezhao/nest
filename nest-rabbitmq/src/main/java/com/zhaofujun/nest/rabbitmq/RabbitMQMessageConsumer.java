@@ -62,7 +62,7 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
             //申明交换机
             channel.basicQos(rabbitMQProviderConfig.getPrefetchCount());
             //申明消息队列
-            channel.queueDeclare(eventHandler.getEventCode(), true, false, false, this.arguments);
+            channel.queueDeclare(eventHandler.getEventCode(), false, false, false, this.arguments);
             channel.queueBind(eventHandler.getEventCode(), this.exchangeName, this.routingKey);
             DefaultConsumer  consumer=new DefaultConsumer(channel){
                 @Override
@@ -75,7 +75,7 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
                         channel.basicAck(envelope.getDeliveryTag(),false);
                     }catch (Exception e){
                         //消息被拒绝
-                        channel.basicNack(envelope.getDeliveryTag(), false, true);
+                        channel.basicNack(envelope.getDeliveryTag(), false, false);
                         e.printStackTrace();
                     }
                 }
