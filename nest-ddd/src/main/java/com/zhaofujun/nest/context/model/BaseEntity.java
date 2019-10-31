@@ -8,7 +8,7 @@ import com.zhaofujun.nest.utils.EntityUtils;
 import java.io.Serializable;
 
 public abstract class BaseEntity<T extends Identifier> implements Serializable {
-    private T id;
+    protected T id;
 
     public T getId() {
         return id;
