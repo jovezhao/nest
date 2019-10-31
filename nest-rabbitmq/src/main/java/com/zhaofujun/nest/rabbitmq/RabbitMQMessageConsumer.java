@@ -1,4 +1,4 @@
-package com.zhaofujun.netst.rabbitmq;
+package com.zhaofujun.nest.rabbitmq;
 
 import com.rabbitmq.client.*;
 import com.zhaofujun.nest.SystemException;
@@ -10,7 +10,6 @@ import com.zhaofujun.nest.utils.JsonUtils;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -61,10 +60,9 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
         try {
             this.channel = connection.createChannel();
             //申明交换机
-            channel.exchangeDeclare(this.exchangeName, this.exchangeType, true, false, this.arguments);
             channel.basicQos(rabbitMQProviderConfig.getPrefetchCount());
             //申明消息队列
-            channel.queueDeclare(eventHandler.getEventCode(), true, false, false, this.arguments);
+            channel.queueDeclare(eventHandler.getEventCode(), false, false, false, this.arguments);
             channel.queueBind(eventHandler.getEventCode(), this.exchangeName, this.routingKey);
             DefaultConsumer  consumer=new DefaultConsumer(channel){
                 @Override
@@ -77,7 +75,7 @@ public class RabbitMQMessageConsumer extends DistributeMessageConsumer {
                         channel.basicAck(envelope.getDeliveryTag(),false);
                     }catch (Exception e){
                         //消息被拒绝
-                        channel.basicNack(envelope.getDeliveryTag(), false, true);
+                        channel.basicNack(envelope.getDeliveryTag(), false, false);
                         e.printStackTrace();
                     }
                 }

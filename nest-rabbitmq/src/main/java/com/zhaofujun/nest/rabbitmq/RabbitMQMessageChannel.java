@@ -1,4 +1,4 @@
-package com.zhaofujun.netst.rabbitmq;
+package com.zhaofujun.nest.rabbitmq;
 
 import com.zhaofujun.nest.container.BeanFinder;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
