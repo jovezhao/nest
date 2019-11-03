@@ -23,7 +23,7 @@ public class CacheEntityLoader<T extends BaseEntity> implements EntityLoader<T> 
 
     public CacheEntityLoader(Class<T> tClass) {
 
-        BeanFinder beanFinder = ServiceContext.getCurrent().getBeanFinder();
+        BeanFinder beanFinder = ServiceContext.getCurrent().getApplication().getBeanFinder();
         this.tClass = tClass;
         CacheClientFactory cacheClientFactory = new CacheClientFactory(beanFinder);
         this.cacheClient = cacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());

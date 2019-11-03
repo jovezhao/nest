@@ -68,7 +68,7 @@ public class ContextUnitOfWork {
     }
 
     private void commitMessage() {
-        BeanFinder beanFinder = ServiceContext.getCurrent().getBeanFinder();
+        BeanFinder beanFinder = ServiceContext.getCurrent().getApplication().getBeanFinder();
         messageBacklogs.forEach(p -> {
             ConfigurationManager configurationManager = new ConfigurationManager(beanFinder);
             EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByCode(p.eventCode);
@@ -86,6 +86,7 @@ public class ContextUnitOfWork {
             cacheCommit();
         } catch (Exception ex) {
             removeCache();
+            ex.printStackTrace();
             throw new SystemException(("提交工作单元时失败"), ex);
         } finally {
             //清空工作单元中的内容
@@ -98,7 +99,7 @@ public class ContextUnitOfWork {
 
     private void cacheCommit() {
 
-        CacheClientFactory cacheClientFactory = new CacheClientFactory(ServiceContext.getCurrent().getBeanFinder());
+        CacheClientFactory cacheClientFactory = new CacheClientFactory(ServiceContext.getCurrent().getApplication().getBeanFinder());
         CacheClient cacheClient = cacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
         entityMap.forEach((p, q) -> {
             switch (q) {
@@ -112,7 +113,7 @@ public class ContextUnitOfWork {
     }
 
     private void removeCache() {
-        CacheClientFactory cacheClientFactory = new CacheClientFactory(ServiceContext.getCurrent().getBeanFinder());
+        CacheClientFactory cacheClientFactory = new CacheClientFactory(ServiceContext.getCurrent().getApplication().getBeanFinder());
         CacheClient cacheClient = cacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
         entityMap.forEach((p, q) -> {
             cacheClient.remove(EntityCacheUtils.getCacheKey(p));

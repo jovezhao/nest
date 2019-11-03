@@ -2,6 +2,8 @@ package com.zhaofujun.nest.context.event.store;
 
 import com.zhaofujun.nest.container.BeanFinder;
 
+import java.util.Set;
+
 public class MessageStoreFactory {
     private BeanFinder beanFinder;
 
@@ -10,9 +12,13 @@ public class MessageStoreFactory {
     }
 
     public MessageStore create() {
-        MessageStore messageStore = beanFinder.getInstance(MessageStore.class);
-        if (messageStore == null)
-            messageStore = new DefaultMessageStore();
+        Set<MessageStore> instances = beanFinder.getInstances(MessageStore.class);
+        MessageStore messageStore;
+        if (instances == null||instances.size()<=1){
+            messageStore = new DefaultMessageStore(beanFinder);
+        }else{
+            messageStore=instances.stream().filter(n->!n.getClass().equals(DefaultMessageStore.class)).findFirst().orElse(null);
+        }
         return messageStore;
     }
 }

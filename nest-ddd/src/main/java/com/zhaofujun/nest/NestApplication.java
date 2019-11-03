@@ -4,7 +4,6 @@ import com.zhaofujun.nest.configuration.ConfigurationManager;
 import com.zhaofujun.nest.container.BeanFinder;
 import com.zhaofujun.nest.container.ContainerProvider;
 import com.zhaofujun.nest.context.ServiceContext;
-import com.guoshouxiang.nest.event.*;
 import com.zhaofujun.nest.event.*;
 
 
@@ -31,7 +30,10 @@ public class NestApplication {
 
         onStarted();
     }
-
+    public ServiceContext newInstance(Class serviceClass) {
+        ServiceContext serviceContext = ServiceContext.newInstance(serviceClass, this);
+        return serviceContext;
+    }
     public BeanFinder getBeanFinder() {
         return this.containerProvider;
     }

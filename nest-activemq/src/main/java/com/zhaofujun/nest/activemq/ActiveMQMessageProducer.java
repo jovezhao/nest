@@ -10,7 +10,6 @@ import javax.jms.*;
 public class ActiveMQMessageProducer extends DistributeMessageProducer {
     private String brokers;
 
-
     public ActiveMQMessageProducer(String brokers) {
         this.brokers = brokers;
     }
@@ -31,5 +30,10 @@ public class ActiveMQMessageProducer extends DistributeMessageProducer {
         } catch (Exception ex) {
 
         }
+    }
+
+    @Override
+    public void destruction() {
+
     }
 }

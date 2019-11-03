@@ -1,9 +1,8 @@
 package com.zhaofujun.nest.spring;
 
+import com.zhaofujun.nest.*;
 import com.zhaofujun.nest.container.BeanFinder;
 import com.zhaofujun.nest.context.ServiceContext;
-import com.zhaofujun.nest.CustomException;
-import com.zhaofujun.nest.SystemException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,10 +15,11 @@ public class NestAspect {
     private BeanFinder beanFinder;
 
     @Around("execution(public * *(..)) && @within(com.zhaofujun.nest.spring.AppService)")
-    public Object aroundMethod(ProceedingJoinPoint joinPoint) {
+    public Object aroundMethod(ProceedingJoinPoint joinPoint) throws Throwable{
 
+        NestApplication application = beanFinder.getInstance(NestApplication.class);
 
-        ServiceContext serviceContext = ServiceContext.newInstance(joinPoint.getSignature().getDeclaringType(), beanFinder);
+        ServiceContext serviceContext =application.newInstance(joinPoint.getSignature().getDeclaringType());
 
         Object result = null;
         try {
@@ -32,7 +32,16 @@ public class NestAspect {
             throw ex;
         } catch (Throwable ex) {
             //其它异常以系统异常抛出
-            throw new SystemException("系统异常", ex);
+            if (ex instanceof CustomExceptionable) {
+                //业务处理异常
+                throw ex;
+            } else if (ex instanceof SystemExceptionable) {
+                //系统处理异常
+                throw new SystemException("系统异常", ex);
+
+            } else {
+                throw new SystemException("系统异常", ex);
+            }
         }
 
         serviceContext.getContextUnitOfWork().commit();

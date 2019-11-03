@@ -37,4 +37,11 @@ public class PasswordChangedEventData extends EventData {
         this.oldPassword = oldPassword;
         this.userId = userId;
     }
+    public static final String EVENT_CODE = "PASSWORD_CHANGED";
+
+    @Override
+    public String getEventCode() {
+        return EVENT_CODE;
+    }
+
 }

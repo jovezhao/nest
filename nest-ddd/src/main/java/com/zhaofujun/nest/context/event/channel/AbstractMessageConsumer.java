@@ -44,9 +44,12 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
         MessageStoreFactory messageStoreFactory = new MessageStoreFactory(beanFinder);
 
         MessageStore messageStore = messageStoreFactory.create();
-        if (messageStore.isSucceed(messageInfo.getMessageId(), eventHandler.getClass().getName()))
+        if (!messageStore.isSucceed(messageInfo.getMessageId(), eventHandler.getClass().getName())){
+            System.err.println("消息已被消费");
             return;
-
+        }else{
+            messageStore.save(record);
+        }
         try {
 
             eventHandler.handle(eventData, eventArgs);
