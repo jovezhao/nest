@@ -21,7 +21,7 @@ public class Application {
     public static void main(String[] args) {
 
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-        ContainerProvider beanContainerProvider = applicationContext.getBean(ContainerProvider.class);
+//        ContainerProvider beanContainerProvider = applicationContext.getBean(ContainerProvider.class);
         NestApplication nestApplication = applicationContext.getBean(NestApplication.class);// new NestApplication(beanContainerProvider);
         nestApplication.addApplicationListener(new ApplicationListener() {
             @Override
@@ -76,7 +76,7 @@ public class Application {
 
         Application application = applicationContext.getBean(Application.class);
         application.run();
-
+        applicationContext.close();
     }
 
     @Autowired

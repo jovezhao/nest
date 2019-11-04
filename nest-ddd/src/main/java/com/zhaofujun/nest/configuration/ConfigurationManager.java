@@ -16,7 +16,6 @@ public class ConfigurationManager {
 
     public ConfigurationManager(BeanFinder beanFinder) {
         this.beanFinder = beanFinder;
-        //默认配置
 
 
     }
@@ -27,9 +26,10 @@ public class ConfigurationManager {
      * @return
      */
     public Set<CacheConfiguration> getCacheConfiguration(){
-        Set<CacheConfiguration> collect = cacheConfigurations.entrySet().stream().map(n -> {
-            return n.getValue();
-        }).collect(Collectors.toSet());
+        Set<CacheConfiguration> collect = cacheConfigurations.entrySet()
+                .stream()
+                .map(n -> n.getValue())
+                .collect(Collectors.toSet());
 
         return collect;
     }

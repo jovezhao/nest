@@ -35,10 +35,9 @@ public class TestAppservices {
         User user = entityLoader.create(StringIdentifier.valueOf(usrName));
         user.changPwd(pwd);
 
-//        EventBus eventBus = new EventBus(beanFinder);
 
         PasswordChangedEventData eventObject = new PasswordChangedEventData("newpwd", "oldpwd", "111");
-
+//
         PasswordChangedEvent passwordChangedEvent = new PasswordChangedEvent(eventObject, "");
         eventBus.publish(passwordChangedEvent);
     }

@@ -8,7 +8,7 @@
 
     <bean name="beanContainerProvider" class="com.zhaofujun.nest.spring.SpringBeanContainerProvider"></bean>
     <bean name="nestAspect" class="com.zhaofujun.nest.spring.NestAspect"></bean>
-    <bean class="com.zhaofujun.nest.spring.test.Application" init-method="run"/>
+    <bean class="com.zhaofujun.nest.spring.test.Application"/>
     <bean class="com.zhaofujun.nest.spring.test.appservices.TestAppservices"></bean>
     <bean class="com.zhaofujun.nest.NestApplication">
         <constructor-arg ref="beanContainerProvider"/>
