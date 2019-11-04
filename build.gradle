@@ -1,6 +1,10 @@
 allprojects {
-    group = 'com.guoshouxiang.nest'
-    version = '1.1-SNAPSHOT'
+    group = 'com.zhaofujun.nest'
+    version = '1.2.SNAPSHOT'
+//    version = '1.1.release'
+
+
+
 }
 
 subprojects {
@@ -20,4 +24,9 @@ subprojects {
     }
 
 
+//    apply from: "${rootProject.projectDir}/publish.gradle"
+
+
+
 }
+

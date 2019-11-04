@@ -1,0 +1,76 @@
+
+// ... 在最下面新增以下代码
+
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allJava
+        classifier = 'sources'
+    }
+
+    task javadocJar(type: Jar) {
+        from javadoc
+        classifier = 'javadoc'
+    }
+
+    javadoc {
+        options{
+            encoding "UTF-8"
+            charSet 'UTF-8'
+        }
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                groupId project.group
+                artifactId project.name
+                version "${version}"
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+
+                // https://docs.gradle.org/current/dsl/org.gradle.api.publish.maven.MavenPublication.html
+                pom {
+                    name = "Nest"
+                    description = "A framework for DDD"
+                    url = "https://github.com/jovezhao/nest"
+                    licenses {
+                        license {
+                            name = "The Apache License, Version 2.0"
+                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = "jovezhao"
+                            name = "zhaofujun"
+                            email = "jovezhao@foxmail.com"
+                        }
+                    }
+                    scm {
+                        connection = "scm:git:https://github.com/jovezhao/nest"
+                        developerConnection = "scm:git:https://github.com/jovezhao/nest"
+                        url = "https://github.com/jovezhao/nest"
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+                // 如果version以SNAPSHOT结尾就会上传到快照仓库，如果不是就上传到release仓库
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = "${NEXUS_USERNAME}"
+                    password = "${NEXUS_PASSWORD}"
+                }
+            }
+
+        }
+    }
+
+    signing {
+        sign publishing.publications.mavenJava
+    }
