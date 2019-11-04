@@ -22,11 +22,17 @@ public class Application {
 
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
         ContainerProvider beanContainerProvider = applicationContext.getBean(ContainerProvider.class);
-        NestApplication nestApplication =applicationContext.getBean(NestApplication.class);// new NestApplication(beanContainerProvider);
+        NestApplication nestApplication = applicationContext.getBean(NestApplication.class);// new NestApplication(beanContainerProvider);
         nestApplication.addApplicationListener(new ApplicationListener() {
             @Override
             public void applicationStarted(ApplicationEvent applicationEvent) {
                 System.out.println("应用启动");
+            }
+
+            @Override
+            public void applicationClosed(ApplicationEvent applicationEvent) {
+                System.out.println("应用停止");
+
             }
         });
         nestApplication.addServiceContextListener(new ServiceContextListener() {

@@ -44,6 +44,12 @@ public class Application {
             public void applicationStarted(ApplicationEvent applicationEvent) {
                 System.out.println("应用启动");
             }
+
+            @Override
+            public void applicationClosed(ApplicationEvent applicationEvent) {
+                System.out.println("应用停止");
+
+            }
         });
         nestApplication.addServiceContextListener(new ServiceContextListener() {
             @Override
