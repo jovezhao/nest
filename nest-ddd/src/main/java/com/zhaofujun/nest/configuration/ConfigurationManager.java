@@ -30,19 +30,6 @@ public class ConfigurationManager {
     }
 
 
-    /**
-     * 获取所有的缓存配置
-     *
-     * @return
-     */
-    public Set<CacheConfiguration> getCacheConfiguration() {
-        Set<CacheConfiguration> collect = cacheConfigurations.entrySet()
-                .stream()
-                .map(n -> n.getValue())
-                .collect(Collectors.toSet());
-
-        return collect;
-    }
 
     /**
      * 基本配置（BeanContainerProvider）

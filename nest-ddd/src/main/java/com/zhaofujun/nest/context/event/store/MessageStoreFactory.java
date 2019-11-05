@@ -12,13 +12,9 @@ public class MessageStoreFactory {
     }
 
     public MessageStore create() {
-        Set<MessageStore> instances = beanFinder.getInstances(MessageStore.class);
-        MessageStore messageStore;
-        if (instances == null||instances.size()<=1){
+        MessageStore messageStore = beanFinder.getInstance(MessageStore.class);
+        if (messageStore == null)
             messageStore = new DefaultMessageStore(beanFinder);
-        }else{
-            messageStore=instances.stream().filter(n->!n.getClass().equals(DefaultMessageStore.class)).findFirst().orElse(null);
-        }
         return messageStore;
     }
 }
