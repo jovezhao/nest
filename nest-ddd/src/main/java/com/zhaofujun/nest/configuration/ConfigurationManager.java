@@ -31,11 +31,7 @@ public class ConfigurationManager {
 
 
 
-    /**
-     * 基本配置（BeanContainerProvider）
-     * 缓存组配置 CacheConfiguration
-     * 事件组配置 EventConfiguration
-     */
+
     public CacheConfiguration getCacheConfigurationByCode(String code) {
 
         CacheConfiguration cacheConfiguration = cacheConfigurations.get(code);

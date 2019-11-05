@@ -28,11 +28,7 @@ public class EntityUtils {
     }
 
 
-    /**
-     * 修改实体为加载状态，加载状态的实体属性发生变化时不提交到工作单元
-     *
-     * @param entityObject
-     */
+    //修改实体为加载状态，加载状态的实体属性发生变化时不提交到工作单元
     public static void load(BaseEntity entityObject) {
 
         try {
@@ -45,11 +41,7 @@ public class EntityUtils {
 
     }
 
-    /**
-     * 修改实体为加载完成状态，完成状态的实体属性发生变化时自将提交到工作单元
-     *
-     * @param entityObject
-     */
+    //修改实体为加载完成状态，完成状态的实体属性发生变化时自将提交到工作单元
     public static void endLoad(BaseEntity entityObject) {
 
         try {

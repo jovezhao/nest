@@ -17,11 +17,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-/**
- * 无中生有类实体的构建
- *
- * @param <T>
- */
+//无中生有类实体的构建
 public class ConstructEntityLoader<T extends BaseEntity> implements EntityLoader<T>,Serializable {
     private Class<T> tClass;
 
