@@ -49,6 +49,7 @@ public class ContextUnitOfWork {
     }
 
     private void commitEntity() {
+
         entityMap.forEach((p, q) -> {
             Repository repository = RepositoryFactory.create(p.getClass());
             switch (q) {
@@ -70,7 +71,7 @@ public class ContextUnitOfWork {
     private void commitMessage() {
         BeanFinder beanFinder = ServiceContext.getCurrent().getApplication().getBeanFinder();
         messageBacklogs.forEach(p -> {
-            ConfigurationManager configurationManager = new ConfigurationManager(beanFinder);
+            ConfigurationManager configurationManager = ConfigurationManager.getCurrent(beanFinder);
             EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByCode(p.eventCode);
             DistributeMessageChannel messageChannel = beanFinder.getInstance(DistributeMessageChannel.class, eventConfiguration.getMessageChannelCode());
             messageChannel.getMessageProducer().commit(p.getEventCode(), p.getMessageInfo());

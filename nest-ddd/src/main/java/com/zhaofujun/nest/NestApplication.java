@@ -15,7 +15,7 @@ public class NestApplication {
 
     public NestApplication(ContainerProvider containerProvider) {
         this.containerProvider = containerProvider;
-        this.configurationManager = new ConfigurationManager(containerProvider);
+        this.configurationManager =  ConfigurationManager.create(containerProvider);
         this.listenerManager = new EventListenerManager();
 
     }

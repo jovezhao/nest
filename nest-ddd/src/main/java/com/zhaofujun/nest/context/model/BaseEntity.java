@@ -18,7 +18,6 @@ public abstract class BaseEntity<T extends Identifier> implements Serializable {
     public <U extends BaseRole> U act(Class<U> clazz, Identifier identifier) {
         if (identifier == null)
             throw new NullException("角色的ID不能为空");
-
         U u = EntityFactory.load(clazz, identifier);
         if (u == null) {
             u = EntityFactory.create(clazz, identifier);

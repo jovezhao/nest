@@ -52,7 +52,7 @@ public class DefaultMessageStore implements MessageStore {
      * @return
      */
     private CacheConfiguration cacheConfiguration(){
-        ConfigurationManager instance =new ConfigurationManager(beanFinder);
+        ConfigurationManager instance = ConfigurationManager.getCurrent(beanFinder);
         Set<CacheConfiguration> cacheConfiguration = instance.getCacheConfiguration();
         if(cacheConfiguration.size()>1){
           return   cacheConfiguration.stream().filter(n->!n.getProviderCode().equals(DefaultCacheProvider.CODE)).findFirst().orElse(null);

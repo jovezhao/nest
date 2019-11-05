@@ -3,6 +3,7 @@ package com.zhaofujun.nest.context.event.channel;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
 import com.zhaofujun.nest.configuration.EventConfiguration;
 import com.zhaofujun.nest.container.BeanFinder;
+import com.zhaofujun.nest.context.ServiceContext;
 import com.zhaofujun.nest.context.event.channel.local.LocalMessageChannel;
 
 public class MessageChannelFactory {
@@ -12,7 +13,7 @@ public class MessageChannelFactory {
 
     public MessageChannelFactory(BeanFinder beanFinder) {
         this.beanFinder = beanFinder;
-        configurationManager = new ConfigurationManager(beanFinder);
+        configurationManager = ConfigurationManager.getCurrent(beanFinder);
     }
 
     public MessageChannel create(String channelCode) {
