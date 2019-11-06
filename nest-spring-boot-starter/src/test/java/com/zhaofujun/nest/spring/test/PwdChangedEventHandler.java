@@ -19,7 +19,7 @@ public class PwdChangedEventHandler implements EventHandler<PasswordChangedEvent
 
     @Override
     public void handle(PasswordChangedEventData eventData, EventArgs eventArgs) {
-        System.out.println(eventData.toString());
+        System.out.println("接收事件"+eventData.toString());
     }
 }
 

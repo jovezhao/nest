@@ -15,6 +15,7 @@ public interface Repository<T extends BaseEntity> {
     void remove(T t);
 
 
+//    void batchSave(T[] t);
 }
 //public @interface Repository1{
 //

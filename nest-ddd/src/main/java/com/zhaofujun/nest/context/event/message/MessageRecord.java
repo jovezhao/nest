@@ -6,15 +6,15 @@ import java.util.Date;
 public class MessageRecord {
 
 
-    public enum RecordState {
-        ERROR, SUCCESS
-    }
+//    public enum RecordState {
+//        ERROR, SUCCESS
+//    }
 
     private MessageInfo messageInfo;
     private String handlerName;
     private Date receiveTime;
     private Date handleTime;
-    private RecordState recordState;
+//    private RecordState recordState;
     private String Id;
 
     public MessageInfo getMessageInfo() {
@@ -49,13 +49,13 @@ public class MessageRecord {
         this.handleTime = handleTime;
     }
 
-    public RecordState getRecordState() {
-        return recordState;
-    }
-
-    public void setRecordState(RecordState recordState) {
-        this.recordState = recordState;
-    }
+//    public RecordState getRecordState() {
+//        return recordState;
+//    }
+//
+//    public void setRecordState(RecordState recordState) {
+//        this.recordState = recordState;
+//    }
 
     public String getId() {
         return Id;

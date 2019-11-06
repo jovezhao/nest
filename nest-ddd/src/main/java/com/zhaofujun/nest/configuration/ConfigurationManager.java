@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.configuration;
 
+import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.cache.provider.DefaultCacheProvider;
 import com.zhaofujun.nest.container.BeanFinder;
 
@@ -14,31 +15,23 @@ public class ConfigurationManager {
     private Map<String, EventConfiguration> eventConfigurations = new HashMap<>();
     private BeanFinder beanFinder;
 
-    public ConfigurationManager(BeanFinder beanFinder) {
+    private ConfigurationManager(BeanFinder beanFinder) {
         this.beanFinder = beanFinder;
-        //默认配置
+    }
 
+    public static ConfigurationManager create(BeanFinder beanFinder) {
+        ConfigurationManager configurationManager = new ConfigurationManager(beanFinder);
+        return configurationManager;
+    }
 
+    public static ConfigurationManager getCurrent(BeanFinder beanFinder) {
+        NestApplication nestApplication = beanFinder.getInstance(NestApplication.class);
+        return nestApplication.getConfigurationManager();
     }
 
 
-    /**
-     * 获取所有的缓存配置
-     * @return
-     */
-    public Set<CacheConfiguration> getCacheConfiguration(){
-        Set<CacheConfiguration> collect = cacheConfigurations.entrySet().stream().map(n -> {
-            return n.getValue();
-        }).collect(Collectors.toSet());
 
-        return collect;
-    }
 
-    /**
-     * 基本配置（BeanContainerProvider）
-     * 缓存组配置 CacheConfiguration
-     * 事件组配置 EventConfiguration
-     */
     public CacheConfiguration getCacheConfigurationByCode(String code) {
 
         CacheConfiguration cacheConfiguration = cacheConfigurations.get(code);

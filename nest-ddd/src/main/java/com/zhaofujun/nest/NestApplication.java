@@ -15,8 +15,9 @@ public class NestApplication {
 
     public NestApplication(ContainerProvider containerProvider) {
         this.containerProvider = containerProvider;
-        this.configurationManager = new ConfigurationManager(containerProvider);
+        this.configurationManager =  ConfigurationManager.create(containerProvider);
         this.listenerManager = new EventListenerManager();
+
     }
 
     public ConfigurationManager getConfigurationManager() {
@@ -30,10 +31,16 @@ public class NestApplication {
 
         onStarted();
     }
+
+    public void close() {
+        onClosed();
+    }
+
     public ServiceContext newInstance(Class serviceClass) {
         ServiceContext serviceContext = ServiceContext.newInstance(serviceClass, this);
         return serviceContext;
     }
+
     public BeanFinder getBeanFinder() {
         return this.containerProvider;
     }
@@ -48,10 +55,17 @@ public class NestApplication {
     }
 
 
-    public void onStarted() {
+    private void onStarted() {
         ApplicationEvent applicationEvent = new ApplicationEvent(this, this);
         this.listenerManager.publish(ApplicationListener.class, p -> {
             p.applicationStarted(applicationEvent);
+        });
+    }
+
+    private void onClosed() {
+        ApplicationEvent applicationEvent = new ApplicationEvent(this, this);
+        this.listenerManager.publish(ApplicationListener.class, p -> {
+            p.applicationClosed(applicationEvent);
         });
     }
 
