@@ -7,4 +7,7 @@ public abstract class DistributeMessageChannel implements MessageChannel {
     public abstract DistributeMessageProducer getMessageProducer();
 
     public abstract DistributeMessageConsumer getMessageConsumer();
+
+     public abstract void onStart();
+    public abstract void onClose();
 }
