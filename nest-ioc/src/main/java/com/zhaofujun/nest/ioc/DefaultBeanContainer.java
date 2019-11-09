@@ -2,9 +2,9 @@ package com.zhaofujun.nest.ioc;
 
 
 import com.zhaofujun.nest.SystemException;
+import com.zhaofujun.nest.ioc.annotation.AppService;
 import com.zhaofujun.nest.ioc.annotation.Component;
-import com.zhaofujun.nest.ioc.annotation.Inject;
-import com.zhaofujun.nest.ioc.annotation.Service;
+import com.zhaofujun.nest.ioc.annotation.Autowired;
 import com.zhaofujun.nest.ioc.annotation.Store;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -104,8 +104,8 @@ public class DefaultBeanContainer implements BeanContainer {
     }
 
     private String getBeanName(Class<?> clazz) {
-        if (clazz.isAnnotationPresent(Service.class))
-            return clazz.getDeclaredAnnotation(Service.class).value();
+        if (clazz.isAnnotationPresent(AppService.class))
+            return clazz.getDeclaredAnnotation(AppService.class).value();
         if (clazz.isAnnotationPresent(Store.class))
             return clazz.getDeclaredAnnotation(Store.class).value().getName();
 
@@ -116,7 +116,7 @@ public class DefaultBeanContainer implements BeanContainer {
 
     private Object createServiceBean(Class<?> clazz) {
         try {
-            if (clazz.isAnnotationPresent(Service.class)) {
+            if (clazz.isAnnotationPresent(AppService.class)) {
                 ServiceBeanBuilder beanBuilder = new ServiceBeanBuilder(this);
                 return beanBuilder.create(clazz);
 
@@ -156,10 +156,10 @@ public class DefaultBeanContainer implements BeanContainer {
     private void inject() {
         beanTypeList.stream().forEach(p -> {
             Stream.of(p.getClazz().getDeclaredFields())
-                    .filter(q -> q.isAnnotationPresent(Inject.class))
+                    .filter(q -> q.isAnnotationPresent(Autowired.class))
                     .forEach(q -> {
                                 try {
-                                    String name = q.getDeclaredAnnotation(Inject.class).value();
+                                    String name = q.getDeclaredAnnotation(Autowired.class).value();
                                     Object bean = getBean((Class) q.getGenericType(), name);
                                     q.setAccessible(true);
                                     q.set(p.getValue(), bean);

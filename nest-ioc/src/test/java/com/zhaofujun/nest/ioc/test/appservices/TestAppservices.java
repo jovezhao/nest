@@ -1,9 +1,8 @@
 package com.zhaofujun.nest.ioc.test.appservices;
 
 import com.zhaofujun.nest.context.event.EventBus;
-import com.zhaofujun.nest.ioc.annotation.Inject;
-import com.zhaofujun.nest.ioc.annotation.Service;
-import com.zhaofujun.nest.ioc.test.models.PasswordChangedEvent;
+import com.zhaofujun.nest.ioc.annotation.AppService;
+import com.zhaofujun.nest.ioc.annotation.Autowired;
 import com.zhaofujun.nest.ioc.test.models.PasswordChangedEventData;
 import com.zhaofujun.nest.ioc.test.models.User;
 import com.zhaofujun.nest.context.model.StringIdentifier;
@@ -11,10 +10,11 @@ import com.zhaofujun.nest.context.loader.ConstructEntityLoader;
 import com.zhaofujun.nest.context.loader.EntityLoader;
 import com.zhaofujun.nest.context.loader.RepositoryEntityLoader;
 
-@Service("fffff")
+@AppService
 public class TestAppservices {
 
-    @Inject EventBus eventBus;
+    @Autowired
+    EventBus eventBus;
 
 
     public void changPwd(String userName, String newPwd) {
@@ -25,8 +25,7 @@ public class TestAppservices {
 
         PasswordChangedEventData eventObject = new PasswordChangedEventData("newpwd", "oldpwd", "111");
 
-        PasswordChangedEvent passwordChangedEvent = new PasswordChangedEvent(eventObject, "");
-        eventBus.publish(passwordChangedEvent);
+        eventBus.publish(eventObject);
     }
 
 
@@ -39,8 +38,7 @@ public class TestAppservices {
 
         PasswordChangedEventData eventObject = new PasswordChangedEventData("newpwd", "oldpwd", "111");
 
-        PasswordChangedEvent passwordChangedEvent = new PasswordChangedEvent(eventObject, "");
-        eventBus.publish(passwordChangedEvent);
+        eventBus.publish(eventObject);
     }
 }
 

@@ -13,10 +13,4 @@ public abstract class DistributeMessageProducer implements MessageProducer {
     }
 
     public abstract void commit(String messageGroup, MessageInfo messageInfo);
-
-    /**
-     * 销毁通道
-     */
-    //TODO 销毁消息生产者通道,应该随着IOC容器的销毁而销毁
-    public abstract void destruction();
 }

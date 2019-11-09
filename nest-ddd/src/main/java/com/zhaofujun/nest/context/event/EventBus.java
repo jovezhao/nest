@@ -1,5 +1,7 @@
 package com.zhaofujun.nest.context.event;
 
+import com.zhaofujun.nest.configuration.ConfigurationManager;
+import com.zhaofujun.nest.configuration.EventConfiguration;
 import com.zhaofujun.nest.container.BeanFinder;
 import com.zhaofujun.nest.context.event.message.MessageConverter;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
@@ -11,38 +13,42 @@ import com.zhaofujun.nest.context.event.channel.MessageProducer;
 public class EventBus {
     private BeanFinder beanFinder;
     private MessageChannelFactory messageChannelFactory;
+    private ConfigurationManager configurationManager;
 
     public EventBus(BeanFinder beanFinder) {
         this.beanFinder = beanFinder;
         this.messageChannelFactory = new MessageChannelFactory(beanFinder);
+        this.configurationManager = ConfigurationManager.getCurrent(beanFinder);
     }
 
-    public void publish(BaseEvent baseEvent) {
-
-
-        MessageChannel messageChannel = messageChannelFactory.createByEventCode(baseEvent.getEventCode());
-        MessageProducer messageProducer = messageChannel.getMessageProducer();
-        MessageInfo messageInfo = MessageConverter.fromEvent(baseEvent);
-        messageProducer.send(baseEvent.getEventCode(), messageInfo);
-    }
 
     public void publish(EventData eventData) {
 
-        MessageChannel messageChannel = messageChannelFactory.createByEventCode(eventData.getEventCode());
+        EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(eventData.getEventCode());
+
+
+        MessageChannel messageChannel = messageChannelFactory.create(eventConfiguration.getMessageChannelCode());
         MessageProducer messageProducer = messageChannel.getMessageProducer();
         MessageInfo messageInfo = MessageConverter.fromEvent(eventData);
         messageProducer.send(eventData.getEventCode(), messageInfo);
     }
 
 
-
     public void registerHandler(EventHandler eventHandler) {
 
+        EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(eventHandler.getEventCode());
 
-        MessageChannel messageChannel = messageChannelFactory.createByEventCode(eventHandler.getEventCode());
+        MessageChannel messageChannel = messageChannelFactory.create(eventConfiguration.getMessageChannelCode());
 
         MessageConsumer messageConsumer = messageChannel.getMessageConsumer();
-        messageConsumer.subscribe(eventHandler);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                messageConsumer.subscribe(eventHandler);
+            }
+        });
+        thread.start();
+
     }
 
     public void autoRegister() {

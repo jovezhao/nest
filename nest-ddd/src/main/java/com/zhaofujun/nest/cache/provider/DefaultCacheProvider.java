@@ -14,11 +14,11 @@ import java.util.Map;
  * @author Jove
  */
 public class DefaultCacheProvider implements CacheProvider {
-    public final static String CODE = "DEFAULT_CACHE_PROVIDER";
+    public final static String PROVIDER_CODE = "DEFAULT_CACHE_PROVIDER";
 
     @Override
     public String getCode() {
-        return CODE;
+        return PROVIDER_CODE;
     }
 
     private CacheManager manager = CacheManager.create();

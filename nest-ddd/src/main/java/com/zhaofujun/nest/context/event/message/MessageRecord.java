@@ -1,9 +1,10 @@
 package com.zhaofujun.nest.context.event.message;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class MessageRecord {
+public class MessageRecord  implements Serializable {
 
 
 //    public enum RecordState {

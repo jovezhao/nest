@@ -1,8 +1,9 @@
 package com.zhaofujun.nest.context.event.message;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class MessageInfo {
+public class MessageInfo implements Serializable {
     private String messageId;
     private String eventSource;
     private Date sendTime;

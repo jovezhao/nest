@@ -8,12 +8,12 @@ import com.zhaofujun.nest.context.event.message.MessageRecord;
 
 public class DefaultMessageStore implements MessageStore {
 
-    private static final String CODE = "DefaultMessageStore";
+    public static  final String CACHE_CODE = "DefaultMessageStore";
     private CacheClient cacheClient;
 
     public DefaultMessageStore(BeanFinder beanFinder) {
         CacheClientFactory cacheClientFactory = new CacheClientFactory(beanFinder);
-        this.cacheClient = cacheClientFactory.getCacheClient(CODE);
+        this.cacheClient = cacheClientFactory.getCacheClient(CACHE_CODE);
     }
 
     @Override

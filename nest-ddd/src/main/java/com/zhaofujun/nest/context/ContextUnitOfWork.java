@@ -5,6 +5,7 @@ import com.zhaofujun.nest.cache.CacheClientFactory;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
 import com.zhaofujun.nest.configuration.EventConfiguration;
 import com.zhaofujun.nest.container.BeanFinder;
+import com.zhaofujun.nest.context.event.channel.MessageChannelFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
 import com.zhaofujun.nest.SystemException;
@@ -72,8 +73,9 @@ public class ContextUnitOfWork {
         BeanFinder beanFinder = ServiceContext.getCurrent().getApplication().getBeanFinder();
         messageBacklogs.forEach(p -> {
             ConfigurationManager configurationManager = ConfigurationManager.getCurrent(beanFinder);
-            EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByCode(p.eventCode);
-            DistributeMessageChannel messageChannel = beanFinder.getInstance(DistributeMessageChannel.class, eventConfiguration.getMessageChannelCode());
+            EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(p.eventCode);
+            MessageChannelFactory channelFactory = new MessageChannelFactory(beanFinder);
+            DistributeMessageChannel messageChannel = (DistributeMessageChannel) channelFactory.create(eventConfiguration.getMessageChannelCode()); //beanFinder.getInstance(DistributeMessageChannel.class, eventConfiguration.getMessageChannelCode());
             messageChannel.getMessageProducer().commit(p.getEventCode(), p.getMessageInfo());
         });
     }

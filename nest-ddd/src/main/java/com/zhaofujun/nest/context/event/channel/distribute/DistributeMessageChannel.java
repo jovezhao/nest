@@ -4,6 +4,10 @@ import com.zhaofujun.nest.context.event.channel.MessageChannel;
 
 public abstract class DistributeMessageChannel implements MessageChannel {
 
+    public DistributeMessageChannel() {
+
+    }
+
     public abstract DistributeMessageProducer getMessageProducer();
 
     public abstract DistributeMessageConsumer getMessageConsumer();

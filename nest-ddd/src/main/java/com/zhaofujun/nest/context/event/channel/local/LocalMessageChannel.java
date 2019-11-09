@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class LocalMessageChannel implements MessageChannel, MessageProducer, MessageConsumer {
 
+    public static final String CHANNEL_CODE = "LocalMessageChannel";
     private MessageConsumer messageConsumer;
 
     public LocalMessageChannel(BeanFinder beanFinder) {
@@ -29,6 +30,11 @@ public class LocalMessageChannel implements MessageChannel, MessageProducer, Mes
             eventSourceMap.put(messageGroup, eventSource);
         }
         return eventSource;
+    }
+
+    @Override
+    public String getMessageChannelCode() {
+        return CHANNEL_CODE;
     }
 
     @Override

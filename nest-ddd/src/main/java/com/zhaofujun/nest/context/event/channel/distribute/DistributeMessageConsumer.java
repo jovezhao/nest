@@ -7,4 +7,7 @@ public abstract class DistributeMessageConsumer extends AbstractMessageConsumer 
     public DistributeMessageConsumer(BeanFinder beanFinder) {
         super(beanFinder);
     }
+
+
+    public abstract void stop();
 }

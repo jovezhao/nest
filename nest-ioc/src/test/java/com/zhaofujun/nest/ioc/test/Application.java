@@ -8,7 +8,7 @@ import com.zhaofujun.nest.event.ServiceContextListener;
 import com.zhaofujun.nest.event.ServiceEvent;
 import com.zhaofujun.nest.ioc.DefaultContainerProvider;
 import com.zhaofujun.nest.ioc.annotation.Component;
-import com.zhaofujun.nest.ioc.annotation.Inject;
+import com.zhaofujun.nest.ioc.annotation.Autowired;
 import com.zhaofujun.nest.ioc.test.appservices.TestAppservices;
 
 import java.lang.reflect.Method;
@@ -22,10 +22,10 @@ public class Application {
 
     }
 
-    @Inject
+    @Autowired
     private TestAppservices testAppservices;
 
-    @Inject
+    @Autowired
     EventBus eventBus;
 
     public void run() {

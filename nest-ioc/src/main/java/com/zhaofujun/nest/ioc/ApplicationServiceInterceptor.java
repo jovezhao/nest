@@ -3,7 +3,7 @@ package com.zhaofujun.nest.ioc;
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.context.ServiceContext;
 import com.zhaofujun.nest.SystemException;
-import com.zhaofujun.nest.ioc.annotation.Service;
+import com.zhaofujun.nest.ioc.annotation.AppService;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class ApplicationServiceInterceptor implements MethodInterceptor, Seriali
                 "hashCode", "equals", "toString", "notify", "notifyAll", "wait"};
         boolean tagProxy = method.getModifiers() == 1 &&
                 !Arrays.asList(withoutMethod).contains(method.getName()) &&
-                obj.getClass().isAnnotationPresent(Service.class);
+                obj.getClass().isAnnotationPresent(AppService.class);
 
         ServiceContext serviceContext = null;
         if (tagProxy) {

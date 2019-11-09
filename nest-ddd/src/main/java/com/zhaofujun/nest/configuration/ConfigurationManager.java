@@ -3,11 +3,10 @@ package com.zhaofujun.nest.configuration;
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.cache.provider.DefaultCacheProvider;
 import com.zhaofujun.nest.container.BeanFinder;
+import com.zhaofujun.nest.context.event.channel.local.LocalMessageChannel;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ConfigurationManager {
 
@@ -30,37 +29,45 @@ public class ConfigurationManager {
     }
 
 
-
-
     public CacheConfiguration getCacheConfigurationByCode(String code) {
 
         CacheConfiguration cacheConfiguration = cacheConfigurations.get(code);
         if (cacheConfiguration == null) {
             cacheConfiguration = beanFinder.getInstances(CacheConfiguration.class)
                     .stream()
-                    .filter(p -> p.getCode().equals(code))
+                    .filter(p -> p.getCacheCode().equals(code))
                     .findFirst()
                     .orElse(null);
         }
         if (cacheConfiguration == null) {
             cacheConfiguration = new CacheConfiguration();
-            cacheConfiguration.setCode("default");
+            cacheConfiguration.setCacheCode("default");
             cacheConfiguration.setIdleSeconds(20000);
             cacheConfiguration.setName("默认缓存项");
-            cacheConfiguration.setProviderCode(DefaultCacheProvider.CODE);
+            cacheConfiguration.setProviderCode(DefaultCacheProvider.PROVIDER_CODE);
         }
         return cacheConfiguration;
     }
 
     public void register(CacheConfiguration cacheConfiguration) {
-        cacheConfigurations.put(cacheConfiguration.getCode(), cacheConfiguration);
+        cacheConfigurations.put(cacheConfiguration.getCacheCode(), cacheConfiguration);
     }
 
-    public EventConfiguration getEventConfigurationByCode(String code) {
+    public EventConfiguration getEventConfigurationByEventCode(String eventCode) {
 
-        EventConfiguration eventConfiguration = eventConfigurations.get(code);
-        if (eventConfiguration == null)
-            eventConfiguration = beanFinder.getInstance(EventConfiguration.class, code);
+        EventConfiguration eventConfiguration = eventConfigurations.get(eventCode);
+        if (eventConfiguration == null) {
+            eventConfiguration = beanFinder.getInstances(EventConfiguration.class)
+                    .stream()
+                    .filter(p -> p.getEventCode().equals(eventCode))
+                    .findFirst()
+                    .orElse(null);
+        }
+        if(eventConfiguration==null){
+            eventConfiguration=new EventConfiguration();
+            eventConfiguration.setEventCode("default");
+            eventConfiguration.setMessageChannelCode(LocalMessageChannel.CHANNEL_CODE);
+        }
         return eventConfiguration;
     }
 

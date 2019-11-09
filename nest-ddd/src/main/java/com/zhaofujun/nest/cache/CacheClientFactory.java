@@ -17,7 +17,10 @@ public class CacheClientFactory {
     public CacheClient getCacheClient(String cacheCode) {
         ConfigurationManager configurationManager = ConfigurationManager.getCurrent(beanFinder);
         CacheConfiguration cacheConfiguration = configurationManager.getCacheConfigurationByCode(cacheCode);
-        CacheProvider beanProvider = beanFinder.getInstance(CacheProvider.class, cacheConfiguration.getProviderCode());
+        CacheProvider beanProvider = beanFinder.getInstances(CacheProvider.class).stream()
+                .filter(p -> p.getCode().equals(cacheConfiguration.getProviderCode()))
+                .findFirst()
+                .orElse(null);
         if (beanProvider == null)
             beanProvider = new DefaultCacheProvider();
         CacheClient cacheClient = new CacheClient(beanProvider, cacheConfiguration);

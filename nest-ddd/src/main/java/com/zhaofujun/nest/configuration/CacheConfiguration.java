@@ -7,7 +7,7 @@ package com.zhaofujun.nest.configuration;
  * @author Jove
  */
 public class  CacheConfiguration {
-    private String code;
+    private String cacheCode;
     /**
      * 名称
      */
@@ -46,11 +46,11 @@ public class  CacheConfiguration {
         this.idleSeconds = idleSeconds;
     }
 
-    public String getCode() {
-        return code;
+    public String getCacheCode() {
+        return cacheCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCacheCode(String cacheCode) {
+        this.cacheCode = cacheCode;
     }
 }
