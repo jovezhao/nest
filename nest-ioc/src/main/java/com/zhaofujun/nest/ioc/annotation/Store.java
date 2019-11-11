@@ -10,5 +10,5 @@ import java.lang.annotation.*;
 @Documented
 @Component
 public @interface Store {
-    Class<? extends BaseEntity> value();
+    String value() default "";
 }

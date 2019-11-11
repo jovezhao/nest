@@ -31,14 +31,29 @@ public class DefaultBeanContainer implements BeanContainer {
             this.reflections.merge(new Reflections(prefix, new SubTypesScanner(false), new TypeAnnotationsScanner(), new TypeElementsScanner()));
     }
 
-    public void initialize() {
+    public void staticInit() {
         beanTypeList.removeAll(beanTypeList.stream().filter(p -> !p.isDynamic()).collect(Collectors.toList()));
-        this.reflections.getTypesAnnotatedWith(Component.class)
+        this.reflections.getTypesAnnotatedWith(Component.class,true)
                 .stream()
                 .filter(p -> !p.isAnnotation())
                 .forEach(p -> {
                     beanTypeList.add(createBeanTypeAndValue(p, false));
                 });
+
+        this.reflections.getTypesAnnotatedWith(AppService.class,true)
+                .stream()
+                .filter(p -> !p.isAnnotation())
+                .forEach(p -> {
+                    beanTypeList.add(createBeanTypeAndValue(p, false));
+                });
+
+        this.reflections.getTypesAnnotatedWith(Store.class,true)
+                .stream()
+                .filter(p -> !p.isAnnotation())
+                .forEach(p -> {
+                    beanTypeList.add(createBeanTypeAndValue(p, false));
+                });
+
 
         inject();
 
@@ -107,7 +122,7 @@ public class DefaultBeanContainer implements BeanContainer {
         if (clazz.isAnnotationPresent(AppService.class))
             return clazz.getDeclaredAnnotation(AppService.class).value();
         if (clazz.isAnnotationPresent(Store.class))
-            return clazz.getDeclaredAnnotation(Store.class).value().getName();
+            return clazz.getDeclaredAnnotation(Store.class).value();
 
         if (clazz.isAnnotationPresent(Component.class))
             return clazz.getDeclaredAnnotation(Component.class).value();

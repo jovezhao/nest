@@ -1,11 +1,12 @@
 package com.zhaofujun.nest.ioc.test.repositories;
 
+import com.zhaofujun.nest.ioc.annotation.Store;
 import com.zhaofujun.nest.ioc.test.models.User;
 import com.zhaofujun.nest.context.model.Identifier;
 import com.zhaofujun.nest.context.loader.EntityLoader;
 import com.zhaofujun.nest.context.repository.Repository;
 
-//@Store(User.class)
+@Store
 public class UserRepository implements Repository<User> {
 
     @Override

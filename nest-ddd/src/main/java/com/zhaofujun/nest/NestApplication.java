@@ -26,9 +26,6 @@ public class NestApplication {
 
 
     public void start() {
-
-        containerProvider.initialize();
-
         onStarted();
     }
 

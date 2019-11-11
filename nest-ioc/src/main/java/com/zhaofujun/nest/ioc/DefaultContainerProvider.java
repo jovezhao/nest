@@ -1,8 +1,6 @@
 package com.zhaofujun.nest.ioc;
 
-import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.container.ContainerProvider;
-import com.zhaofujun.nest.context.event.EventBus;
 
 import java.util.*;
 
@@ -31,11 +29,11 @@ public class DefaultContainerProvider implements ContainerProvider {
 
     @Override
     public void initialize() {
-        beanContainer.register(DefaultContainerProvider.class, this);
-        beanContainer.register(EventBus.class, new EventBus(this));
-        beanContainer.register(NestApplication.class, this);
+        beanContainer.staticInit();
 
-        beanContainer.initialize();
+    }
 
+    public void register(Class clazz,Object value){
+        beanContainer.register(clazz,value);
     }
 }

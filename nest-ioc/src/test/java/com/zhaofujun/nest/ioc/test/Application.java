@@ -1,20 +1,23 @@
 package com.zhaofujun.nest.ioc.test;
 
 import com.zhaofujun.nest.NestApplication;
+import com.zhaofujun.nest.container.ContainerProvider;
 import com.zhaofujun.nest.context.event.EventBus;
 import com.zhaofujun.nest.event.ApplicationEvent;
 import com.zhaofujun.nest.event.ApplicationListener;
 import com.zhaofujun.nest.event.ServiceContextListener;
 import com.zhaofujun.nest.event.ServiceEvent;
+import com.zhaofujun.nest.ioc.CommandLineRunner;
 import com.zhaofujun.nest.ioc.DefaultContainerProvider;
 import com.zhaofujun.nest.ioc.annotation.Component;
 import com.zhaofujun.nest.ioc.annotation.Autowired;
+import com.zhaofujun.nest.ioc.config.IocConfiguration;
 import com.zhaofujun.nest.ioc.test.appservices.TestAppservices;
 
 import java.lang.reflect.Method;
 
 @Component
-public class Application {
+public class Application implements CommandLineRunner {
 
 
     public Application() {
@@ -26,19 +29,24 @@ public class Application {
     private TestAppservices testAppservices;
 
     @Autowired
-    EventBus eventBus;
+    private EventBus eventBus;
 
-    public void run() {
-        eventBus.autoRegister();
-        testAppservices.createUser("111", "pwd");
+    @Autowired
+    private NestApplication nestApplication;
 
-    }
 
     //设置
     public static void main(String[] args) {
 
-        DefaultContainerProvider beanContainerProvider = new DefaultContainerProvider("com.guoshouxiang.nest");
-        NestApplication nestApplication = new NestApplication(beanContainerProvider);
+        IocConfiguration iocConfiguration = new IocConfiguration("com.zhaofujun.nest.ioc.test");
+        iocConfiguration.init();
+
+
+
+        ContainerProvider containerProvider = iocConfiguration.getContainerProvider();
+
+        NestApplication nestApplication = containerProvider.getInstance(NestApplication.class);
+
         nestApplication.addApplicationListener(new ApplicationListener() {
             @Override
             public void applicationStarted(ApplicationEvent applicationEvent) {
@@ -51,6 +59,19 @@ public class Application {
 
             }
         });
+
+        nestApplication.start();
+
+        CommandLineRunner application = containerProvider.getInstance(CommandLineRunner.class);
+        application.run();
+
+        nestApplication.close();
+    }
+
+    @Override
+    public void run() {
+
+
         nestApplication.addServiceContextListener(new ServiceContextListener() {
             @Override
             public void serviceCreated(ServiceEvent serviceEvent) {
@@ -87,12 +108,11 @@ public class Application {
 
             }
         });
-        nestApplication.start();
-
-        Application application = beanContainerProvider.getInstance(Application.class);
-        application.run();
 
 
+
+        eventBus.autoRegister();
+        testAppservices.createUser("111", "pwd");
     }
 }
 
