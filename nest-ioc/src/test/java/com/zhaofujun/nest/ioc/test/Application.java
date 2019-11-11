@@ -7,8 +7,6 @@ import com.zhaofujun.nest.event.ApplicationEvent;
 import com.zhaofujun.nest.event.ApplicationListener;
 import com.zhaofujun.nest.event.ServiceContextListener;
 import com.zhaofujun.nest.event.ServiceEvent;
-import com.zhaofujun.nest.ioc.CommandLineRunner;
-import com.zhaofujun.nest.ioc.DefaultContainerProvider;
 import com.zhaofujun.nest.ioc.annotation.Component;
 import com.zhaofujun.nest.ioc.annotation.Autowired;
 import com.zhaofujun.nest.ioc.config.IocConfiguration;
@@ -17,7 +15,7 @@ import com.zhaofujun.nest.ioc.test.appservices.TestAppservices;
 import java.lang.reflect.Method;
 
 @Component
-public class Application implements CommandLineRunner {
+public class Application   {
 
 
     public Application() {
@@ -62,13 +60,13 @@ public class Application implements CommandLineRunner {
 
         nestApplication.start();
 
-        CommandLineRunner application = containerProvider.getInstance(CommandLineRunner.class);
+        Application application = containerProvider.getInstance(Application.class);
         application.run();
 
         nestApplication.close();
     }
 
-    @Override
+
     public void run() {
 
 
