@@ -16,6 +16,24 @@ Nest的设计受DDD战略、战术设计思想指导，使用Nest前需要对DDD
 
 # 开发手册
 
+## 如何获取 nest
+
+**Maven引用**
+```xml
+<!-- https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd -->
+<dependency>
+    <groupId>com.zhaofujun.nest</groupId>
+    <artifactId>nest-ddd</artifactId>
+    <version>1.2.RELEASE</version>
+</dependency>
+```
+**Gradle引用**
+```groovy
+// https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd
+compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '1.2.RELEASE'
+
+```
+
 ## 演练-使用nest和nest-ioc创建可运行的项目
 
 本案例使用nest-ioc快速创建基于DDD的项目，并且完成创建用户的演示操作
@@ -250,9 +268,9 @@ CacheConfiguration 可以配置缓存组的代号、名称、使用的缓存提�
 
 如果配置的缓存提供者无法找到，系统将使用默认的缓存提供者。
 
-默认缓存提供者使用ehcache支持，我们也可以通过实现com.zhaofujun.nest.cache.provider.CacheProvider接口来集成其它缓存，比如Redis。
+默认缓存提供者使用ehcache支持，我们也可以通过实现com.zhaofujun.nest.cache.provider.CacheProvider接口来集成其它缓存中间件，比如Redis。
 
-> 缓存集成方案见： [缓存通道扩展与集成](#缓存通道扩展与集成)
+> 缓存中间件集成方案见： [缓存通道扩展与集成](#缓存通道扩展与集成)
 
 
 ### 事件总线
