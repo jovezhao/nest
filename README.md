@@ -183,9 +183,36 @@ public class IocConfiguration {
 
 ## Nest进阶教程
 
-### IOC集成方案
+### Ioc容器集成方式
+
+nest提供了默认的nest-ioc容器，nest-ioc是一个极度简的ioc实现方案，提供了容器管理、依赖注入的功能，通过注解完成包扫描与注入。
+
+当我们的项目中没有使用spring等相关的ioc容器时，可以用nest-ioc简化代码开发，在企业项目中推荐使用spring ioc做为nest的容器提供者。
+
+集成一个容器，只需要实现com.zhaofujun.nest.container.ContainerProvider接口即可。
+
+#### nest-ioc 实现方式
+nest-ioc定义了AppService注解、Component注解、Store注解以及Autowired注解
+
+**AppService注解**
+用于定义应用服务，当使用了该注释的类，nest-ioc会认为这是一个应用服务，调用该应用服务中的方法时会通过切面初始化一个服务上下文和工作单元。在该应用服务中的所有领域对象的变化都将记录在工作单元中，直到应用服务方法调用完毕后一起提交给对应的仓储。
+
+**Component注解**
+用于定义一个类可以被nest-ioc容器扫描并且托管
+
+**Store注解**
+用户定义这个类是一个仓储的实现，该注解目前没有实际作用，与Component注解效果一致。
+
+**Autowired注解**
+作用于类的字段上，当这个类被nest-ioc容器托管时，使用了该注解的字段将自动从容器中获取实例并且注入相应的值
+
+> 使用方式见 [演练-使用nest和nest-ioc创建可运行的项目](#演练-使用nest和nest-ioc创建可运行的项目)
+
+#### 实现spring的集成
+> 见[集成Spring与Spring boot](#集成Spring与Spring_boot)
 
 ### 缓存管理
+
 
 ### 事件总线
 
@@ -202,9 +229,11 @@ public class IocConfiguration {
 
 ### DDD-六边型架构
 
-### 缓存管理
+### 集成Spring与Spring boot
 
-### 事件总线
+### 缓存通道扩展与集成
+
+### 事件通道扩展与集成
 
 
 # 常见问题汇总
