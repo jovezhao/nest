@@ -209,9 +209,50 @@ nest-ioc定义了AppService注解、Component注解、Store注解以及Autowired
 > 使用方式见 [演练-使用nest和nest-ioc创建可运行的项目](#演练-使用nest和nest-ioc创建可运行的项目)
 
 #### 实现spring的集成
-> 见[集成Spring与Spring boot](#集成Spring与Spring_boot)
+> 见[集成Spring与Spring boot](#集成Spring与Spring-boot)
 
 ### 缓存管理
+
+Nest 将不同场景下用到缓存的信息进行了分组，为每一个分组指定了一个代号"cacheCode""。
+
+在使用时，通过com.zhaofujun.nest.cache.CacheClientFactory的getCacheClient方法获取一个CacheClient。
+
+CacheClient对缓存的操作见如下定义
+
+```java
+
+public interface CacheClient {
+    <T> T get(Class<T> clazz, String key);
+
+
+    <T> Map<String, T> get(Class<T> clazz, String... keys);
+
+
+    void put(String key, Object value, long idleSeconds);
+
+    void put(String key, Object value);
+
+    boolean remove(String key);
+
+    void removeAll();
+
+    boolean containsKey(String key);
+
+    String[] getKeys();
+}
+
+```
+缓存分组信息通过com.zhaofujun.nest.configuration.ConfigurationManager管理。
+
+开发人员可以通过ConfigurationManager类的 register(CacheConfiguration cacheConfiguration)方法手动注册一组缓存配置，也可以将CacheConfiguration的bean配置到ioc容器中由ConfigurationManager去自动发现。
+
+CacheConfiguration 可以配置缓存组的代号、名称、使用的缓存提供者和统一的过期时间。
+
+如果配置的缓存提供者无法找到，系统将使用默认的缓存提供者。
+
+默认缓存提供者使用ehcache支持，我们也可以通过实现com.zhaofujun.nest.cache.provider.CacheProvider接口来集成其它缓存，比如Redis。
+
+> 缓存集成方案见： [缓存通道扩展与集成](#缓存通道扩展与集成)
 
 
 ### 事件总线
