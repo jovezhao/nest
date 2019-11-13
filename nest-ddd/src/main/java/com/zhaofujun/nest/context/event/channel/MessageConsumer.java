@@ -1,6 +1,6 @@
 package com.zhaofujun.nest.context.event.channel;
 
-import com.zhaofujun.nest.context.event.EventHandler;
+import com.zhaofujun.nest.core.EventHandler;
 
 
 public interface  MessageConsumer {

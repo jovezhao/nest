@@ -1,7 +1,7 @@
 package com.zhaofujun.nest.utils;
 
-import com.zhaofujun.nest.context.model.BaseEntity;
-import com.zhaofujun.nest.context.model.Identifier;
+import com.zhaofujun.nest.core.BaseEntity;
+import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.SystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

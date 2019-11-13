@@ -1,5 +1,7 @@
 package com.zhaofujun.nest.context.model;
 
+import com.zhaofujun.nest.core.Identifier;
+
 import java.util.UUID;
 
 public class UUIdentifier extends Identifier {

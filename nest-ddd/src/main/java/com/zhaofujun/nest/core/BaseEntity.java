@@ -1,8 +1,8 @@
-package com.zhaofujun.nest.context.model;
+package com.zhaofujun.nest.core;
 
-import com.zhaofujun.nest.context.EntityFactory;
 import com.zhaofujun.nest.context.ServiceContext;
 import com.zhaofujun.nest.NullException;
+import com.zhaofujun.nest.context.model.VerifyFailedException;
 import com.zhaofujun.nest.utils.EntityUtils;
 
 import java.io.Serializable;

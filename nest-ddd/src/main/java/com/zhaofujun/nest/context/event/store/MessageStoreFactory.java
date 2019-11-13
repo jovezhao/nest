@@ -1,6 +1,6 @@
 package com.zhaofujun.nest.context.event.store;
 
-import com.zhaofujun.nest.container.BeanFinder;
+import com.zhaofujun.nest.core.BeanFinder;
 
 
 public class MessageStoreFactory {

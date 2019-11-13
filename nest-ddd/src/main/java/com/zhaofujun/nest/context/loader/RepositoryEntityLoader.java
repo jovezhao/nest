@@ -1,16 +1,17 @@
 package com.zhaofujun.nest.context.loader;
 
 
-import com.zhaofujun.nest.cache.CacheClient;
+import com.zhaofujun.nest.core.CacheClient;
 import com.zhaofujun.nest.cache.CacheClientFactory;
-import com.zhaofujun.nest.container.BeanFinder;
+import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.context.ServiceContext;
-import com.zhaofujun.nest.context.model.BaseEntity;
-import com.zhaofujun.nest.context.model.BaseRole;
-import com.zhaofujun.nest.context.model.Identifier;
-import com.zhaofujun.nest.context.repository.Repository;
+import com.zhaofujun.nest.core.BaseEntity;
+import com.zhaofujun.nest.core.BaseRole;
+import com.zhaofujun.nest.core.Identifier;
+import com.zhaofujun.nest.core.Repository;
 import com.zhaofujun.nest.context.repository.RepositoryFactory;
-import com.zhaofujun.nest.context.repository.RoleRepository;
+import com.zhaofujun.nest.core.RoleRepository;
+import com.zhaofujun.nest.core.EntityLoader;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
 import com.zhaofujun.nest.utils.EntityUtils;
 

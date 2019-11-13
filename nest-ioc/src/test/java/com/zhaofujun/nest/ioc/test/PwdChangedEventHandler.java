@@ -1,7 +1,7 @@
 package com.zhaofujun.nest.ioc.test;
 
 import com.zhaofujun.nest.context.event.EventArgs;
-import com.zhaofujun.nest.context.event.EventHandler;
+import com.zhaofujun.nest.core.EventHandler;
 import com.zhaofujun.nest.ioc.annotation.Component;
 import com.zhaofujun.nest.ioc.test.models.PasswordChangedEventData;
 

@@ -2,20 +2,22 @@ package com.zhaofujun.nest.context.event;
 
 import com.zhaofujun.nest.configuration.ConfigurationManager;
 import com.zhaofujun.nest.configuration.EventConfiguration;
-import com.zhaofujun.nest.container.BeanFinder;
-import com.zhaofujun.nest.context.event.message.MessageConverter;
-import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.channel.MessageChannel;
 import com.zhaofujun.nest.context.event.channel.MessageChannelFactory;
 import com.zhaofujun.nest.context.event.channel.MessageConsumer;
 import com.zhaofujun.nest.context.event.channel.MessageProducer;
+import com.zhaofujun.nest.context.event.message.MessageConverter;
+import com.zhaofujun.nest.context.event.message.MessageInfo;
+import com.zhaofujun.nest.core.BeanFinder;
+import com.zhaofujun.nest.core.EventBus;
+import com.zhaofujun.nest.core.EventHandler;
 
-public class EventBus {
+public class DefaultEventBus implements EventBus {
     private BeanFinder beanFinder;
     private MessageChannelFactory messageChannelFactory;
     private ConfigurationManager configurationManager;
 
-    public EventBus(BeanFinder beanFinder) {
+    public DefaultEventBus(BeanFinder beanFinder) {
         this.beanFinder = beanFinder;
         this.messageChannelFactory = new MessageChannelFactory(beanFinder);
         this.configurationManager = ConfigurationManager.getCurrent(beanFinder);
@@ -57,5 +59,3 @@ public class EventBus {
 
 
 }
-
-

@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.context.model;
+package com.zhaofujun.nest.core;
 
 import java.io.Serializable;
 

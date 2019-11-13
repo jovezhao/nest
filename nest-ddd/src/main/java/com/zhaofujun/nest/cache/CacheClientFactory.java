@@ -4,7 +4,8 @@ import com.zhaofujun.nest.cache.provider.CacheProvider;
 import com.zhaofujun.nest.cache.provider.DefaultCacheProvider;
 import com.zhaofujun.nest.configuration.CacheConfiguration;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
-import com.zhaofujun.nest.container.BeanFinder;
+import com.zhaofujun.nest.core.BeanFinder;
+import com.zhaofujun.nest.core.CacheClient;
 
 public class CacheClientFactory {
 
@@ -23,7 +24,7 @@ public class CacheClientFactory {
                 .orElse(null);
         if (beanProvider == null)
             beanProvider = new DefaultCacheProvider();
-        CacheClient cacheClient = new CacheClient(beanProvider, cacheConfiguration);
+        CacheClient cacheClient = new DefaultCacheClient(beanProvider, cacheConfiguration);
         return cacheClient;
     }
 }

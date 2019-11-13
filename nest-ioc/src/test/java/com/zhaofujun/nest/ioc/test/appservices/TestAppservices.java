@@ -1,13 +1,13 @@
 package com.zhaofujun.nest.ioc.test.appservices;
 
-import com.zhaofujun.nest.context.event.EventBus;
+import com.zhaofujun.nest.core.EventBus;
 import com.zhaofujun.nest.ioc.annotation.AppService;
 import com.zhaofujun.nest.ioc.annotation.Autowired;
 import com.zhaofujun.nest.ioc.test.models.PasswordChangedEventData;
 import com.zhaofujun.nest.ioc.test.models.User;
 import com.zhaofujun.nest.context.model.StringIdentifier;
 import com.zhaofujun.nest.context.loader.ConstructEntityLoader;
-import com.zhaofujun.nest.context.loader.EntityLoader;
+import com.zhaofujun.nest.core.EntityLoader;
 import com.zhaofujun.nest.context.loader.RepositoryEntityLoader;
 
 @AppService

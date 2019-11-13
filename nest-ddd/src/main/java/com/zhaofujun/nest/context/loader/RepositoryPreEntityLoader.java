@@ -1,8 +1,9 @@
 package com.zhaofujun.nest.context.loader;
 
 
-import com.zhaofujun.nest.context.model.BaseEntity;
-import com.zhaofujun.nest.context.model.Identifier;
+import com.zhaofujun.nest.core.BaseEntity;
+import com.zhaofujun.nest.core.Identifier;
+import com.zhaofujun.nest.core.EntityLoader;
 import com.zhaofujun.nest.utils.EntityUtils;
 
 /**

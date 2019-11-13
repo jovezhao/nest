@@ -1,17 +1,17 @@
 package com.zhaofujun.nest.context;
 
-import com.zhaofujun.nest.cache.CacheClient;
+import com.zhaofujun.nest.core.CacheClient;
 import com.zhaofujun.nest.cache.CacheClientFactory;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
 import com.zhaofujun.nest.configuration.EventConfiguration;
-import com.zhaofujun.nest.container.BeanFinder;
+import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.context.event.channel.MessageChannelFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
 import com.zhaofujun.nest.SystemException;
-import com.zhaofujun.nest.context.model.BaseEntity;
-import com.zhaofujun.nest.context.model.Identifier;
-import com.zhaofujun.nest.context.repository.Repository;
+import com.zhaofujun.nest.core.BaseEntity;
+import com.zhaofujun.nest.core.Identifier;
+import com.zhaofujun.nest.core.Repository;
 import com.zhaofujun.nest.context.repository.RepositoryFactory;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
 

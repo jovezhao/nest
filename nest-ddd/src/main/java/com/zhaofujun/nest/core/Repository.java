@@ -1,8 +1,8 @@
-package com.zhaofujun.nest.context.repository;
+package com.zhaofujun.nest.core;
 
-import com.zhaofujun.nest.context.loader.EntityLoader;
-import com.zhaofujun.nest.context.model.BaseEntity;
-import com.zhaofujun.nest.context.model.Identifier;
+import com.zhaofujun.nest.core.EntityLoader;
+import com.zhaofujun.nest.core.BaseEntity;
+import com.zhaofujun.nest.core.Identifier;
 
 public interface Repository<T extends BaseEntity> {
 

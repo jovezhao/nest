@@ -1,7 +1,4 @@
-package com.zhaofujun.nest.context.repository;
-
-import com.zhaofujun.nest.context.model.BaseRole;
-import com.zhaofujun.nest.context.model.Identifier;
+package com.zhaofujun.nest.core;
 
 import java.util.Set;
 

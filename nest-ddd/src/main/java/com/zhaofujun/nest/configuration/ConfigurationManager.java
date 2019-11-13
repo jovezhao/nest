@@ -2,7 +2,7 @@ package com.zhaofujun.nest.configuration;
 
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.cache.provider.DefaultCacheProvider;
-import com.zhaofujun.nest.container.BeanFinder;
+import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.context.event.channel.local.LocalMessageChannel;
 
 import java.util.HashMap;

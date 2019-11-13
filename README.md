@@ -49,7 +49,7 @@ compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '1.2.RELEASE'
 ```java
 package com.zhaofujun.nest.ioc.test.models;
 
-import com.zhaofujun.nest.context.model.BaseEntity;
+import com.zhaofujun.nest.core.BaseEntity;
 import com.zhaofujun.nest.context.model.StringIdentifier;
 
 
@@ -69,14 +69,14 @@ public class User extends BaseEntity<StringIdentifier> {
 ```java
 package com.zhaofujun.nest.ioc.test.appservices;
 
-import com.zhaofujun.nest.context.event.EventBus;
+import com.zhaofujun.nest.core.EventBus;
 import com.zhaofujun.nest.ioc.annotation.AppService;
 import com.zhaofujun.nest.ioc.annotation.Autowired;
 import com.zhaofujun.nest.ioc.test.models.PasswordChangedEventData;
 import com.zhaofujun.nest.ioc.test.models.User;
 import com.zhaofujun.nest.context.model.StringIdentifier;
 import com.zhaofujun.nest.context.loader.ConstructEntityLoader;
-import com.zhaofujun.nest.context.loader.EntityLoader;
+import com.zhaofujun.nest.core.EntityLoader;
 import com.zhaofujun.nest.context.loader.RepositoryEntityLoader;
 
 @AppService
@@ -109,7 +109,7 @@ package com.zhaofujun.nest.ioc.test;
 
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.container.ContainerProvider;
-import com.zhaofujun.nest.context.event.EventBus;
+import com.zhaofujun.nest.core.EventBus;
 import com.zhaofujun.nest.event.ApplicationEvent;
 import com.zhaofujun.nest.event.ApplicationListener;
 import com.zhaofujun.nest.event.ServiceContextListener;
@@ -174,7 +174,7 @@ package com.zhaofujun.nest.ioc.config;
 
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.container.ContainerProvider;
-import com.zhaofujun.nest.context.event.EventBus;
+import com.zhaofujun.nest.core.EventBus;
 import com.zhaofujun.nest.ioc.DefaultContainerProvider;
 
 public class IocConfiguration {
@@ -332,6 +332,18 @@ CacheConfiguration 可以配置缓存组的代号、名称、使用的缓存提�
 #### 四色原型建模
 
 #### nest如何支持DDD开发
+
+DDD术语 | Nest
+---|---
+限界上下文 | NestApplication
+应用服务 | AppService
+实体 | BaseEntity
+实体标识 | Identifier
+值对象 | ValueObject
+实体工厂 | EntityLoader
+领域事件 | EventBus
+仓储 | Repository
+
 
 
 ### 事件总线

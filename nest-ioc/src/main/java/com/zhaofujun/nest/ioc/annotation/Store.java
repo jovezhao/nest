@@ -1,7 +1,5 @@
 package com.zhaofujun.nest.ioc.annotation;
 
-import com.zhaofujun.nest.context.model.BaseEntity;
-
 import java.lang.annotation.*;
 
 @Inherited

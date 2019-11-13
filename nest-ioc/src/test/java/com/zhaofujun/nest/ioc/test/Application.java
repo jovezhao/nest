@@ -2,7 +2,7 @@ package com.zhaofujun.nest.ioc.test;
 
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.container.ContainerProvider;
-import com.zhaofujun.nest.context.event.EventBus;
+import com.zhaofujun.nest.core.EventBus;
 import com.zhaofujun.nest.event.ApplicationEvent;
 import com.zhaofujun.nest.event.ApplicationListener;
 import com.zhaofujun.nest.event.ServiceContextListener;
@@ -58,17 +58,17 @@ public class Application   {
             }
         });
 
-        nestApplication.start();
+
 
         Application application = containerProvider.getInstance(Application.class);
         application.run();
 
-        nestApplication.close();
     }
 
 
     public void run() {
 
+        nestApplication.start();
 
         nestApplication.addServiceContextListener(new ServiceContextListener() {
             @Override
@@ -111,6 +111,9 @@ public class Application   {
 
         eventBus.autoRegister();
         testAppservices.createUser("111", "pwd");
+
+        nestApplication.close();
+
     }
 }
 

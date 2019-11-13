@@ -1,5 +1,7 @@
 package com.zhaofujun.nest.context.model;
 
+import com.zhaofujun.nest.core.Identifier;
+
 public class StringIdentifier extends Identifier {
 
     private String id;

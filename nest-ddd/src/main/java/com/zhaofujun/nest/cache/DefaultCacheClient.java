@@ -1,7 +1,8 @@
 package com.zhaofujun.nest.cache;
 
-import com.zhaofujun.nest.configuration.CacheConfiguration;
 import com.zhaofujun.nest.cache.provider.CacheProvider;
+import com.zhaofujun.nest.configuration.CacheConfiguration;
+import com.zhaofujun.nest.core.CacheClient;
 
 import java.util.Map;
 
@@ -10,14 +11,14 @@ import java.util.Map;
  *
  * @author Jove
  */
-public class CacheClient {
+class DefaultCacheClient implements CacheClient {
 
     private CacheProvider cacheProvider;
 
     private CacheConfiguration cacheConfiguration;
 
 
-    public  CacheClient(CacheProvider cacheProvider, CacheConfiguration cacheConfiguration) {
+    public  DefaultCacheClient(CacheProvider cacheProvider, CacheConfiguration cacheConfiguration) {
         this.cacheProvider = cacheProvider;
         this.cacheConfiguration = cacheConfiguration;
     }
