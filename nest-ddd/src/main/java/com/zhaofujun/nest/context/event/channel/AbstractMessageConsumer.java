@@ -60,7 +60,9 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
     }
 
 
-    protected abstract void onFailed(EventHandler eventHandler, Object context, Exception ex);
+    protected void onFailed(EventHandler eventHandler, Object context, Exception ex) {
+    }
 
-    protected abstract void onEnds(EventHandler eventHandler, Object context);
+    protected void onEnds(EventHandler eventHandler, Object context) {
+    }
 }
