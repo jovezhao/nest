@@ -30,7 +30,7 @@ public class EntityUtils {
         enhancer.setSuperclass(tClass);
         enhancer.setCallback(new EntityMethodInterceptor());
         T t = (T) enhancer.create();
-        EntityUtils.represent(t, true);// 被代理的对象默认设置代理为true
+//        EntityUtils.represent(t, true);// 被代理的对象默认设置代理为true
         EntityUtils.setIdentifier(t, identifier);
         EntityUtils.setNewInstance(t, newInstance);
         EntityUtils.setLoading(t, loading);
@@ -72,15 +72,6 @@ public class EntityUtils {
         }
     }
 
-    public static void represent(Entity entityObject, boolean v) {
-        try {
-            Field field = Entity.class.getDeclaredField("_represented");
-            field.setAccessible(true);
-            field.set(entityObject, v);
-        } catch (Exception e) {
-            throw new SystemException("完成实体加载状态失败", e);
-        }
-    }
 
     public static void setIdentifier(Entity entityObject, Identifier identifier) {
         try {
@@ -94,7 +85,7 @@ public class EntityUtils {
 
     public static boolean isRepresented(Entity entityObject) {
         try {
-            Field field = Entity.class.getDeclaredField("_represented");
+            Field field = Entity.class.getDeclaredField("CGLIB$BOUND");
             field.setAccessible(true);
             return field.getBoolean(entityObject);
         } catch (Exception e) {

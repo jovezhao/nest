@@ -25,40 +25,40 @@ class DefaultCacheClient implements CacheClient {
 
 
     public <T> T get(Class<T> clazz, String key) {
-        return cacheProvider.get(cacheConfiguration.getName(), key, clazz);
+        return cacheProvider.get(cacheConfiguration.getCacheCode(), key, clazz);
     }
 
 
     public <T> Map<String, T> get(Class<T> clazz, String... keys) {
-        return cacheProvider.get(cacheConfiguration.getName(), clazz, keys);
+        return cacheProvider.get(cacheConfiguration.getCacheCode(), clazz, keys);
     }
 
 
     public void put(String key, Object value, long idleSeconds) {
-        cacheProvider.put(cacheConfiguration.getName(), key, value, idleSeconds);
+        cacheProvider.put(cacheConfiguration.getCacheCode(), key, value, idleSeconds);
     }
 
 
     public void put(String key, Object value) {
-        cacheProvider.put(cacheConfiguration.getName(), key, value, cacheConfiguration.getIdleSeconds());
+        cacheProvider.put(cacheConfiguration.getCacheCode(), key, value, cacheConfiguration.getIdleSeconds());
     }
 
 
     public boolean remove(String key) {
-        return cacheProvider.remove(cacheConfiguration.getName(), key);
+        return cacheProvider.remove(cacheConfiguration.getCacheCode(), key);
     }
 
 
     public void removeAll() {
-        cacheProvider.removeAll(cacheConfiguration.getName());
+        cacheProvider.removeAll(cacheConfiguration.getCacheCode());
     }
 
 
     public boolean containsKey(String key) {
-        return cacheProvider.containsKey(cacheConfiguration.getName(), key);
+        return cacheProvider.containsKey(cacheConfiguration.getCacheCode(), key);
     }
 
     public String[] getKeys() {
-        return cacheProvider.getKeys(cacheConfiguration.getName());
+        return cacheProvider.getKeys(cacheConfiguration.getCacheCode());
     }
 }

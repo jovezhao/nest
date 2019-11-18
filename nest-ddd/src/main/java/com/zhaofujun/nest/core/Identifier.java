@@ -20,4 +20,9 @@ public abstract class Identifier implements Serializable {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        return toValue().hashCode();
+    }
 }

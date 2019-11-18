@@ -2,6 +2,8 @@ package com.zhaofujun.nest.context.model;
 
 import com.zhaofujun.nest.context.ServiceContext;
 import com.zhaofujun.nest.NullException;
+import com.zhaofujun.nest.context.loader.ConstructEntityLoader;
+import com.zhaofujun.nest.context.loader.RepositoryEntityLoader;
 import com.zhaofujun.nest.core.EntityFactory;
 import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.utils.EntityUtils;
@@ -16,25 +18,23 @@ public abstract class Entity<T extends Identifier> implements Serializable {
     }
 
 
-//    public <U extends Role> U act(Class<U> clazz, Identifier identifier) {
-//        if (identifier == null)
-//            throw new NullException("角色的ID不能为空");
-//        U u = EntityFactory.load(clazz, identifier);
-//        if (u == null) {
-//            u = EntityFactory.create(clazz, identifier);
-//            if (Role.class.isInstance(u)) {
-//                EntityUtils.setValue(Role.class, u, "actor", this);
-//            }
-//        }
-//        return u;
-//    }
-//
-//    public <U extends Role> U act(Class<U> clazz) {
-//        return act(clazz, this.getId());
-//    }
+    public <U extends Role> U act(Class<U> clazz, Identifier identifier) {
+        if (identifier == null)
+            throw new NullException("角色的ID不能为空");
+        U u = new RepositoryEntityLoader<U>(clazz).create(identifier);
+        if (u == null) {
+            u = new ConstructEntityLoader<U>(clazz).create(identifier);
+            if (Role.class.isInstance(u)) {
+                EntityUtils.setValue(Role.class, u, "actor", this);
+            }
+        }
+        return u;
+    }
 
+    public <U extends Role> U act(Class<U> clazz) {
+        return act(clazz, this.getId());
+    }
 
-    private boolean _represented;
 
     //是否处于加载中状态
     private boolean _loading;
