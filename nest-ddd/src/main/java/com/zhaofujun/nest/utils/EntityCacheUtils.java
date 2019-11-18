@@ -1,6 +1,6 @@
 package com.zhaofujun.nest.utils;
 
-import com.zhaofujun.nest.core.BaseEntity;
+import com.zhaofujun.nest.context.model.Entity;
 import com.zhaofujun.nest.core.Identifier;
 
 /**
@@ -12,7 +12,7 @@ public class EntityCacheUtils {
     public static final String PROXY_SPLIT_STR = "$";
     public static final int BEGIN_INDEX = 0;
 
-    public static String getCacheKey(BaseEntity entityObject) {
+    public static String getCacheKey(Entity entityObject) {
         String className = entityObject.getClass().getSimpleName();
         int endIndex = className.indexOf(PROXY_SPLIT_STR);
         return className.substring(BEGIN_INDEX, endIndex) + "_" + entityObject.getId();
@@ -36,18 +36,18 @@ public class EntityCacheUtils {
 //        return iCacheClient;
 //    }
 //
-//    public static void put(BaseEntity entityObject) {
+//    public static void put(Entity entityObject) {
 //        if (entityObject != null) {
 //            getCacheClient().put(getCacheKey(entityObject), entityObject);
 //        }
 //    }
 //
-//    public static <T extends BaseEntity> T get(Class<T> tClass, Identifier identifier) {
+//    public static <T extends Entity> T get(Class<T> tClass, Identifier identifier) {
 //        String key = tClass.getSimpleName() + " _" + identifier;
 //        return getCacheClient().get(tClass, key);
 //    }
 //
-//    public static void remove(BaseEntity entityObject) {
+//    public static void remove(Entity entityObject) {
 //        if (entityObject != null)
 //            getCacheClient().remove(getCacheKey(entityObject));
 //    }

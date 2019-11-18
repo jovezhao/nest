@@ -4,6 +4,7 @@ import com.zhaofujun.nest.context.loader.EntityLoaderFactory;
 import com.zhaofujun.nest.context.loader.EntityLoaderType;
 
 
+
 public class EntityFactory {
     public static <T extends BaseEntity> T create(Class<T> tClass, Identifier identifier) {
         EntityLoader<T> entityLoader = EntityLoaderFactory.create(tClass, EntityLoaderType.ConstructEntityLoader);

@@ -1,11 +1,11 @@
 package com.zhaofujun.nest.context.loader;
 
 import com.zhaofujun.nest.context.ServiceContext;
-import com.zhaofujun.nest.core.BaseEntity;
+import com.zhaofujun.nest.context.model.Entity;
 import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.core.EntityLoader;
 
-public class UnitOfWorkEntityLoader<T extends BaseEntity> implements EntityLoader<T> {
+public class UnitOfWorkEntityLoader<T extends Entity> implements EntityLoader<T> {
 
 
     private Class<T> tClass;

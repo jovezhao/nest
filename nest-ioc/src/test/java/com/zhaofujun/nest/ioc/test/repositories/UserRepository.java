@@ -21,9 +21,15 @@ public class UserRepository implements Repository<User> {
     }
 
     @Override
-    public void save(User user) {
+    public void insert(User user) {
 
     }
+
+    @Override
+    public void update(User user) {
+
+    }
+
 
     @Override
     public void remove(User user) {

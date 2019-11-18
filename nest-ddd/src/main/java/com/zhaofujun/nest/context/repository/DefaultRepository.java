@@ -1,6 +1,6 @@
 package com.zhaofujun.nest.context.repository;
 
-import com.zhaofujun.nest.core.BaseEntity;
+import com.zhaofujun.nest.context.model.Entity;
 import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.core.EntityLoader;
 import com.zhaofujun.nest.core.Repository;
@@ -8,29 +8,34 @@ import com.zhaofujun.nest.core.Repository;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DefaultRepository implements Repository<BaseEntity> {
+public class DefaultRepository implements Repository<Entity> {
 
-    private static Map<Identifier, BaseEntity> entityMap = new HashMap<>();
+    private static Map<Identifier, Entity> entityMap = new HashMap<>();
 
 
 
     @Override
-    public BaseEntity getEntityById(Identifier identifier, EntityLoader entityLoader) {
+    public Entity getEntityById(Identifier identifier, EntityLoader entityLoader) {
         return entityMap.get(identifier);
     }
 
     @Override
-    public Class<BaseEntity> getEntityClass() {
-        return BaseEntity.class;
+    public Class<Entity> getEntityClass() {
+        return Entity.class;
     }
 
     @Override
-    public void save(BaseEntity baseEntity) {
-        entityMap.put(baseEntity.getId(), baseEntity);
+    public void insert(Entity entity) {
+        entityMap.put(entity.getId(), entity);
     }
 
     @Override
-    public void remove(BaseEntity baseEntity) {
-        entityMap.remove(baseEntity.getId());
+    public void update(Entity entity) {
+        entityMap.put(entity.getId(), entity);
+    }
+
+    @Override
+    public void remove(Entity entity) {
+        entityMap.remove(entity.getId());
     }
 }

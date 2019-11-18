@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.context;
 
+import com.zhaofujun.nest.context.model.Entity;
 import com.zhaofujun.nest.core.CacheClient;
 import com.zhaofujun.nest.cache.CacheClientFactory;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
@@ -9,58 +10,80 @@ import com.zhaofujun.nest.context.event.channel.MessageChannelFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
 import com.zhaofujun.nest.SystemException;
-import com.zhaofujun.nest.core.BaseEntity;
 import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.core.Repository;
 import com.zhaofujun.nest.context.repository.RepositoryFactory;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ContextUnitOfWork {
 
     ContextUnitOfWork() {
     }
 
-    private Map<BaseEntity, EntityOperateEnum> entityMap = new HashMap<>();
+    private Map<Entity, EntityOperateEnum> entityMap = new HashMap<>();
 
-    public <T extends BaseEntity> T getEntity(Class<T> tClass, Identifier identifier) {
-        BaseEntity baseEntity = entityMap.entrySet()
+
+    public <T extends Entity> T getEntity(Class<T> tClass, Identifier identifier) {
+        Entity entity = entityMap.entrySet()
                 .stream()
                 .filter(p -> p.getKey().getId().equals(identifier) && tClass.isInstance(p.getKey()))
                 .map(p -> p.getKey())
                 .findFirst()
                 .orElse(null);
-        return (T) baseEntity;
+        return (T) entity;
     }
 
     enum EntityOperateEnum {
-        save, remove
+        create, update, remove
     }
 
-    public void addEntityObject(BaseEntity baseEntity) {
-        entityMap.put(baseEntity, EntityOperateEnum.save);
+    public void addEntityObject(Entity entity) {
+        entityMap.put(entity, EntityOperateEnum.create);
     }
 
-    public void removeEntityObject(BaseEntity baseEntity) {
-        entityMap.put(baseEntity, EntityOperateEnum.remove);
+    public void updateEntityObject(Entity entity) {
+        entityMap.put(entity, EntityOperateEnum.update);
+    }
+
+    public void removeEntityObject(Entity entity) {
+        entityMap.put(entity, EntityOperateEnum.remove);
     }
 
     private void commitEntity() {
 
-        entityMap.forEach((p, q) -> {
-            Repository repository = RepositoryFactory.create(p.getClass());
-            switch (q) {
-                case save:
-                    repository.save(p);
-                    break;
-                case remove:
-                    repository.remove(p);
-            }
+        Map<Repository, Map<EntityOperateEnum, List<Entity>>> repositoryMap = toRepositoryMap(entityMap);
+
+        repositoryMap.forEach((p, q) -> {
+            q.forEach((r, s) -> {
+                switch (r) {
+                    case create:
+                        p.batchInsert(s);
+                        break;
+                    case update:
+                        p.batchUpdate(s);
+                        break;
+                    case remove:
+                        p.batchRemove(s);
+                }
+            });
         });
+
+//
+//        entityMap.forEach((p, q) -> {
+//            Repository repository = RepositoryFactory.create(p.getClass());
+//            switch (q) {
+//                case create:
+//                    repository.insert(p);
+//                    break;
+//                case update:
+//                    repository.update(p);
+//                    break;
+//                case remove:
+//                    repository.remove(p);
+//            }
+//        });
     }
 
     private Set<MessageBacklog> messageBacklogs = new HashSet<>();
@@ -106,7 +129,10 @@ public class ContextUnitOfWork {
         CacheClient cacheClient = cacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
         entityMap.forEach((p, q) -> {
             switch (q) {
-                case save:
+                case create:
+                    cacheClient.put(EntityCacheUtils.getCacheKey(p), p);
+                    break;
+                case update:
                     cacheClient.put(EntityCacheUtils.getCacheKey(p), p);
                     break;
                 case remove:
@@ -150,4 +176,29 @@ public class ContextUnitOfWork {
             this.messageInfo = messageInfo;
         }
     }
+
+
+    private Map<Repository, Map<EntityOperateEnum, List<Entity>>> toRepositoryMap(Map<Entity, EntityOperateEnum> entityMap) {
+        Map<Repository, Map<EntityOperateEnum, List<Entity>>> repositoryMap = new HashMap<>();
+
+        entityMap.entrySet().stream().forEach(p -> {
+            Repository repository = RepositoryFactory.create(p.getKey().getClass());
+            ;
+            if (!repositoryMap.containsKey(repository))
+                repositoryMap.put(repository, new HashMap<>());
+
+            Map<EntityOperateEnum, List<Entity>> entityOperateEnumListMap = repositoryMap.get(repository);
+
+            if (!entityOperateEnumListMap.containsKey(p.getValue()))
+                entityOperateEnumListMap.put(p.getValue(), new ArrayList<>());
+
+            List<Entity> entityList = entityOperateEnumListMap.get(p.getValue());
+
+            entityList.add(p.getKey());
+        });
+
+
+        return repositoryMap;
+    }
+
 }

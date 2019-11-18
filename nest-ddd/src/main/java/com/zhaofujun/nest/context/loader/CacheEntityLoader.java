@@ -4,7 +4,7 @@ import com.zhaofujun.nest.core.CacheClient;
 import com.zhaofujun.nest.cache.CacheClientFactory;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.context.ServiceContext;
-import com.zhaofujun.nest.core.BaseEntity;
+import com.zhaofujun.nest.context.model.Entity;
 import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.core.EntityLoader;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class CacheEntityLoader<T extends BaseEntity> implements EntityLoader<T> {
+public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
     private Class<T> tClass;
     private CacheClient cacheClient;
 
@@ -41,19 +41,18 @@ public class CacheEntityLoader<T extends BaseEntity> implements EntityLoader<T> 
         String cacheKey = EntityCacheUtils.getCacheKey(uClass, id);
         U u = cacheClient.get(uClass, cacheKey);
 
-        BaseEntity baseEntity = toEntityObject(u);
-        return (U) baseEntity;
+        Entity entity = toEntityObject(u);
+        return (U) entity;
     }
 
 
-    private BaseEntity toEntityObject(BaseEntity entityObject) {
+    private Entity toEntityObject(Entity entityObject) {
         if (entityObject == null) return null;
 
         if (EntityUtils.isRepresented(entityObject)) return entityObject;
 
-        EntityLoader entityLoader = new ConstructEntityLoader(entityObject.getClass());
-        BaseEntity result = entityLoader.create(entityObject.getId());
-        EntityUtils.load(result);
+
+        Entity result = EntityUtils.create(entityObject.getClass(), entityObject.getId(), false, true);
 
         List<Field> fieldList = new ArrayList<>();
         Class aClass = entityObject.getClass();
@@ -73,10 +72,10 @@ public class CacheEntityLoader<T extends BaseEntity> implements EntityLoader<T> 
                 if (!"_loading".equals(p.getName())) {
 
                     p.setAccessible(true);
-                    if (BaseEntity.class.isAssignableFrom(p.getType())) {
-                        BaseEntity v = null;
+                    if (Entity.class.isAssignableFrom(p.getType())) {
+                        Entity v = null;
 
-                        v = (BaseEntity) p.get(entityObject);
+                        v = (Entity) p.get(entityObject);
                         p.set(result, toEntityObject(v));
 
 
@@ -89,7 +88,7 @@ public class CacheEntityLoader<T extends BaseEntity> implements EntityLoader<T> 
                 e.printStackTrace();
             }
         });
-        EntityUtils.endLoad(result);
+        EntityUtils.setLoading(result, false);
 
         return result;
     }

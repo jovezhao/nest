@@ -49,7 +49,7 @@ compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '1.2.RELEASE'
 ```java
 package com.zhaofujun.nest.ioc.test.models;
 
-import com.zhaofujun.nest.core.BaseEntity;
+import com.zhaofujun.nest.context.model.Entity;
 import com.zhaofujun.nest.context.model.StringIdentifier;
 
 

@@ -1,17 +1,12 @@
 package com.zhaofujun.nest.context.loader;
 
 
-import com.zhaofujun.nest.core.CacheClient;
+import com.zhaofujun.nest.context.model.Entity;
+import com.zhaofujun.nest.core.*;
 import com.zhaofujun.nest.cache.CacheClientFactory;
-import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.context.ServiceContext;
-import com.zhaofujun.nest.core.BaseEntity;
-import com.zhaofujun.nest.core.BaseRole;
-import com.zhaofujun.nest.core.Identifier;
-import com.zhaofujun.nest.core.Repository;
+import com.zhaofujun.nest.context.model.Role;
 import com.zhaofujun.nest.context.repository.RepositoryFactory;
-import com.zhaofujun.nest.core.RoleRepository;
-import com.zhaofujun.nest.core.EntityLoader;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
 import com.zhaofujun.nest.utils.EntityUtils;
 
@@ -19,7 +14,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 
-public class RepositoryEntityLoader<T extends BaseEntity> implements EntityLoader<T> {
+public class RepositoryEntityLoader<T extends Entity> implements EntityLoader<T> {
 
     private Class<T> tClass;
     private CacheClient cacheClient;
@@ -36,7 +31,7 @@ public class RepositoryEntityLoader<T extends BaseEntity> implements EntityLoade
     }
 
     private void setActor(Identifier id, T t, Class tClass) {
-        if (BaseRole.class.isInstance(t)) {
+        if (Role.class.isInstance(t)) {
             RoleRepository roleRepository = (RoleRepository) RepositoryFactory.create(tClass);
             Identifier actorId = roleRepository.getActorIdByRoleId(id);
             ParameterizedType parameterizedType = (ParameterizedType) tClass.getGenericSuperclass();
@@ -50,8 +45,8 @@ public class RepositoryEntityLoader<T extends BaseEntity> implements EntityLoade
             }
 
             RepositoryEntityLoader repositoryEntityLoader = new RepositoryEntityLoader(actorClass);
-            BaseEntity baseEntity = repositoryEntityLoader.create(actorId);
-            EntityUtils.setValue(BaseRole.class, t, "actor", baseEntity);
+            Entity entity = repositoryEntityLoader.create(actorId);
+            EntityUtils.setValue(Role.class, t, "actor", entity);
         }
     }
 
@@ -60,7 +55,7 @@ public class RepositoryEntityLoader<T extends BaseEntity> implements EntityLoade
 
         EntityLoader<U> entityLoader = null;
         U result = null;
-        //从上下文中获取实体
+        //从当前上下文中获取实体
         entityLoader = new UnitOfWorkEntityLoader<>(uClass);
         result = entityLoader.create(id);
         if (result != null) return result;
@@ -71,10 +66,13 @@ public class RepositoryEntityLoader<T extends BaseEntity> implements EntityLoade
         result = entityLoader.create(id);
         if (result != null) return result;
 
+
         Repository<U> repository = RepositoryFactory.create(uClass);
+
+
         result = repository.getEntityById(id, new RepositoryPreEntityLoader<U>(uClass));
         if (result != null) {
-            EntityUtils.endLoad(result);
+            EntityUtils.setLoading(result, false);
 
             cacheClient.put(EntityCacheUtils.getCacheKey(result), result);
         }
