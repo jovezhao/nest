@@ -15,7 +15,7 @@ public interface Repository<T extends Entity> {
 
     void update(T t);
 
-    void remove(T t);
+    void delete(T t);
 
 
     default void batchInsert(List<T> ts) {
@@ -30,9 +30,9 @@ public interface Repository<T extends Entity> {
         }
     }
 
-    default void batchRemove(List<T> ts) {
+    default void batchDelete(List<T> ts) {
         for (T t : ts) {
-            remove(t);
+            delete(t);
         }
     }
 }

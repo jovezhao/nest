@@ -1,6 +1,6 @@
 package com.zhaofujun.nest.context.event.message;
 
-import com.zhaofujun.nest.context.event.EventData;
+import com.zhaofujun.nest.core.EventData;
 import com.zhaofujun.nest.utils.JsonUtils;
 
 import java.util.Date;

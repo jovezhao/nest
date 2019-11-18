@@ -29,13 +29,13 @@ Nest的设计受DDD战略、战术设计思想指导，使用Nest前需要对DDD
 <dependency>
     <groupId>com.zhaofujun.nest</groupId>
     <artifactId>nest-ddd</artifactId>
-    <version>2.0.RELEASE</version>
+    <version>1.2.RELEASE</version>
 </dependency>
 ```
 **Gradle引用**
 ```groovy
 // https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd
-compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '2.0.RELEASE'
+compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '1.2.RELEASE'
 
 ```
 
@@ -49,7 +49,7 @@ compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '2.0.RELEASE'
 ```java
 package com.zhaofujun.nest.ioc.test.models;
 
-import com.zhaofujun.nest.context.model.Entity;
+import com.zhaofujun.nest.core.BaseEntity;
 import com.zhaofujun.nest.context.model.StringIdentifier;
 
 
@@ -208,25 +208,25 @@ public class IocConfiguration {
 
 ### Ioc容器集成方式
 
-nest提供了默认的nest-ioc容器，nest-ioc是一个极度简的ioc实现方案，提供了容器管理、依赖注入的功能，通过注解完成包扫描与注入。
+nest提供了默认的`nest-ioc`容器，`nest-ioc`是一个极度精简的ioc实现方案，提供了容器管理、依赖注入的功能，通过注解完成包扫描与注入。
 
-当我们的项目中没有使用spring等相关的ioc容器时，可以用nest-ioc简化代码开发，在企业项目中推荐使用spring ioc做为nest的容器提供者。
+当我们的项目中没有使用spring等相关的ioc容器时，可以用`nest-ioc`简化代码开发，在企业项目中推荐使用spring ioc做为nest的容器提供者。
 
-集成一个容器，只需要实现com.zhaofujun.nest.container.ContainerProvider接口即可。
+集成一个容器，只需要实现`com.zhaofujun.nest.container.ContainerProvider`接口即可。
 
 #### nest-ioc 实现方式
 nest-ioc定义了AppService注解、Component注解、Store注解以及Autowired注解
 
-**AppService注解**
+**`@AppService`注解**
 用于定义应用服务，当使用了该注释的类，nest-ioc会认为这是一个应用服务，调用该应用服务中的方法时会通过切面初始化一个服务上下文和工作单元。在该应用服务中的所有领域对象的变化都将记录在工作单元中，直到应用服务方法调用完毕后一起提交给对应的仓储。
 
-**Component注解**
-用于定义一个类可以被nest-ioc容器扫描并且托管
+**`@Component`注解**
+用于定义一个类可以被`nest-ioc`容器扫描并且托管
 
-**Store注解**
-用户定义这个类是一个仓储的实现，该注解目前没有实际作用，与Component注解效果一致。
+**`@Store`注解**
+用户定义这个类是一个仓储的实现，该注解目前没有实际作用，与`@Component`注解效果一致。
 
-**Autowired注解**
+**`@Autowired`注解**
 作用于类的字段上，当这个类被nest-ioc容器托管时，使用了该注解的字段将自动从容器中获取实例并且注入相应的值
 
 > 使用方式见 [演练-使用nest和nest-ioc创建可运行的项目](#演练-使用nest和nest-ioc创建可运行的项目)
@@ -236,11 +236,11 @@ nest-ioc定义了AppService注解、Component注解、Store注解以及Autowired
 
 ### 缓存管理
 
-Nest 将不同场景下用到缓存的信息进行了分组，为每一个分组指定了一个代号"cacheCode""。
+Nest 将不同场景下用到缓存的信息进行了分组，为每一个分组指定了一个代号`cacheCode`。
 
-在使用时，通过com.zhaofujun.nest.cache.CacheClientFactory的getCacheClient方法获取一个CacheClient。
+在使用时，通过`com.zhaofujun.nest.cache.CacheClientFactory`的getCacheClient方法获取一个`CacheClient`。
 
-CacheClient对缓存的操作见如下定义
+`CacheClient`对缓存的操作见如下定义
 
 ```java
 
@@ -265,15 +265,15 @@ public interface CacheClient {
 }
 
 ```
-缓存分组信息通过com.zhaofujun.nest.configuration.ConfigurationManager管理。
+缓存分组信息通过`com.zhaofujun.nest.configuration.ConfigurationManager`管理。
 
-开发人员可以通过ConfigurationManager类的 register(CacheConfiguration cacheConfiguration)方法手动注册一组缓存配置，也可以将CacheConfiguration的bean配置到ioc容器中由ConfigurationManager去自动发现。
+开发人员可以通过`ConfigurationManager.register(CacheConfiguration cacheConfiguration)`方法手动注册一组缓存配置，也可以将`CacheConfiguration`的bean配置到ioc容器中由`ConfigurationManager`去自动发现。
 
-CacheConfiguration 可以配置缓存组的代号、名称、使用的缓存提供者和统一的过期时间。
+`CacheConfiguration` 可以配置缓存组的代号、名称、使用的缓存提供者和统一的过期时间。
 
 如果配置的缓存提供者无法找到，系统将使用默认的缓存提供者。
 
-默认缓存提供者使用ehcache支持，我们也可以通过实现com.zhaofujun.nest.cache.provider.CacheProvider接口来集成其它缓存中间件，比如Redis。
+默认缓存提供者使用ehcache支持，我们也可以通过实现`com.zhaofujun.nest.cache.provider.CacheProvider`接口来集成其它缓存中间件，比如`Redis`。
 
 > 缓存中间件集成方案见： [缓存通道扩展与集成](#缓存通道扩展与集成)
 
@@ -321,7 +321,8 @@ CacheConfiguration 可以配置缓存组的代号、名称、使用的缓存提�
 
 在通用语言中抽象出来的一些动作，这些动作往往需要协调多个实体才能完成，而这样的行为放在其中任何一个实体中都不那么和谐时，便可以用领域服务来处理。 但是我们不要太过于依赖领域服务，只有在没有办法的情况下才用领域服务，否则容易产生贫血模式。
 
-#### 领域建模原则
+
+**领域建模原则**
 
 领域建模是DDD战术设计的重要内容。其中最基础的模型过程便是区分实体与值对象。
 
@@ -329,9 +330,16 @@ CacheConfiguration 可以配置缓存组的代号、名称、使用的缓存提�
 
 领域模型应该包括实体、值对象、领域服务。并且可以通过领域模型图完成业务演练与代码开发指导。
 
-#### 四色原型建模
+#### 应用服务与事件
 
-#### nest如何支持DDD开发
+应用服务与事件代表了当前上下文具有的能力及交互方式。应用服务的定义应该基于用例，并且一个应用服务代表了一个事务。应用服务通封装领域模型中的能力组装业务逻辑。事件的发布也需要通过应用服务来触发。
+
+#### 四色原型建模
+暂略...
+
+#### 使用Nest关于DDD的定义
+
+根据DDD的术语，Nest的支持对应关系如下：
 
 DDD术语 | Nest
 ---|---
@@ -340,13 +348,196 @@ DDD术语 | Nest
 实体 | BaseEntity
 实体标识 | Identifier
 值对象 | ValueObject
-实体工厂 | EntityLoader
+实体工厂 | EntityFactory
 领域事件 | EventBus
 仓储 | Repository
 
+**定义一个实体**
+
+要定义一个实体，只需要将该类继承`com.zhaofujun.nest.core.BaseEntity<T extends Identifier>`。
+
+Nest为开发人员提供了`com.zhaofujun.nest.context.model.Entity`，它默认使用了`com.zhaofujun.nest.context.model.StringIdentifier`作为实体标识。
+
+实体的标识可以按要求自定义。系统还提供了`com.zhaofujun.nest.context.model.UUIdentifier`给开发人员选择，开发人员也可以继承`com.zhaofujun.nest.core.Identifier`实现自定义的实体标识。
+
+**为实体实现仓储**
+
+实体是需要关注基生命周期的，可以通过实现`com.zhaofujun.nest.core.Repository<T extends BaseEntity>`完成实体的持久化处理。该接口定义了`insert`、`update`、`delete`方法用于对数据库的操作。同时还定义了`batchInsert`、`batchUpdate`、`batchDelete`方法用于批量处理，批量处理方法都提供了默认的实现，如果需要批量处理的数据量较大，建议使用数据库的batch方式提交。
+
+仓储将通过`RepositoryFactory`从容器中加载，所以仓储定义后需要使用容器来托管。
+
+
+**如何加载或创建实体**
+
+可以使用实体工厂`com.zhaofujun.nest.core.EntityFactory`来加载或创建一个实体，`load`方法将通过仓储来加载，在仓储加载之前优先使用当前工作单元中的实体，如果当前工作单元中找不到，就会去缓存加载，如果缓存也没有才会使用仓储在数据库中去加载。`create`方法将创建一个全新的实体，建议按实体的标识建立数据库唯一索引，可以有效利用数据库的一些额外能力，比如提升查询性能、处理重复数据等。
 
 
 ### 事件总线
+
+当系统需要接受外部的异步消息或发布事件时，可以通过事件总线`com.zhaofujun.nest.core.EventBus`来处理。 
+
+事件总线的定义如下：
+```java
+package com.zhaofujun.nest.core;
+
+
+import com.zhaofujun.nest.context.event.EventData;
+
+
+public interface EventBus{
+    void autoRegister();
+    void registerHandler(EventHandler eventHandler);
+    void publish(EventData eventData);
+}
+
+```
+**事件订阅**
+
+`autoRegister`方法自动从容器中扫描注册EventHandler，也可以通过`registerHandler`手动注册一个EventHandler。
+
+**事件发布**
+
+`publish`方法发布一个事件，发布一个事件需要实现`com.zhaofujun.nest.core.EventData`抽象类做为事件发布的内容。 其中`getEventCode`抽象方法定义当前事件代号。事件代号可以通过配置指定当前事件发送或接受的管道。
+
+**事件管道配置**
+
+事件管道的配置信息由配置管理器`com.zhaofujun.nest.configuration.ConfigurationManager`管理，配置管理器优先从静态注册的配置信息中获取配置项，如果没有找到再从容器中查找，如果仍然没有找到将使用内置的默认管道发布或订阅事件。
+
+事件管道配置`com.zhaofujun.nest.configuration.EventConfiguration`用事件代号与管道代号连接事件与管道的关系。在容器下，我们可以直接通过定义`EventConfiguration`类型的bean来完成配置。
+
+#### 代码演示
+
+
+**事件数据 PasswordChangedEventData**
+
+```java
+package com.zhaofujun.nest.ioc.test.models;
+
+import com.zhaofujun.nest.core.EventData;
+
+public class PasswordChangedEventData extends EventData {
+    public static final String EVENT_CODE = "PASSWORD_CHANGED";
+
+    @Override
+    public String getEventCode() {
+        return EVENT_CODE;
+    }
+    private String newPassword;
+    private String oldPassword;
+    private String userId;
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public PasswordChangedEventData(String newPassword, String oldPassword, String userId) {
+        this.newPassword = newPassword;
+        this.oldPassword = oldPassword;
+        this.userId = userId;
+    }
+}
+```
+
+**从应用服务发布事件TestAppservices**
+```java
+package com.zhaofujun.nest.ioc.test.appservices;
+
+import com.zhaofujun.nest.core.EventBus;
+import com.zhaofujun.nest.ioc.annotation.AppService;
+import com.zhaofujun.nest.ioc.annotation.Autowired;
+import com.zhaofujun.nest.ioc.test.models.PasswordChangedEventData;
+import com.zhaofujun.nest.ioc.test.models.User;
+import com.zhaofujun.nest.context.model.StringIdentifier;
+import com.zhaofujun.nest.context.loader.ConstructEntityLoader;
+import com.zhaofujun.nest.core.EntityLoader;
+import com.zhaofujun.nest.context.loader.RepositoryEntityLoader;
+
+@AppService
+public class TestAppservices {
+
+    @Autowired
+    EventBus eventBus;
+
+
+    public void changPwd(String userName, String newPwd) {
+        EntityLoader<User> entityLoader = new RepositoryEntityLoader<>(User.class);
+        User user = entityLoader.create(StringIdentifier.valueOf(userName));
+        user.changPwd(newPwd);
+//        EventBus eventBus = new EventBus(beanFinder);
+
+        PasswordChangedEventData eventObject = new PasswordChangedEventData("newpwd", "oldpwd", "111");
+
+        eventBus.publish(eventObject);
+    }
+
+
+    public void createUser(String usrName, String pwd) {
+        EntityLoader<User> entityLoader = new ConstructEntityLoader<>(User.class);
+        User user = entityLoader.create(StringIdentifier.valueOf(usrName));
+        user.changPwd(pwd);
+
+//        EventBus eventBus = new EventBus(beanFinder);
+
+        PasswordChangedEventData eventObject = new PasswordChangedEventData("newpwd", "oldpwd", "111");
+
+        eventBus.publish(eventObject);
+    }
+}
+
+
+```
+
+**事件处理器PwdChangedEventHandler**
+
+```java
+package com.zhaofujun.nest.ioc.test;
+
+import com.zhaofujun.nest.context.event.EventArgs;
+import com.zhaofujun.nest.core.EventHandler;
+import com.zhaofujun.nest.ioc.annotation.Component;
+import com.zhaofujun.nest.ioc.test.models.PasswordChangedEventData;
+
+@Component("PASSWORD_CHANGED")
+public class PwdChangedEventHandler implements EventHandler<PasswordChangedEventData> {
+    public static final String EVENT_CODE = "PASSWORD_CHANGED";
+
+    @Override
+    public String getEventCode() {
+        return EVENT_CODE;
+    }
+
+    @Override
+    public Class<PasswordChangedEventData> getEventDataClass() {
+        return PasswordChangedEventData.class;
+    }
+
+    @Override
+    public void handle(PasswordChangedEventData eventData, EventArgs eventArgs) {
+        System.out.println(eventData.toString());
+    }
+}
+
+```
 
 ### 异常处理
 
