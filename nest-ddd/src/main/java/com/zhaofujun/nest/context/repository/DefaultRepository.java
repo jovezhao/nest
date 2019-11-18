@@ -35,7 +35,7 @@ public class DefaultRepository implements Repository<Entity> {
     }
 
     @Override
-    public void remove(Entity entity) {
+    public void delete(Entity entity) {
         entityMap.remove(entity.getId());
     }
 }

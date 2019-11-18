@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.context.event;
+package com.zhaofujun.nest.core;
 
 import com.zhaofujun.nest.utils.JsonUtils;
 

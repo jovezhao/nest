@@ -65,7 +65,7 @@ public class ContextUnitOfWork {
                         p.batchUpdate(s);
                         break;
                     case remove:
-                        p.batchRemove(s);
+                        p.batchDelete(s);
                 }
             });
         });

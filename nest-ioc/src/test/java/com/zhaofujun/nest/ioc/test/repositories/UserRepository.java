@@ -32,7 +32,7 @@ public class UserRepository implements Repository<User> {
 
 
     @Override
-    public void remove(User user) {
+    public void delete(User user) {
 
     }
 
