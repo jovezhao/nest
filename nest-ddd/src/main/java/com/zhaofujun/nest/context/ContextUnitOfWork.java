@@ -19,7 +19,7 @@ import java.util.*;
 
 public class ContextUnitOfWork {
 
-    ContextUnitOfWork() {
+     ContextUnitOfWork() {
     }
 
     private Map<Entity, EntityOperateEnum> entityMap = new HashMap<>();
@@ -164,17 +164,11 @@ public class ContextUnitOfWork {
             return eventCode;
         }
 
-        public void setEventCode(String eventCode) {
-            this.eventCode = eventCode;
-        }
 
         public MessageInfo getMessageInfo() {
             return messageInfo;
         }
 
-        public void setMessageInfo(MessageInfo messageInfo) {
-            this.messageInfo = messageInfo;
-        }
     }
 
 
