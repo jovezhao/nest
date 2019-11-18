@@ -66,23 +66,22 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
 
         fieldList.forEach(p -> {
             try {
-                if (Modifier.isStatic(p.getModifiers()) || Modifier.isFinal(p.getModifiers())) {
+                if (Modifier.isStatic(p.getModifiers()) || Modifier.isFinal(p.getModifiers()))
                     return;
+
+                if (p.getName().startsWith("_"))
+                    return;
+
+                p.setAccessible(true);
+                if (Entity.class.isAssignableFrom(p.getType())) {
+                    Entity v = (Entity) p.get(entityObject);
+                    p.set(result, toEntityObject(v));
+
+
+                } else {
+                    p.set(result, p.get(entityObject));
                 }
-                if (!"_loading".equals(p.getName())) {
 
-                    p.setAccessible(true);
-                    if (Entity.class.isAssignableFrom(p.getType())) {
-                        Entity v = null;
-
-                        v = (Entity) p.get(entityObject);
-                        p.set(result, toEntityObject(v));
-
-
-                    } else {
-                        p.set(result, p.get(entityObject));
-                    }
-                }
 
             } catch (IllegalAccessException e) {
                 e.printStackTrace();

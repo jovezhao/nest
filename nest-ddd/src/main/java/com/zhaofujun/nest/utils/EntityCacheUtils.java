@@ -19,7 +19,7 @@ public class EntityCacheUtils {
     }
 
     public static String getCacheKey(Class clazz, Identifier identifier) {
-        return clazz.getSimpleName() + " _" + identifier;
+        return clazz.getSimpleName() + "_" + identifier;
 
     }
     public static String getCacheCode(){
