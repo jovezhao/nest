@@ -20,11 +20,11 @@ public class UUIdentifier extends Identifier {
         return new UUIdentifier(value);
     }
 
-    public static Identifier valueOf(String value) {
+    public static UUIdentifier valueOf(String value) {
         return new UUIdentifier(UUID.fromString(value));
     }
 
-    private static Identifier newId() {
+    private static UUIdentifier newId() {
         return new UUIdentifier(UUID.randomUUID());
     }
 
