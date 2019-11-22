@@ -39,7 +39,11 @@ public abstract class Entity<T extends Identifier> implements Serializable {
     //是否处于加载中状态
     private boolean _loading;
 
+    //是否是新增的对象
     private boolean _newInstance;
+
+    //版本号
+    private int _version;
 
     private void updateEntityObject() {
         if (verify()) {
