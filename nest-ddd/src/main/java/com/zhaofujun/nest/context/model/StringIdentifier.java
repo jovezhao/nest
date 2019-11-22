@@ -19,7 +19,7 @@ public class StringIdentifier extends Identifier {
         return getId();
     }
 
-    public static Identifier valueOf(String value) {
+    public static StringIdentifier valueOf(String value) {
         return new StringIdentifier(value);
     }
 }
