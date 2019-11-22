@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.context;
 
+import com.zhaofujun.nest.CustomException;
 import com.zhaofujun.nest.context.model.Entity;
 import com.zhaofujun.nest.core.CacheClient;
 import com.zhaofujun.nest.cache.CacheClientFactory;
@@ -19,7 +20,7 @@ import java.util.*;
 
 public class ContextUnitOfWork {
 
-     ContextUnitOfWork() {
+    ContextUnitOfWork() {
     }
 
     private Map<Entity, EntityOperateEnum> entityMap = new HashMap<>();
@@ -110,10 +111,13 @@ public class ContextUnitOfWork {
             commitEntity();
             commitMessage();
             cacheCommit();
+        } catch (CustomException ex) {
+            removeCache();
+            throw ex;
         } catch (Exception ex) {
             removeCache();
             ex.printStackTrace();
-            throw new SystemException(("提交工作单元时失败"), ex);
+            throw new SystemException("提交工作单元时失败", ex);
         } finally {
             //清空工作单元中的内容
             entityMap.clear();

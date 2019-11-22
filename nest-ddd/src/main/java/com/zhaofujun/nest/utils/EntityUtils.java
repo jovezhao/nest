@@ -50,7 +50,7 @@ public class EntityUtils {
 
 
     //修改实体为加载状态，加载状态的实体属性发生变化时不提交到工作单元
-    public static void setLoading(Entity entityObject,boolean loading) {
+    public static void setLoading(Entity entityObject, boolean loading) {
 
         try {
             Field field = Entity.class.getDeclaredField("_loading");
@@ -85,13 +85,14 @@ public class EntityUtils {
 
     public static boolean isRepresented(Entity entityObject) {
         try {
-            Field field = Entity.class.getDeclaredField("CGLIB$BOUND");
+            Field field = entityObject.getClass().getDeclaredField("CGLIB$BOUND");
             field.setAccessible(true);
             return field.getBoolean(entityObject);
         } catch (Exception e) {
             return false;
         }
     }
+
     public static boolean isNewInstance(Entity entityObject) {
         try {
             Field field = Entity.class.getDeclaredField("_newInstance");
@@ -101,7 +102,8 @@ public class EntityUtils {
             return false;
         }
     }
-    public static void setNewInstance(Entity entityObject,boolean newInstance) {
+
+    public static void setNewInstance(Entity entityObject, boolean newInstance) {
         try {
             Field field = Entity.class.getDeclaredField("_newInstance");
             field.setAccessible(true);

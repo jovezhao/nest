@@ -41,7 +41,7 @@ public class ConfigurationManager {
         }
         if (cacheConfiguration == null) {
             cacheConfiguration = new CacheConfiguration();
-            cacheConfiguration.setCacheCode("default");
+            cacheConfiguration.setCacheCode("defaultCacheItem");
             cacheConfiguration.setIdleSeconds(20000);
             cacheConfiguration.setName("默认缓存项");
             cacheConfiguration.setProviderCode(DefaultCacheProvider.PROVIDER_CODE);
