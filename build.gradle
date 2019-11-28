@@ -1,7 +1,7 @@
 allprojects {
     group = 'com.zhaofujun.nest'
 //    version = '2.0.SNAPSHOT'
-    version = '2.0.RELEASE'
+    version = '2.0.1'
 
 
 
@@ -24,7 +24,7 @@ subprojects {
     }
 
 
-//    apply from: "${rootProject.projectDir}/publish.gradle"
+    apply from: "${rootProject.projectDir}/publish.gradle"
 
 
 

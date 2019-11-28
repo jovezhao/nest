@@ -72,5 +72,20 @@ public abstract class Entity<T extends Identifier> implements Serializable {
         if (!this._newInstance) //  不是新对象的时候才需要调用移除操作
             ServiceContext.getCurrent().getContextUnitOfWork().removeEntityObject(this);
     }
+
+    @Override
+    public int hashCode() {
+        return this.id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (Entity.class.isAssignableFrom(obj.getClass())) {
+            Entity entity = (Entity) obj;
+            return this.id.equals(entity.id);
+        }
+        return false;
+    }
 }
 
