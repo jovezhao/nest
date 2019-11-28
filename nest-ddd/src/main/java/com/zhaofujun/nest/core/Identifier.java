@@ -23,6 +23,6 @@ public abstract class Identifier implements Serializable {
 
     @Override
     public int hashCode() {
-        return toValue().hashCode();
+        return ("!@#$%^"+toValue()+"(*&").hashCode();
     }
 }
