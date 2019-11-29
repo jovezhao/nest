@@ -113,4 +113,13 @@ public class EntityUtils {
         }
     }
 
+    public static String getClassName(Entity entityObject) {
+        final String PROXY_SPLIT_STR = "$";
+        final int BEGIN_INDEX = 0;
+
+        String className = entityObject.getClass().getSimpleName();
+        int endIndex = className.indexOf(PROXY_SPLIT_STR);
+        return className.substring(BEGIN_INDEX, endIndex);
+    }
+
 }

@@ -75,7 +75,7 @@ public abstract class Entity<T extends Identifier> implements Serializable {
 
     @Override
     public int hashCode() {
-        return this.id.hashCode();
+        return EntityUtils.getClassName(this).hashCode() + this.id.hashCode();
     }
 
     @Override
@@ -83,7 +83,7 @@ public abstract class Entity<T extends Identifier> implements Serializable {
 
         if (Entity.class.isAssignableFrom(obj.getClass())) {
             Entity entity = (Entity) obj;
-            return this.id.equals(entity.id);
+            return this.id.equals(entity.id) && EntityUtils.getClassName(entity).equals(EntityUtils.getClassName(this));
         }
         return false;
     }
