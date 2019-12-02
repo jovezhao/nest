@@ -581,5 +581,10 @@ public interface ServiceContextListener extends EventListener {
 
 ```
 
+## Nest最佳实践
+
+推荐使用nest-plus来扩展nest
+
+[点击进入](https://github.com/jovezhao/nest-plus)
 
 # 常见问题汇总
