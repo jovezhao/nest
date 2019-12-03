@@ -29,13 +29,13 @@ Nest的设计受DDD战略、战术设计思想指导，使用Nest前需要对DDD
 <dependency>
     <groupId>com.zhaofujun.nest</groupId>
     <artifactId>nest-ddd</artifactId>
-    <version>1.2.RELEASE</version>
+    <version>2.0.4</version>
 </dependency>
 ```
 **Gradle引用**
 ```groovy
 // https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd
-compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '1.2.RELEASE'
+compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '2.0.4'
 
 ```
 
@@ -539,24 +539,52 @@ public class PwdChangedEventHandler implements EventHandler<PasswordChangedEvent
 
 ```
 
-### 异常处理
-
-### 日志处理
 
 ### 应用及服务全生命周期
 
+一个系统称为一个应用，每一个用例对应的请求都将启动一个服务上下文。
 
-## 最佳实践 nest-plus
+Nest可以通过监听器`com.zhaofujun.nest.event.ApplicationListener`和`com.zhaofujun.nest.event.ServiceContextListener`来监听应用与服务的事件。
 
-### DDD-分层架构
 
-### DDD-六边型架构
+**`ApplicationListener`定义如下**
 
-### 集成Spring与Spring boot
+```java
+package com.zhaofujun.nest.event;
 
-### 缓存通道扩展与集成
+import java.util.EventListener;
 
-### 事件通道扩展与集成
+public interface ApplicationListener extends EventListener {
 
+    void applicationStarted(ApplicationEvent applicationEvent);
+
+    void applicationClosed(ApplicationEvent applicationEvent);
+}
+```
+
+**`ServiceContextListener`定义如下
+
+```java
+
+public interface ServiceContextListener extends EventListener {
+    void serviceCreated(ServiceEvent serviceEvent);
+
+    void serviceMethodStart(ServiceEvent serviceEvent, Method method);
+
+    void serviceMethodEnd(ServiceEvent serviceEvent, Method method);
+
+    void beforeCommit(ServiceEvent serviceEvent);
+    void committed(ServiceEvent serviceEvent);
+
+    void serviceEnd(ServiceEvent serviceEvent);
+}
+
+```
+
+## Nest最佳实践
+
+推荐使用nest-plus来扩展nest
+
+[点击进入](https://github.com/jovezhao/nest-plus)
 
 # 常见问题汇总

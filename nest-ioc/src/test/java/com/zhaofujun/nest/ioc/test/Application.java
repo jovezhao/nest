@@ -15,7 +15,7 @@ import com.zhaofujun.nest.ioc.test.appservices.TestAppservices;
 import java.lang.reflect.Method;
 
 @Component
-public class Application   {
+public class Application {
 
 
     public Application() {
@@ -36,9 +36,9 @@ public class Application   {
     //设置
     public static void main(String[] args) {
 
+
         IocConfiguration iocConfiguration = new IocConfiguration("com.zhaofujun.nest.ioc.test");
         iocConfiguration.init();
-
 
 
         ContainerProvider containerProvider = iocConfiguration.getContainerProvider();
@@ -57,7 +57,6 @@ public class Application   {
 
             }
         });
-
 
 
         Application application = containerProvider.getInstance(Application.class);
@@ -106,7 +105,6 @@ public class Application   {
 
             }
         });
-
 
 
         eventBus.autoRegister();
