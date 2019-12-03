@@ -74,6 +74,10 @@ public class RepositoryEntityLoader<T extends Entity> implements EntityLoader<T>
         if (result != null) {
             EntityUtils.setLoading(result, false);
 
+            ServiceContext serviceContext = ServiceContext.getCurrent();
+            if (serviceContext != null) {
+                serviceContext.getContextUnitOfWork().updateEntityObject(result);
+            }
             cacheClient.put(EntityCacheUtils.getCacheKey(result), result);
         }
 

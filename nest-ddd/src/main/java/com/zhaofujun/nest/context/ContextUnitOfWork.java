@@ -15,6 +15,7 @@ import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.core.Repository;
 import com.zhaofujun.nest.context.repository.RepositoryFactory;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
+import com.zhaofujun.nest.utils.EntityUtils;
 
 import java.util.*;
 
@@ -179,7 +180,9 @@ public class ContextUnitOfWork {
     private Map<Repository, Map<EntityOperateEnum, List<Entity>>> toRepositoryMap(Map<Entity, EntityOperateEnum> entityMap) {
         Map<Repository, Map<EntityOperateEnum, List<Entity>>> repositoryMap = new HashMap<>();
 
-        entityMap.entrySet().stream().forEach(p -> {
+        entityMap.entrySet().stream()
+                .filter(p-> EntityUtils.isChanged(p.getKey()))
+                .forEach(p -> {
             Repository repository = RepositoryFactory.create(p.getKey().getClass());
             ;
             if (!repositoryMap.containsKey(repository))

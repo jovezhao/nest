@@ -26,20 +26,14 @@ public class EntityMethodInterceptor implements MethodInterceptor, Serializable 
 //
         String[] withoutMethod = {
                 "hashCode", "equals", "toString", "notify", "notifyAll", "wait"
-                , "act", "findRoles", "delete"};
+                , "act", "verify", "findRoles", "delete"};
 
         if (method.getModifiers() == 1 && !Arrays.asList(withoutMethod).contains(method.getName()) && !method.getName().startsWith("get") && !method.getName().startsWith("is")) {
             Entity entity = (Entity) obj;
             if (!EntityUtils.isLoading(entity)) {
-
-                Method methodToUnitOfWork;
-                if (EntityUtils.isNewInstance(entity))
-                    methodToUnitOfWork = Entity.class.getDeclaredMethod("newEntityObject");
-                else
-                    methodToUnitOfWork = Entity.class.getDeclaredMethod("updateEntityObject");
-
-                methodToUnitOfWork.setAccessible(true);
-                methodToUnitOfWork.invoke(entity);
+                EntityUtils.setChanged(entity, true);
+                //调用实体验证方法
+                entity.verify();
                 logger.debug("领域实体发生更改，调用方法{}", method.getName());
             }
         }

@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.utils;
 
+import com.zhaofujun.nest.CustomException;
 import com.zhaofujun.nest.context.loader.EntityMethodInterceptor;
 import com.zhaofujun.nest.context.model.Entity;
 import com.zhaofujun.nest.context.model.Role;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 
 ///**
@@ -53,7 +55,7 @@ public class EntityUtils {
     public static void setLoading(Entity entityObject, boolean loading) {
 
         try {
-            Field field = Entity.class.getDeclaredField("_loading");
+            Field field = Entity.class.getDeclaredField("__loading");
             field.setAccessible(true);
             field.set(entityObject, loading);
         } catch (Exception e) {
@@ -64,7 +66,7 @@ public class EntityUtils {
 
     public static boolean isLoading(Entity entityObject) {
         try {
-            Field field = Entity.class.getDeclaredField("_loading");
+            Field field = Entity.class.getDeclaredField("__loading");
             field.setAccessible(true);
             return field.getBoolean(entityObject);
         } catch (Exception e) {
@@ -95,7 +97,7 @@ public class EntityUtils {
 
     public static boolean isNewInstance(Entity entityObject) {
         try {
-            Field field = Entity.class.getDeclaredField("_newInstance");
+            Field field = Entity.class.getDeclaredField("__newInstance");
             field.setAccessible(true);
             return field.getBoolean(entityObject);
         } catch (Exception e) {
@@ -105,13 +107,47 @@ public class EntityUtils {
 
     public static void setNewInstance(Entity entityObject, boolean newInstance) {
         try {
-            Field field = Entity.class.getDeclaredField("_newInstance");
+            Field field = Entity.class.getDeclaredField("__newInstance");
             field.setAccessible(true);
             field.set(entityObject, newInstance);
         } catch (Exception e) {
             throw new SystemException("设置实体是否为新实例失败", e);
         }
     }
+
+
+    public static boolean isChanged(Entity entityObject) {
+        try {
+            Field field = Entity.class.getDeclaredField("__changed");
+            field.setAccessible(true);
+            return field.getBoolean(entityObject);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static void setChanged(Entity entityObject, boolean changed) {
+        try {
+            Field field = Entity.class.getDeclaredField("__changed");
+            field.setAccessible(true);
+            field.set(entityObject, changed);
+        } catch (Exception e) {
+            throw new SystemException("设置实体发生变更", e);
+        }
+    }
+//
+//    public static void invokeVerify(Entity entityObject) {
+//
+//        try {
+//            Method verifyMethod = Entity.class.getDeclaredMethod("verify");
+//            verifyMethod.setAccessible(true);
+//            verifyMethod.invoke(entityObject);
+//        } catch (CustomException e) {
+//            throw e;
+//        } catch (Exception e) {
+//            throw new SystemException("验证实体时发生错误", e);
+//        }
+//    }
 
     public static String getClassName(Entity entityObject) {
         final String PROXY_SPLIT_STR = "$";

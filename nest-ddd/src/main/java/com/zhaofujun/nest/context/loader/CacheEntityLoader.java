@@ -41,13 +41,21 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
         String cacheKey = EntityCacheUtils.getCacheKey(uClass, id);
         U u = cacheClient.get(uClass, cacheKey);
 
+        if (u == null) return null;
+
         Entity entity = toEntityObject(u);
+
+        //缓存对象加入上下文中
+        ServiceContext serviceContext = ServiceContext.getCurrent();
+        if (serviceContext != null) {
+            serviceContext.getContextUnitOfWork().updateEntityObject(entity);
+        }
+
         return (U) entity;
     }
 
 
     private Entity toEntityObject(Entity entityObject) {
-        if (entityObject == null) return null;
 
         if (EntityUtils.isRepresented(entityObject)) return entityObject;
 

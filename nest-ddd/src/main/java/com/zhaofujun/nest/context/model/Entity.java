@@ -37,39 +37,41 @@ public abstract class Entity<T extends Identifier> implements Serializable {
 
 
     //是否处于加载中状态
-    private boolean _loading;
+    private boolean __loading;
 
     //是否是新增的对象
-    private boolean _newInstance;
+    private boolean __newInstance;
+
+    //是否有变更
+    private boolean __changed;
 
     //版本号
     private int _version;
 
-    private void updateEntityObject() {
-        if (verify()) {
-            ServiceContext.getCurrent()
-                    .getContextUnitOfWork().updateEntityObject(this);
-        } else {
-            throw new VerifyFailedException("验证实体失败");
-        }
-    }
+//    private void updateEntityObject() {
+//        if (verify()) {
+//            ServiceContext.getCurrent()
+//                    .getContextUnitOfWork().updateEntityObject(this);
+//        } else {
+//            throw new VerifyFailedException("验证实体失败");
+//        }
+//    }
+//
+//    private void newEntityObject() {
+//        if (verify()) {
+//            ServiceContext.getCurrent()
+//                    .getContextUnitOfWork().addEntityObject(this);
+//        } else {
+//            throw new VerifyFailedException("验证实体失败");
+//        }
+//    }
 
-    private void newEntityObject() {
-        if (verify()) {
-            ServiceContext.getCurrent()
-                    .getContextUnitOfWork().addEntityObject(this);
-        } else {
-            throw new VerifyFailedException("验证实体失败");
-        }
-    }
 
-
-    protected boolean verify() {
-        return true;
+    public void verify() {
     }
 
     public void delete() {
-        if (!this._newInstance) //  不是新对象的时候才需要调用移除操作
+        if (!this.__newInstance) //  不是新对象的时候才需要调用移除操作
             ServiceContext.getCurrent().getContextUnitOfWork().removeEntityObject(this);
     }
 
