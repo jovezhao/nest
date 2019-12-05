@@ -72,7 +72,10 @@ public abstract class Entity<T extends Identifier> implements Serializable {
 
     public void delete() {
         if (!this.__newInstance) //  不是新对象的时候才需要调用移除操作
+        {
+            this.__changed = true;
             ServiceContext.getCurrent().getContextUnitOfWork().removeEntityObject(this);
+        }
     }
 
     @Override
