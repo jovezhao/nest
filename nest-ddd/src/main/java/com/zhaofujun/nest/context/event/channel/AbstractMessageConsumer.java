@@ -54,6 +54,7 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
             messageStore.save(record);
         } catch (Exception ex) {
             onFailed(eventHandler, context, ex);
+            eventHandler.onFailed(context, ex);
         } finally {
             onEnds(eventHandler, context);
         }
