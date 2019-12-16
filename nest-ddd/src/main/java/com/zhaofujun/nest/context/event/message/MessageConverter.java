@@ -12,14 +12,14 @@ public class MessageConverter {
     public static MessageInfo fromEvent(EventData eventData) {
         MessageInfo messageInfo = new MessageInfo();
         messageInfo.setMessageId(UUID.randomUUID().toString());
-        messageInfo.setData(JsonUtils.toJsonString(eventData).getBytes());
+        messageInfo.setData(JsonUtils.toJsonString(eventData));
         messageInfo.setEventSource("?");
         messageInfo.setSendTime(new Date());
 
         return messageInfo;
     }
     public static <T extends EventData> T toEventData(MessageInfo messageInfo, Class<T> tClass) {
-        String message = new String(messageInfo.getData());
+        String message = messageInfo.getData();
         return JsonUtils.toObj(message, tClass);
     }
 }

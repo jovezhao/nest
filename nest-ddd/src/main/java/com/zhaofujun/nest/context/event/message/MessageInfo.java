@@ -7,7 +7,7 @@ public class MessageInfo implements Serializable {
     private String messageId;
     private String eventSource;
     private Date sendTime;
-    private byte[] data;
+    private String data;
 
     public String getMessageId() {
         return messageId;
@@ -33,11 +33,11 @@ public class MessageInfo implements Serializable {
         this.sendTime = sendTime;
     }
 
-    public byte[] getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(byte[] data) {
+    public void setData(String data) {
         this.data = data;
     }
 }

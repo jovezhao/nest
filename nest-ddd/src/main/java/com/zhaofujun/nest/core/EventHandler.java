@@ -10,5 +10,6 @@ public interface EventHandler<T extends EventData> {
     void handle(T eventData, EventArgs eventArgs);
 
     default void onFailed( Object context, Exception ex) {
+        ex.printStackTrace();
     }
 }
