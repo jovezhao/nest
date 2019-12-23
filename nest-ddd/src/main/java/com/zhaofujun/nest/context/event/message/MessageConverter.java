@@ -39,7 +39,7 @@ public class MessageConverter {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        String eventDataJson = jsonObject.get("data").getAsString();
+        String eventDataJson = jsonCreator.toJsonString(jsonObject.get("data"));
         Object o = jsonCreator.toObj(eventDataJson, eventDataClass);
         messageInfo.setData((EventData) o);
         return messageInfo;
