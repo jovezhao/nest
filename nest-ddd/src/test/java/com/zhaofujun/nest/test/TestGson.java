@@ -4,6 +4,7 @@ package com.zhaofujun.nest.test;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import org.junit.Test;
 
 public class TestGson {
@@ -11,8 +12,7 @@ public class TestGson {
     public void gsonTest() {
 
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(User.class, new UserAdapter())
-//                .registerTypeAdapterFactory(new TEntity())
+                .registerTypeAdapterFactory(new EntityTypeAdapterFactory())
                 .create();
 
         AdminUser user = new AdminUser();

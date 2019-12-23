@@ -15,16 +15,16 @@ public class JsonCreator {
 
     public JsonCreator(BeanFinder beanFinder) {
 
-        EntityObjectAdapter objectAdapter = new EntityObjectAdapter();
         this.beanFinder = beanFinder;
         GsonBuilder gsonBuilder = new GsonBuilder()
                 .disableHtmlEscaping()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .registerTypeAdapterFactory(new EntityTypeAdapterFactory())
                 .serializeNulls();
-        Set<JsonConfiguration> jsonConfigurations = beanFinder.getInstances(JsonConfiguration.class);
-        for (JsonConfiguration p : jsonConfigurations) {
-            gsonBuilder = gsonBuilder.registerTypeAdapter(p.getClazz(), objectAdapter);
-        }
+//        Set<JsonConfiguration> jsonConfigurations = beanFinder.getInstances(JsonConfiguration.class);
+//        for (JsonConfiguration p : jsonConfigurations) {
+//            gsonBuilder = gsonBuilder.registerTypeAdapter(p.getClazz(), objectAdapter);
+//        }
         gson = gsonBuilder.create();
     }
 

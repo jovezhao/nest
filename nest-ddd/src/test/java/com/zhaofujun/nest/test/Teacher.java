@@ -1,6 +1,9 @@
 package com.zhaofujun.nest.test;
 
-public class Teacher {
+import com.zhaofujun.nest.context.model.Entity;
+import com.zhaofujun.nest.context.model.StringIdentifier;
+
+public class Teacher extends Entity<StringIdentifier> {
     private User user;
     private int tid;
 
