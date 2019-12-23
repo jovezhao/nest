@@ -9,11 +9,11 @@ public class EntityObjectAdapter implements JsonSerializer<Entity>, JsonDeserial
     @Override
     public Entity deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
-        String type = jsonObject.get("type").getAsString();
-        JsonElement element = jsonObject.get("properties");
+
+        String type = jsonObject.get("__type__").getAsString();
 
         try {
-            return context.deserialize(element, Class.forName(type));
+            return context.deserialize(json, Class.forName(type));
         } catch (ClassNotFoundException ex) {
             throw new JsonParseException("Unknown element type:" + type, ex);
         }
@@ -22,9 +22,10 @@ public class EntityObjectAdapter implements JsonSerializer<Entity>, JsonDeserial
 
     @Override
     public JsonElement serialize(Entity src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonObject result = new JsonObject();
-        result.add("type", new JsonPrimitive(src.getClass().getName()));
-        result.add("properties", context.serialize(src, src.getClass()));
-        return result;
+
+        JsonElement jsonElement = context.serialize(src, src.getClass());
+        jsonElement.getAsJsonObject().addProperty("__type__", src.getClass().getName());
+
+        return jsonElement;
     }
 }
