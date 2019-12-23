@@ -16,15 +16,21 @@ import java.util.UUID;
 public abstract class AbstractMessageConsumer implements MessageConsumer {
 
     private BeanFinder beanFinder;
+    private MessageConverter messageConverter;
 
     public AbstractMessageConsumer(BeanFinder beanFinder) {
         this.beanFinder = beanFinder;
+        messageConverter=new MessageConverter(beanFinder);
+    }
+
+    public BeanFinder getBeanFinder() {
+        return beanFinder;
     }
 
     public abstract void subscribe(EventHandler eventHandler);
 
     protected void onReceivedMessage(MessageInfo messageInfo, EventHandler eventHandler, Object context) {
-        EventData eventData = MessageConverter.toEventData(messageInfo, eventHandler.getEventDataClass());
+        EventData eventData = messageConverter.toEventData(messageInfo, eventHandler.getEventDataClass());
 
         MessageRecord record = new MessageRecord();
         record.setHandlerName(eventHandler.getClass().getName());

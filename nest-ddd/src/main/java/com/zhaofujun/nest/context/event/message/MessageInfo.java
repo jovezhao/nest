@@ -1,13 +1,15 @@
 package com.zhaofujun.nest.context.event.message;
 
+import com.zhaofujun.nest.core.EventData;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class MessageInfo implements Serializable {
+public class MessageInfo<T extends EventData> implements Serializable {
     private String messageId;
     private String eventSource;
     private Date sendTime;
-    private String data;
+    private T data;
 
     public String getMessageId() {
         return messageId;
@@ -33,11 +35,11 @@ public class MessageInfo implements Serializable {
         this.sendTime = sendTime;
     }
 
-    public String getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(T data) {
         this.data = data;
     }
 }

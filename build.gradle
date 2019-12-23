@@ -1,6 +1,6 @@
 allprojects {
     group = 'com.zhaofujun.nest'
-    version = '2.0.7'
+    version = '2.0.8'
 
 
 
@@ -20,6 +20,10 @@ subprojects {
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
+    }
+
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.12'
     }
 
 

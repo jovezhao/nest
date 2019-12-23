@@ -1,6 +1,9 @@
 package com.zhaofujun.nest.context;
 
 import com.zhaofujun.nest.CustomException;
+import com.zhaofujun.nest.context.event.message.MessageBacklog;
+import com.zhaofujun.nest.context.event.resend.MessageResendFactory;
+import com.zhaofujun.nest.context.event.resend.MessageResendStore;
 import com.zhaofujun.nest.context.model.Entity;
 import com.zhaofujun.nest.core.CacheClient;
 import com.zhaofujun.nest.cache.CacheClientFactory;
@@ -16,10 +19,13 @@ import com.zhaofujun.nest.core.Repository;
 import com.zhaofujun.nest.context.repository.RepositoryFactory;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
 import com.zhaofujun.nest.utils.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class ContextUnitOfWork {
+    private Logger logger = LoggerFactory.getLogger(ContextUnitOfWork.class);
 
     ContextUnitOfWork() {
     }
@@ -56,36 +62,27 @@ public class ContextUnitOfWork {
     private void commitEntity() {
 
         Map<Repository, Map<EntityOperateEnum, List<Entity>>> repositoryMap = toRepositoryMap(entityMap);
+        CacheClientFactory cacheClientFactory = new CacheClientFactory(ServiceContext.getCurrent().getApplication().getBeanFinder());
+        CacheClient cacheClient = cacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
 
         repositoryMap.forEach((p, q) -> {
             q.forEach((r, s) -> {
                 switch (r) {
                     case create:
                         p.batchInsert(s);
+                        s.forEach(ss -> cacheClient.put(EntityCacheUtils.getCacheKey(ss), ss));
                         break;
                     case update:
                         p.batchUpdate(s);
+                        s.forEach(ss -> cacheClient.put(EntityCacheUtils.getCacheKey(ss), ss));
                         break;
                     case remove:
                         p.batchDelete(s);
+                        s.forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
                 }
             });
         });
 
-//
-//        entityMap.forEach((p, q) -> {
-//            Repository repository = RepositoryFactory.create(p.getClass());
-//            switch (q) {
-//                case create:
-//                    repository.insert(p);
-//                    break;
-//                case update:
-//                    repository.update(p);
-//                    break;
-//                case remove:
-//                    repository.remove(p);
-//            }
-//        });
     }
 
     private Set<MessageBacklog> messageBacklogs = new HashSet<>();
@@ -98,10 +95,19 @@ public class ContextUnitOfWork {
         BeanFinder beanFinder = ServiceContext.getCurrent().getApplication().getBeanFinder();
         messageBacklogs.forEach(p -> {
             ConfigurationManager configurationManager = ConfigurationManager.getCurrent(beanFinder);
-            EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(p.eventCode);
+            EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(p.getEventCode());
             MessageChannelFactory channelFactory = new MessageChannelFactory(beanFinder);
             DistributeMessageChannel messageChannel = (DistributeMessageChannel) channelFactory.create(eventConfiguration.getMessageChannelCode()); //beanFinder.getInstance(DistributeMessageChannel.class, eventConfiguration.getMessageChannelCode());
-            messageChannel.getMessageProducer().commit(p.getEventCode(), p.getMessageInfo());
+            try {
+                messageChannel.getMessageProducer().commit(p.getEventCode(), p.getMessageInfo());
+            } catch (Exception ex) {
+                //投递到消息中间件时发生异常，将有异常的数据存入待发送区域，用于消息补偿
+                logger.warn("提交消息时失败，消息将通过补偿器重试，失败原因：" + ex.getMessage(), ex);
+
+                MessageResendFactory resendFactory = new MessageResendFactory(beanFinder);
+                MessageResendStore messageResendStore = resendFactory.create();
+                messageResendStore.add(p);
+            }
         });
     }
 
@@ -111,13 +117,9 @@ public class ContextUnitOfWork {
         try {
             commitEntity();
             commitMessage();
-            cacheCommit();
         } catch (CustomException ex) {
-            removeCache();
             throw ex;
         } catch (Exception ex) {
-            removeCache();
-            ex.printStackTrace();
             throw new SystemException("提交工作单元时失败", ex);
         } finally {
             //清空工作单元中的内容
@@ -128,75 +130,26 @@ public class ContextUnitOfWork {
     }
 
 
-    private void cacheCommit() {
-
-        CacheClientFactory cacheClientFactory = new CacheClientFactory(ServiceContext.getCurrent().getApplication().getBeanFinder());
-        CacheClient cacheClient = cacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
-        entityMap.forEach((p, q) -> {
-            switch (q) {
-                case create:
-                    cacheClient.put(EntityCacheUtils.getCacheKey(p), p);
-                    break;
-                case update:
-                    cacheClient.put(EntityCacheUtils.getCacheKey(p), p);
-                    break;
-                case remove:
-                    cacheClient.remove(EntityCacheUtils.getCacheKey(p));
-            }
-        });
-    }
-
-    private void removeCache() {
-        CacheClientFactory cacheClientFactory = new CacheClientFactory(ServiceContext.getCurrent().getApplication().getBeanFinder());
-        CacheClient cacheClient = cacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
-        entityMap.forEach((p, q) -> {
-            cacheClient.remove(EntityCacheUtils.getCacheKey(p));
-
-        });
-    }
-
-
-    class MessageBacklog {
-        private String eventCode;
-        private MessageInfo messageInfo;
-
-        public MessageBacklog(String eventCode, MessageInfo messageInfo) {
-            this.eventCode = eventCode;
-            this.messageInfo = messageInfo;
-        }
-
-        public String getEventCode() {
-            return eventCode;
-        }
-
-
-        public MessageInfo getMessageInfo() {
-            return messageInfo;
-        }
-
-    }
-
-
     private Map<Repository, Map<EntityOperateEnum, List<Entity>>> toRepositoryMap(Map<Entity, EntityOperateEnum> entityMap) {
         Map<Repository, Map<EntityOperateEnum, List<Entity>>> repositoryMap = new HashMap<>();
 
         entityMap.entrySet().stream()
-                .filter(p-> EntityUtils.isChanged(p.getKey()))
+                .filter(p -> EntityUtils.isChanged(p.getKey()))
                 .forEach(p -> {
-            Repository repository = RepositoryFactory.create(p.getKey().getClass());
-            ;
-            if (!repositoryMap.containsKey(repository))
-                repositoryMap.put(repository, new HashMap<>());
+                    Repository repository = RepositoryFactory.create(p.getKey().getClass());
+                    ;
+                    if (!repositoryMap.containsKey(repository))
+                        repositoryMap.put(repository, new HashMap<>());
 
-            Map<EntityOperateEnum, List<Entity>> entityOperateEnumListMap = repositoryMap.get(repository);
+                    Map<EntityOperateEnum, List<Entity>> entityOperateEnumListMap = repositoryMap.get(repository);
 
-            if (!entityOperateEnumListMap.containsKey(p.getValue()))
-                entityOperateEnumListMap.put(p.getValue(), new ArrayList<>());
+                    if (!entityOperateEnumListMap.containsKey(p.getValue()))
+                        entityOperateEnumListMap.put(p.getValue(), new ArrayList<>());
 
-            List<Entity> entityList = entityOperateEnumListMap.get(p.getValue());
+                    List<Entity> entityList = entityOperateEnumListMap.get(p.getValue());
 
-            entityList.add(p.getKey());
-        });
+                    entityList.add(p.getKey());
+                });
 
 
         return repositoryMap;

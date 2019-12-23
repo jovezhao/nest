@@ -17,9 +17,11 @@ public class DefaultEventBus implements EventBus {
     private BeanFinder beanFinder;
     private MessageChannelFactory messageChannelFactory;
     private ConfigurationManager configurationManager;
+    private MessageConverter messageConverter;
 
     public DefaultEventBus(BeanFinder beanFinder) {
         this.beanFinder = beanFinder;
+        this.messageConverter=new MessageConverter(beanFinder);
         this.messageChannelFactory = new MessageChannelFactory(beanFinder);
         this.configurationManager = ConfigurationManager.getCurrent(beanFinder);
     }
@@ -32,7 +34,7 @@ public class DefaultEventBus implements EventBus {
 
         MessageChannel messageChannel = messageChannelFactory.create(eventConfiguration.getMessageChannelCode());
         MessageProducer messageProducer = messageChannel.getMessageProducer();
-        MessageInfo messageInfo = MessageConverter.fromEvent(eventData);
+        MessageInfo messageInfo = messageConverter.fromEvent(eventData);
         messageProducer.send(eventData.getEventCode(), messageInfo);
     }
 
