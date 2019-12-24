@@ -8,6 +8,8 @@ import com.google.gson.reflect.TypeToken;
 import com.zhaofujun.nest.json.EntityTypeAdapterFactory;
 import org.junit.Test;
 
+import java.lang.reflect.Type;
+
 public class TestGson {
     @Test
     public void gsonTest() {
@@ -42,9 +44,13 @@ public class TestGson {
         message.setUser(adminUser);
 
         String json = gson.toJson(message);
+        TypeToken<Message<AdminUser>> typeToken = new TypeToken<Message<AdminUser>>() {
+        };
+        Type type = typeToken.getType();
 
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-        JsonObject user = jsonObject.getAsJsonObject("user");
+
+        Message user = gson.fromJson(json,type);
 
 
     }
