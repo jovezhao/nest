@@ -52,6 +52,7 @@ public class TestGson {
         Type type = typeToken.getType();
 
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+
         ParameterizedType type1 = ParameterizedTypeFactory.make(Message.class, AdminUser.class);
         Message user = gson.fromJson(json, type1);
 
