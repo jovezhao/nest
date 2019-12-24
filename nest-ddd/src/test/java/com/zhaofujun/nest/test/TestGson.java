@@ -6,8 +6,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.zhaofujun.nest.json.EntityTypeAdapterFactory;
+import com.zhaofujun.nest.json.ParameterizedTypeFactory;
 import org.junit.Test;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 public class TestGson {
@@ -49,8 +52,8 @@ public class TestGson {
         Type type = typeToken.getType();
 
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-
-        Message user = gson.fromJson(json,type);
+        ParameterizedType type1 = ParameterizedTypeFactory.make(Message.class, AdminUser.class);
+        Message user = gson.fromJson(json, type1);
 
 
     }

@@ -4,7 +4,9 @@ import com.google.gson.JsonObject;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.core.EventData;
 import com.zhaofujun.nest.json.JsonCreator;
+import com.zhaofujun.nest.json.ParameterizedTypeFactory;
 
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -34,26 +36,31 @@ public class MessageConverter {
     }
 
     public MessageInfo fromString(String messageJson, Class eventDataClass) {
-        JsonObject jsonObject = jsonCreator.toObj(messageJson, JsonObject.class);
-        MessageInfo messageInfo = new MessageInfo();
-        messageInfo.setEventSource(jsonObject.get("eventSource").getAsString());
-        messageInfo.setMessageId(jsonObject.get("messageId").getAsString());
 
-        Optional.ofNullable(jsonObject.get("sendTime")).ifPresent(timeString -> {
-            try {
-                String timeWithIsoFormat = timeString.getAsString().replace(" ", "T");
-                Date sendTime = Date.from(LocalDateTime.parse(timeWithIsoFormat, DateTimeFormatter.ISO_DATE_TIME)
-                        .atZone(ZoneId.systemDefault()).toInstant());
-                messageInfo.setSendTime(sendTime);
-            } catch (DateTimeParseException e) {
-                e.printStackTrace();
-            }
-        });
-
-        String eventDataJson = jsonCreator.toJsonString(jsonObject.get("data"));
-        Object o = jsonCreator.toObj(eventDataJson, eventDataClass);
-        messageInfo.setData((EventData) o);
+        Type type = ParameterizedTypeFactory.make(MessageInfo.class, eventDataClass);
+        MessageInfo messageInfo = jsonCreator.toObj(messageJson, type);
         return messageInfo;
+
+//        JsonObject jsonObject = jsonCreator.toObj(messageJson, JsonObject.class);
+//        MessageInfo messageInfo = new MessageInfo();
+//        messageInfo.setEventSource(jsonObject.get("eventSource").getAsString());
+//        messageInfo.setMessageId(jsonObject.get("messageId").getAsString());
+//
+//        Optional.ofNullable(jsonObject.get("sendTime")).ifPresent(timeString -> {
+//            try {
+//                String timeWithIsoFormat = timeString.getAsString().replace(" ", "T");
+//                Date sendTime = Date.from(LocalDateTime.parse(timeWithIsoFormat, DateTimeFormatter.ISO_DATE_TIME)
+//                        .atZone(ZoneId.systemDefault()).toInstant());
+//                messageInfo.setSendTime(sendTime);
+//            } catch (DateTimeParseException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//
+//        String eventDataJson = jsonCreator.toJsonString(jsonObject.get("data"));
+//        Object o = jsonCreator.toObj(eventDataJson, eventDataClass);
+//        messageInfo.setData((EventData) o);
+//        return messageInfo;
     }
 
     public <T extends EventData> T toEventData(MessageInfo messageInfo, Class<T> tClass) {

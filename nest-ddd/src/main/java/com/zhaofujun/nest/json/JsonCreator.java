@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.zhaofujun.nest.core.BeanFinder;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,6 +45,9 @@ public class JsonCreator {
         return collect;
     }
 
+    public <T> T toObj(String jsonString, Type typeOfT) {
+        return gson.fromJson(jsonString, typeOfT);
+    }
 
 }
 
