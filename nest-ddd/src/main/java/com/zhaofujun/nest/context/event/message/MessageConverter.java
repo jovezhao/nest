@@ -5,9 +5,12 @@ import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.core.EventData;
 import com.zhaofujun.nest.json.JsonCreator;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 public class MessageConverter {
@@ -35,13 +38,18 @@ public class MessageConverter {
         MessageInfo messageInfo = new MessageInfo();
         messageInfo.setEventSource(jsonObject.get("eventSource").getAsString());
         messageInfo.setMessageId(jsonObject.get("messageId").getAsString());
-//         DateTimeFormatter.ISO_LOCAL_DATE;
 
-        try {
-            messageInfo.setSendTime(new SimpleDateFormat().parse(jsonObject.get("sendTime").getAsString()));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        Optional.ofNullable(jsonObject.get("sendTime")).ifPresent(timeString -> {
+            try {
+                String timeWithIsoFormat = timeString.getAsString().replace(" ", "T");
+                Date sendTime = Date.from(LocalDateTime.parse(timeWithIsoFormat, DateTimeFormatter.ISO_DATE_TIME)
+                        .atZone(ZoneId.systemDefault()).toInstant());
+                messageInfo.setSendTime(sendTime);
+            } catch (DateTimeParseException e) {
+                e.printStackTrace();
+            }
+        });
+
         String eventDataJson = jsonCreator.toJsonString(jsonObject.get("data"));
         Object o = jsonCreator.toObj(eventDataJson, eventDataClass);
         messageInfo.setData((EventData) o);
