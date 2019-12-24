@@ -158,4 +158,8 @@ public class EntityUtils {
         return className.substring(BEGIN_INDEX, endIndex);
     }
 
+    public static String getFullClassName(Entity entityObject) {
+        return entityObject.getClass().getPackage().getName() + getClassName(entityObject);
+    }
+
 }

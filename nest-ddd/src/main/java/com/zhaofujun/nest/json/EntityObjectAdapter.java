@@ -2,6 +2,7 @@ package com.zhaofujun.nest.json;
 
 import com.google.gson.*;
 import com.zhaofujun.nest.context.model.Entity;
+import com.zhaofujun.nest.utils.EntityUtils;
 
 import java.lang.reflect.Type;
 
@@ -24,7 +25,8 @@ public class EntityObjectAdapter implements JsonSerializer<Entity>, JsonDeserial
     public JsonElement serialize(Entity src, Type typeOfSrc, JsonSerializationContext context) {
 
         JsonElement jsonElement = context.serialize(src, src.getClass());
-        jsonElement.getAsJsonObject().addProperty("__type__", src.getClass().getName());
+        String fullClassName = EntityUtils.getFullClassName(src);
+        jsonElement.getAsJsonObject().addProperty("__type__", fullClassName);
 
         return jsonElement;
     }
