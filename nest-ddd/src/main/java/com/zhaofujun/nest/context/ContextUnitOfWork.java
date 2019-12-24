@@ -48,15 +48,18 @@ public class ContextUnitOfWork {
     }
 
     public void addEntityObject(Entity entity) {
-        entityMap.put(entity, EntityOperateEnum.create);
+        if (entity != null)
+            entityMap.put(entity, EntityOperateEnum.create);
     }
 
     public void updateEntityObject(Entity entity) {
-        entityMap.put(entity, EntityOperateEnum.update);
+        if (entity != null)
+            entityMap.put(entity, EntityOperateEnum.update);
     }
 
     public void removeEntityObject(Entity entity) {
-        entityMap.put(entity, EntityOperateEnum.remove);
+        if (entity != null)
+            entityMap.put(entity, EntityOperateEnum.remove);
     }
 
     private void commitEntity() {

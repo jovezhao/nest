@@ -6,6 +6,7 @@ import com.zhaofujun.nest.core.EventData;
 import com.zhaofujun.nest.json.JsonCreator;
 
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.UUID;
 
@@ -34,6 +35,8 @@ public class MessageConverter {
         MessageInfo messageInfo = new MessageInfo();
         messageInfo.setEventSource(jsonObject.get("eventSource").getAsString());
         messageInfo.setMessageId(jsonObject.get("messageId").getAsString());
+//         DateTimeFormatter.ISO_LOCAL_DATE;
+
         try {
             messageInfo.setSendTime(new SimpleDateFormat().parse(jsonObject.get("sendTime").getAsString()));
         } catch (Exception ex) {

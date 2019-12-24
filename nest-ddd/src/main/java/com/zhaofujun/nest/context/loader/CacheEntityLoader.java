@@ -57,6 +57,8 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
 
     private Entity toEntityObject(Entity entityObject) {
 
+        if (entityObject == null) return null;
+
         if (EntityUtils.isRepresented(entityObject)) return entityObject;
 
 
