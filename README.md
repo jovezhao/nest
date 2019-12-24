@@ -29,13 +29,13 @@ Nest的设计受DDD战略、战术设计思想指导，使用Nest前需要对DDD
 <dependency>
     <groupId>com.zhaofujun.nest</groupId>
     <artifactId>nest-ddd</artifactId>
-    <version>2.0.7</version>
+    <version>2.0.8</version>
 </dependency>
 ```
 **Gradle引用**
 ```groovy
 // https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd
-compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '2.0.7'
+compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '2.0.8'
 
 ```
 
