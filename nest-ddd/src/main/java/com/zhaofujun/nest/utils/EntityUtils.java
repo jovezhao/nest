@@ -159,7 +159,7 @@ public class EntityUtils {
     }
 
     public static String getFullClassName(Entity entityObject) {
-        return entityObject.getClass().getPackage().getName() + getClassName(entityObject);
+        return entityObject.getClass().getPackage().getName() + "." + getClassName(entityObject);
     }
 
 }
