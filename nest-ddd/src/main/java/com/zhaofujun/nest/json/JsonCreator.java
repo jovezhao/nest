@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.zhaofujun.nest.core.BeanFinder;
 
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,15 +18,21 @@ public class JsonCreator {
 
     public JsonCreator(BeanFinder beanFinder) {
 
+        String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+        String dateFormat = "yyyy-MM-dd";
+
         this.beanFinder = beanFinder;
         GsonBuilder gsonBuilder = new GsonBuilder()
                 .disableHtmlEscaping()
-                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .setDateFormat(dateTimeFormat)
                 .registerTypeAdapterFactory(new EntityTypeAdapterFactory())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter(dateTimeFormat))
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter(dateFormat))
                 .serializeNulls();
+
         Set<JsonConfiguration> jsonConfigurations = beanFinder.getInstances(JsonConfiguration.class);
         for (JsonConfiguration p : jsonConfigurations) {
-            gsonBuilder.registerTypeAdapter(p.getClazz(), p.getTypeAdapter());
+            gsonBuilder = gsonBuilder.registerTypeAdapter(p.getClazz(), p.getTypeAdapter());
         }
         gson = gsonBuilder.create();
     }
