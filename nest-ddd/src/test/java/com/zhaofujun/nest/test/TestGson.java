@@ -1,17 +1,17 @@
 package com.zhaofujun.nest.test;
 
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.zhaofujun.nest.json.EntityTypeAdapterFactory;
 import com.zhaofujun.nest.json.ParameterizedTypeFactory;
+import org.junit.Assert;
 import org.junit.Test;
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class TestGson {
     @Test
@@ -57,5 +57,27 @@ public class TestGson {
         Message user = gson.fromJson(json, type1);
 
 
+    }
+
+    @Test
+    public void testDeserializeLocalDateTime() {
+        final String timeJsonString = "\"2011-11-11T11:11:11\"";
+        Gson defaultGson = new GsonBuilder().create();
+        try {
+            defaultGson.fromJson(timeJsonString, LocalDateTime.class);
+        } catch (Exception e) {
+            Assert.assertEquals(JsonSyntaxException.class, e.getClass());
+        }
+
+        Gson customGson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+            @Override
+            public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                return LocalDateTime.parse(json.getAsString(), DateTimeFormatter.ISO_DATE_TIME);
+            }
+        }).create();
+
+        LocalDateTime expected = LocalDateTime.of(2011, 11, 11, 11, 11, 11);
+        LocalDateTime deserializedLocalDateTime = customGson.fromJson(timeJsonString, LocalDateTime.class);
+        Assert.assertEquals(expected, deserializedLocalDateTime);
     }
 }
