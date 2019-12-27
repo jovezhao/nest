@@ -7,11 +7,15 @@ import com.zhaofujun.nest.context.event.channel.MessageChannelFactory;
 import com.zhaofujun.nest.context.event.channel.MessageConsumer;
 import com.zhaofujun.nest.context.event.channel.MessageProducer;
 import com.zhaofujun.nest.context.event.message.MessageConverter;
+import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.core.EventBus;
 import com.zhaofujun.nest.core.EventData;
 import com.zhaofujun.nest.core.EventHandler;
+
+import java.util.Date;
+import java.util.UUID;
 
 public class DefaultEventBus implements EventBus {
     private BeanFinder beanFinder;
@@ -21,21 +25,31 @@ public class DefaultEventBus implements EventBus {
 
     public DefaultEventBus(BeanFinder beanFinder) {
         this.beanFinder = beanFinder;
-        this.messageConverter=new MessageConverter(beanFinder);
+        this.messageConverter = new MessageConverterFactory(beanFinder).create();
         this.messageChannelFactory = new MessageChannelFactory(beanFinder);
         this.configurationManager = ConfigurationManager.getCurrent(beanFinder);
     }
 
-
     public void publish(EventData eventData) {
+        publish(eventData, "?");
+    }
 
+    public void publish(EventData eventData, String eventSource) {
         EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(eventData.getEventCode());
 
 
         MessageChannel messageChannel = messageChannelFactory.create(eventConfiguration.getMessageChannelCode());
         MessageProducer messageProducer = messageChannel.getMessageProducer();
-        MessageInfo messageInfo = messageConverter.fromEvent(eventData);
+
+
+        MessageInfo messageInfo = new MessageInfo();
+        messageInfo.setMessageId(UUID.randomUUID().toString());
+        messageInfo.setData(eventData);
+        messageInfo.setEventSource(eventSource);
+        messageInfo.setSendTime(new Date());
+
         messageProducer.send(eventData.getEventCode(), messageInfo);
+
     }
 
 

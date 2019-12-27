@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.context.event.channel;
 
+import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.context.event.EventArgs;
 import com.zhaofujun.nest.core.EventHandler;
@@ -20,7 +21,11 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
 
     public AbstractMessageConsumer(BeanFinder beanFinder) {
         this.beanFinder = beanFinder;
-        messageConverter=new MessageConverter(beanFinder);
+        messageConverter = new MessageConverterFactory(beanFinder).create();
+    }
+
+    public MessageConverter getMessageConverter() {
+        return messageConverter;
     }
 
     public BeanFinder getBeanFinder() {
@@ -30,7 +35,7 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
     public abstract void subscribe(EventHandler eventHandler);
 
     protected void onReceivedMessage(MessageInfo messageInfo, EventHandler eventHandler, Object context) {
-        EventData eventData = messageConverter.toEventData(messageInfo, eventHandler.getEventDataClass());
+        EventData eventData = messageInfo.getData();
 
         MessageRecord record = new MessageRecord();
         record.setHandlerName(eventHandler.getClass().getName());
