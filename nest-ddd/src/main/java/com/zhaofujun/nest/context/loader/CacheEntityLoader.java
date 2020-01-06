@@ -45,11 +45,7 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
 
         Entity entity = toEntityObject(u);
 
-        //缓存对象加入上下文中
-        ServiceContext serviceContext = ServiceContext.getCurrent();
-        if (serviceContext != null) {
-            serviceContext.getContextUnitOfWork().updateEntityObject(entity);
-        }
+
 
         return (U) entity;
     }
@@ -99,6 +95,12 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
         });
         EntityUtils.setLoading(result, false);
 
+
+        //缓存对象加入上下文中
+        ServiceContext serviceContext = ServiceContext.getCurrent();
+        if (serviceContext != null) {
+            serviceContext.getContextUnitOfWork().updateEntityObject(result);
+        }
         return result;
     }
 
