@@ -23,7 +23,7 @@ public class CacheClientFactory {
                 .findFirst()
                 .orElse(null);
         if (beanProvider == null)
-            beanProvider = new DefaultCacheProvider();
+            beanProvider = new DefaultCacheProvider(beanFinder);
         CacheClient cacheClient = new DefaultCacheClient(beanProvider, cacheConfiguration);
         return cacheClient;
     }

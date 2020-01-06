@@ -1,6 +1,8 @@
 package com.zhaofujun.nest.cache.provider;
 
 
+import com.zhaofujun.nest.core.BeanFinder;
+import com.zhaofujun.nest.json.JsonCreator;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -16,6 +18,12 @@ import java.util.Map;
 public class DefaultCacheProvider implements CacheProvider {
     public final static String PROVIDER_CODE = "DEFAULT_CACHE_PROVIDER";
 
+    private JsonCreator jsonCreator;
+
+    public DefaultCacheProvider(BeanFinder beanFinder) {
+        this.jsonCreator = new JsonCreator(beanFinder);
+    }
+
     @Override
     public String getCode() {
         return PROVIDER_CODE;
@@ -27,8 +35,10 @@ public class DefaultCacheProvider implements CacheProvider {
         if (!manager.cacheExists(groupName)) return null;
         Cache cache = manager.getCache(groupName);
         Element el = cache.get(key);
-        if (el != null)
-            return el.getObjectValue();
+        if (el != null) {
+            String json = el.getObjectValue().toString();
+            return jsonCreator.toObj(json, clazz);
+        }
         return null;
     }
 
@@ -48,7 +58,8 @@ public class DefaultCacheProvider implements CacheProvider {
         }
         Cache cache = manager.getCache(groupName);
         synchronized (value) {
-            Element el = new Element(key, value, false, (int) idleSeconds, 0);
+            String json=jsonCreator.toJsonString(value);
+            Element el = new Element(key, json, false, (int) idleSeconds, 0);
             cache.put(el);
         }
 
