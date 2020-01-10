@@ -8,8 +8,14 @@ package com.zhaofujun.nest;
 public abstract class CustomException extends RuntimeException {
     private int errorCode;
 
-    public CustomException(int errorCode,String message,Object... arguments) {
+    public CustomException(int errorCode, String message, Object... arguments) {
         super(message);
+        this.errorCode = errorCode;
+        Object[] arguments1 = arguments;
+    }
+
+    public CustomException(int errorCode, String message, Throwable cause, Object... arguments) {
+        super(message, cause);
         this.errorCode = errorCode;
         Object[] arguments1 = arguments;
     }

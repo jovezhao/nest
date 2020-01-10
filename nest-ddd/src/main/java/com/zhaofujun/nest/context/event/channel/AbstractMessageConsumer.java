@@ -1,5 +1,9 @@
 package com.zhaofujun.nest.context.event.channel;
 
+import com.zhaofujun.nest.CustomException;
+import com.zhaofujun.nest.CustomExceptionable;
+import com.zhaofujun.nest.OtherCustomException;
+import com.zhaofujun.nest.SystemException;
 import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.context.event.EventArgs;
@@ -63,9 +67,25 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
 
             eventHandler.handle(eventData, eventArgs);
             messageStore.save(record);
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
+            eventHandler.onCustomException(context, ex);
+        } catch (SystemException ex) {
             onFailed(eventHandler, context, ex);
-            eventHandler.onFailed(context, ex);
+            eventHandler.onSystemException(context, ex);
+            throw ex;
+        } catch (Exception ex) {
+
+            if (ex instanceof CustomExceptionable) {
+                //业务异常
+                OtherCustomException customException = new OtherCustomException("发生业务异常", ex);
+                eventHandler.onCustomException(context, customException);
+            } else {
+
+                onFailed(eventHandler, context, ex);
+                SystemException systemException = new SystemException("事件处理器发生系统异常", ex);
+                eventHandler.onSystemException(context, systemException);
+                throw systemException;
+            }
         } finally {
             onEnds(eventHandler, context);
         }

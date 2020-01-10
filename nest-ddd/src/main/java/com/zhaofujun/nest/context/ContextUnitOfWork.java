@@ -1,6 +1,8 @@
 package com.zhaofujun.nest.context;
 
 import com.zhaofujun.nest.CustomException;
+import com.zhaofujun.nest.CustomExceptionable;
+import com.zhaofujun.nest.OtherCustomException;
 import com.zhaofujun.nest.context.event.message.MessageBacklog;
 import com.zhaofujun.nest.context.event.resend.MessageResendFactory;
 import com.zhaofujun.nest.context.event.resend.MessageResendStore;
@@ -123,6 +125,13 @@ public class ContextUnitOfWork {
         } catch (CustomException ex) {
             throw ex;
         } catch (Exception ex) {
+
+            if (ex instanceof CustomExceptionable) {
+                //业务异常
+                OtherCustomException customException = new OtherCustomException("发生业务异常", ex);
+                throw customException;
+            }
+
             throw new SystemException("提交工作单元时失败", ex);
         } finally {
             //清空工作单元中的内容

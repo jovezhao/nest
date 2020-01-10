@@ -1,5 +1,7 @@
 package com.zhaofujun.nest.core;
 
+import com.zhaofujun.nest.CustomException;
+import com.zhaofujun.nest.SystemException;
 import com.zhaofujun.nest.context.event.EventArgs;
 
 public interface EventHandler<T extends EventData> {
@@ -9,7 +11,10 @@ public interface EventHandler<T extends EventData> {
 
     void handle(T eventData, EventArgs eventArgs);
 
-    default void onFailed( Object context, Exception ex) {
+    default void onSystemException( Object context, SystemException ex) {
+        ex.printStackTrace();
+    }
+    default void onCustomException( Object context, CustomException ex) {
         ex.printStackTrace();
     }
 }
