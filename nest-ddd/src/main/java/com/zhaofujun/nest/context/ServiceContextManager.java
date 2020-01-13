@@ -2,14 +2,30 @@ package com.zhaofujun.nest.context;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
 
+import java.util.Stack;
+
 public class ServiceContextManager {
-    private static TransmittableThreadLocal<ServiceContext> serviceContextThreadLocal = new TransmittableThreadLocal<>();
+
+    //使用堆栈来处理当前上下文信息
+
+    private static TransmittableThreadLocal<Stack<ServiceContext>> serviceContextThreadLocal = new TransmittableThreadLocal<>();
 
     public static void set(ServiceContext serviceContext) {
-        serviceContextThreadLocal.set(serviceContext);
+        Stack<ServiceContext> serviceContexts = serviceContextThreadLocal.get();
+        if (serviceContexts == null) {
+            serviceContexts = new Stack<>();
+            serviceContextThreadLocal.set(serviceContexts);
+        }
+        serviceContexts.push(serviceContext);
     }
 
-    public static ServiceContext get() {
-        return serviceContextThreadLocal.get();
+    public static ServiceContext getCurrent() {
+        Stack<ServiceContext> serviceContexts = serviceContextThreadLocal.get();
+        return serviceContexts.peek();
+    }
+
+    public static ServiceContext pop() {
+        Stack<ServiceContext> serviceContexts = serviceContextThreadLocal.get();
+        return serviceContexts.pop();
     }
 }

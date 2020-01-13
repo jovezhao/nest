@@ -2,6 +2,7 @@ package com.zhaofujun.nest.context.loader;
 
 
 import com.zhaofujun.nest.context.ServiceContext;
+import com.zhaofujun.nest.context.ServiceContextManager;
 import com.zhaofujun.nest.context.model.Entity;
 import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.core.EntityLoader;
@@ -26,7 +27,7 @@ public class ConstructEntityLoader<T extends Entity> implements EntityLoader<T>,
         U u = EntityUtils.create(uClass, id, true, false);
 
         //新对象加入上下文中
-        ServiceContext serviceContext = ServiceContext.getCurrent();
+        ServiceContext serviceContext = ServiceContextManager.getCurrent();
         if (serviceContext != null) {
             serviceContext.getContextUnitOfWork().addEntityObject(u);
         }

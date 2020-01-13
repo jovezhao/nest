@@ -20,13 +20,12 @@ public class ServiceContext {
         return serviceClass;
     }
 
-    public static ServiceContext getCurrent() {
-        return ServiceContextManager.get();
-    }
+//    public static ServiceContext getCurrent() {
+//        return ServiceContextManager.get();
+//    }
 
     public static ServiceContext newInstance(Class serviceClass, NestApplication application) {
         ServiceContext serviceContext = new ServiceContext(serviceClass,application);
-        ServiceContextManager.set(serviceContext);
 
         serviceContext.getApplication().onServiceContextCreated(serviceContext);
         return serviceContext;

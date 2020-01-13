@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.context.loader;
 
+import com.zhaofujun.nest.context.ServiceContextManager;
 import com.zhaofujun.nest.core.CacheClient;
 import com.zhaofujun.nest.cache.CacheClientFactory;
 import com.zhaofujun.nest.core.BeanFinder;
@@ -24,7 +25,7 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
 
     public CacheEntityLoader(Class<T> tClass) {
 
-        BeanFinder beanFinder = ServiceContext.getCurrent().getApplication().getBeanFinder();
+        BeanFinder beanFinder = ServiceContextManager.getCurrent().getApplication().getBeanFinder();
         this.tClass = tClass;
         CacheClientFactory cacheClientFactory = new CacheClientFactory(beanFinder);
         this.cacheClient = cacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
@@ -97,7 +98,7 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
 
 
         //缓存对象加入上下文中
-        ServiceContext serviceContext = ServiceContext.getCurrent();
+        ServiceContext serviceContext = ServiceContextManager.getCurrent();
         if (serviceContext != null) {
             serviceContext.getContextUnitOfWork().updateEntityObject(result);
         }

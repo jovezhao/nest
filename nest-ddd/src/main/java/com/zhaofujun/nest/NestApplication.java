@@ -1,6 +1,7 @@
 package com.zhaofujun.nest;
 
 import com.zhaofujun.nest.configuration.ConfigurationManager;
+import com.zhaofujun.nest.context.ServiceContextManager;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.container.ContainerProvider;
 import com.zhaofujun.nest.context.ServiceContext;
@@ -35,6 +36,7 @@ public class NestApplication {
 
     public ServiceContext newInstance(Class serviceClass) {
         ServiceContext serviceContext = ServiceContext.newInstance(serviceClass, this);
+        ServiceContextManager.set(serviceContext);
         return serviceContext;
     }
 

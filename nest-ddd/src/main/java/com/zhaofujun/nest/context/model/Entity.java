@@ -2,6 +2,7 @@ package com.zhaofujun.nest.context.model;
 
 import com.zhaofujun.nest.context.ServiceContext;
 import com.zhaofujun.nest.NullException;
+import com.zhaofujun.nest.context.ServiceContextManager;
 import com.zhaofujun.nest.context.loader.ConstructEntityLoader;
 import com.zhaofujun.nest.context.loader.RepositoryEntityLoader;
 import com.zhaofujun.nest.core.EntityFactory;
@@ -74,7 +75,7 @@ public abstract class Entity<T extends Identifier> implements Serializable {
         if (!this.__newInstance) //  不是新对象的时候才需要调用移除操作
         {
             this.__changed = true;
-            ServiceContext.getCurrent().getContextUnitOfWork().removeEntityObject(this);
+            ServiceContextManager.getCurrent().getContextUnitOfWork().removeEntityObject(this);
         }
     }
 

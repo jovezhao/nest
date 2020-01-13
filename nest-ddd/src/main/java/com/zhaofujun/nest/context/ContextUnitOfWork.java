@@ -67,7 +67,7 @@ public class ContextUnitOfWork {
     private void commitEntity() {
 
         Map<Repository, Map<EntityOperateEnum, List<Entity>>> repositoryMap = toRepositoryMap(entityMap);
-        CacheClientFactory cacheClientFactory = new CacheClientFactory(ServiceContext.getCurrent().getApplication().getBeanFinder());
+        CacheClientFactory cacheClientFactory = new CacheClientFactory(ServiceContextManager.getCurrent().getApplication().getBeanFinder());
         CacheClient cacheClient = cacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
 
         repositoryMap.forEach((p, q) -> {
@@ -97,7 +97,7 @@ public class ContextUnitOfWork {
     }
 
     private void commitMessage() {
-        BeanFinder beanFinder = ServiceContext.getCurrent().getApplication().getBeanFinder();
+        BeanFinder beanFinder = ServiceContextManager.getCurrent().getApplication().getBeanFinder();
         messageBacklogs.forEach(p -> {
             ConfigurationManager configurationManager = ConfigurationManager.getCurrent(beanFinder);
             EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(p.getEventCode());
@@ -117,7 +117,7 @@ public class ContextUnitOfWork {
     }
 
     public void commit() {
-        ServiceContext serviceContext = ServiceContext.getCurrent();
+        ServiceContext serviceContext = ServiceContextManager.getCurrent();
         serviceContext.getApplication().beforeCommit(serviceContext);
         try {
             commitEntity();
@@ -137,6 +137,7 @@ public class ContextUnitOfWork {
             //清空工作单元中的内容
             entityMap.clear();
             messageBacklogs.clear();
+            ServiceContextManager.pop();
         }
         serviceContext.getApplication().committed(serviceContext);
     }

@@ -35,7 +35,7 @@ public class ApplicationServiceInterceptor implements MethodInterceptor, Seriali
         ServiceContext serviceContext = null;
         if (tagProxy) {
             //执行之前
-            serviceContext = ServiceContext.newInstance(method.getDeclaringClass(), application);
+            serviceContext = application.newInstance(method.getDeclaringClass());
         }
 
         Object result = null;

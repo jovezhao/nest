@@ -1,6 +1,7 @@
 package com.zhaofujun.nest.context.repository;
 
 
+import com.zhaofujun.nest.context.ServiceContextManager;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.context.ServiceContext;
 import com.zhaofujun.nest.context.model.Entity;
@@ -13,7 +14,7 @@ public class RepositoryFactory {
 
         if (entityClass.equals(Entity.class)) return new DefaultRepository();
 
-        BeanFinder beanFinder = ServiceContext.getCurrent().getApplication().getBeanFinder();
+        BeanFinder beanFinder = ServiceContextManager.getCurrent().getApplication().getBeanFinder();
         Repository repository = beanFinder.getInstances(Repository.class)
                 .stream()
                 .filter(p -> p.getEntityClass().equals(entityClass))
