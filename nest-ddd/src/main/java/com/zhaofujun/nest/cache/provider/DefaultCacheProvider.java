@@ -7,6 +7,7 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,21 +32,21 @@ public class DefaultCacheProvider implements CacheProvider {
 
     private CacheManager manager = CacheManager.create();
 
-    public Object get(String groupName, String key, Class clazz) {
+    public Object get(String groupName, String key, Type type) {
         if (!manager.cacheExists(groupName)) return null;
         Cache cache = manager.getCache(groupName);
         Element el = cache.get(key);
         if (el != null) {
             String json = el.getObjectValue().toString();
-            return jsonCreator.toObj(json, clazz);
+            return jsonCreator.toObj(json, type);
         }
         return null;
     }
 
-    public Map<String, Object> get(String groupName, Class clazz, String... keys) {
+    public Map<String, Object> get(String groupName, Type type, String... keys) {
         Map<String, Object> result = new HashMap<String, Object>();
         for (String key : keys) {
-            Object val = get(groupName, key, clazz);
+            Object val = get(groupName, key, type);
             result.put(key, val);
         }
         return result;

@@ -35,7 +35,7 @@ public class ContextUnitOfWork {
     private Map<Entity, EntityOperateEnum> entityMap = new HashMap<>();
 
 
-    public <T extends Entity> T getEntity(Class<T> tClass, Identifier identifier) {
+    public <T extends Entity> T getEntity(Class tClass, Identifier identifier) {
         Entity entity = entityMap.entrySet()
                 .stream()
                 .filter(p -> p.getKey().getId().equals(identifier) && tClass.isInstance(p.getKey()))

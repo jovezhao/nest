@@ -3,7 +3,7 @@ package com.zhaofujun.nest.core;
 import java.util.Map;
 
 public interface CacheClient {
-    <T> T get(Class<T> clazz, String key);
+    <T> T get(Class clazz, String key);
 
 
     <T> Map<String, T> get(Class<T> clazz, String... keys);

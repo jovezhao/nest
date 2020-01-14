@@ -17,10 +17,10 @@ import java.lang.reflect.Type;
 
 public class RepositoryEntityLoader<T extends Entity> implements EntityLoader<T> {
 
-    private Class<T> tClass;
+    private Class tClass;
     private CacheClient cacheClient;
 
-    public RepositoryEntityLoader(Class<T> tClass) {
+    public RepositoryEntityLoader(Class tClass) {
         this.tClass = tClass;
         BeanFinder beanFinder = ServiceContextManager.getCurrent().getApplication().getBeanFinder();
         CacheClientFactory cacheClientFactory = new CacheClientFactory(beanFinder);
@@ -52,7 +52,7 @@ public class RepositoryEntityLoader<T extends Entity> implements EntityLoader<T>
     }
 
     @Override
-    public <U extends T> U create(Class<U> uClass, Identifier id) {
+    public <U extends T> U create(Class uClass, Identifier id) {
 
         EntityLoader<U> entityLoader = null;
         U result = null;
@@ -75,10 +75,7 @@ public class RepositoryEntityLoader<T extends Entity> implements EntityLoader<T>
         if (result != null) {
             EntityUtils.setLoading(result, false);
 
-            ServiceContext serviceContext = ServiceContextManager.getCurrent();
-            if (serviceContext != null) {
-                serviceContext.getContextUnitOfWork().updateEntityObject(result);
-            }
+
             cacheClient.put(EntityCacheUtils.getCacheKey(result), result);
         }
 

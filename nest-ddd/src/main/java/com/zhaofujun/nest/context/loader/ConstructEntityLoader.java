@@ -13,9 +13,9 @@ import java.io.Serializable;
 
 //无中生有类实体的构建
 public class ConstructEntityLoader<T extends Entity> implements EntityLoader<T>, Serializable {
-    private Class<T> tClass;
+    private Class tClass;
 
-    public ConstructEntityLoader(Class<T> tClass) {
+    public ConstructEntityLoader(Class tClass) {
         this.tClass = tClass;
     }
 
@@ -23,14 +23,10 @@ public class ConstructEntityLoader<T extends Entity> implements EntityLoader<T>,
         return create(tClass, id);
     }
 
-    public <U extends T> U create(Class<U> uClass, Identifier id) {
-        U u = EntityUtils.create(uClass, id, true, false);
+    public <U extends T> U create(Class uClass, Identifier id) {
+        U u = EntityCreate.create(uClass, id, true, false);
 
-        //新对象加入上下文中
-        ServiceContext serviceContext = ServiceContextManager.getCurrent();
-        if (serviceContext != null) {
-            serviceContext.getContextUnitOfWork().addEntityObject(u);
-        }
+
         return u;
     }
 

@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.cache.provider;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -12,10 +13,10 @@ public interface CacheProvider {
     String getCode();
 
 
-    <T> T get(String groupName, String key, Class<T> clazz);
+    <T> T get(String groupName, String key, Type type);
 
 
-    <T> Map<String, T> get(String groupName, Class<T> clazz, String... keys);
+    <T> Map<String, T> get(String groupName, Type type, String... keys);
 
 
     void put(String groupName, String key, Object value, long idleSeconds);

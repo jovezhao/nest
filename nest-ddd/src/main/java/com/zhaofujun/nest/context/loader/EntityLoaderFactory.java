@@ -5,11 +5,11 @@ import com.zhaofujun.nest.core.EntityLoader;
 
 public class EntityLoaderFactory {
 
-    public static <T extends Entity> EntityLoader<T> create(Class<T> tClass, EntityLoaderType entityLoaderType) {
+    public static <T extends Entity> EntityLoader<T> create(Class tClass, EntityLoaderType entityLoaderType) {
         EntityLoader<T> entityLoader = null;
         switch (entityLoaderType) {
             case CacheEntityLoader:
-                entityLoader = new CacheEntityLoader<T>(tClass);
+                entityLoader = new CacheEntityLoader<>(tClass);
                 break;
             case RepositoryEntityLoader:
                 entityLoader = new RepositoryEntityLoader<>(tClass);

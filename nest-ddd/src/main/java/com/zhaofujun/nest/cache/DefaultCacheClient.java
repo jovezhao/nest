@@ -24,7 +24,7 @@ class DefaultCacheClient implements CacheClient {
     }
 
 
-    public <T> T get(Class<T> clazz, String key) {
+    public <T> T get(Class clazz, String key) {
         return cacheProvider.get(cacheConfiguration.getCacheCode(), key, clazz);
     }
 

@@ -9,9 +9,9 @@ import com.zhaofujun.nest.core.EntityLoader;
 public class UnitOfWorkEntityLoader<T extends Entity> implements EntityLoader<T> {
 
 
-    private Class<T> tClass;
+    private Class tClass;
 
-    public UnitOfWorkEntityLoader(Class<T> tClass) {
+    public UnitOfWorkEntityLoader(Class tClass) {
         this.tClass = tClass;
     }
 
@@ -21,7 +21,7 @@ public class UnitOfWorkEntityLoader<T extends Entity> implements EntityLoader<T>
     }
 
     @Override
-    public <U extends T> U create(Class<U> uClass, Identifier id) {
+    public <U extends T> U create(Class uClass, Identifier id) {
         U entity = ServiceContextManager.getCurrent()
                 .getContextUnitOfWork()
                 .getEntity(uClass, id);

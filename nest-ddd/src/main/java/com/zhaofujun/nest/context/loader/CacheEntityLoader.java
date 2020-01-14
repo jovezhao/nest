@@ -1,13 +1,10 @@
 package com.zhaofujun.nest.context.loader;
 
 import com.zhaofujun.nest.context.ServiceContextManager;
-import com.zhaofujun.nest.core.CacheClient;
+import com.zhaofujun.nest.core.*;
 import com.zhaofujun.nest.cache.CacheClientFactory;
-import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.context.ServiceContext;
 import com.zhaofujun.nest.context.model.Entity;
-import com.zhaofujun.nest.core.Identifier;
-import com.zhaofujun.nest.core.EntityLoader;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
 import com.zhaofujun.nest.utils.EntityUtils;
 
@@ -19,11 +16,11 @@ import java.util.List;
 
 
 public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
-    private Class<T> tClass;
+    private Class tClass;
     private CacheClient cacheClient;
 
 
-    public CacheEntityLoader(Class<T> tClass) {
+    public CacheEntityLoader(Class tClass) {
 
         BeanFinder beanFinder = ServiceContextManager.getCurrent().getApplication().getBeanFinder();
         this.tClass = tClass;
@@ -37,7 +34,7 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
     }
 
     @Override
-    public <U extends T> U create(Class<U> uClass, Identifier id) {
+    public <U extends T> U create(Class uClass, Identifier id) {
 
         String cacheKey = EntityCacheUtils.getCacheKey(uClass, id);
         U u = cacheClient.get(uClass, cacheKey);
@@ -45,7 +42,6 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
         if (u == null) return null;
 
         Entity entity = toEntityObject(u);
-
 
 
         return (U) entity;
@@ -59,7 +55,7 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
         if (EntityUtils.isRepresented(entityObject)) return entityObject;
 
 
-        Entity result = EntityUtils.create(entityObject.getClass(), entityObject.getId(), false, true);
+        Entity result = EntityCreate.create(entityObject.getClass(), entityObject.getId(), false, true);
 
         List<Field> fieldList = new ArrayList<>();
         Class aClass = entityObject.getClass();
@@ -82,7 +78,11 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
                 p.setAccessible(true);
                 if (Entity.class.isAssignableFrom(p.getType())) {
                     Entity v = (Entity) p.get(entityObject);
-                    p.set(result, toEntityObject(v));
+                    if (v != null) {
+                        Entity entity = EntityFactory.load(p.getType(), v.getId());
+                        p.set(result, entity);
+                    }
+//                    p.set(result, toEntityObject(v));
 
 
                 } else {
@@ -96,12 +96,6 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
         });
         EntityUtils.setLoading(result, false);
 
-
-        //缓存对象加入上下文中
-        ServiceContext serviceContext = ServiceContextManager.getCurrent();
-        if (serviceContext != null) {
-            serviceContext.getContextUnitOfWork().updateEntityObject(result);
-        }
         return result;
     }
 
