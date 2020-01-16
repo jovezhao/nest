@@ -1,6 +1,6 @@
 allprojects {
     group = 'com.zhaofujun.nest'
-    version = '2.0.15'
+    version = '2.0.16'
 
 
 
