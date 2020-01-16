@@ -1,6 +1,7 @@
 package com.zhaofujun.nest.context.event.channel.local;
 
 
+import com.zhaofujun.nest.context.event.message.MessageConverter;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.core.EventHandler;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
@@ -51,6 +52,11 @@ public class LocalMessageChannel implements MessageChannel, MessageProducer, Mes
     public void send(String messageGroup, MessageInfo messageInfo) {
         EventSource eventSource = getEventSource(messageGroup);
         eventSource.send(messageInfo);
+    }
+
+    @Override
+    public MessageConverter getMessageConverter() {
+        return null;
     }
 
 

@@ -1,7 +1,5 @@
 package com.zhaofujun.nest.context.event.message;
 
-import com.zhaofujun.nest.context.event.channel.MessageChannel;
-import com.zhaofujun.nest.context.event.channel.local.LocalMessageChannel;
 import com.zhaofujun.nest.core.BeanFinder;
 
 public class MessageConverterFactory {
