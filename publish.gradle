@@ -63,8 +63,8 @@
                 // 如果version以SNAPSHOT结尾就会上传到快照仓库，如果不是就上传到release仓库
                 url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
                 credentials {
-                    username = "${NEXUS_USERNAME}"
-                    password = "${NEXUS_PASSWORD}"
+                    username = project.properties.NEXUS_USERNAME
+                    password = project.properties.NEXUS_PASSWORD
                 }
             }
 
