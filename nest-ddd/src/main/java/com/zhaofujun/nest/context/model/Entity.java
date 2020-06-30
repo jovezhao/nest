@@ -9,7 +9,11 @@ import com.zhaofujun.nest.core.EntityFactory;
 import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.utils.EntityUtils;
 
+import javax.validation.Validation;
+import javax.xml.validation.Validator;
 import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Entity<T extends Identifier> implements Serializable {
     protected T id;
@@ -69,6 +73,16 @@ public abstract class Entity<T extends Identifier> implements Serializable {
 
 
     public void verify() {
+        String[] strings = Validation.buildDefaultValidatorFactory()
+                .getValidator()
+                .validate(this)
+                .stream()
+                .map(p -> p.getMessage())
+                .collect(Collectors.toList())
+                .toArray(new String[0]);
+
+        if (strings.length > 0)
+            throw new VerifyFailedException("对象验证失败", strings);
     }
 
     public void delete() {

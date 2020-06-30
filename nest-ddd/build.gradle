@@ -9,5 +9,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.5'
     // https://mvnrepository.com/artifact/com.alibaba/transmittable-thread-local
     compile 'com.alibaba:transmittable-thread-local:2.11.0'
+    compile 'javax.validation:validation-api:2.0.0.Final'
 
 }
