@@ -73,13 +73,12 @@ public abstract class Entity<T extends Identifier> implements Serializable {
 
 
     public void verify() {
-        String[] strings = Validation.buildDefaultValidatorFactory()
+        Object[] strings = Validation.buildDefaultValidatorFactory()
                 .getValidator()
                 .validate(this)
                 .stream()
                 .map(p -> p.getMessage())
-                .collect(Collectors.toList())
-                .toArray(new String[0]);
+                .toArray();
 
         if (strings.length > 0)
             throw new VerifyFailedException("对象验证失败", strings);
