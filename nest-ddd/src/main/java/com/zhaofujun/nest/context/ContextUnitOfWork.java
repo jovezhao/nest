@@ -75,16 +75,17 @@ public class ContextUnitOfWork {
                 switch (r) {
                     case create:
                         p.batchInsert(s);
-                        s.forEach(ss -> cacheClient.put(EntityCacheUtils.getCacheKey(ss), ss));
+                        //s.parallelStream().forEach(ss -> cacheClient.put(EntityCacheUtils.getCacheKey(ss), ss));
                         break;
                     case update:
                         p.batchUpdate(s);
-                        s.forEach(ss -> cacheClient.put(EntityCacheUtils.getCacheKey(ss), ss));
+                       // s.parallelStream().forEach(ss -> cacheClient.put(EntityCacheUtils.getCacheKey(ss), ss));
                         break;
                     case remove:
                         p.batchDelete(s);
-                        s.forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
+                       // s.parallelStream().forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
                 }
+                s.parallelStream().forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
             });
         });
 

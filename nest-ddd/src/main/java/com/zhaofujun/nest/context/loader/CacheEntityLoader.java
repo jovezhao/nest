@@ -79,7 +79,7 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
                 if (Entity.class.isAssignableFrom(p.getType())) {
                     Entity v = (Entity) p.get(entityObject);
                     if (v != null) {
-                        Entity entity = EntityFactory.load(p.getType(), v.getId());
+                        Entity entity = new RepositoryEntityLoader(p.getType()).create(v.getId());
                         p.set(result, entity);
                     }
 //                    p.set(result, toEntityObject(v));

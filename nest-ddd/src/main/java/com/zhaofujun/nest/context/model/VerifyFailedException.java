@@ -7,4 +7,5 @@ public class VerifyFailedException extends CustomException {
     public VerifyFailedException(String message, Object... arguments) {
         super(ExceptionCode.VerifyFailed, message, arguments);
     }
+
 }

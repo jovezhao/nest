@@ -8,12 +8,12 @@ import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.context.event.EventArgs;
 import com.zhaofujun.nest.core.EventHandler;
-import com.zhaofujun.nest.core.EventData;
 import com.zhaofujun.nest.context.event.message.MessageConverter;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.message.MessageRecord;
 import com.zhaofujun.nest.context.event.store.MessageStore;
 import com.zhaofujun.nest.context.event.store.MessageStoreFactory;
+import com.zhaofujun.nest.standard.EventData;
 
 import java.util.Date;
 import java.util.UUID;

@@ -5,3 +5,5 @@
 rootProject.name = 'nest'
 include(':nest-ddd')
 include(':nest-ioc')
+include 'nest-standard'
+

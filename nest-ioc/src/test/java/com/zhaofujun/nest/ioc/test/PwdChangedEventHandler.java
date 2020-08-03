@@ -5,7 +5,7 @@ import com.zhaofujun.nest.core.EventHandler;
 import com.zhaofujun.nest.ioc.annotation.Component;
 import com.zhaofujun.nest.ioc.test.models.PasswordChangedEventData;
 
-@Component("PASSWORD_CHANGED")
+@Component(PwdChangedEventHandler.EVENT_CODE)
 public class PwdChangedEventHandler implements EventHandler<PasswordChangedEventData> {
     public static final String EVENT_CODE = "PASSWORD_CHANGED";
 

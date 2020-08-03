@@ -3,6 +3,7 @@ package com.zhaofujun.nest.core;
 import com.zhaofujun.nest.CustomException;
 import com.zhaofujun.nest.SystemException;
 import com.zhaofujun.nest.context.event.EventArgs;
+import com.zhaofujun.nest.standard.EventData;
 
 public interface EventHandler<T extends EventData> {
     String getEventCode();

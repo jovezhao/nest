@@ -4,6 +4,7 @@ import com.zhaofujun.nest.cache.provider.CacheProvider;
 import com.zhaofujun.nest.configuration.CacheConfiguration;
 import com.zhaofujun.nest.core.CacheClient;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -24,13 +25,13 @@ class DefaultCacheClient implements CacheClient {
     }
 
 
-    public <T> T get(Class clazz, String key) {
-        return cacheProvider.get(cacheConfiguration.getCacheCode(), key, clazz);
+    public <T> T get(Type type, String key) {
+        return cacheProvider.get(cacheConfiguration.getCacheCode(), key, type);
     }
 
 
-    public <T> Map<String, T> get(Class<T> clazz, String... keys) {
-        return cacheProvider.get(cacheConfiguration.getCacheCode(), clazz, keys);
+    public <T> Map<String, T> get(Type type, String... keys) {
+        return cacheProvider.get(cacheConfiguration.getCacheCode(), type, keys);
     }
 
 

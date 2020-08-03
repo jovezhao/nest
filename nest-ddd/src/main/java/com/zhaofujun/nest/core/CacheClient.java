@@ -1,12 +1,13 @@
 package com.zhaofujun.nest.core;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 
 public interface CacheClient {
-    <T> T get(Class clazz, String key);
+    <T> T get(Type type, String key);
 
 
-    <T> Map<String, T> get(Class<T> clazz, String... keys);
+    <T> Map<String, T> get(Type type, String... keys);
 
 
     void put(String key, Object value, long idleSeconds);

@@ -1,6 +1,7 @@
 package com.zhaofujun.nest.ioc.test.models;
 
-import com.zhaofujun.nest.core.EventData;
+
+import com.zhaofujun.nest.standard.EventData;
 
 public class PasswordChangedEventData extends EventData {
     public static final String EVENT_CODE = "PASSWORD_CHANGED";

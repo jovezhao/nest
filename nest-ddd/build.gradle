@@ -10,5 +10,6 @@ dependencies {
     // https://mvnrepository.com/artifact/com.alibaba/transmittable-thread-local
     compile 'com.alibaba:transmittable-thread-local:2.11.0'
     compile 'javax.validation:validation-api:2.0.0.Final'
+    compile project(':nest-standard')
 
 }

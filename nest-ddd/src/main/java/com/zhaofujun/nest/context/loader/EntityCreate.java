@@ -15,6 +15,8 @@ public class EntityCreate {
 
         if (tClass.isAssignableFrom(Role.class))
             throw new SystemException("角色不能直接通过实体加载器创建，请通过实体act方法扮演");
+        if(!Entity.class.isAssignableFrom(tClass))
+            throw new SystemException("Class["+tClass.getName()+"]不是一个有效的实体");
         Enhancer enhancer = new Enhancer();
         // 设置需要创建子类的类
         enhancer.setSuperclass(tClass);
