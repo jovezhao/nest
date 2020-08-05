@@ -154,7 +154,7 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
                 result.add(p);
             }
 
-            if (p.getType().isArray()) {Ca
+            if (p.getType().isArray()) {
 
                 Object[] fieldValue = (Object[]) getFieldValue(p, source);
                 for (int i = 0; i < fieldValue.length; i++) {
