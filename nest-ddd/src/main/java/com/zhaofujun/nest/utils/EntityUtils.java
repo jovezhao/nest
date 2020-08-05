@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 
 ///**
@@ -51,6 +54,24 @@ public class EntityUtils {
         }
 
     }
+
+
+//    public static <T extends Entity> void loading(T entityObject, Consumer<T> consumer){
+//        try {
+//            Field field = Entity.class.getDeclaredField("__loading");
+//            field.setAccessible(true);
+//            field.set(entityObject, true);
+//            consumer.accept(entityObject);
+//            field.set(entityObject, false);
+//        }catch (CustomException ex){
+//            throw ex;
+//        }catch (SystemException ex){
+//            throw  ex;
+//        } catch (Exception ex){
+//            throw new SystemException("更新实体加载状态失败", ex);
+//        }
+//    }
+
 
     public static boolean isLoading(Entity entityObject) {
         try {

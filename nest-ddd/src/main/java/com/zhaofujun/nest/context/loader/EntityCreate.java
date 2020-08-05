@@ -27,7 +27,6 @@ public class EntityCreate {
         EntityUtils.setNewInstance(t, newInstance);
         EntityUtils.setLoading(t, loading);
 
-
         ServiceContext serviceContext = ServiceContextManager.getCurrent();
         if (serviceContext != null) {
             if (newInstance)

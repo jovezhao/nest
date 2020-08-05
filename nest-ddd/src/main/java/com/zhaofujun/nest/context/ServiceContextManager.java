@@ -21,6 +21,7 @@ public class ServiceContextManager {
 
     public static ServiceContext getCurrent() {
         Stack<ServiceContext> serviceContexts = serviceContextThreadLocal.get();
+        if(serviceContexts==null) return null;
         return serviceContexts.peek();
     }
 

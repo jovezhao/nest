@@ -1,21 +1,17 @@
 package com.zhaofujun.nest.context.model;
 
-import com.zhaofujun.nest.context.ServiceContext;
 import com.zhaofujun.nest.NullException;
 import com.zhaofujun.nest.context.ServiceContextManager;
 import com.zhaofujun.nest.context.loader.ConstructEntityLoader;
 import com.zhaofujun.nest.context.loader.RepositoryEntityLoader;
-import com.zhaofujun.nest.core.EntityFactory;
+import com.zhaofujun.nest.core.DomainObject;
 import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.utils.EntityUtils;
 
 import javax.validation.Validation;
-import javax.xml.validation.Validator;
 import java.io.Serializable;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public abstract class Entity<T extends Identifier> implements Serializable {
+public abstract class Entity<T extends Identifier> extends DomainObject implements Serializable {
     protected T id;
 
     public T getId() {
