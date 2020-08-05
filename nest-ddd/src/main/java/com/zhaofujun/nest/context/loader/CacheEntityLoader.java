@@ -62,7 +62,7 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
             setDomainObject(entityObject, p);
         });
 
-        EntityUtils.setLoading(entityObject, false);
+        EntityUtils.setLoading(result, false);
         return result;
     }
 
@@ -154,7 +154,7 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
                 result.add(p);
             }
 
-            if (p.getType().isArray()) {
+            if (p.getType().isArray()) {Ca
 
                 Object[] fieldValue = (Object[]) getFieldValue(p, source);
                 for (int i = 0; i < fieldValue.length; i++) {
