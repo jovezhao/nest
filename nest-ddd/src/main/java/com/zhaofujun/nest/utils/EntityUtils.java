@@ -74,13 +74,14 @@ public class EntityUtils {
 
 
     public static boolean isLoading(Entity entityObject) {
-        try {
-            Field field = Entity.class.getDeclaredField("__loading");
-            field.setAccessible(true);
-            return field.getBoolean(entityObject);
-        } catch (Exception e) {
-            return false;
-        }
+        return entityObject.is__loading();
+//        try {
+//            Field field = Entity.class.getDeclaredField("__loading");
+//            field.setAccessible(true);
+//            return field.getBoolean(entityObject);
+//        } catch (Exception e) {
+//            return false;
+//        }
     }
 
 
@@ -105,13 +106,14 @@ public class EntityUtils {
     }
 
     public static boolean isNewInstance(Entity entityObject) {
-        try {
-            Field field = Entity.class.getDeclaredField("__newInstance");
-            field.setAccessible(true);
-            return field.getBoolean(entityObject);
-        } catch (Exception e) {
-            return false;
-        }
+        return entityObject.is__newInstance();
+//        try {
+//            Field field = Entity.class.getDeclaredField("__newInstance");
+//            field.setAccessible(true);
+//            return field.getBoolean(entityObject);
+//        } catch (Exception e) {
+//            return false;
+//        }
     }
 
     public static void setNewInstance(Entity entityObject, boolean newInstance) {
@@ -126,13 +128,14 @@ public class EntityUtils {
 
 
     public static boolean isChanged(Entity entityObject) {
-        try {
-            Field field = Entity.class.getDeclaredField("__changed");
-            field.setAccessible(true);
-            return field.getBoolean(entityObject);
-        } catch (Exception e) {
-            return false;
-        }
+        return entityObject.is__changed();
+//        try {
+//            Field field = Entity.class.getDeclaredField("__changed");
+//            field.setAccessible(true);
+//            return field.getBoolean(entityObject);
+//        } catch (Exception e) {
+//            return false;
+//        }
     }
 
     public static void setChanged(Entity entityObject, boolean changed) {

@@ -20,12 +20,14 @@ public interface Repository<T extends Entity> {
 
     default void batchInsert(List<T> ts) {
         for (T t : ts) {
+            t.verify();
             insert(t);
         }
     }
 
     default void batchUpdate(List<T> ts) {
         for (T t : ts) {
+            t.verify();
             update(t);
         }
     }

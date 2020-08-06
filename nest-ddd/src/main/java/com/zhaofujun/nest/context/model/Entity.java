@@ -8,7 +8,9 @@ import com.zhaofujun.nest.core.DomainObject;
 import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.utils.EntityUtils;
 
+import javax.validation.NoProviderFoundException;
 import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
 import java.io.Serializable;
 
 public abstract class Entity<T extends Identifier> extends DomainObject implements Serializable {
@@ -49,7 +51,23 @@ public abstract class Entity<T extends Identifier> extends DomainObject implemen
     //版本号
     private int _version;
 
-//    private void updateEntityObject() {
+    public boolean is__loading() {
+        return __loading;
+    }
+
+    public boolean is__newInstance() {
+        return __newInstance;
+    }
+
+    public boolean is__changed() {
+        return __changed;
+    }
+
+    public int get_version() {
+        return _version;
+    }
+
+    //    private void updateEntityObject() {
 //        if (verify()) {
 //            ServiceContext.getCurrent()
 //                    .getContextUnitOfWork().updateEntityObject(this);
@@ -69,7 +87,13 @@ public abstract class Entity<T extends Identifier> extends DomainObject implemen
 
 
     public void verify() {
-        Object[] strings = Validation.buildDefaultValidatorFactory()
+        ValidatorFactory validatorFactory;
+        try {
+            validatorFactory = Validation.buildDefaultValidatorFactory();
+        } catch (NoProviderFoundException exception) {
+            return;
+        }
+        Object[] strings = validatorFactory
                 .getValidator()
                 .validate(this)
                 .stream()
