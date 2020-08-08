@@ -2,11 +2,12 @@ package com.zhaofujun.nest.json;
 
 import com.google.gson.*;
 import com.zhaofujun.nest.context.model.Entity;
+import com.zhaofujun.nest.core.DomainObject;
 import com.zhaofujun.nest.utils.EntityUtils;
 
 import java.lang.reflect.Type;
 
-public class EntityObjectAdapter implements JsonSerializer<Entity>, JsonDeserializer<Entity> {
+public class EntityObjectAdapter implements JsonSerializer<DomainObject>, JsonDeserializer<DomainObject> {
     @Override
     public Entity deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
@@ -23,7 +24,7 @@ public class EntityObjectAdapter implements JsonSerializer<Entity>, JsonDeserial
     }
 
     @Override
-    public JsonElement serialize(Entity src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(DomainObject src, Type typeOfSrc, JsonSerializationContext context) {
 
         JsonElement jsonElement = context.serialize(src, src.getClass());
         String fullClassName = EntityUtils.getFullClassName(src);

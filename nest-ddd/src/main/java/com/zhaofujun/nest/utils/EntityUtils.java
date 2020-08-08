@@ -6,6 +6,7 @@ import com.zhaofujun.nest.context.ServiceContextManager;
 import com.zhaofujun.nest.context.loader.EntityMethodInterceptor;
 import com.zhaofujun.nest.context.model.Entity;
 import com.zhaofujun.nest.context.model.Role;
+import com.zhaofujun.nest.core.DomainObject;
 import com.zhaofujun.nest.core.Identifier;
 import com.zhaofujun.nest.SystemException;
 import net.sf.cglib.proxy.Enhancer;
@@ -26,9 +27,6 @@ import java.util.function.Function;
 public class EntityUtils {
     //
     private static Logger logger = LoggerFactory.getLogger(EntityUtils.class);
-
-
-
 
 
     public static void setValue(Class clazz, Entity entityObject, String fieldName, Object value) {
@@ -161,16 +159,16 @@ public class EntityUtils {
 //        }
 //    }
 
-    public static String getClassName(Entity entityObject) {
+    public static String getClassName(DomainObject entityObject) {
         final String PROXY_SPLIT_STR = "$";
         final int BEGIN_INDEX = 0;
 
         String className = entityObject.getClass().getSimpleName();
         int endIndex = className.indexOf(PROXY_SPLIT_STR);
-        return className.substring(BEGIN_INDEX, endIndex);
+        return endIndex == -1 ? className : className.substring(BEGIN_INDEX, endIndex);
     }
 
-    public static String getFullClassName(Entity entityObject) {
+    public static String getFullClassName(DomainObject entityObject) {
         return entityObject.getClass().getPackage().getName() + "." + getClassName(entityObject);
     }
 
