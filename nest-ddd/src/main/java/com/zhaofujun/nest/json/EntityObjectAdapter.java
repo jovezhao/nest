@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
 
 public class EntityObjectAdapter implements JsonSerializer<DomainObject>, JsonDeserializer<DomainObject> {
     @Override
-    public Entity deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public DomainObject deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
 
         String typeName = jsonObject.get("__type__").getAsString();
