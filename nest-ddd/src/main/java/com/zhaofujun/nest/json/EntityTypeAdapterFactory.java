@@ -6,13 +6,14 @@ import com.google.gson.TypeAdapterFactory;
 import com.google.gson.internal.bind.TreeTypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.zhaofujun.nest.context.model.Entity;
+import com.zhaofujun.nest.core.DomainObject;
 
 import java.lang.reflect.Modifier;
 
 public class EntityTypeAdapterFactory implements TypeAdapterFactory {
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-        if (!Entity.class.isAssignableFrom(type.getRawType())) return null;
+        if (!DomainObject.class.isAssignableFrom(type.getRawType())) return null;
 
         if (!Modifier.isAbstract(type.getRawType().getModifiers())) return null;
 

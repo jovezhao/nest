@@ -160,7 +160,7 @@ public class EntityUtils {
 //    }
 
     public static String getClassName(DomainObject entityObject) {
-        final String PROXY_SPLIT_STR = "$";
+        final String PROXY_SPLIT_STR = "$$";
         final int BEGIN_INDEX = 0;
 
         String className = entityObject.getClass().getSimpleName();
@@ -169,7 +169,12 @@ public class EntityUtils {
     }
 
     public static String getFullClassName(DomainObject entityObject) {
-        return entityObject.getClass().getPackage().getName() + "." + getClassName(entityObject);
+        final String PROXY_SPLIT_STR = "$$";
+        final int BEGIN_INDEX = 0;
+
+        String className = entityObject.getClass().getName();
+        int endIndex = className.indexOf(PROXY_SPLIT_STR);
+        return endIndex == -1 ? className : className.substring(BEGIN_INDEX, endIndex);
     }
 
 }

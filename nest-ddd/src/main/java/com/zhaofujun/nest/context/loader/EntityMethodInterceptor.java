@@ -18,8 +18,8 @@ import java.util.Set;
 
 public class EntityMethodInterceptor implements MethodInterceptor, Serializable {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final Set<String> withoutMethod = new HashSet<>(Arrays.asList(
+    private transient final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private transient final Set<String> withoutMethod = new HashSet<>(Arrays.asList(
             "hashCode", "equals", "toString", "notify",
             "notifyAll", "wait", "act", "verify", "findRoles",
             "delete", "is__loading", "is__newInstance", "is__changed", "get_version"));
