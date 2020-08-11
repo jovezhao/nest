@@ -157,6 +157,7 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
             if (p.getType().isArray()) {
 
                 Object[] fieldValue = (Object[]) getFieldValue(p, source);
+                if(fieldValue==null) return;
                 for (int i = 0; i < fieldValue.length; i++) {
                     if (Entity.class.isAssignableFrom(fieldValue[i].getClass())) {
                         fieldValue[i] = toEntityObject((Entity) fieldValue[i]);
@@ -169,6 +170,7 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
             }
             if (List.class.isAssignableFrom(p.getType())) {
                 List fieldValues = (List) getFieldValue(p, source);
+                if(fieldValues==null) return;
                 for (int i = 0; i < fieldValues.size(); i++) {
                     Object o = fieldValues.get(i);
                     if (Entity.class.isAssignableFrom(o.getClass())) {
@@ -182,6 +184,7 @@ public class CacheEntityLoader<T extends Entity> implements EntityLoader<T> {
             }
             if (Set.class.isAssignableFrom(p.getType())) {
                 Set fieldValues = (Set) getFieldValue(p, source);
+                if(fieldValues==null) return;
                 Object set = fieldValues.stream().map(q -> {
                     if (Entity.class.isAssignableFrom(q.getClass())) {
                         return toEntityObject((Entity) q);
