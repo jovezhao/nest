@@ -19,6 +19,6 @@ public class LocalDateAdapter implements JsonSerializer<LocalDate>, JsonDeserial
         Long timestamp = json.getAsJsonPrimitive().getAsLong();
         if (0L == timestamp) return null;
         Instant instant = Instant.ofEpochMilli(timestamp);
-        return LocalDate.ofInstant(instant, ZoneId.systemDefault());
+        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalDate();
     }
 }
