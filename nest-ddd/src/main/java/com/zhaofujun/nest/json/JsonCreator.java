@@ -25,9 +25,10 @@ public class JsonCreator {
         GsonBuilder gsonBuilder = new GsonBuilder()
                 .disableHtmlEscaping()
                 .setDateFormat(dateTimeFormat)
-                .registerTypeAdapterFactory(new EntityTypeAdapterFactory())
+                .registerTypeAdapterFactory(new DomainObjectTypeAdapterFactory())
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter(dateTimeFormat))
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter(dateFormat))
+//                .registerTypeAdapter(DomainObject.class, new DomainObjectAdapter())
                 .serializeNulls();
 
         Set<JsonConfiguration> jsonConfigurations = beanFinder.getInstances(JsonConfiguration.class);
@@ -39,7 +40,15 @@ public class JsonCreator {
 
 
     public String toJsonString(Object object) {
-        return gson.toJson(object);
+        //1 开起序列化上下文
+        //2 序列化(上下文内已经出现过的领域对象不再进行序列化)
+        //3 清空上下文
+        DomainObjectSerializeContext.clear();
+        try {
+            return gson.toJson(object);
+        } finally {
+            DomainObjectSerializeContext.clear();
+        }
     }
 
     public <T> T toObj(String jsonString, Class<T> tClass) {
@@ -57,6 +66,6 @@ public class JsonCreator {
         return gson.fromJson(jsonString, typeOfT);
     }
 
-}
 
+}
 
