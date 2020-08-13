@@ -12,6 +12,7 @@ public class MessageInfo<T extends EventData> implements Serializable {
     private String eventSource;
     private Date sendTime;
     private T data;
+    private String extendInfo;
 
     public String getMessageId() {
         return messageId;
@@ -43,5 +44,13 @@ public class MessageInfo<T extends EventData> implements Serializable {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public String getExtendInfo() {
+        return extendInfo;
+    }
+
+    public void setExtendInfo(String extendInfo) {
+        this.extendInfo = extendInfo;
     }
 }

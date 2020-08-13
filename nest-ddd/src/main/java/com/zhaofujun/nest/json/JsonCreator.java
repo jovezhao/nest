@@ -7,6 +7,7 @@ import com.zhaofujun.nest.core.BeanFinder;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,17 +19,13 @@ public class JsonCreator {
 
     public JsonCreator(BeanFinder beanFinder) {
 
-        String dateTimeFormat = "yyyy-MM-dd HH:mm:ss";
-        String dateFormat = "yyyy-MM-dd";
-
         this.beanFinder = beanFinder;
         GsonBuilder gsonBuilder = new GsonBuilder()
                 .disableHtmlEscaping()
-                .setDateFormat(dateTimeFormat)
                 .registerTypeAdapterFactory(new DomainObjectTypeAdapterFactory())
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter(dateTimeFormat))
-                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter(dateFormat))
-//                .registerTypeAdapter(DomainObject.class, new DomainObjectAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .registerTypeAdapter(Date.class, new DateAdapter())
                 .serializeNulls();
 
         Set<JsonConfiguration> jsonConfigurations = beanFinder.getInstances(JsonConfiguration.class);
