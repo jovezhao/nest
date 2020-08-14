@@ -1,12 +1,23 @@
 package com.zhaofujun.nest.event;
 
+import com.zhaofujun.nest.core.BeanFinder;
+
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class EventListenerManager {
-    private List<EventListener> listeners = new ArrayList<>();
+    private List<EventListener> listeners ;
+
+    public EventListenerManager(BeanFinder beanFinder) {
+
+        Set<EventListener> eventListeners = beanFinder.getInstances(EventListener.class);
+        this.listeners.addAll(eventListeners);
+    }
+
+
 
     public void addListener(EventListener eventListener) {
         this.listeners.add(eventListener);
