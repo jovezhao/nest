@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class EventListenerManager {
-    private List<EventListener> listeners ;
+    private List<EventListener> listeners=new ArrayList<>();
 
     public EventListenerManager(BeanFinder beanFinder) {
 
