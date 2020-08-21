@@ -2,9 +2,7 @@ package com.zhaofujun.nest;
 
 import com.zhaofujun.nest.configuration.ConfigurationItem;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
-import com.zhaofujun.nest.configuration.NestConfiguration;
-import com.zhaofujun.nest.context.appservice.ApplicationServiceCreator;
-import com.zhaofujun.nest.context.appservice.UnitOfWorkCommitor;
+import com.zhaofujun.nest.configuration.MessageConfiguration;
 import com.zhaofujun.nest.context.event.DefaultEventBus;
 import com.zhaofujun.nest.context.repository.RepositoryManager;
 import com.zhaofujun.nest.standard.EventBus;
@@ -18,9 +16,9 @@ import com.zhaofujun.nest.provider.ProviderManage;
 
 public class NestApplication {
 
-    private NestConfiguration configuration;
-    private EventListenerManager listenerManager;
+    private MessageConfiguration messageConfiguration;
     private ConfigurationManager configurationManager;
+    private EventListenerManager listenerManager;
     private RepositoryManager repositoryManager;
     private ProviderManage providerManage;
 
@@ -41,7 +39,7 @@ public class NestApplication {
     }
 
     NestApplication() {
-        this.configuration = new NestConfiguration();
+        this.messageConfiguration = new MessageConfiguration();
         this.configurationManager = new ConfigurationManager();
         this.providerManage = new ProviderManage();
         this.listenerManager = new EventListenerManager();
@@ -66,8 +64,8 @@ public class NestApplication {
     }
 
 
-    public NestConfiguration getConfiguration() {
-        return configuration;
+    public MessageConfiguration getMessageConfiguration() {
+        return messageConfiguration;
     }
 
     public void start() {
@@ -126,15 +124,17 @@ public class NestApplication {
     public void serviceMethodStart(ServiceContext serviceContext) {
         ServiceEvent serviceEvent = new ServiceEvent(this, serviceContext);
         this.listenerManager.publish(ServiceContextListener.class, p -> {
-            p.serviceMethodStart(serviceEvent,serviceContext.getMethod());
+            p.serviceMethodStart(serviceEvent, serviceContext.getMethod());
         });
     }
+
     public void serviceMethodEnd(ServiceContext serviceContext) {
         ServiceEvent serviceEvent = new ServiceEvent(this, serviceContext);
         this.listenerManager.publish(ServiceContextListener.class, p -> {
-            p.serviceMethodEnd(serviceEvent,serviceContext.getMethod());
+            p.serviceMethodEnd(serviceEvent, serviceContext.getMethod());
         });
     }
+
     public void serviceEnd(ServiceContext serviceContext) {
         ServiceEvent serviceEvent = new ServiceEvent(this, serviceContext);
         this.listenerManager.publish(ServiceContextListener.class, p -> {

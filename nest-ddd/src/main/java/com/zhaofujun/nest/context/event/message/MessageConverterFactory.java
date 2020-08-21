@@ -6,6 +6,6 @@ public class MessageConverterFactory {
 
     public static MessageConverter create() {
 
-      return NestApplication.current().getProviderManage().getMessageConverter(NestApplication.current().getConfiguration().getDefaultMessageConverter());
+      return NestApplication.current().getProviderManage().getMessageConverter(NestApplication.current().getMessageConfiguration().getConverter());
     }
 }

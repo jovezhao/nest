@@ -5,6 +5,6 @@ import com.zhaofujun.nest.NestApplication;
 public class MessageResendFactory {
 
     public static MessageResendStore create() {
-        return NestApplication.current().getProviderManage().getMessageResendStore(NestApplication.current().getConfiguration().getDefaultMessageResendStore());
+        return NestApplication.current().getProviderManage().getMessageResendStore(NestApplication.current().getMessageConfiguration().getResendStore());
     }
 }

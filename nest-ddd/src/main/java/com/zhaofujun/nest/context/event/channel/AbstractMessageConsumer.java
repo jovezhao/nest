@@ -16,11 +16,9 @@ import java.util.UUID;
 
 public abstract class AbstractMessageConsumer implements MessageConsumer {
 
-    private MessageConverter messageConverter=NestApplication.current().getProviderManage().getMessageConverter(NestApplication.current().getConfiguration().getDefaultMessageConverter());
-
 
     public MessageConverter getMessageConverter() {
-        return messageConverter;
+        return MessageConverterFactory.create();
     }
 
 
@@ -44,8 +42,7 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
         eventArgs.setSendTime(messageInfo.getSendTime());
 
 
-
-        MessageStoreProvider messageStoreProvider = NestApplication.current().getProviderManage().getMessageStore(NestApplication.current().getConfiguration().getDefaultMessageStore());
+        MessageStoreProvider messageStoreProvider = NestApplication.current().getProviderManage().getMessageStore(NestApplication.current().getMessageConfiguration().getStore());
         if (messageStoreProvider.isSucceed(messageInfo.getMessageId(), eventHandler.getClass().getName()))
             return;
 

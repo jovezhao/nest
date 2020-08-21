@@ -3,13 +3,10 @@ package com.zhaofujun.nest.test;
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.context.appservice.ApplicationServiceCreator;
 import com.zhaofujun.nest.test.application.UserApplicationService;
-import com.zhaofujun.nest.test.domain.User;
-import com.zhaofujun.nest.test.repositories.UserRepository;
 
-import java.lang.reflect.Field;
 
 public class Application {
-    public static void main(String[] args) throws NoSuchFieldException {
+    public static void main(String[] args)   {
 
 
         NestApplication application = NestApplication.current();
