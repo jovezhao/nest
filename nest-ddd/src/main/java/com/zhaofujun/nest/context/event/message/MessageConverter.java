@@ -1,6 +1,8 @@
 package com.zhaofujun.nest.context.event.message;
 
-public interface MessageConverter {
+import com.zhaofujun.nest.provider.Provider;
+
+public interface MessageConverter extends Provider {
 
     String messageToString(MessageInfo messageInfo);
 

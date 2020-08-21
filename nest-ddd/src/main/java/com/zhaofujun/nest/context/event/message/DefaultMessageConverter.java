@@ -1,6 +1,5 @@
 package com.zhaofujun.nest.context.event.message;
 
-import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.json.JsonCreator;
 import com.zhaofujun.nest.json.ParameterizedTypeFactory;
 
@@ -8,13 +7,10 @@ import java.lang.reflect.Type;
 
 public class DefaultMessageConverter implements MessageConverter {
 
-    private BeanFinder beanFinder;
-    private JsonCreator jsonCreator;
+    public static final String CODE = "DefaultMessageConverter";
 
-    public DefaultMessageConverter(BeanFinder beanFinder) {
-        this.beanFinder = beanFinder;
-        jsonCreator = new JsonCreator(beanFinder);
-    }
+    private JsonCreator jsonCreator = new JsonCreator();
+
 
 
     public String messageToString(MessageInfo messageInfo) {
@@ -29,4 +25,8 @@ public class DefaultMessageConverter implements MessageConverter {
 
     }
 
+    @Override
+    public String getCode() {
+        return CODE;
+    }
 }

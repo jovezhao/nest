@@ -1,21 +1,19 @@
 package com.zhaofujun.nest.context.event.store;
 
-import com.zhaofujun.nest.core.CacheClient;
+import com.zhaofujun.nest.cache.CacheClient;
 import com.zhaofujun.nest.cache.CacheClientFactory;
-import com.zhaofujun.nest.core.BeanFinder;
 import com.zhaofujun.nest.context.event.message.MessageRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class DefaultMessageStore implements MessageStore {
+public class DefaultMessageStore implements MessageStoreProvider {
     private Logger logger = LoggerFactory.getLogger(DefaultMessageStore.class);
     public static final String CACHE_CODE = "DefaultMessageStore";
     private CacheClient cacheClient;
 
-    public DefaultMessageStore(BeanFinder beanFinder) {
-        CacheClientFactory cacheClientFactory = new CacheClientFactory(beanFinder);
-        this.cacheClient = cacheClientFactory.getCacheClient(CACHE_CODE);
+    public DefaultMessageStore() {
+        this.cacheClient = CacheClientFactory.getCacheClient(CACHE_CODE);
     }
 
     @Override
@@ -39,4 +37,8 @@ public class DefaultMessageStore implements MessageStore {
     }
 
 
+    @Override
+    public String getCode() {
+        return "DefaultMessageStore";
+    }
 }

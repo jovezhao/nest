@@ -1,41 +1,71 @@
 package com.zhaofujun.nest.context.repository;
 
-import com.zhaofujun.nest.context.model.Entity;
-import com.zhaofujun.nest.core.Identifier;
-import com.zhaofujun.nest.core.EntityLoader;
-import com.zhaofujun.nest.core.Repository;
+import com.zhaofujun.nest.context.model.BaseEntity;
+import com.zhaofujun.nest.context.model.AbstractIdentifier;
+import com.zhaofujun.nest.standard.EntityLoader;
+import com.zhaofujun.nest.json.JsonCreator;
+import com.zhaofujun.nest.standard.Identifier;
+import com.zhaofujun.nest.standard.Repository;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DefaultRepository implements Repository<Entity> {
+public class DefaultRepository implements Repository<BaseEntity> {
 
-    private static Map<Identifier, Entity> entityMap = new HashMap<>();
+    private JsonCreator jsonCreator = new JsonCreator();
 
+    class EntityItem {
+        private AbstractIdentifier id;
+        private Class tClass;
+        private String value;
+    }
 
+    private static Map<Identifier, EntityItem> entityMap = new HashMap<>();
 
     @Override
-    public Entity getEntityById(Identifier identifier, EntityLoader entityLoader) {
-        return entityMap.get(identifier);
+    public BaseEntity getEntityById(Identifier abstractIdentifier, EntityLoader<BaseEntity> entityLoader) {
+        EntityItem entityItem = entityMap.get(abstractIdentifier);
+        System.out.println("get:" + entityItem.value);
+        if (entityItem != null) {
+            return jsonCreator.toObj(entityItem.value, (Type) entityItem.tClass.getSuperclass());
+        }
+        return null;
     }
 
     @Override
-    public Class<Entity> getEntityClass() {
-        return Entity.class;
+    public Class<BaseEntity> getEntityClass() {
+        return BaseEntity.class;
+    }
+
+
+
+    @Override
+    public void insert(BaseEntity entity) {
+        EntityItem entityItem = new EntityItem();
+        entityItem.id = entity.getId();
+        entityItem.tClass = entity.getClass();
+        entityItem.value = jsonCreator.toJsonString(entity);
+        entityMap.put(entity.getId(), entityItem);
+        System.out.println("insert:" + entityItem.value);
+
     }
 
     @Override
-    public void insert(Entity entity) {
-        entityMap.put(entity.getId(), entity);
+    public void update(BaseEntity entity) {
+        EntityItem entityItem = new EntityItem();
+        entityItem.id = entity.getId();
+        entityItem.tClass = entity.getClass();
+        entityItem.value = jsonCreator.toJsonString(entity);
+        entityMap.put(entity.getId(), entityItem);
+        System.out.println("update:" + entityItem.value);
+
     }
 
     @Override
-    public void update(Entity entity) {
-        entityMap.put(entity.getId(), entity);
-    }
-
-    @Override
-    public void delete(Entity entity) {
+    public void delete(BaseEntity entity) {
         entityMap.remove(entity.getId());
+        System.out.println("delete:");
+
     }
 }

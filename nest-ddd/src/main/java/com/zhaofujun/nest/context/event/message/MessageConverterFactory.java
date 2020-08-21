@@ -1,20 +1,11 @@
 package com.zhaofujun.nest.context.event.message;
 
-import com.zhaofujun.nest.core.BeanFinder;
+import com.zhaofujun.nest.NestApplication;
 
 public class MessageConverterFactory {
-    private BeanFinder beanFinder;
 
-    public MessageConverterFactory(BeanFinder beanFinder) {
-        this.beanFinder = beanFinder;
-    }
+    public static MessageConverter create() {
 
-    public MessageConverter create() {
-
-        MessageConverter messageConverter = beanFinder.getInstance(MessageConverter.class);
-
-        if (messageConverter == null)
-            messageConverter = new DefaultMessageConverter(beanFinder);
-        return messageConverter;
+      return NestApplication.current().getProviderManage().getMessageConverter(NestApplication.current().getConfiguration().getDefaultMessageConverter());
     }
 }

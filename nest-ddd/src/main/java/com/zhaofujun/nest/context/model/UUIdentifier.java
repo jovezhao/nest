@@ -1,10 +1,8 @@
 package com.zhaofujun.nest.context.model;
 
-import com.zhaofujun.nest.core.Identifier;
-
 import java.util.UUID;
 
-public class UUIdentifier extends Identifier {
+public class UUIdentifier extends AbstractIdentifier {
     private UUID id;
 
     @Override
@@ -16,7 +14,7 @@ public class UUIdentifier extends Identifier {
         this.id = id;
     }
 
-    public static Identifier valueOf(UUID value) {
+    public static AbstractIdentifier valueOf(UUID value) {
         return new UUIdentifier(value);
     }
 

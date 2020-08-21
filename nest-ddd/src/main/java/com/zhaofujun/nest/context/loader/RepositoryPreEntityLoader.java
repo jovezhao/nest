@@ -1,11 +1,9 @@
 package com.zhaofujun.nest.context.loader;
 
 
-import com.zhaofujun.nest.context.ServiceContext;
-import com.zhaofujun.nest.context.ServiceContextManager;
-import com.zhaofujun.nest.context.model.Entity;
-import com.zhaofujun.nest.core.Identifier;
-import com.zhaofujun.nest.core.EntityLoader;
+import com.zhaofujun.nest.context.model.BaseEntity;
+import com.zhaofujun.nest.standard.EntityLoader;
+import com.zhaofujun.nest.standard.Identifier;
 import com.zhaofujun.nest.utils.EntityUtils;
 
 /**
@@ -14,7 +12,7 @@ import com.zhaofujun.nest.utils.EntityUtils;
  *
  * @param <T>
  */
-class RepositoryPreEntityLoader<T extends Entity> implements EntityLoader<T> {
+class RepositoryPreEntityLoader<T extends BaseEntity> implements EntityLoader<T> {
     private Class tClass;
 
     public RepositoryPreEntityLoader(Class tClass) {
@@ -28,8 +26,8 @@ class RepositoryPreEntityLoader<T extends Entity> implements EntityLoader<T> {
 
     @Override
     public <U extends T> U create(Class uClass, Identifier id) {
-        U u = EntityCreate.create(uClass, id, false, true);
-
+        U u = EntityCreate.create(uClass, false);
+        EntityUtils.setIdentifier(u, id);
         return u;
     }
 }

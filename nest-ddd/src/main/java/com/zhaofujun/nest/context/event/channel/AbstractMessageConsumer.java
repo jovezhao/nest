@@ -1,18 +1,14 @@
 package com.zhaofujun.nest.context.event.channel;
 
-import com.zhaofujun.nest.CustomException;
-import com.zhaofujun.nest.CustomExceptionable;
-import com.zhaofujun.nest.OtherCustomException;
-import com.zhaofujun.nest.SystemException;
-import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
-import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.context.event.EventArgs;
-import com.zhaofujun.nest.core.EventHandler;
-import com.zhaofujun.nest.context.event.message.MessageConverter;
-import com.zhaofujun.nest.context.event.message.MessageInfo;
-import com.zhaofujun.nest.context.event.message.MessageRecord;
-import com.zhaofujun.nest.context.event.store.MessageStore;
-import com.zhaofujun.nest.context.event.store.MessageStoreFactory;
+import com.zhaofujun.nest.*;
+import com.zhaofujun.nest.context.event.message.*;
+import com.zhaofujun.nest.context.event.store.MessageStoreProvider;
+import com.zhaofujun.nest.standard.EventArgs;
+import com.zhaofujun.nest.standard.EventHandler;
+import com.zhaofujun.nest.standard.CustomException;
+import com.zhaofujun.nest.exception.CustomExceptionable;
+import com.zhaofujun.nest.exception.OtherCustomException;
+import com.zhaofujun.nest.standard.SystemException;
 import com.zhaofujun.nest.standard.EventData;
 
 import java.util.Date;
@@ -20,21 +16,13 @@ import java.util.UUID;
 
 public abstract class AbstractMessageConsumer implements MessageConsumer {
 
-    private BeanFinder beanFinder;
-    private MessageConverter messageConverter;
+    private MessageConverter messageConverter=NestApplication.current().getProviderManage().getMessageConverter(NestApplication.current().getConfiguration().getDefaultMessageConverter());
 
-    public AbstractMessageConsumer(BeanFinder beanFinder) {
-        this.beanFinder = beanFinder;
-        messageConverter = new MessageConverterFactory(beanFinder).create();
-    }
 
     public MessageConverter getMessageConverter() {
         return messageConverter;
     }
 
-    public BeanFinder getBeanFinder() {
-        return beanFinder;
-    }
 
     public abstract void subscribe(EventHandler eventHandler);
 
@@ -56,17 +44,16 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
         eventArgs.setSendTime(messageInfo.getSendTime());
 
 
-        MessageStoreFactory messageStoreFactory = new MessageStoreFactory(beanFinder);
 
-        MessageStore messageStore = messageStoreFactory.create();
-        if (messageStore.isSucceed(messageInfo.getMessageId(), eventHandler.getClass().getName()))
+        MessageStoreProvider messageStoreProvider = NestApplication.current().getProviderManage().getMessageStore(NestApplication.current().getConfiguration().getDefaultMessageStore());
+        if (messageStoreProvider.isSucceed(messageInfo.getMessageId(), eventHandler.getClass().getName()))
             return;
 
 
         try {
 
             eventHandler.handle(eventData, eventArgs);
-            messageStore.save(record);
+            messageStoreProvider.save(record);
         } catch (CustomException ex) {
             eventHandler.onCustomException(context, ex);
         } catch (SystemException ex) {

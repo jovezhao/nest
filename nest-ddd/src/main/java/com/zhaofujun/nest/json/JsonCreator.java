@@ -2,24 +2,25 @@ package com.zhaofujun.nest.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.zhaofujun.nest.core.BeanFinder;
+import com.zhaofujun.nest.standard.DomainObject;
+import com.zhaofujun.nest.json.adapter.DateAdapter;
+import com.zhaofujun.nest.json.adapter.DomainObjectTypeAdapterFactory;
+import com.zhaofujun.nest.json.adapter.LocalDateAdapter;
+import com.zhaofujun.nest.json.adapter.LocalDateTimeAdapter;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
 public class JsonCreator {
     private Gson gson;
-    private BeanFinder beanFinder;
 
-    public JsonCreator(BeanFinder beanFinder) {
+    public JsonCreator() {
 
-        this.beanFinder = beanFinder;
         GsonBuilder gsonBuilder = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapterFactory(new DomainObjectTypeAdapterFactory())
@@ -28,24 +29,19 @@ public class JsonCreator {
                 .registerTypeAdapter(Date.class, new DateAdapter())
                 .serializeNulls();
 
-        Set<JsonConfiguration> jsonConfigurations = beanFinder.getInstances(JsonConfiguration.class);
-        for (JsonConfiguration p : jsonConfigurations) {
-            gsonBuilder = gsonBuilder.registerTypeAdapter(p.getClazz(), p.getTypeAdapter());
-        }
         gson = gsonBuilder.create();
     }
 
 
     public String toJsonString(Object object) {
-        //1 开起序列化上下文
-        //2 序列化(上下文内已经出现过的领域对象不再进行序列化)
-        //3 清空上下文
-        DomainObjectSerializeContext.clear();
-        try {
-            return gson.toJson(object);
-        } finally {
+        if (DomainObject.class.isInstance(object)) {
+            DomainObjectSerializeContext.setCurrent((DomainObject) object);
             DomainObjectSerializeContext.clear();
         }
+        String s = gson.toJson(object);
+        DomainObjectSerializeContext.clear();
+        DomainObjectSerializeContext.clearDomainObject();
+        return s;
     }
 
     public <T> T toObj(String jsonString, Class<T> tClass) {

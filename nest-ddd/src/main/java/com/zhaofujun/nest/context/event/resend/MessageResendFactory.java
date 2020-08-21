@@ -1,20 +1,10 @@
 package com.zhaofujun.nest.context.event.resend;
 
-import com.zhaofujun.nest.context.event.store.DefaultMessageStore;
-import com.zhaofujun.nest.context.event.store.MessageStore;
-import com.zhaofujun.nest.core.BeanFinder;
+import com.zhaofujun.nest.NestApplication;
 
 public class MessageResendFactory {
-    private BeanFinder beanFinder;
 
-    public MessageResendFactory(BeanFinder beanFinder) {
-        this.beanFinder = beanFinder;
-    }
-
-    public MessageResendStore create() {
-        MessageResendStore messageResendStore = beanFinder.getInstance(MessageResendStore.class);
-        if (messageResendStore == null)
-            messageResendStore = new DefaultMessageResendStore(beanFinder);
-        return messageResendStore;
+    public static MessageResendStore create() {
+        return NestApplication.current().getProviderManage().getMessageResendStore(NestApplication.current().getConfiguration().getDefaultMessageResendStore());
     }
 }

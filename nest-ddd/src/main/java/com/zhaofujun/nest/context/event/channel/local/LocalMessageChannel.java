@@ -1,24 +1,23 @@
 package com.zhaofujun.nest.context.event.channel.local;
 
 
+import com.zhaofujun.nest.context.event.channel.MessageChannelProvider;
 import com.zhaofujun.nest.context.event.message.MessageConverter;
-import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.core.EventHandler;
+import com.zhaofujun.nest.standard.EventHandler;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
-import com.zhaofujun.nest.context.event.channel.MessageChannel;
 import com.zhaofujun.nest.context.event.channel.MessageConsumer;
 import com.zhaofujun.nest.context.event.channel.MessageProducer;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class LocalMessageChannel implements MessageChannel, MessageProducer, MessageConsumer {
+public class LocalMessageChannel implements MessageChannelProvider, MessageProducer, MessageConsumer {
 
     public static final String CHANNEL_CODE = "LocalMessageChannel";
     private MessageConsumer messageConsumer;
 
-    public LocalMessageChannel(BeanFinder beanFinder) {
-        this.messageConsumer = new LocalMessageConsumer(this, beanFinder);
+    public LocalMessageChannel() {
+        this.messageConsumer = new LocalMessageConsumer(this);
     }
 
 
@@ -34,7 +33,7 @@ public class LocalMessageChannel implements MessageChannel, MessageProducer, Mes
     }
 
     @Override
-    public String getMessageChannelCode() {
+    public String getCode() {
         return CHANNEL_CODE;
     }
 

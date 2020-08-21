@@ -1,30 +1,74 @@
 package com.zhaofujun.nest;
 
+import com.zhaofujun.nest.configuration.ConfigurationItem;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
-import com.zhaofujun.nest.context.ServiceContextManager;
-import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.container.ContainerProvider;
-import com.zhaofujun.nest.context.ServiceContext;
+import com.zhaofujun.nest.configuration.NestConfiguration;
+import com.zhaofujun.nest.context.appservice.ApplicationServiceCreator;
+import com.zhaofujun.nest.context.appservice.UnitOfWorkCommitor;
+import com.zhaofujun.nest.context.event.DefaultEventBus;
+import com.zhaofujun.nest.context.repository.RepositoryManager;
+import com.zhaofujun.nest.standard.EventBus;
+import com.zhaofujun.nest.standard.EventHandler;
+import com.zhaofujun.nest.standard.Repository;
+import com.zhaofujun.nest.context.appservice.ServiceContext;
 import com.zhaofujun.nest.event.*;
+import com.zhaofujun.nest.provider.Provider;
+import com.zhaofujun.nest.provider.ProviderManage;
 
 
 public class NestApplication {
 
+    private NestConfiguration configuration;
     private EventListenerManager listenerManager;
     private ConfigurationManager configurationManager;
-    private ContainerProvider containerProvider;
-
-    public NestApplication(ContainerProvider containerProvider) {
-        this.containerProvider = containerProvider;
-        this.configurationManager =  ConfigurationManager.create(containerProvider);
-        this.listenerManager = new EventListenerManager(containerProvider);
-
-    }
+    private RepositoryManager repositoryManager;
+    private ProviderManage providerManage;
 
     public ConfigurationManager getConfigurationManager() {
         return this.configurationManager;
     }
 
+    public ProviderManage getProviderManage() {
+        return providerManage;
+    }
+
+    public EventListenerManager getListenerManager() {
+        return listenerManager;
+    }
+
+    public RepositoryManager getRepositoryManager() {
+        return repositoryManager;
+    }
+
+    NestApplication() {
+        this.configuration = new NestConfiguration();
+        this.configurationManager = new ConfigurationManager();
+        this.providerManage = new ProviderManage();
+        this.listenerManager = new EventListenerManager();
+        this.repositoryManager = new RepositoryManager();
+    }
+
+    public void setContainerProvider(ContainerProvider containerProvider) {
+        this.configurationManager.addConfigurationItem(containerProvider.getInstances(ConfigurationItem.class));
+        this.providerManage.addProvider(containerProvider.getInstances(Provider.class));
+        this.listenerManager.addListeners(containerProvider.getInstances(NestEventListener.class));
+        this.repositoryManager.addRepository(containerProvider.getInstances(Repository.class));
+        EventBus eventBus = new DefaultEventBus(this);
+        containerProvider.getInstances(EventHandler.class).forEach(eventHandler -> {
+            eventBus.registerHandler(eventHandler);
+        });
+    }
+
+    private static NestApplication application = new NestApplication();
+
+    public static NestApplication current() {
+        return application;
+    }
+
+
+    public NestConfiguration getConfiguration() {
+        return configuration;
+    }
 
     public void start() {
         onStarted();
@@ -32,16 +76,6 @@ public class NestApplication {
 
     public void close() {
         onClosed();
-    }
-
-    public ServiceContext newInstance(Class serviceClass) {
-        ServiceContext serviceContext = ServiceContext.newInstance(serviceClass, this);
-        ServiceContextManager.set(serviceContext);
-        return serviceContext;
-    }
-
-    public BeanFinder getBeanFinder() {
-        return this.containerProvider;
     }
 
 
@@ -89,7 +123,24 @@ public class NestApplication {
         });
     }
 
-
+    public void serviceMethodStart(ServiceContext serviceContext) {
+        ServiceEvent serviceEvent = new ServiceEvent(this, serviceContext);
+        this.listenerManager.publish(ServiceContextListener.class, p -> {
+            p.serviceMethodStart(serviceEvent,serviceContext.getMethod());
+        });
+    }
+    public void serviceMethodEnd(ServiceContext serviceContext) {
+        ServiceEvent serviceEvent = new ServiceEvent(this, serviceContext);
+        this.listenerManager.publish(ServiceContextListener.class, p -> {
+            p.serviceMethodEnd(serviceEvent,serviceContext.getMethod());
+        });
+    }
+    public void serviceEnd(ServiceContext serviceContext) {
+        ServiceEvent serviceEvent = new ServiceEvent(this, serviceContext);
+        this.listenerManager.publish(ServiceContextListener.class, p -> {
+            p.serviceEnd(serviceEvent);
+        });
+    }
 }
 
 

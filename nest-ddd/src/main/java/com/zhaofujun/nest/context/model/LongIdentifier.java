@@ -1,8 +1,6 @@
 package com.zhaofujun.nest.context.model;
 
-import com.zhaofujun.nest.core.Identifier;
-
-public class LongIdentifier extends Identifier {
+public class LongIdentifier extends AbstractIdentifier {
 
     private static SnowflakeIdWorker snowflakeIdWorker = new SnowflakeIdWorker();
     private Long id;

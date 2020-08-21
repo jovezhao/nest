@@ -1,29 +1,22 @@
 package com.zhaofujun.nest.event;
 
-import com.zhaofujun.nest.core.BeanFinder;
-
-import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class EventListenerManager {
-    private List<EventListener> listeners=new ArrayList<>();
+    private List<NestEventListener> listeners = new ArrayList<>();
 
-    public EventListenerManager(BeanFinder beanFinder) {
 
-        Set<EventListener> eventListeners = beanFinder.getInstances(EventListener.class);
+    public void addListeners(Collection<NestEventListener> eventListeners) {
         this.listeners.addAll(eventListeners);
     }
 
 
-
-    public void addListener(EventListener eventListener) {
+    public void addListener(NestEventListener eventListener) {
         this.listeners.add(eventListener);
     }
 
-    public <T extends EventListener> void publish(Class<T> tClass, Consumer<? super T> doSomething) {
+    public <T extends NestEventListener> void publish(Class<T> tClass, Consumer<? super T> doSomething) {
         listeners.stream()
                 .filter(p -> tClass.isAssignableFrom(p.getClass()))
                 .map(p -> (T) p)

@@ -1,33 +1,24 @@
 package com.zhaofujun.nest.context.event;
 
+import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
-import com.zhaofujun.nest.configuration.EventConfiguration;
-import com.zhaofujun.nest.context.event.channel.MessageChannel;
-import com.zhaofujun.nest.context.event.channel.MessageChannelFactory;
+import com.zhaofujun.nest.context.event.channel.MessageChannelProvider;
 import com.zhaofujun.nest.context.event.channel.MessageConsumer;
 import com.zhaofujun.nest.context.event.channel.MessageProducer;
-import com.zhaofujun.nest.context.event.message.MessageConverter;
-import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
-import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.core.EventBus;
-import com.zhaofujun.nest.core.EventHandler;
+import com.zhaofujun.nest.standard.EventBus;
 import com.zhaofujun.nest.standard.EventData;
+import com.zhaofujun.nest.standard.EventHandler;
 
 import java.util.Date;
 import java.util.UUID;
 
 public class DefaultEventBus implements EventBus {
-    private BeanFinder beanFinder;
-    private MessageChannelFactory messageChannelFactory;
     private ConfigurationManager configurationManager;
-    private MessageConverter messageConverter;
 
-    public DefaultEventBus(BeanFinder beanFinder) {
-        this.beanFinder = beanFinder;
-        this.messageConverter = new MessageConverterFactory(beanFinder).create();
-        this.messageChannelFactory = new MessageChannelFactory(beanFinder);
-        this.configurationManager = ConfigurationManager.getCurrent(beanFinder);
+    public DefaultEventBus(NestApplication nestApplication) {
+
+        this.configurationManager = nestApplication.getConfigurationManager();
     }
 
     public void publish(EventData eventData) {
@@ -38,7 +29,7 @@ public class DefaultEventBus implements EventBus {
         EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(eventData.getEventCode());
 
 
-        MessageChannel messageChannel = messageChannelFactory.create(eventConfiguration.getMessageChannelCode());
+        MessageChannelProvider messageChannel = NestApplication.current().getProviderManage().getMessageChannel(eventConfiguration.getMessageChannelCode());
         MessageProducer messageProducer = messageChannel.getMessageProducer();
 
 
@@ -57,7 +48,7 @@ public class DefaultEventBus implements EventBus {
 
         EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(eventHandler.getEventCode());
 
-        MessageChannel messageChannel = messageChannelFactory.create(eventConfiguration.getMessageChannelCode());
+        MessageChannelProvider messageChannel = NestApplication.current().getProviderManage().getMessageChannel(eventConfiguration.getMessageChannelCode());
 
         MessageConsumer messageConsumer = messageChannel.getMessageConsumer();
         Thread thread = new Thread(new Runnable() {
@@ -69,10 +60,5 @@ public class DefaultEventBus implements EventBus {
         thread.start();
 
     }
-
-    public void autoRegister() {
-        beanFinder.getInstances(EventHandler.class).forEach(p -> registerHandler(p));
-    }
-
 
 }

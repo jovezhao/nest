@@ -1,12 +1,11 @@
 package com.zhaofujun.nest.context.event.resend;
 
 import com.zhaofujun.nest.context.event.message.MessageBacklog;
-import com.zhaofujun.nest.context.event.store.MessageStore;
+import com.zhaofujun.nest.provider.Provider;
 
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingDeque;
 
-public interface  MessageResendStore{
+public interface  MessageResendStore extends Provider {
+
     void add(MessageBacklog messageBacklog);
 
 }

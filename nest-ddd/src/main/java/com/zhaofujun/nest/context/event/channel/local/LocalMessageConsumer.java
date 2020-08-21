@@ -1,7 +1,6 @@
 package com.zhaofujun.nest.context.event.channel.local;
 
-import com.zhaofujun.nest.core.BeanFinder;
-import com.zhaofujun.nest.core.EventHandler;
+import com.zhaofujun.nest.standard.EventHandler;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.channel.AbstractMessageConsumer;
 
@@ -9,8 +8,7 @@ public class LocalMessageConsumer extends AbstractMessageConsumer {
 
     private LocalMessageChannel localMessageChannel;
 
-    public LocalMessageConsumer(LocalMessageChannel localMessageChannel, BeanFinder beanFinder) {
-        super(beanFinder);
+    public LocalMessageConsumer(LocalMessageChannel localMessageChannel) {
         this.localMessageChannel = localMessageChannel;
     }
 

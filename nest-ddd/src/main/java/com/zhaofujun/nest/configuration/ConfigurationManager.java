@@ -1,47 +1,42 @@
 package com.zhaofujun.nest.configuration;
 
-import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.cache.provider.DefaultCacheProvider;
-import com.zhaofujun.nest.core.BeanFinder;
+import com.zhaofujun.nest.cache.CacheConfiguration;
+import com.zhaofujun.nest.cache.DefaultCacheProvider;
+import com.zhaofujun.nest.context.event.EventConfiguration;
 import com.zhaofujun.nest.context.event.channel.local.LocalMessageChannel;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 public class ConfigurationManager {
 
-    private Map<String, CacheConfiguration> cacheConfigurations = new HashMap<>();
-    private Map<String, EventConfiguration> eventConfigurations = new HashMap<>();
-    private BeanFinder beanFinder;
+    private List<ConfigurationItem> itemList = new ArrayList<>();
 
-    private ConfigurationManager(BeanFinder beanFinder) {
-        this.beanFinder = beanFinder;
+    public void addConfigurationItem(ConfigurationItem... configurationItems) {
+        itemList.addAll(Arrays.asList(configurationItems));
     }
 
-    public static ConfigurationManager create(BeanFinder beanFinder) {
-        ConfigurationManager configurationManager = new ConfigurationManager(beanFinder);
-        return configurationManager;
+    public void addConfigurationItem(Collection<ConfigurationItem> configurationItems) {
+        itemList.addAll(configurationItems);
     }
 
-    public static ConfigurationManager getCurrent(BeanFinder beanFinder) {
-        NestApplication nestApplication = beanFinder.getInstance(NestApplication.class);
-        return nestApplication.getConfigurationManager();
+    private <T extends ConfigurationItem> T get(Class<T> tClass, String code) {
+        return (T) itemList
+                .stream()
+                .filter(p -> tClass.isAssignableFrom(p.getClass()) && code.equals(code))
+                .findFirst()
+                .orElse(null);
     }
-
 
     public CacheConfiguration getCacheConfigurationByCode(String code) {
 
-        CacheConfiguration cacheConfiguration = cacheConfigurations.get(code);
-        if (cacheConfiguration == null) {
-            cacheConfiguration = beanFinder.getInstances(CacheConfiguration.class)
-                    .stream()
-                    .filter(p -> p.getCacheCode().equals(code))
-                    .findFirst()
-                    .orElse(null);
-        }
+        CacheConfiguration cacheConfiguration = get(CacheConfiguration.class, code);
+
         if (cacheConfiguration == null) {
             cacheConfiguration = new CacheConfiguration();
-            cacheConfiguration.setCacheCode("defaultCacheItem");
+            cacheConfiguration.setCode("defaultCacheItem");
             cacheConfiguration.setIdleSeconds(20000);
             cacheConfiguration.setName("默认缓存项");
             cacheConfiguration.setProviderCode(DefaultCacheProvider.PROVIDER_CODE);
@@ -49,31 +44,18 @@ public class ConfigurationManager {
         return cacheConfiguration;
     }
 
-    public void register(CacheConfiguration cacheConfiguration) {
-        cacheConfigurations.put(cacheConfiguration.getCacheCode(), cacheConfiguration);
-    }
-
     public EventConfiguration getEventConfigurationByEventCode(String eventCode) {
 
-        EventConfiguration eventConfiguration = eventConfigurations.get(eventCode);
+        EventConfiguration eventConfiguration = get(EventConfiguration.class, eventCode);
+
         if (eventConfiguration == null) {
-            eventConfiguration = beanFinder.getInstances(EventConfiguration.class)
-                    .stream()
-                    .filter(p -> p.getEventCode().equals(eventCode))
-                    .findFirst()
-                    .orElse(null);
-        }
-        if(eventConfiguration==null){
-            eventConfiguration=new EventConfiguration();
-            eventConfiguration.setEventCode("default");
+            eventConfiguration = new EventConfiguration();
+            eventConfiguration.setCode("default");
             eventConfiguration.setMessageChannelCode(LocalMessageChannel.CHANNEL_CODE);
         }
         return eventConfiguration;
     }
 
-    public void register(EventConfiguration eventConfiguration) {
-        eventConfigurations.put(eventConfiguration.getEventCode(), eventConfiguration);
-    }
 
 }
 
