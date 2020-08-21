@@ -33,16 +33,6 @@ public class EntityUtils {
         setValue(BaseEntity.class, entityObject, "id", abstractIdentifier);
     }
 
-//    public static boolean isRepresented(BaseEntity entityObject) {
-//        try {
-//            Field field = entityObject.getClass().getDeclaredField("CGLIB$BOUND");
-//            field.setAccessible(true);
-//            return field.getBoolean(entityObject);
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
-
     public static String getClassName(DomainObject entityObject) {
         final String PROXY_SPLIT_STR = "$$";
         final int BEGIN_INDEX = 0;

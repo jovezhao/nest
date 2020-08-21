@@ -2,7 +2,6 @@ package com.zhaofujun.nest.cache;
 
 
 import com.zhaofujun.nest.json.JsonCreator;
-import com.zhaofujun.nest.provider.CacheProvider;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;

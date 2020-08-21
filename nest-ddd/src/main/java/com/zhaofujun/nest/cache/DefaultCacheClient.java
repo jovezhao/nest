@@ -1,7 +1,5 @@
 package com.zhaofujun.nest.cache;
 
-import com.zhaofujun.nest.provider.CacheProvider;
-
 import java.lang.reflect.Type;
 import java.util.Map;
 

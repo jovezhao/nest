@@ -1,7 +1,7 @@
 package com.zhaofujun.nest.provider;
 
+import com.zhaofujun.nest.cache.CacheProvider;
 import com.zhaofujun.nest.cache.DefaultCacheProvider;
-import com.zhaofujun.nest.configuration.ConfigurationItem;
 import com.zhaofujun.nest.context.event.channel.MessageChannelProvider;
 import com.zhaofujun.nest.context.event.channel.local.LocalMessageChannel;
 import com.zhaofujun.nest.context.event.message.DefaultMessageConverter;

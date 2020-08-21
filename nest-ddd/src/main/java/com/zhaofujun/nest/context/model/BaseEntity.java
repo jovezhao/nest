@@ -61,12 +61,7 @@ public abstract class BaseEntity<T extends AbstractIdentifier> implements Entity
     }
 
 
-    /**
-     * 从数据库或者缓存中读取信息完成后需要调用ready方法，并且记录当时的hash值，
-     * 当提交仓储之前再次计算签名对比是否需要进行持久化处理。
-     *
-     * @return 当前实体的签名值
-     */
+
     public void ready() {
         //计算当前实体hash值
         __hashcode = EntityUtils.getEntityHash(this);

@@ -1,7 +1,6 @@
 package com.zhaofujun.nest.cache;
 
 import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.provider.CacheProvider;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
 import com.zhaofujun.nest.provider.ProviderManage;
 
