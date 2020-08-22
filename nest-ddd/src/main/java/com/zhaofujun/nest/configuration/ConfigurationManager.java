@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConfigurationManager {
 
@@ -44,6 +45,12 @@ public class ConfigurationManager {
         return cacheConfiguration;
     }
 
+    public List<CacheConfiguration> getCacheConfigurations() {
+        return itemList.stream().filter(p -> p instanceof CacheConfiguration)
+                .map(p -> (CacheConfiguration) p)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
     public EventConfiguration getEventConfigurationByEventCode(String eventCode) {
 
         EventConfiguration eventConfiguration = get(EventConfiguration.class, eventCode);
@@ -56,6 +63,11 @@ public class ConfigurationManager {
         return eventConfiguration;
     }
 
+    public List<EventConfiguration> getEventConfigurations() {
+        return itemList.stream().filter(p -> p instanceof EventConfiguration)
+                .map(p -> (EventConfiguration) p)
+                .collect(Collectors.toUnmodifiableList());
+    }
 
 }
 
