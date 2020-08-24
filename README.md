@@ -29,74 +29,58 @@ Nest的设计受DDD战略、战术设计思想指导，使用Nest前需要对DDD
 <dependency>
     <groupId>com.zhaofujun.nest</groupId>
     <artifactId>nest-ddd</artifactId>
-    <version>2.0.8</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 **Gradle引用**
 ```groovy
 // https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd
-compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '2.0.8'
+compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '2.1.0'
 
 ```
 
-## 快速上手演练-使用nest和nest-ioc创建可运行的项目
+## 快速上手演练-使用nest创建可运行的项目
 
-本案例使用nest-ioc快速创建基于DDD的项目，并且完成创建用户的演示操作
+本案例使用nest-ddd快速创建基于DDD的项目，并且完成创建用户的演示操作，源码参考nest-ddd项目test目录。
 
-项目由领域模型、应用服务和应用程序以及nest-ioc的集成配置组成。
+项目由领域模型、应用服务和应用程序组成。
 
 **领域模型代码：**
 ```java
-package com.zhaofujun.nest.ioc.test.models;
+package com.zhaofujun.nest.test.domain;
 
-import com.zhaofujun.nest.context.model.BaseAbstractEntity;
-import com.zhaofujun.nest.context.model.StringIdentifier;
+import com.zhaofujun.nest.context.model.BaseEntity;
+import com.zhaofujun.nest.context.model.LongIdentifier;
 
+public abstract class Teacher extends BaseEntity<LongIdentifier> {
+    private String name;
 
-public class User extends BaseEntity<StringIdentifier> {
+    public void init(String name) {
+        this.name = name;
+    }
 
-    private String pwd;
-
-    public void changPwd(String newpwd) {
-
-        this.pwd = newpwd;
-
+    public String getName() {
+        return name;
     }
 }
+
 
 ```
 **应用服务代码：**
 ```java
-package com.zhaofujun.nest.ioc.test.appservices;
+package com.zhaofujun.nest.test.application;
 
-import com.zhaofujun.nest.standard.EventBus;
-import com.zhaofujun.nest.ioc.annotation.AppService;
-import com.zhaofujun.nest.ioc.annotation.Autowired;
-import com.zhaofujun.nest.ioc.test.models.PasswordChangedEventData;
-import com.zhaofujun.nest.ioc.test.models.User;
-import com.zhaofujun.nest.context.model.StringIdentifier;
-import com.zhaofujun.nest.context.loader.ConstructEntityLoader;
-import com.zhaofujun.nest.standard.EntityLoader;
-import com.zhaofujun.nest.context.loader.RepositoryEntityLoader;
+import com.zhaofujun.nest.context.model.EntityFactory;
+import com.zhaofujun.nest.context.model.LongIdentifier;
+import com.zhaofujun.nest.standard.AppService;
+import com.zhaofujun.nest.test.domain.Teacher;
 
 @AppService
-public class TestAppservices {
+public class TeacherApplicationService {
 
-    @Autowired
-    EventBus eventBus;
-
-
-    public void changPwd(String userName, String newPwd) {
-        EntityLoader<User> entityLoader = new RepositoryEntityLoader<>(User.class);
-        User user = entityLoader.create(StringIdentifier.valueOf(userName));
-        user.changPwd(newPwd);
-    }
-
-
-    public void createUser(String usrName, String pwd) {
-        EntityLoader<User> entityLoader = new ConstructEntityLoader<>(User.class);
-        User user = entityLoader.create(StringIdentifier.valueOf(usrName));
-        user.changPwd(pwd);
+    public void teachCreate() {
+        Teacher teacher = EntityFactory.create(Teacher.class, LongIdentifier.valueOf(11L));
+        teacher.init("teacher 1");
     }
 }
 
@@ -105,132 +89,60 @@ public class TestAppservices {
 **应用程序代码**
 
 ```java
-package com.zhaofujun.nest.ioc.test;
+package com.zhaofujun.nest.test;
 
 import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.ContainerProvider;
-import com.zhaofujun.nest.standard.EventBus;
-import com.zhaofujun.nest.event.ApplicationEvent;
-import com.zhaofujun.nest.event.ApplicationListener;
-import com.zhaofujun.nest.event.ServiceContextListener;
-import com.zhaofujun.nest.event.ServiceEvent;
-import com.zhaofujun.nest.ioc.annotation.Component;
-import com.zhaofujun.nest.ioc.annotation.Autowired;
-import com.zhaofujun.nest.ioc.config.IocConfiguration;
-import com.zhaofujun.nest.ioc.test.appservices.TestAppservices;
-
-import java.lang.reflect.Method;
-
-@Component
-public class Application   {
+import com.zhaofujun.nest.context.appservice.ApplicationServiceCreator;
+import com.zhaofujun.nest.test.application.TeacherApplicationService;
 
 
-    public Application() {
+public class Application {
+    public static void main(String[] args)   {
 
 
-    }
+        NestApplication application = NestApplication.current();
+        application.start();
 
-    @Autowired
-    private TestAppservices testAppservices;
+        TeacherApplicationService teacherApplicationService=ApplicationServiceCreator.create(TeacherApplicationService.class);
+        teacherApplicationService.teachCreate();
 
-
-    @Autowired
-    private NestApplication nestApplication;
-
-
-    //设置
-    public static void main(String[] args) {
-
-        IocConfiguration iocConfiguration = new IocConfiguration("com.zhaofujun.nest.ioc.test");
-        iocConfiguration.init();
-
-
-
-        ContainerProvider containerProvider = iocConfiguration.getContainerProvider();
-
-        
-        Application application = containerProvider.getInstance(Application.class);
-        application.run();
-
-    }
-
-
-    public void run() {
-
-        nestApplication.start();
-
-        eventBus.autoRegister();
-        testAppservices.createUser("111", "pwd");
-        nestApplication.close();
-
-    }
-}
-```
-
-**nest-ioc集成配置代码**
-
-```java
-package com.zhaofujun.nest.ioc.config;
-
-import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.ContainerProvider;
-import com.zhaofujun.nest.standard.EventBus;
-import com.zhaofujun.nest.ioc.DefaultContainerProvider;
-
-public class IocConfiguration {
-    DefaultContainerProvider beanContainerProvider;
-
-    public IocConfiguration(String prefix) {
-        beanContainerProvider = new DefaultContainerProvider(prefix);
-        NestApplication nestApplication = new NestApplication(beanContainerProvider);
-        beanContainerProvider.register(DefaultContainerProvider.class, beanContainerProvider);
-        beanContainerProvider.register(NestApplication.class, nestApplication);
-        beanContainerProvider.register(EventBus.class, new EventBus(beanContainerProvider));
-    }
-
-    public void init() {
-
-
-        beanContainerProvider.initialize();
-    }
-
-    public ContainerProvider getContainerProvider() {
-        return beanContainerProvider;
+        application.close();
     }
 }
 
 ```
+
 
 在本案例中，我们只是简单的对演示了如何对领域模型User的创建过程。
-没有做任何仓储的实现，框架会提供基于内存的默认仓库来实现，这样可以帮助程序员快速完成业务部分的代码开发与测试。
+没有做任何仓储的实现，框架会提供基于内存的默认仓库来实现，这样可以帮助程序员快速完成业务部分的代码开发与测试，默认仓库使用内存仓储实体的json结构。
 
 ## Nest进阶教程
 
 ### Ioc容器集成方式
 
-nest提供了默认的`nest-ioc`容器，`nest-ioc`是一个极度精简的ioc实现方案，提供了容器管理、依赖注入的功能，通过注解完成包扫描与注入。
+集成一个容器，只需要实现`com.zhaofujun.nest.ContainerProvider`接口，并且调用`NestApplication.setContainerProvider(ContainerProvider containerProvider)`方法初始化系统基础配置。
 
-当我们的项目中没有使用spring等相关的ioc容器时，可以用`nest-ioc`简化代码开发，在企业项目中推荐使用spring ioc做为nest的容器提供者。
+使用IOC容器可以支持以下实现自动注册到应用程序中。
 
-集成一个容器，只需要实现`com.zhaofujun.nest.ContainerProvider`接口即可。
+#### 继承至CacheConfiguration的缓存组配置信息
 
-#### nest-ioc 实现方式
-nest-ioc定义了AppService注解、Component注解、Store注解以及Autowired注解
+CacheConfiguration定义了一组缓存配置，同一组缓存将共享相关配置信息，包括缓存提供者、过期时间等。
 
-**`@AppService`注解**
-用于定义应用服务，当使用了该注释的类，nest-ioc会认为这是一个应用服务，调用该应用服务中的方法时会通过切面初始化一个服务上下文和工作单元。在该应用服务中的所有领域对象的变化都将记录在工作单元中，直到应用服务方法调用完毕后一起提交给对应的仓储。
+可以使用IOC定义一个继承至CacheConfiguration的Bean，系统将自动注册该缓存组信息。
 
-**`@Component`注解**
-用于定义一个类可以被`nest-ioc`容器扫描并且托管
+#### 继承至EventConfiguration的事件配置信息
 
-**`@Store`注解**
-用户定义这个类是一个仓储的实现，该注解目前没有实际作用，与`@Component`注解效果一致。
+EventConfiguration定义了一个事件的相关配置，可以指定该事件使用什么消息中间件来完成消息的传递。
 
-**`@Autowired`注解**
-作用于类的字段上，当这个类被nest-ioc容器托管时，使用了该注解的字段将自动从容器中获取实例并且注入相应的值
+可以使用IOC定义一个继承至EventConfiguration的Bean，系统将自动注册该事件信息。
 
-> 使用方式见 [演练-使用nest和nest-ioc创建可运行的项目](#演练-使用nest和nest-ioc创建可运行的项目)
+#### 继承至CacheProvider的缓存提供者
 
+CacheProvider定义了一个缓存的提供者，nest-plus集成了redis。如果用户需要集成其它缓存提供者，如memcache。
+
+可以使用IOC定义一个继承至CacheProvider的Bean，系统将自动集成该类型的缓存提供方式。
+
+#### 
 #### 实现spring的集成
 > 见[集成Spring与Spring boot](#集成Spring与Spring-boot)
 
@@ -385,7 +297,6 @@ import com.zhaofujun.nest.context.event.EventData;
 
 
 public interface EventBus{
-    void autoRegister();
     void registerHandler(EventHandler eventHandler);
     void publish(EventData eventData);
 }
