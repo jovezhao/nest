@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class DefaultMessageStore implements MessageStoreProvider {
+public class DefaultMessageStore implements MessageStore {
     private Logger logger = LoggerFactory.getLogger(DefaultMessageStore.class);
     public static final String CACHE_CODE = "DefaultMessageStore";
     private CacheClient cacheClient;

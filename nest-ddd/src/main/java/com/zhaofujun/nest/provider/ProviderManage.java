@@ -9,7 +9,7 @@ import com.zhaofujun.nest.context.event.message.MessageConverter;
 import com.zhaofujun.nest.context.event.resend.DefaultMessageResendStore;
 import com.zhaofujun.nest.context.event.resend.MessageResendStore;
 import com.zhaofujun.nest.context.event.store.DefaultMessageStore;
-import com.zhaofujun.nest.context.event.store.MessageStoreProvider;
+import com.zhaofujun.nest.context.event.store.MessageStore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,11 +51,11 @@ public class ProviderManage {
         return channelProvider;
     }
 
-    public MessageStoreProvider getMessageStore(String code) {
-        MessageStoreProvider messageStoreProvider = get(MessageStoreProvider.class, code);
+    public MessageStore getMessageStore(String code) {
+        MessageStore messageStore = get(MessageStore.class, code);
 
-        if (messageStoreProvider == null) return new DefaultMessageStore();
-        return messageStoreProvider;
+        if (messageStore == null) return new DefaultMessageStore();
+        return messageStore;
     }
 
     public MessageConverter getMessageConverter(String code) {

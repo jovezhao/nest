@@ -3,7 +3,7 @@ package com.zhaofujun.nest.context.event.store;
 import com.zhaofujun.nest.context.event.message.MessageRecord;
 import com.zhaofujun.nest.provider.Provider;
 
-public interface MessageStoreProvider extends Provider {
+public interface MessageStore extends Provider {
 
     void save(MessageRecord messageRecord);
 

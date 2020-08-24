@@ -1,8 +1,8 @@
 package com.zhaofujun.nest.context.event.channel;
 
-import com.zhaofujun.nest.*;
 import com.zhaofujun.nest.context.event.message.*;
-import com.zhaofujun.nest.context.event.store.MessageStoreProvider;
+import com.zhaofujun.nest.context.event.store.MessageStoreFactory;
+import com.zhaofujun.nest.context.event.store.MessageStore;
 import com.zhaofujun.nest.standard.EventArgs;
 import com.zhaofujun.nest.standard.EventHandler;
 import com.zhaofujun.nest.standard.CustomException;
@@ -36,15 +36,15 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
         eventArgs.setSendTime(messageInfo.getSendTime());
 
 
-        MessageStoreProvider messageStoreProvider = NestApplication.current().getProviderManage().getMessageStore(NestApplication.current().getMessageConfiguration().getStore());
-        if (messageStoreProvider.isSucceed(messageInfo.getMessageId(), eventHandler.getClass().getName()))
+        MessageStore messageStore = MessageStoreFactory.create();
+        if (messageStore.isSucceed(messageInfo.getMessageId(), eventHandler.getClass().getName()))
             return;
 
 
         try {
 
             eventHandler.handle(eventData, eventArgs);
-            messageStoreProvider.save(record);
+            messageStore.save(record);
         } catch (CustomException ex) {
             eventHandler.onCustomException(context, ex);
         } catch (SystemException ex) {

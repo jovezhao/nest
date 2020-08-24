@@ -1,15 +1,18 @@
-//package com.zhaofujun.nest.context.event.store;
-//
-//import com.zhaofujun.nest.core.BeanFinder;
-//
-//
-//public class MessageStoreFactory {
-//
-//
-//    public MessageStoreProvider create() {
-//        MessageStore messageStore = beanFinder.getInstance(MessageStore.class);
-//        if (messageStore == null)
-//            messageStore = new DefaultMessageStore(beanFinder);
-//        return messageStore;
-//    }
-//}
+package com.zhaofujun.nest.context.event.store;
+
+
+import com.zhaofujun.nest.NestApplication;
+
+public class MessageStoreFactory {
+
+    public static MessageStore create() {
+        return create(NestApplication.current().getMessageConfiguration().getStore());
+    }
+
+    public static MessageStore create(String code) {
+        MessageStore messageStore = NestApplication.current().getProviderManage().getMessageStore(code);
+        if (messageStore == null)
+            return create(NestApplication.current().getMessageConfiguration().getStore());
+        return messageStore;
+    }
+}
