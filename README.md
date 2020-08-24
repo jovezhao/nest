@@ -118,32 +118,65 @@ public class Application {
 
 ## Nest进阶教程
 
-### Ioc容器集成方式
+### 扩展
 
-集成一个容器，只需要实现`com.zhaofujun.nest.ContainerProvider`接口，并且调用`NestApplication.setContainerProvider(ContainerProvider containerProvider)`方法初始化系统基础配置。
-
-使用IOC容器可以支持以下实现自动注册到应用程序中。
-
-#### 继承至CacheConfiguration的缓存组配置信息
-
-CacheConfiguration定义了一组缓存配置，同一组缓存将共享相关配置信息，包括缓存提供者、过期时间等。
-
-可以使用IOC定义一个继承至CacheConfiguration的Bean，系统将自动注册该缓存组信息。
-
-#### 继承至EventConfiguration的事件配置信息
-
-EventConfiguration定义了一个事件的相关配置，可以指定该事件使用什么消息中间件来完成消息的传递。
-
-可以使用IOC定义一个继承至EventConfiguration的Bean，系统将自动注册该事件信息。
+Nest本身具有丰富的可扩展性，为程序员提供了大量可扩展可能以满足不同的业务需求，并且扩展起来也相当简单。
 
 #### 继承至CacheProvider的缓存提供者
 
 CacheProvider定义了一个缓存的提供者，nest-plus集成了redis。如果用户需要集成其它缓存提供者，如memcache。
 
+使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的缓存提供者。
+
 可以使用IOC定义一个继承至CacheProvider的Bean，系统将自动集成该类型的缓存提供方式。
 
-#### 
-#### 实现spring的集成
+#### 继承至MessageConverter的消息转换器
+
+MessageConverter定义了MessageInfo与字符串的互相转换过程，用户可以通过MessageConverter来实现自定义转换的过程。
+
+使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的消息转换器。
+
+完成自定义的MessageConverter后还需要修改配置项`NestApplication.getMessageConfiguration().setConverter(String code)`使其生效。
+
+
+#### 继承至MessageResendStore的消息暂存器
+
+MessageResendStore定义了投递失败的消息存储方式，默认投递失败的消息使用内存空间暂存，为了保证可靠性，一般情况需要使用外部存储空间来保存投递失败的消息。
+
+使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的消息暂存器。
+
+完成自定义的MessageResendStore后还需要修改配置项`NestApplication.getMessageConfiguration().setResendStore(String code)`使其生效。
+
+#### 继承至MessageStore的消息存储器
+
+MessageStore定义消费成功的消息的存储方式，用于处理消费者的幂等性，使消息不被重复消费。默认存储方式是使用的内存空间，为了保证可靠性，一般情况需要使用外部存储空间来保存已经消费的消息。
+
+使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的消息存储器。
+
+完成自定义的MessageStore后还需要修改配置项`NestApplication.getMessageConfiguration().setStore(String code)`使其生效。
+
+#### 继承至MessageChannelProvider的消息通道提供者
+
+MessageChannelProvider定义了消息通道的实现方式，默认的消息通道是命名用的本地内存的实现方式，不支持分布式，在分布式系统中一般消息通道都需要使用第三方消息中间件来传递消息。
+
+使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的消息通道提供者。
+
+nest-plus实现了常用消息中间件集成方式，包括ActiveMQ、RocketMQ、RabbitMQ，用户也可以自己实现相应的消息通道，并且配置通道的参数。
+
+#### 继承至ApplicationListener的应用监听器
+
+ApplicationListener 定义了应用程序的监听器，当应用程序启动或者停止时将回调该监听器相关方法。
+
+实现该应用监听器接口后需要使用`NestApplication.getListenerManager().addListeners(NestEventListener ... eventListeners)`注册监听器，也可以将ApplicationListener注册到IOC容器中，由IOC容器自动注册。
+
+#### 继承至ServiceContextListener的服务上下文监听器
+
+ServiceContextListener 定义了服务调用的过程，包括服务创建、服务方法开始、服务方法结束、开始提交工作单元、完成工作单元提交、服务结束等回调过程。
+
+实现该应用监听器接口后需要使用`NestApplication.getListenerManager().addListeners(NestEventListener ... eventListeners)`注册监听器，也可以将ServiceContextListener注册到IOC容器中，由IOC容器自动注册。
+
+
+### 实现spring的集成
 > 见[集成Spring与Spring boot](#集成Spring与Spring-boot)
 
 ### 缓存管理
@@ -179,7 +212,7 @@ public interface CacheClient {
 ```
 缓存分组信息通过`com.zhaofujun.nest.configuration.ConfigurationManager`管理。
 
-开发人员可以通过`ConfigurationManager.register(CacheConfiguration cacheConfiguration)`方法手动注册一组缓存配置，也可以将`CacheConfiguration`的bean配置到ioc容器中由`ConfigurationManager`去自动发现。
+开发人员可以通过`NestApplication.getConfigurationManager().addConfigurationItem(ConfigurationItem... configurationItems)`方法手动注册一组缓存配置，也可以将`CacheConfiguration`的bean配置到ioc容器中实现自动注册。
 
 `CacheConfiguration` 可以配置缓存组的代号、名称、使用的缓存提供者和统一的过期时间。
 
@@ -255,33 +288,37 @@ public interface CacheClient {
 
 DDD术语 | Nest
 ---|---
-限界上下文 | NestApplication
+限界上下文 | 应用程序
 应用服务 | AppService
-实体 | BaseEntity
+实体 | Entity
 实体标识 | Identifier
 值对象 | ValueObject
-实体工厂 | EntityFactory
+实体工厂 | EntityLoader
 领域事件 | EventBus
 仓储 | Repository
 
 **定义一个实体**
 
-要定义一个实体，只需要将该类继承`com.zhaofujun.nest.context.model.BaseAbstractEntity<T extends Identifier>`。
+要定义一个实体，只需要将该类继承`com.zhaofujun.nest.context.model.BaseEntity<T extends AbstractIdentifier>`。
 
-Nest为开发人员提供了`com.zhaofujun.nest.context.model.BaseEntity`，它默认使用了`com.zhaofujun.nest.context.model.StringIdentifier`作为实体标识。
+实体的标识可以按要求自定义。系统还提供了`com.zhaofujun.nest.context.model.UUIdentifier`、`com.zhaofujun.nest.context.model.LongIdentifier`、`com.zhaofujun.nest.context.model.StringIdentifier`给开发人员选择.
 
-实体的标识可以按要求自定义。系统还提供了`com.zhaofujun.nest.context.model.UUIdentifier`给开发人员选择，开发人员也可以继承`com.zhaofujun.nest.context.model.AbstractIdentifier`实现自定义的实体标识。
+开发人员也可以继承`com.zhaofujun.nest.context.model.AbstractIdentifier`实现自定义的实体标识。
 
 **为实体实现仓储**
 
-实体是需要关注基生命周期的，可以通过实现`com.zhaofujun.nest.standard.Repository<T extends BaseEntity>`完成实体的持久化处理。该接口定义了`insert`、`update`、`delete`方法用于对数据库的操作。同时还定义了`batchInsert`、`batchUpdate`、`batchDelete`方法用于批量处理，批量处理方法都提供了默认的实现，如果需要批量处理的数据量较大，建议使用数据库的batch方式提交。
+实体是需要关注基生命周期的，可以通过实现`com.zhaofujun.nest.standard.Repository<T extends Entity>`完成实体的持久化处理。该接口定义了`insert`、`update`、`delete`方法用于对数据库的操作。同时还定义了`batchInsert`、`batchUpdate`、`batchDelete`方法用于批量处理，批量处理方法都提供了默认的实现，如果需要批量处理的数据量较大，建议使用数据库的batch方式提交。
 
-仓储将通过`RepositoryFactory`从容器中加载，所以仓储定义后需要使用容器来托管。
+自定义的仓储实现需要使用`NestApplication.getRepositoryManager().addRepository(Repository... repositories)`方法向系统注册仓储，也可以将仓储注册到IOC从容器，由IOC容器自动注册。
 
 
 **如何加载或创建实体**
 
-可以使用实体工厂`com.zhaofujun.nest.context.model.EntityFactory`来加载或创建一个实体，`load`方法将通过仓储来加载，在仓储加载之前优先使用当前工作单元中的实体，如果当前工作单元中找不到，就会去缓存加载，如果缓存也没有才会使用仓储在数据库中去加载。`create`方法将创建一个全新的实体，建议按实体的标识建立数据库唯一索引，可以有效利用数据库的一些额外能力，比如提升查询性能、处理重复数据等。
+可以使用实体工厂`com.zhaofujun.nest.context.model.EntityFactory`来加载或创建一个实体。
+
+`load`方法将通过仓储来加载，在仓储加载之前优先使用当前工作单元中的实体，如果当前工作单元中找不到，就会去缓存加载，如果缓存也没有才会使用仓储在数据库中去加载。
+
+`create`方法将创建一个全新的实体，建议按实体的标识建立数据库唯一索引，可以有效利用数据库的一些额外能力，比如提升查询性能、处理重复数据等。
 
 
 ### 事件总线
@@ -304,20 +341,23 @@ public interface EventBus{
 ```
 **事件订阅**
 
-`autoRegister`方法自动从容器中扫描注册EventHandler，也可以通过`registerHandler`手动注册一个EventHandler。
+通过`registerHandler`手动注册一个EventHandler。当然在IOC容器下，也可以将EventHandler注册到IOC容器中，由IOC容器自动注册。
 
 **事件发布**
 
-`publish`方法发布一个事件，发布一个事件需要实现`com.zhaofujun.nest.core.EventData`抽象类做为事件发布的内容。 其中`getEventCode`抽象方法定义当前事件代号。事件代号可以通过配置指定当前事件发送或接受的管道。
+`publish`方法发布一个事件，发布一个事件需要实现`com.zhaofujun.nest.core.EventData`抽象类做为事件发布的内容。 其中`getEventCode`抽象方法定义当前事件代号。
+
+事件的发布应该在应用服务层发起，事件提交并不是立刻进行，而是与实体的提交一起进行，如果实体提交失败，事件将不会提交，如果实体提交成功而事件提交失败时，事件消息将通过补偿机制重新发起以达到最终一致性。
 
 **事件管道配置**
 
-事件管道的配置信息由配置管理器`com.zhaofujun.nest.configuration.ConfigurationManager`管理，配置管理器优先从静态注册的配置信息中获取配置项，如果没有找到再从容器中查找，如果仍然没有找到将使用内置的默认管道发布或订阅事件。
+事件管道配置由`com.zhaofujun.nest.context.event.EventConfiguration`定义，事件代号对应EventData中的Code，管道对应于`MessageChannelProvider`的实现。表示当前事件使用才能方式发出。
 
-事件管道配置`com.zhaofujun.nest.context.event.EventConfiguration`用事件代号与管道代号连接事件与管道的关系。在容器下，我们可以直接通过定义`EventConfiguration`类型的bean来完成配置。
+使用`NestApplication.getConfigurationManager().addConfigurationItem(ConfigurationItem... configurationItems)`向应用程序注册新的配置项。
+
+可在IOC容器下，可以使用IOC定义一个EventConfiguration的Bean，系统将自动注册该配置。
 
 #### 代码演示
-
 
 **事件数据 PasswordChangedEventData**
 
@@ -374,10 +414,6 @@ public class PasswordChangedEventData extends EventData {
 package com.zhaofujun.nest.ioc.test.appservices;
 
 import com.zhaofujun.nest.standard.EventBus;
-import com.zhaofujun.nest.ioc.annotation.AppService;
-import com.zhaofujun.nest.ioc.annotation.Autowired;
-import com.zhaofujun.nest.ioc.test.models.PasswordChangedEventData;
-import com.zhaofujun.nest.ioc.test.models.User;
 import com.zhaofujun.nest.context.model.StringIdentifier;
 import com.zhaofujun.nest.context.loader.ConstructEntityLoader;
 import com.zhaofujun.nest.standard.EntityLoader;
@@ -394,7 +430,6 @@ public class TestAppservices {
         EntityLoader<User> entityLoader = new RepositoryEntityLoader<>(User.class);
         User user = entityLoader.create(StringIdentifier.valueOf(userName));
         user.changPwd(newPwd);
-//        EventBus eventBus = new EventBus(beanFinder);
 
         PasswordChangedEventData eventObject = new PasswordChangedEventData("newpwd", "oldpwd", "111");
 
@@ -406,8 +441,6 @@ public class TestAppservices {
         EntityLoader<User> entityLoader = new ConstructEntityLoader<>(User.class);
         User user = entityLoader.create(StringIdentifier.valueOf(usrName));
         user.changPwd(pwd);
-
-//        EventBus eventBus = new EventBus(beanFinder);
 
         PasswordChangedEventData eventObject = new PasswordChangedEventData("newpwd", "oldpwd", "111");
 
@@ -425,10 +458,9 @@ package com.zhaofujun.nest.ioc.test;
 
 import com.zhaofujun.nest.standard.EventArgs;
 import com.zhaofujun.nest.standard.EventHandler;
-import com.zhaofujun.nest.ioc.annotation.Component;
 import com.zhaofujun.nest.ioc.test.models.PasswordChangedEventData;
 
-@Component("PASSWORD_CHANGED")
+@Component
 public class PwdChangedEventHandler implements EventHandler<PasswordChangedEventData> {
     public static final String EVENT_CODE = "PASSWORD_CHANGED";
 
