@@ -1,8 +1,5 @@
 package com.zhaofujun.nest.event;
 
-import java.lang.reflect.Method;
-import java.util.EventListener;
-
 public interface ServiceContextListener extends NestEventListener {
     void serviceCreated(ServiceEvent serviceEvent);
 

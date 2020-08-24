@@ -27,6 +27,7 @@ public class ProviderManage {
     public void addProvider(Collection<Provider> providers) {
         providerList.addAll(providers);
     }
+
     private <T extends Provider> T get(Class<T> tClass, String code) {
         return (T) providerList
                 .stream()
@@ -54,21 +55,30 @@ public class ProviderManage {
     public MessageStore getMessageStore(String code) {
         MessageStore messageStore = get(MessageStore.class, code);
 
-        if (messageStore == null) return new DefaultMessageStore();
+        if (messageStore == null) {
+            messageStore = new DefaultMessageStore();
+            providerList.add(messageStore);
+        }
         return messageStore;
     }
 
     public MessageConverter getMessageConverter(String code) {
         MessageConverter messageConverter = get(MessageConverter.class, code);
 
-        if (messageConverter == null) return new DefaultMessageConverter();
+        if (messageConverter == null) {
+            messageConverter = new DefaultMessageConverter();
+            providerList.add(messageConverter);
+        }
         return messageConverter;
     }
 
     public MessageResendStore getMessageResendStore(String code) {
         MessageResendStore messageResendStore = get(MessageResendStore.class, code);
 
-        if (messageResendStore == null) return new DefaultMessageResendStore();
+        if (messageResendStore == null) {
+            messageResendStore = new DefaultMessageResendStore();
+            providerList.add(messageResendStore);
+        }
         return messageResendStore;
     }
 }

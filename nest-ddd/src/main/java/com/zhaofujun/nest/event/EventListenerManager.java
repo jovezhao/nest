@@ -12,8 +12,8 @@ public class EventListenerManager {
     }
 
 
-    public void addListener(NestEventListener eventListener) {
-        this.listeners.add(eventListener);
+    public void addListeners(NestEventListener ... eventListeners) {
+        this.listeners.addAll(Arrays.asList(eventListeners));
     }
 
     public <T extends NestEventListener> void publish(Class<T> tClass, Consumer<? super T> doSomething) {

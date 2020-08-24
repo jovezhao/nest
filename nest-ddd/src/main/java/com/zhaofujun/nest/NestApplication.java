@@ -85,13 +85,13 @@ public class NestApplication {
     }
 
 
-    public void addApplicationListener(ApplicationListener applicationListener) {
-        this.listenerManager.addListener(applicationListener);
-    }
-
-    public void addServiceContextListener(ServiceContextListener serviceContextListener) {
-        this.listenerManager.addListener(serviceContextListener);
-    }
+//    public void addApplicationListener(ApplicationListener applicationListener) {
+//        this.listenerManager.addListener(applicationListener);
+//    }
+//
+//    public void addServiceContextListener(ServiceContextListener serviceContextListener) {
+//        this.listenerManager.addListener(serviceContextListener);
+//    }
 
 
     private void onStarted() {
