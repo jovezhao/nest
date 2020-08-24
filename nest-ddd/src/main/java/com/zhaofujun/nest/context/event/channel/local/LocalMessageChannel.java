@@ -54,12 +54,6 @@ public class LocalMessageChannel implements MessageChannelProvider, MessageProdu
     }
 
     @Override
-    public MessageConverter getMessageConverter() {
-        return null;
-    }
-
-
-    @Override
     public void subscribe(EventHandler eventHandler) {
         this.messageConsumer.subscribe(eventHandler);
     }

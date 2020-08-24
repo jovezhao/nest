@@ -7,7 +7,6 @@ import java.io.Serializable;
 public abstract class AbstractIdentifier implements Identifier, Serializable {
 
     public abstract String toValue();
-//    public abstract AbstractIdentifier valueOf(String value);
 
     @Override
     public String toString() {

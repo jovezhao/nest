@@ -16,12 +16,6 @@ import java.util.UUID;
 
 public abstract class AbstractMessageConsumer implements MessageConsumer {
 
-
-    public MessageConverter getMessageConverter() {
-        return MessageConverterFactory.create();
-    }
-
-
     public abstract void subscribe(EventHandler eventHandler);
 
     protected void onReceivedMessage(MessageInfo messageInfo, EventHandler eventHandler, Object context) {
