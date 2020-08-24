@@ -14,19 +14,14 @@ import java.util.Date;
 import java.util.UUID;
 
 public class DefaultEventBus implements EventBus {
-    private ConfigurationManager configurationManager;
 
-    public DefaultEventBus(NestApplication nestApplication) {
-
-        this.configurationManager = nestApplication.getConfigurationManager();
-    }
 
     public void publish(EventData eventData) {
         publish(eventData, "?");
     }
 
     public void publish(EventData eventData, String eventSource) {
-        EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(eventData.getEventCode());
+        EventConfiguration eventConfiguration = getEventConfigurationByEventCode(eventData.getEventCode());
 
 
         MessageChannelProvider messageChannel = NestApplication.current().getProviderManage().getMessageChannel(eventConfiguration.getMessageChannelCode());
@@ -43,10 +38,14 @@ public class DefaultEventBus implements EventBus {
 
     }
 
+    private EventConfiguration getEventConfigurationByEventCode(String eventCode) {
+        return NestApplication.current().getConfigurationManager().getEventConfigurationByEventCode(eventCode);
+    }
+
 
     public void registerHandler(EventHandler eventHandler) {
 
-        EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(eventHandler.getEventCode());
+        EventConfiguration eventConfiguration = getEventConfigurationByEventCode(eventHandler.getEventCode());
 
         MessageChannelProvider messageChannel = NestApplication.current().getProviderManage().getMessageChannel(eventConfiguration.getMessageChannelCode());
 

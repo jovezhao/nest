@@ -8,4 +8,5 @@ public interface  MessageResendStore extends Provider {
 
     void add(MessageBacklog messageBacklog);
 
+    MessageBacklog pollOne();
 }

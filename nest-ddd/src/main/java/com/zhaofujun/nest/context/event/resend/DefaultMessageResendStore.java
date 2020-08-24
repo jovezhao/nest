@@ -14,9 +14,9 @@ public class DefaultMessageResendStore implements MessageResendStore {
         messageBacklogs.add(messageBacklog);
     }
 
-    public void Resend() {
+    public MessageBacklog pollOne() {
         MessageBacklog messageBacklog = messageBacklogs.poll();
-        //todo resend
+        return messageBacklog;
     }
 
     @Override

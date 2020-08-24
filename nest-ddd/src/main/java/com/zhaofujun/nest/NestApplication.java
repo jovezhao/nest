@@ -4,6 +4,7 @@ import com.zhaofujun.nest.configuration.ConfigurationItem;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
 import com.zhaofujun.nest.configuration.MessageConfiguration;
 import com.zhaofujun.nest.context.event.DefaultEventBus;
+import com.zhaofujun.nest.context.event.resend.ResenderTimerTask;
 import com.zhaofujun.nest.context.repository.RepositoryManager;
 import com.zhaofujun.nest.standard.EventBus;
 import com.zhaofujun.nest.standard.EventHandler;
@@ -13,6 +14,9 @@ import com.zhaofujun.nest.event.*;
 import com.zhaofujun.nest.provider.Provider;
 import com.zhaofujun.nest.provider.ProviderManage;
 
+import java.sql.Time;
+import java.util.Timer;
+
 
 public class NestApplication {
 
@@ -21,6 +25,8 @@ public class NestApplication {
     private EventListenerManager listenerManager;
     private RepositoryManager repositoryManager;
     private ProviderManage providerManage;
+    private Timer timer = new Timer();
+
 
     public ConfigurationManager getConfigurationManager() {
         return this.configurationManager;
@@ -51,7 +57,7 @@ public class NestApplication {
         this.providerManage.addProvider(containerProvider.getInstances(Provider.class));
         this.listenerManager.addListeners(containerProvider.getInstances(NestEventListener.class));
         this.repositoryManager.addRepository(containerProvider.getInstances(Repository.class));
-        EventBus eventBus = new DefaultEventBus(this);
+        EventBus eventBus = new DefaultEventBus();
         containerProvider.getInstances(EventHandler.class).forEach(eventHandler -> {
             eventBus.registerHandler(eventHandler);
         });
@@ -70,9 +76,11 @@ public class NestApplication {
 
     public void start() {
         onStarted();
+        timer.schedule(new ResenderTimerTask(), 0, 1000);
     }
 
     public void close() {
+        timer.cancel();
         onClosed();
     }
 
