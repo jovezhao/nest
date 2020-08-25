@@ -120,11 +120,11 @@ public class Application {
 
 ### 扩展
 
-Nest本身具有丰富的可扩展性，为程序员提供了大量可扩展可能以满足不同的业务需求，并且扩展起来也相当简单。
+Nest本身具有丰富的可扩展性，并且扩展起来也相当简单。
 
 #### 继承至CacheProvider的缓存提供者
 
-CacheProvider定义了一个缓存的提供者，nest-plus集成了redis。如果用户需要集成其它缓存提供者，如memcache。
+CacheProvider定义了一个缓存的提供者，nest-plus集成了redis。如果用户需要集成其它缓存提供者只需要实现CacheProvider接口并且添加到配置中。
 
 使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的缓存提供者。
 
@@ -505,7 +505,7 @@ public interface ApplicationListener extends EventListener {
 }
 ```
 
-**`ServiceContextListener`定义如下
+**`ServiceContextListener`定义如下**
 
 ```java
 
