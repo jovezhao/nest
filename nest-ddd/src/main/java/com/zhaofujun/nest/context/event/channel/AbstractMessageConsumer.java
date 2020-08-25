@@ -6,7 +6,7 @@ import com.zhaofujun.nest.context.event.store.MessageStore;
 import com.zhaofujun.nest.standard.EventArgs;
 import com.zhaofujun.nest.standard.EventHandler;
 import com.zhaofujun.nest.standard.CustomException;
-import com.zhaofujun.nest.exception.CustomExceptionable;
+import com.zhaofujun.nest.standard.CustomExceptionable;
 import com.zhaofujun.nest.exception.OtherCustomException;
 import com.zhaofujun.nest.standard.SystemException;
 import com.zhaofujun.nest.standard.EventData;

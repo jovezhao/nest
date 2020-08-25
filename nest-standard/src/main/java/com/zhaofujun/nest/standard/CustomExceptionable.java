@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.exception;
+package com.zhaofujun.nest.standard;
 
 public interface CustomExceptionable{
 
