@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import com.zhaofujun.nest.context.loader.EntityCreate;
 import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.standard.DomainObject;
+import com.zhaofujun.nest.standard.Entity;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -32,7 +33,8 @@ public class DomainObjectTypeAdapterFactory implements TypeAdapterFactory {
 
 
         Map<Type, InstanceCreator<?>> instanceCreators = new HashMap<>();
-        instanceCreators.put(type.getType(), new EntityInstanceCreator());
+        if (Entity.class.isAssignableFrom(type.getRawType()))
+            instanceCreators.put(type.getType(), new EntityInstanceCreator());
         ConstructorConstructor constructorConstructor = new ConstructorConstructor(instanceCreators);
         TypeAdapterFactory typeAdapterFactory = new ReflectiveTypeAdapterFactory(constructorConstructor, gson.fieldNamingStrategy(), gson.excluder(), new JsonAdapterAnnotationTypeAdapterFactory(constructorConstructor));
 
