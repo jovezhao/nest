@@ -4,6 +4,7 @@ import com.zhaofujun.nest.cache.CacheConfiguration;
 import com.zhaofujun.nest.cache.DefaultCacheProvider;
 import com.zhaofujun.nest.context.event.EventConfiguration;
 import com.zhaofujun.nest.context.event.channel.local.LocalMessageChannel;
+import com.zhaofujun.nest.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,9 +25,10 @@ public class ConfigurationManager {
     }
 
     private <T extends ConfigurationItem> T get(Class<T> tClass, String code) {
+        if (StringUtils.isEmpty(code)) return null;
         return (T) itemList
                 .stream()
-                .filter(p -> tClass.isAssignableFrom(p.getClass()) && code.equals(code))
+                .filter(p -> tClass.isAssignableFrom(p.getClass()) && code.equals(p.getCode()))
                 .findFirst()
                 .orElse(null);
     }
