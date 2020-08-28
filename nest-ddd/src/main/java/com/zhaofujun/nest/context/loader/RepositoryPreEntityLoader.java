@@ -28,6 +28,7 @@ class RepositoryPreEntityLoader<T extends BaseEntity> implements EntityLoader<T>
     public <U extends T> U create(Class uClass, Identifier id) {
         U u = EntityCreate.create(uClass, false);
         EntityUtils.setIdentifier(u, id);
+        u.ready();
         return u;
     }
 }
