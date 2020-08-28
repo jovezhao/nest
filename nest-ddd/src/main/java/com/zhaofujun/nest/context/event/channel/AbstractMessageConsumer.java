@@ -55,7 +55,7 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
 
             if (ex instanceof CustomExceptionable) {
                 //业务异常
-                OtherCustomException customException = new OtherCustomException("发生业务异常", ex);
+                OtherCustomException customException = new OtherCustomException(ex.getMessage(), ex);
                 eventHandler.onCustomException(context, customException);
             } else {
 
