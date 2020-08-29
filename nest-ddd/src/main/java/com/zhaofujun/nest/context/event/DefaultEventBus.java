@@ -3,6 +3,7 @@ package com.zhaofujun.nest.context.event;
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
 import com.zhaofujun.nest.context.event.channel.MessageChannelProvider;
+import com.zhaofujun.nest.context.event.channel.MessageChannelProviderFactory;
 import com.zhaofujun.nest.context.event.channel.MessageConsumer;
 import com.zhaofujun.nest.context.event.channel.MessageProducer;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
@@ -24,7 +25,7 @@ public class DefaultEventBus implements EventBus {
         EventConfiguration eventConfiguration = getEventConfigurationByEventCode(eventData.getEventCode());
 
 
-        MessageChannelProvider messageChannel = NestApplication.current().getProviderManage().getMessageChannel(eventConfiguration.getMessageChannelCode());
+        MessageChannelProvider messageChannel = MessageChannelProviderFactory.create(eventConfiguration.getMessageChannelCode());
         MessageProducer messageProducer = messageChannel.getMessageProducer();
 
 
@@ -47,7 +48,7 @@ public class DefaultEventBus implements EventBus {
 
         EventConfiguration eventConfiguration = getEventConfigurationByEventCode(eventHandler.getEventCode());
 
-        MessageChannelProvider messageChannel = NestApplication.current().getProviderManage().getMessageChannel(eventConfiguration.getMessageChannelCode());
+        MessageChannelProvider messageChannel =MessageChannelProviderFactory.create(eventConfiguration.getMessageChannelCode());
 
         MessageConsumer messageConsumer = messageChannel.getMessageConsumer();
         Thread thread = new Thread(new Runnable() {
