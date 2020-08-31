@@ -11,6 +11,7 @@ import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.resend.MessageResendFactory;
 import com.zhaofujun.nest.context.event.resend.MessageResendStore;
 import com.zhaofujun.nest.context.model.BaseEntity;
+import com.zhaofujun.nest.context.model.EntityNotify;
 import com.zhaofujun.nest.standard.CustomExceptionable;
 import com.zhaofujun.nest.exception.OtherCustomException;
 import com.zhaofujun.nest.standard.*;
@@ -20,11 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-
 public class UnitOfWork {
-    enum EntityOperateEnum {
-        create, update, remove
-    }
 
     private Logger logger = LoggerFactory.getLogger(UnitOfWork.class);
 
@@ -69,6 +66,7 @@ public class UnitOfWork {
                         p.batchDelete(s);
                         // s.parallelStream().forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
                 }
+                entityNotify(p.getEntityClass(), r, s);
                 s.parallelStream().forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
             });
         });
@@ -161,4 +159,58 @@ public class UnitOfWork {
         return repositoryMap;
     }
 
+
+    private void entityNotify(Class entityClass, EntityOperateEnum operateEnum, List<BaseEntity> entities) {
+
+        if (EntityNotify.class.isAssignableFrom(entityClass)) {
+
+            entities.forEach(baseEntity -> {
+                MessageInfo<EntityNotifyEventData> messageInfo = new MessageInfo<>();
+
+                EntityNotifyEventData eventData = new EntityNotifyEventData();
+                eventData.setEntity(baseEntity);
+                eventData.setOperateEnum(operateEnum);
+
+                messageInfo.setMessageId(UUID.randomUUID().toString());
+                messageInfo.setData(eventData);
+                messageInfo.setEventSource("nest");
+                messageInfo.setSendTime(new Date());
+
+                addMessageBacklog(eventData.getEventCode(), messageInfo);
+            });
+
+
+        }
+    }
+
+
+    class EntityNotifyEventData implements EventData {
+        public static final String CODE = "Entity_Notify";
+
+        @Override
+        public String getEventCode() {
+            return CODE;
+        }
+
+        public BaseEntity entity;
+        private EntityOperateEnum operateEnum;
+
+        public BaseEntity getEntity() {
+            return entity;
+        }
+
+        public void setEntity(BaseEntity entity) {
+            this.entity = entity;
+        }
+
+        public EntityOperateEnum getOperateEnum() {
+            return operateEnum;
+        }
+
+        public void setOperateEnum(EntityOperateEnum operateEnum) {
+            this.operateEnum = operateEnum;
+        }
+    }
 }
+
+
