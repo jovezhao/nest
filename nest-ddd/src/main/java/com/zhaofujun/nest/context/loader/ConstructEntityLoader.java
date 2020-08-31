@@ -23,7 +23,7 @@ public class ConstructEntityLoader<T extends BaseEntity> implements EntityLoader
     public <U extends T> U create(Class uClass, Identifier id) {
         U u = EntityCreate.create(uClass, true);
         EntityUtils.setIdentifier(u, id);
-
+        u.ready();
         return u;
     }
 

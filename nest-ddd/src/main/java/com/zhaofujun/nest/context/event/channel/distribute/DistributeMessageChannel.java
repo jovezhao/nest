@@ -12,6 +12,5 @@ public abstract class DistributeMessageChannel implements MessageChannelProvider
 
     public abstract DistributeMessageConsumer getMessageConsumer();
 
-     public abstract void onStart();
-    public abstract void onClose();
+
 }

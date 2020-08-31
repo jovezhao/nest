@@ -18,7 +18,7 @@ import java.util.Map;
 public class DefaultCacheProvider implements CacheProvider {
     public final static String PROVIDER_CODE = "DEFAULT_CACHE_PROVIDER";
 
-    private JsonCreator jsonCreator=new JsonCreator();
+    private JsonCreator jsonCreator= JsonCreator.getInstance();
 
 
     @Override

@@ -1,36 +1,13 @@
 package com.zhaofujun.nest.context.event.channel.local;
 
 
-import com.zhaofujun.nest.context.event.channel.MessageChannelProvider;
-import com.zhaofujun.nest.context.event.message.MessageConverter;
-import com.zhaofujun.nest.standard.EventHandler;
-import com.zhaofujun.nest.context.event.message.MessageInfo;
-import com.zhaofujun.nest.context.event.channel.MessageConsumer;
-import com.zhaofujun.nest.context.event.channel.MessageProducer;
+import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
+import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
+import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageProducer;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class LocalMessageChannel implements MessageChannelProvider, MessageProducer, MessageConsumer {
+public class LocalMessageChannel extends DistributeMessageChannel {
 
     public static final String CHANNEL_CODE = "LocalMessageChannel";
-    private MessageConsumer messageConsumer;
-
-    public LocalMessageChannel() {
-        this.messageConsumer = new LocalMessageConsumer(this);
-    }
-
-
-    private static Map<String, EventSource> eventSourceMap = new HashMap<>();
-
-    public EventSource getEventSource(String messageGroup) {
-        EventSource eventSource = eventSourceMap.get(messageGroup);
-        if (eventSource == null) {
-            eventSource = new EventSource(this);
-            eventSourceMap.put(messageGroup, eventSource);
-        }
-        return eventSource;
-    }
 
     @Override
     public String getCode() {
@@ -38,24 +15,22 @@ public class LocalMessageChannel implements MessageChannelProvider, MessageProdu
     }
 
     @Override
-    public MessageProducer getMessageProducer() {
-        return this;
+    public DistributeMessageProducer getMessageProducer() {
+        return new LocalMessageProducer();
     }
 
     @Override
-    public MessageConsumer getMessageConsumer() {
-        return this;
+    public DistributeMessageConsumer getMessageConsumer() {
+        return new LocalMessageConsumer();
     }
 
     @Override
-    public void send(String messageGroup, MessageInfo messageInfo) {
-        EventSource eventSource = getEventSource(messageGroup);
-        eventSource.send(messageInfo);
+    public void start() {
     }
 
     @Override
-    public void subscribe(EventHandler eventHandler) {
-        this.messageConsumer.subscribe(eventHandler);
+    public void close() {
+        EventSource.removeAll();
     }
 }
 

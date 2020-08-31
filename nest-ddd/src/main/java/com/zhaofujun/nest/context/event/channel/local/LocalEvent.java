@@ -5,14 +5,14 @@ import java.util.EventObject;
 public class LocalEvent extends EventObject {
 
 
-    public LocalEvent(Object source, Object... args) {
+    public LocalEvent(String source, String... args) {
         super(source);
         this.args = args;
     }
 
-    private Object[] args;
+    private String[] args;
 
-    public Object[] getArgs() {
+    public String[] getArgs() {
         return args;
     }
 }

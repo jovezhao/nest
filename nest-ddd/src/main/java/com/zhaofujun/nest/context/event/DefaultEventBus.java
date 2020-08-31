@@ -1,7 +1,6 @@
 package com.zhaofujun.nest.context.event;
 
 import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.configuration.ConfigurationManager;
 import com.zhaofujun.nest.context.event.channel.MessageChannelProvider;
 import com.zhaofujun.nest.context.event.channel.MessageChannelProviderFactory;
 import com.zhaofujun.nest.context.event.channel.MessageConsumer;

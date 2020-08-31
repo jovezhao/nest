@@ -20,13 +20,13 @@ public class UserApplicationService {
 //        User user1 = EntityFactory.load(User.class, LongIdentifier.valueOf(10L));
 //        user1.delete();
 
-        change(11);
+//        change(11);
     }
 
     public void change(int age) {
         User user = EntityFactory.load(User.class, LongIdentifier.valueOf(10L));
-        user.changeAge(age);
-        user.getTeacher().init("teacher 22");
+//        user.changeAge(age);
+//        user.getTeacher().init("teacher 22");
 //        user.delete();
     }
 

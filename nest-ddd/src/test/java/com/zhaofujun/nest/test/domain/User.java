@@ -1,10 +1,11 @@
 package com.zhaofujun.nest.test.domain;
 
 import com.zhaofujun.nest.context.model.BaseEntity;
+import com.zhaofujun.nest.context.model.EntityNotify;
 import com.zhaofujun.nest.context.model.LongIdentifier;
 
 
-public abstract class User extends BaseEntity<LongIdentifier> {
+public abstract class User extends BaseEntity<LongIdentifier> implements EntityNotify {
     private String name;
     private int age;
     private Address address;

@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class DefaultRepository implements Repository<BaseEntity> {
 
-    private JsonCreator jsonCreator = new JsonCreator();
+    private JsonCreator jsonCreator = JsonCreator.getInstance();
 
     class EntityItem {
         private AbstractIdentifier id;
@@ -37,7 +37,6 @@ public class DefaultRepository implements Repository<BaseEntity> {
     public Class<BaseEntity> getEntityClass() {
         return BaseEntity.class;
     }
-
 
 
     @Override

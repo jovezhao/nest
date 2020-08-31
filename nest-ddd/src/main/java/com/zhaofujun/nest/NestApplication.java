@@ -4,6 +4,7 @@ import com.zhaofujun.nest.configuration.ConfigurationItem;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
 import com.zhaofujun.nest.configuration.MessageConfiguration;
 import com.zhaofujun.nest.context.event.DefaultEventBus;
+import com.zhaofujun.nest.context.event.channel.MessageChannelApplicationListener;
 import com.zhaofujun.nest.context.event.resend.ResenderTimerTask;
 import com.zhaofujun.nest.context.repository.RepositoryManager;
 import com.zhaofujun.nest.standard.EventBus;
@@ -75,6 +76,7 @@ public class NestApplication {
     }
 
     public void start() {
+        this.getListenerManager().addListeners(new MessageChannelApplicationListener());
         onStarted();
         timer.schedule(new ResenderTimerTask(), 0, 1000);
     }

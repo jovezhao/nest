@@ -18,7 +18,7 @@ public class ServiceContext {
         this.applicationService = applicationService;
         this.method = method;
         this.commitor = commitor;
-        this.unitOfWork = new UnitOfWork();
+        this.unitOfWork = new UnitOfWork(this);
     }
 
     public Class getServiceClass() {

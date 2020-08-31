@@ -24,8 +24,10 @@ import java.util.*;
 public class UnitOfWork {
 
     private Logger logger = LoggerFactory.getLogger(UnitOfWork.class);
+    private ServiceContext serviceContext;
 
-    UnitOfWork() {
+    UnitOfWork(ServiceContext serviceContext) {
+        this.serviceContext = serviceContext;
     }
 
     private Set<BaseEntity> entities = new HashSet<>();
@@ -66,7 +68,7 @@ public class UnitOfWork {
                         p.batchDelete(s);
                         // s.parallelStream().forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
                 }
-                entityNotify(p.getEntityClass(), r, s);
+                entityNotify(r, s);
                 s.parallelStream().forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
             });
         });
@@ -160,15 +162,18 @@ public class UnitOfWork {
     }
 
 
-    private void entityNotify(Class entityClass, EntityOperateEnum operateEnum, List<BaseEntity> entities) {
+    private void entityNotify(EntityOperateEnum operateEnum, List<BaseEntity> entities) {
+        entities.forEach(baseEntity -> {
 
-        if (EntityNotify.class.isAssignableFrom(entityClass)) {
+            if (baseEntity instanceof EntityNotify) {
 
-            entities.forEach(baseEntity -> {
                 MessageInfo<EntityNotifyEventData> messageInfo = new MessageInfo<>();
 
                 EntityNotifyEventData eventData = new EntityNotifyEventData();
-                eventData.setEntity(baseEntity);
+                eventData.setBeginSnapshot(baseEntity.getBeginSnapshot());
+                eventData.setEndSnapshot(baseEntity.getEndSnapshot());
+                eventData.setServiceName(serviceContext.getServiceClass().getName());
+                eventData.setMethodName(serviceContext.getMethod());
                 eventData.setOperateEnum(operateEnum);
 
                 messageInfo.setMessageId(UUID.randomUUID().toString());
@@ -177,39 +182,10 @@ public class UnitOfWork {
                 messageInfo.setSendTime(new Date());
 
                 addMessageBacklog(eventData.getEventCode(), messageInfo);
-            });
+            }
+        });
 
 
-        }
-    }
-
-
-    class EntityNotifyEventData implements EventData {
-        public static final String CODE = "Entity_Notify";
-
-        @Override
-        public String getEventCode() {
-            return CODE;
-        }
-
-        public BaseEntity entity;
-        private EntityOperateEnum operateEnum;
-
-        public BaseEntity getEntity() {
-            return entity;
-        }
-
-        public void setEntity(BaseEntity entity) {
-            this.entity = entity;
-        }
-
-        public EntityOperateEnum getOperateEnum() {
-            return operateEnum;
-        }
-
-        public void setOperateEnum(EntityOperateEnum operateEnum) {
-            this.operateEnum = operateEnum;
-        }
     }
 }
 

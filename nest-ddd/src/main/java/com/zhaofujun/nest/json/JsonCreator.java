@@ -17,9 +17,16 @@ import java.util.stream.Collectors;
 
 
 public class JsonCreator {
+
     private Gson gson;
 
-    public JsonCreator() {
+    private static JsonCreator jsonCreator = new JsonCreator();
+
+    public static JsonCreator getInstance() {
+        return jsonCreator;
+    }
+
+    private JsonCreator() {
 
         GsonBuilder gsonBuilder = new GsonBuilder()
                 .disableHtmlEscaping()

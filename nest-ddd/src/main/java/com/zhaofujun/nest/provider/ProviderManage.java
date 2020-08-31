@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProviderManage {
 
@@ -36,11 +37,21 @@ public class ProviderManage {
                 .orElse(null);
     }
 
+    private <T extends Provider> List<T> getList(Class<T> tClass) {
+        return providerList.stream()
+                .filter(p -> tClass.isAssignableFrom(p.getClass()))
+                .map(p -> (T) p)
+                .collect(Collectors.toList());
+    }
+
     public CacheProvider getCacheProvider(String code) {
 
         CacheProvider cacheProvider = get(CacheProvider.class, code);
 
-        if (cacheProvider == null) return new DefaultCacheProvider();
+        if (cacheProvider == null) {
+            cacheProvider= new DefaultCacheProvider();
+            providerList.add(cacheProvider);
+        }
         return cacheProvider;
     }
 
@@ -48,8 +59,16 @@ public class ProviderManage {
 
         MessageChannelProvider channelProvider = get(MessageChannelProvider.class, code);
 
-        if (channelProvider == null) return new LocalMessageChannel();
+        if (channelProvider == null) {
+            channelProvider=new LocalMessageChannel();
+            channelProvider.start();
+            providerList.add(channelProvider);
+        }
         return channelProvider;
+    }
+
+    public List<MessageChannelProvider> getMessageChannels() {
+        return getList(MessageChannelProvider.class);
     }
 
     public MessageStore getMessageStore(String code) {

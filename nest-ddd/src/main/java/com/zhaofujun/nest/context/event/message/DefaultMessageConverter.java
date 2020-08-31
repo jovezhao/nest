@@ -9,7 +9,7 @@ public class DefaultMessageConverter implements MessageConverter {
 
     public static final String CODE = "DefaultMessageConverter";
 
-    private JsonCreator jsonCreator = new JsonCreator();
+    private JsonCreator jsonCreator =  JsonCreator.getInstance();
 
 
 

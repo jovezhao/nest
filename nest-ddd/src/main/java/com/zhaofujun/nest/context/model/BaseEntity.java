@@ -1,6 +1,7 @@
 package com.zhaofujun.nest.context.model;
 
 import com.zhaofujun.nest.exception.VerifyFailedException;
+import com.zhaofujun.nest.json.JsonCreator;
 import com.zhaofujun.nest.standard.DomainObject;
 import com.zhaofujun.nest.standard.Entity;
 import com.zhaofujun.nest.utils.EntityUtils;
@@ -17,14 +18,14 @@ public abstract class BaseEntity<T extends AbstractIdentifier> implements Entity
         return id;
     }
 
-
     //实体当前状态(1 修改、2 删除)
     private transient boolean __deleted;
 
     //实体生成方式(1 新增、2 删除）
     private transient boolean __new;
 
-    private transient int __hashcode;
+    private transient String beginSnapshot;
+    private transient String endSnapshot;
 
     //版本号
     private int _version;
@@ -61,14 +62,23 @@ public abstract class BaseEntity<T extends AbstractIdentifier> implements Entity
     }
 
 
-
     public void ready() {
         //计算当前实体hash值
-        __hashcode = EntityUtils.getEntityHash(this);
+//        __hashcode = EntityUtils.getEntityHash(this);
+        beginSnapshot = JsonCreator.getInstance().toJsonString(this);
     }
 
     public boolean isChanged() {
-        return __hashcode != EntityUtils.getEntityHash(this);
+        endSnapshot = JsonCreator.getInstance().toJsonString(this);
+        return beginSnapshot.hashCode() != endSnapshot.hashCode();
+    }
+
+    public String getBeginSnapshot() {
+        return beginSnapshot;
+    }
+
+    public String getEndSnapshot() {
+        return endSnapshot;
     }
 }
 
