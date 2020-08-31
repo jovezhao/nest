@@ -357,6 +357,10 @@ public interface EventBus{
 
 可在IOC容器下，可以使用IOC定义一个EventConfiguration的Bean，系统将自动注册该配置。
 
+**监听实体变更**
+
+如果实体实现了`EntityNotify`接口，当该实体向仓储提交数据时将自动发起事件`EntityNotifyEventData`事件，该事件可以根据项目需求配置到指定的消息通道。
+
 #### 代码演示
 
 **事件数据 PasswordChangedEventData**
