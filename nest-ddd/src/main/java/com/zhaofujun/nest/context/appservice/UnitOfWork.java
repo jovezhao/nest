@@ -16,6 +16,7 @@ import com.zhaofujun.nest.standard.CustomExceptionable;
 import com.zhaofujun.nest.exception.OtherCustomException;
 import com.zhaofujun.nest.standard.*;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
+import com.zhaofujun.nest.utils.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,6 +171,7 @@ public class UnitOfWork {
                 MessageInfo<EntityNotifyEventData> messageInfo = new MessageInfo<>();
 
                 EntityNotifyEventData eventData = new EntityNotifyEventData();
+                eventData.setEntityClassName(EntityUtils.getFullClassName(baseEntity));
                 eventData.setBeginSnapshot(baseEntity.getBeginSnapshot());
                 eventData.setEndSnapshot(baseEntity.getEndSnapshot());
                 eventData.setServiceName(serviceContext.getServiceClass().getName());

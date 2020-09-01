@@ -14,7 +14,16 @@ public class EntityNotifyEventData implements EventData {
     private String endSnapshot;
     private String serviceName;
     private String methodName;
+    private String entityClassName;
     private EntityOperateEnum operateEnum;
+
+    public String getEntityClassName() {
+        return entityClassName;
+    }
+
+    public void setEntityClassName(String entityClassName) {
+        this.entityClassName = entityClassName;
+    }
 
     public String getBeginSnapshot() {
         return beginSnapshot;
