@@ -28,7 +28,7 @@ public class DefaultRepository implements Repository<BaseEntity> {
         EntityItem entityItem = entityMap.get(abstractIdentifier);
         System.out.println("get:" + entityItem.value);
         if (entityItem != null) {
-            return jsonCreator.toObj(entityItem.value, (Type) entityItem.tClass.getSuperclass());
+            return jsonCreator.toObj(entityItem.value, (Type) entityItem.tClass.getSuperclass(),true);
         }
         return null;
     }

@@ -25,8 +25,8 @@ public class UserApplicationService {
 
     public void change(int age) {
         User user = EntityFactory.load(User.class, LongIdentifier.valueOf(10L));
-//        user.changeAge(age);
-//        user.getTeacher().init("teacher 22");
+        user.changeAge(age);
+        user.getTeacher().init("teacher 22");
 //        user.delete();
     }
 

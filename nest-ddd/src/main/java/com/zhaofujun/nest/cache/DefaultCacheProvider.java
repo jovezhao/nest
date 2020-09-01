@@ -34,7 +34,7 @@ public class DefaultCacheProvider implements CacheProvider {
         Element el = cache.get(key);
         if (el != null) {
             String json = el.getObjectValue().toString();
-            return jsonCreator.toObj(json, type);
+            return jsonCreator.toObj(json, type,true);
         }
         return null;
     }

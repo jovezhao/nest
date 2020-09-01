@@ -8,6 +8,15 @@ import java.util.HashSet;
 public class DomainObjectSerializeContext {
     private static ThreadLocal<HashSet<DomainObject>> threadLocal = new ThreadLocal();
     private static ThreadLocal<DomainObject> domainObjectThreadLocal = new ThreadLocal<>();
+    private static ThreadLocal<Boolean> intoContextThreadLocal = new ThreadLocal<>();
+
+    public static void setIntoContext(boolean intoContext) {
+        intoContextThreadLocal.set(intoContext);
+    }
+
+    public static boolean isIntoContext() {
+        return intoContextThreadLocal.get() == null || intoContextThreadLocal.get().booleanValue();
+    }
 
     private static HashSet<DomainObject> current() {
         HashSet<DomainObject> domainObjects = (HashSet) threadLocal.get();
@@ -24,7 +33,7 @@ public class DomainObjectSerializeContext {
     }
 
     public static boolean put(DomainObject domainObject) {
-        if(!(domainObject instanceof Entity)) return true;
+        if (!(domainObject instanceof Entity)) return true;
         HashSet<DomainObject> domainObjects = current();
         if (domainObjects.contains(domainObject)) {
             return false;

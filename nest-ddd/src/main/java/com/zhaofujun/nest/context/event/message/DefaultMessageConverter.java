@@ -20,7 +20,7 @@ public class DefaultMessageConverter implements MessageConverter {
     public MessageInfo jsonToMessage(String messageJson, Class eventDataClass) {
 
         Type type = ParameterizedTypeFactory.make(MessageInfo.class, eventDataClass);
-        MessageInfo messageInfo = jsonCreator.toObj(messageJson, type);
+        MessageInfo messageInfo = jsonCreator.toObj(messageJson, type,false);
         return messageInfo;
 
     }

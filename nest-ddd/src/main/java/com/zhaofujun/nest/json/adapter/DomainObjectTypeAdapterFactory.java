@@ -11,6 +11,7 @@ import com.google.gson.internal.bind.TreeTypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.zhaofujun.nest.context.loader.EntityCreate;
 import com.zhaofujun.nest.context.model.BaseEntity;
+import com.zhaofujun.nest.json.DomainObjectSerializeContext;
 import com.zhaofujun.nest.standard.DomainObject;
 import com.zhaofujun.nest.standard.Entity;
 
@@ -33,7 +34,7 @@ public class DomainObjectTypeAdapterFactory implements TypeAdapterFactory {
 
 
         Map<Type, InstanceCreator<?>> instanceCreators = new HashMap<>();
-        if (Entity.class.isAssignableFrom(type.getRawType()))
+        if (Entity.class.isAssignableFrom(type.getRawType()) && DomainObjectSerializeContext.isIntoContext())
             instanceCreators.put(type.getType(), new EntityInstanceCreator());
         ConstructorConstructor constructorConstructor = new ConstructorConstructor(instanceCreators);
         TypeAdapterFactory typeAdapterFactory = new ReflectiveTypeAdapterFactory(constructorConstructor, gson.fieldNamingStrategy(), gson.excluder(), new JsonAdapterAnnotationTypeAdapterFactory(constructorConstructor));

@@ -52,6 +52,11 @@ public class JsonCreator {
     }
 
     public <T> T toObj(String jsonString, Class<T> tClass) {
+        return toObj(jsonString, tClass,false);
+    }
+
+    public <T> T toObj(String jsonString, Class<T> tClass, boolean intoContext) {
+        DomainObjectSerializeContext.setIntoContext(intoContext);
         return gson.fromJson(jsonString, tClass);
     }
 
@@ -63,6 +68,10 @@ public class JsonCreator {
     }
 
     public <T> T toObj(String jsonString, Type typeOfT) {
+        return toObj(jsonString, typeOfT,false);
+    }
+    public <T> T toObj(String jsonString,Type typeOfT,boolean intoContext){
+        DomainObjectSerializeContext.setIntoContext(intoContext);
         return gson.fromJson(jsonString, typeOfT);
     }
 
