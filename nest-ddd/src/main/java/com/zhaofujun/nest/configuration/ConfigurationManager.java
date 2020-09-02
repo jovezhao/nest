@@ -9,6 +9,7 @@ import com.zhaofujun.nest.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,9 +49,9 @@ public class ConfigurationManager {
     }
 
     public List<CacheConfiguration> getCacheConfigurations() {
-        return itemList.stream().filter(p -> p instanceof CacheConfiguration)
+        return Collections.unmodifiableList(itemList.stream().filter(p -> p instanceof CacheConfiguration)
                 .map(p -> (CacheConfiguration) p)
-                .collect(Collectors.toUnmodifiableList());
+                .collect(Collectors.toList()));
     }
 
     public EventConfiguration getEventConfigurationByEventCode(String eventCode) {
@@ -66,9 +67,9 @@ public class ConfigurationManager {
     }
 
     public List<EventConfiguration> getEventConfigurations() {
-        return itemList.stream().filter(p -> p instanceof EventConfiguration)
+        return Collections.unmodifiableList(itemList.stream().filter(p -> p instanceof EventConfiguration)
                 .map(p -> (EventConfiguration) p)
-                .collect(Collectors.toUnmodifiableList());
+                .collect(Collectors.toList()));
     }
 
 }
