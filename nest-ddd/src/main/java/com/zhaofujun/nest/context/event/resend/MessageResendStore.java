@@ -4,7 +4,7 @@ import com.zhaofujun.nest.context.event.message.MessageBacklog;
 import com.zhaofujun.nest.provider.Provider;
 
 
-public interface  MessageResendStore extends Provider {
+public interface MessageResendStore extends Provider {
 
     void add(MessageBacklog messageBacklog);
 

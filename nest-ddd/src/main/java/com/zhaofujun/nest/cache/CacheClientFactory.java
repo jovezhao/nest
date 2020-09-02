@@ -10,8 +10,8 @@ public class CacheClientFactory {
         ConfigurationManager configurationManager = NestApplication.current().getConfigurationManager();
         CacheConfiguration cacheConfiguration = configurationManager.getCacheConfigurationByCode(cacheCode);
 
-        ProviderManage providerManage=NestApplication.current().getProviderManage();
-        CacheProvider cacheProvider=providerManage.getCacheProvider(cacheConfiguration.getProviderCode());
+        ProviderManage providerManage = NestApplication.current().getProviderManage();
+        CacheProvider cacheProvider = providerManage.getCacheProvider(cacheConfiguration.getProviderCode());
 
         CacheClient cacheClient = new DefaultCacheClient(cacheProvider, cacheConfiguration);
         return cacheClient;

@@ -3,9 +3,7 @@ package com.zhaofujun.nest.test;
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.context.appservice.ApplicationServiceCreator;
 import com.zhaofujun.nest.context.event.DefaultEventBus;
-import com.zhaofujun.nest.standard.EventBus;
 import com.zhaofujun.nest.test.adapter.EntityNotifyEventHandler;
-import com.zhaofujun.nest.test.application.TeacherApplicationService;
 import com.zhaofujun.nest.test.application.UserApplicationService;
 
 

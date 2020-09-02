@@ -8,7 +8,7 @@ import com.zhaofujun.nest.configuration.ConfigurationItem;
  *
  * @author Jove
  */
-public class  CacheConfiguration extends ConfigurationItem {
+public class CacheConfiguration extends ConfigurationItem {
     /**
      * 名称
      */

@@ -18,7 +18,7 @@ import java.util.Map;
 public class DefaultCacheProvider implements CacheProvider {
     public final static String PROVIDER_CODE = "DEFAULT_CACHE_PROVIDER";
 
-    private JsonCreator jsonCreator= JsonCreator.getInstance();
+    private JsonCreator jsonCreator = JsonCreator.getInstance();
 
 
     @Override
@@ -34,7 +34,7 @@ public class DefaultCacheProvider implements CacheProvider {
         Element el = cache.get(key);
         if (el != null) {
             String json = el.getObjectValue().toString();
-            return jsonCreator.toObj(json, type,true);
+            return jsonCreator.toObj(json, type, true);
         }
         return null;
     }
@@ -55,7 +55,7 @@ public class DefaultCacheProvider implements CacheProvider {
         }
         Cache cache = manager.getCache(groupName);
         synchronized (value) {
-            String json=jsonCreator.toJsonString(value);
+            String json = jsonCreator.toJsonString(value);
             Element el = new Element(key, json, false, (int) idleSeconds, 0);
             cache.put(el);
         }

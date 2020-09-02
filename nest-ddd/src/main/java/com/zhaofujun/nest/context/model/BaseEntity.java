@@ -2,9 +2,7 @@ package com.zhaofujun.nest.context.model;
 
 import com.zhaofujun.nest.exception.VerifyFailedException;
 import com.zhaofujun.nest.json.JsonCreator;
-import com.zhaofujun.nest.standard.DomainObject;
 import com.zhaofujun.nest.standard.Entity;
-import com.zhaofujun.nest.utils.EntityUtils;
 
 import javax.validation.NoProviderFoundException;
 import javax.validation.Validation;

@@ -4,7 +4,7 @@ import com.alibaba.ttl.TransmittableThreadLocal;
 
 import java.util.Stack;
 
- public class ServiceContextManager {
+public class ServiceContextManager {
 
     //使用堆栈来处理当前上下文信息
 
@@ -21,7 +21,7 @@ import java.util.Stack;
 
     public static ServiceContext get() {
         Stack<ServiceContext> serviceContexts = serviceContextThreadLocal.get();
-        if(serviceContexts==null) return null;
+        if (serviceContexts == null) return null;
         return serviceContexts.peek();
     }
 

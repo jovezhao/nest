@@ -1,6 +1,9 @@
 package com.zhaofujun.nest.event;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class EventListenerManager {
@@ -12,7 +15,7 @@ public class EventListenerManager {
     }
 
 
-    public void addListeners(NestEventListener ... eventListeners) {
+    public void addListeners(NestEventListener... eventListeners) {
         this.listeners.addAll(Arrays.asList(eventListeners));
     }
 

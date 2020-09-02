@@ -2,9 +2,8 @@ package com.zhaofujun.nest.context.event.channel.local;
 
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageConsumer;
 import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
-import com.zhaofujun.nest.standard.EventHandler;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
-import com.zhaofujun.nest.context.event.channel.AbstractMessageConsumer;
+import com.zhaofujun.nest.standard.EventHandler;
 
 public class LocalMessageConsumer extends DistributeMessageConsumer {
 

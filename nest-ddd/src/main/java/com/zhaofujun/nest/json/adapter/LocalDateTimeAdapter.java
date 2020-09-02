@@ -3,14 +3,16 @@ package com.zhaofujun.nest.json.adapter;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {
 
     @Override
     public JsonElement serialize(LocalDateTime src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(src.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());    }
+        return new JsonPrimitive(src.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+    }
 
     @Override
     public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {

@@ -49,7 +49,7 @@ public class ProviderManage {
         CacheProvider cacheProvider = get(CacheProvider.class, code);
 
         if (cacheProvider == null) {
-            cacheProvider= new DefaultCacheProvider();
+            cacheProvider = new DefaultCacheProvider();
             providerList.add(cacheProvider);
         }
         return cacheProvider;
@@ -60,7 +60,7 @@ public class ProviderManage {
         MessageChannelProvider channelProvider = get(MessageChannelProvider.class, code);
 
         if (channelProvider == null) {
-            channelProvider=new LocalMessageChannel();
+            channelProvider = new LocalMessageChannel();
             channelProvider.start();
             providerList.add(channelProvider);
         }

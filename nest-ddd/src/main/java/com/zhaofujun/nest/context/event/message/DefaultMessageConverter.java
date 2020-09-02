@@ -9,8 +9,7 @@ public class DefaultMessageConverter implements MessageConverter {
 
     public static final String CODE = "DefaultMessageConverter";
 
-    private JsonCreator jsonCreator =  JsonCreator.getInstance();
-
+    private JsonCreator jsonCreator = JsonCreator.getInstance();
 
 
     public String messageToString(MessageInfo messageInfo) {
@@ -20,7 +19,7 @@ public class DefaultMessageConverter implements MessageConverter {
     public MessageInfo jsonToMessage(String messageJson, Class eventDataClass) {
 
         Type type = ParameterizedTypeFactory.make(MessageInfo.class, eventDataClass);
-        MessageInfo messageInfo = jsonCreator.toObj(messageJson, type,false);
+        MessageInfo messageInfo = jsonCreator.toObj(messageJson, type, false);
         return messageInfo;
 
     }

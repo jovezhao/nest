@@ -3,11 +3,11 @@ package com.zhaofujun.nest.context.loader;
 
 import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.cache.CacheClient;
-import com.zhaofujun.nest.context.model.BaseEntity;
-import com.zhaofujun.nest.standard.Repository;
 import com.zhaofujun.nest.cache.CacheClientFactory;
+import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.standard.EntityLoader;
 import com.zhaofujun.nest.standard.Identifier;
+import com.zhaofujun.nest.standard.Repository;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
 
 
@@ -40,7 +40,7 @@ public class RepositoryEntityLoader<T extends BaseEntity> implements EntityLoade
         //从缓存中获取实体
         entityLoader = new CacheEntityLoader<>(uClass);
         result = entityLoader.create(id);
-        if (result != null){
+        if (result != null) {
             result.ready();
             return result;
         }

@@ -12,7 +12,6 @@ import com.zhaofujun.nest.context.event.resend.MessageResendFactory;
 import com.zhaofujun.nest.context.event.resend.MessageResendStore;
 import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.context.model.EntityNotify;
-import com.zhaofujun.nest.standard.CustomExceptionable;
 import com.zhaofujun.nest.exception.OtherCustomException;
 import com.zhaofujun.nest.standard.*;
 import com.zhaofujun.nest.utils.EntityCacheUtils;

@@ -47,7 +47,7 @@ public class DefaultEventBus implements EventBus {
 
         EventConfiguration eventConfiguration = getEventConfigurationByEventCode(eventHandler.getEventCode());
 
-        MessageChannelProvider messageChannel =MessageChannelProviderFactory.create(eventConfiguration.getMessageChannelCode());
+        MessageChannelProvider messageChannel = MessageChannelProviderFactory.create(eventConfiguration.getMessageChannelCode());
 
         MessageConsumer messageConsumer = messageChannel.getMessageConsumer();
         Thread thread = new Thread(new Runnable() {

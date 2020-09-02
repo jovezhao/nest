@@ -28,7 +28,6 @@ public class LongIdentifier extends AbstractIdentifier {
     }
 
 
-
     public static class SnowflakeIdWorker {
 
         // ==============================Fields===========================================

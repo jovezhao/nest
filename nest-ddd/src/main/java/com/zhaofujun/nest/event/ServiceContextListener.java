@@ -8,6 +8,7 @@ public interface ServiceContextListener extends NestEventListener {
     void serviceMethodEnd(ServiceEvent serviceEvent, String methodName);
 
     void beforeCommit(ServiceEvent serviceEvent);
+
     void committed(ServiceEvent serviceEvent);
 
     void serviceEnd(ServiceEvent serviceEvent);

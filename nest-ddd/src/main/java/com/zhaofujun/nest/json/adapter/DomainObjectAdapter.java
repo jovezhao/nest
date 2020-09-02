@@ -4,9 +4,9 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.zhaofujun.nest.context.loader.RepositoryEntityLoader;
 import com.zhaofujun.nest.context.model.BaseEntity;
+import com.zhaofujun.nest.json.DomainObjectSerializeContext;
 import com.zhaofujun.nest.standard.DomainObject;
 import com.zhaofujun.nest.standard.EntityLoader;
-import com.zhaofujun.nest.json.DomainObjectSerializeContext;
 import com.zhaofujun.nest.standard.Identifier;
 import com.zhaofujun.nest.utils.EntityUtils;
 

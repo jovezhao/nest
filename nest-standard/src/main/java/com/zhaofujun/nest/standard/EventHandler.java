@@ -8,10 +8,11 @@ public interface EventHandler<T extends EventData> {
 
     void handle(T eventData, EventArgs eventArgs);
 
-    default void onSystemException( Object context, SystemException ex) {
+    default void onSystemException(Object context, SystemException ex) {
         ex.printStackTrace();
     }
-    default void onCustomException( Object context, CustomException ex) {
+
+    default void onCustomException(Object context, CustomException ex) {
         ex.printStackTrace();
     }
 }

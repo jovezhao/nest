@@ -4,7 +4,7 @@ package com.zhaofujun.nest.context.event.message;
 import java.io.Serializable;
 import java.util.Date;
 
-public class MessageRecord  implements Serializable {
+public class MessageRecord implements Serializable {
 
 
 //    public enum RecordState {
@@ -15,7 +15,7 @@ public class MessageRecord  implements Serializable {
     private String handlerName;
     private Date receiveTime;
     private Date handleTime;
-//    private RecordState recordState;
+    //    private RecordState recordState;
     private String Id;
 
     public MessageInfo getMessageInfo() {

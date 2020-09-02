@@ -1,5 +1,5 @@
 package com.zhaofujun.nest.standard;
 
-public interface SystemExceptionable{
+public interface SystemExceptionable {
 
 }

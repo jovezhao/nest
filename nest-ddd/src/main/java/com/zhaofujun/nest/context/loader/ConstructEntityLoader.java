@@ -5,7 +5,6 @@ import com.zhaofujun.nest.standard.EntityLoader;
 import com.zhaofujun.nest.standard.Identifier;
 import com.zhaofujun.nest.utils.EntityUtils;
 
-
 import java.io.Serializable;
 
 //无中生有类实体的构建

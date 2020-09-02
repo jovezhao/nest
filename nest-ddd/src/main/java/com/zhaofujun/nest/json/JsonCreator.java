@@ -2,11 +2,11 @@ package com.zhaofujun.nest.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.zhaofujun.nest.standard.DomainObject;
 import com.zhaofujun.nest.json.adapter.DateAdapter;
 import com.zhaofujun.nest.json.adapter.DomainObjectTypeAdapterFactory;
 import com.zhaofujun.nest.json.adapter.LocalDateAdapter;
 import com.zhaofujun.nest.json.adapter.LocalDateTimeAdapter;
+import com.zhaofujun.nest.standard.DomainObject;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
@@ -52,7 +52,7 @@ public class JsonCreator {
     }
 
     public <T> T toObj(String jsonString, Class<T> tClass) {
-        return toObj(jsonString, tClass,false);
+        return toObj(jsonString, tClass, false);
     }
 
     public <T> T toObj(String jsonString, Class<T> tClass, boolean intoContext) {
@@ -68,9 +68,10 @@ public class JsonCreator {
     }
 
     public <T> T toObj(String jsonString, Type typeOfT) {
-        return toObj(jsonString, typeOfT,false);
+        return toObj(jsonString, typeOfT, false);
     }
-    public <T> T toObj(String jsonString,Type typeOfT,boolean intoContext){
+
+    public <T> T toObj(String jsonString, Type typeOfT, boolean intoContext) {
         DomainObjectSerializeContext.setIntoContext(intoContext);
         return gson.fromJson(jsonString, typeOfT);
     }

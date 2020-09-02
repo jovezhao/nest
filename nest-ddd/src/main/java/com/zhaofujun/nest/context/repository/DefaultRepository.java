@@ -1,9 +1,9 @@
 package com.zhaofujun.nest.context.repository;
 
-import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.context.model.AbstractIdentifier;
-import com.zhaofujun.nest.standard.EntityLoader;
+import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.json.JsonCreator;
+import com.zhaofujun.nest.standard.EntityLoader;
 import com.zhaofujun.nest.standard.Identifier;
 import com.zhaofujun.nest.standard.Repository;
 
@@ -28,7 +28,7 @@ public class DefaultRepository implements Repository<BaseEntity> {
         EntityItem entityItem = entityMap.get(abstractIdentifier);
         System.out.println("get:" + entityItem.value);
         if (entityItem != null) {
-            return jsonCreator.toObj(entityItem.value, (Type) entityItem.tClass.getSuperclass(),true);
+            return jsonCreator.toObj(entityItem.value, (Type) entityItem.tClass.getSuperclass(), true);
         }
         return null;
     }
