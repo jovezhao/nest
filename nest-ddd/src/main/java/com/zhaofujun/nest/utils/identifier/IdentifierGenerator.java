@@ -3,7 +3,7 @@ package com.zhaofujun.nest.utils.identifier;
 import java.io.Serializable;
 
 public interface IdentifierGenerator<T extends Serializable> {
-    
+
     /**
      * Generator name.
      *
@@ -12,7 +12,7 @@ public interface IdentifierGenerator<T extends Serializable> {
     default String name() {
         return getClass().getName();
     }
-    
+
     /**
      * Get next ID value.
      *

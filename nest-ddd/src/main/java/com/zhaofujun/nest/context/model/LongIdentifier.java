@@ -8,7 +8,7 @@ import java.util.ServiceLoader;
 public class LongIdentifier extends AbstractIdentifier {
 
     private static LongIdentifierGenerator longIdentifierGenerator;
-    
+
     private final Long id;
 
     public LongIdentifier(Long id) {

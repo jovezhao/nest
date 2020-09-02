@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public final class CustomLongIdentifierTest {
-    
+
     @Test
     public void assertCustomLongIdentifier() {
         assertThat(LongIdentifier.newValue().getId(), is(1L));

@@ -6,11 +6,7 @@ import com.zhaofujun.nest.context.event.EventConfiguration;
 import com.zhaofujun.nest.context.event.channel.local.LocalMessageChannel;
 import com.zhaofujun.nest.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ConfigurationManager {
