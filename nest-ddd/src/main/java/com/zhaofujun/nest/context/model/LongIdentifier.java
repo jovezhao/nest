@@ -8,8 +8,6 @@ import java.util.ServiceLoader;
 public class LongIdentifier extends AbstractIdentifier {
 
     private static LongIdentifierGenerator longIdentifierGenerator;
-
-    private static String identifierGeneratorName = DefaultLongIdentifierGenerator.class.getName();
     
     private final Long id;
 
@@ -46,31 +44,24 @@ public class LongIdentifier extends AbstractIdentifier {
     }
 
     private static void initGenerator() {
-        for (LongIdentifierGenerator each : ServiceLoader.load(LongIdentifierGenerator.class)) {
-            if (!identifierGeneratorName.equals(each.name())) {
-                continue;
-            }
+        if (null != longIdentifierGenerator) {
+            return;
+        }
+        for (LongIdentifierGenerator first : ServiceLoader.load(LongIdentifierGenerator.class)) {
             if (null != longIdentifierGenerator) {
-                throw new IllegalStateException(String.format("Identifier generator name [%s] duplicated.", identifierGeneratorName));
+                throw new IllegalStateException("More than 1 implementations of generator are listed in META-INF/services. Consider remove other and keep only one implementation.");
             }
-            longIdentifierGenerator = each;
+            longIdentifierGenerator = first;
         }
         if (null == longIdentifierGenerator) {
             longIdentifierGenerator = new DefaultLongIdentifierGenerator();
         }
     }
 
-    public static String getIdentifierGeneratorName() {
-        return identifierGeneratorName;
-    }
-
-    public static void setIdentifierGeneratorName(final String identifierGeneratorName) {
-        if (null != longIdentifierGenerator) {
+    public static void setLongIdentifierGenerator(final LongIdentifierGenerator longIdentifierGenerator) {
+        if (null != LongIdentifier.longIdentifierGenerator) {
             throw new IllegalStateException("LongIdentifierGenerator has already initialized.");
         }
-        if (null == identifierGeneratorName) {
-            throw new IllegalArgumentException("Identifier generator name cannot be null.");
-        }
-        LongIdentifier.identifierGeneratorName = identifierGeneratorName;
+        LongIdentifier.longIdentifierGenerator = longIdentifierGenerator;
     }
 }
