@@ -15,7 +15,7 @@ public class DomainObjectSerializeContext {
     }
 
     public static boolean isIntoContext() {
-        return intoContextThreadLocal.get() == null || intoContextThreadLocal.get().booleanValue();
+        return intoContextThreadLocal.get() != null && intoContextThreadLocal.get();
     }
 
     private static HashSet<DomainObject> current() {
