@@ -34,7 +34,8 @@ public class DomainObjectTypeAdapterFactory implements TypeAdapterFactory {
 
 
         Map<Type, InstanceCreator<?>> instanceCreators = new HashMap<>();
-        if (Entity.class.isAssignableFrom(type.getRawType()) && DomainObjectSerializeContext.isIntoContext())
+        //        if (Entity.class.isAssignableFrom(type.getRawType()) && DomainObjectSerializeContext.isIntoContext())
+        if (Entity.class.isAssignableFrom(type.getRawType()))
             instanceCreators.put(type.getType(), new EntityInstanceCreator());
         ConstructorConstructor constructorConstructor = new ConstructorConstructor(instanceCreators);
         TypeAdapterFactory typeAdapterFactory = new ReflectiveTypeAdapterFactory(constructorConstructor, gson.fieldNamingStrategy(), gson.excluder(), new JsonAdapterAnnotationTypeAdapterFactory(constructorConstructor));
