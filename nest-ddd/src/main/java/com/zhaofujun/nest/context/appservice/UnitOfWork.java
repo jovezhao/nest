@@ -37,6 +37,7 @@ public class UnitOfWork {
         Entity entity = entities
                 .stream()
                 .filter(p -> identifier.equals(p.getId()) && tClass.isInstance(p))
+                .filter(p->!p.is__deleted())
                 .findFirst()
                 .orElse(null);
         return (T) entity;
@@ -69,7 +70,7 @@ public class UnitOfWork {
                         // s.parallelStream().forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
                 }
                 entityNotify(r, s);
-                s.parallelStream().forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
+                s.forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
             });
         });
 
