@@ -37,7 +37,7 @@ public class UnitOfWork {
         Entity entity = entities
                 .stream()
                 .filter(p -> identifier.equals(p.getId()) && tClass.isInstance(p))
-                .filter(p->!p.is__deleted())
+                .filter(p -> !p.is__deleted())
                 .findFirst()
                 .orElse(null);
         return (T) entity;
@@ -128,6 +128,8 @@ public class UnitOfWork {
 
     private Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> toRepositoryMap(Set<BaseEntity> entityMap) {
         Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> repositoryMap = new HashMap<>();
+
+        entities.forEach(p -> p.end());
 
         entities.stream()
                 .filter(p -> !(p.is__new() && p.is__deleted()))//排除又是新增又被删除的

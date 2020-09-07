@@ -6,7 +6,7 @@ import com.zhaofujun.nest.standard.Entity;
 import java.util.HashSet;
 
 public class DomainObjectSerializeContext {
-    private static ThreadLocal<HashSet<DomainObject>> threadLocal = new ThreadLocal();
+    private static ThreadLocal<HashSet<DomainObject>> threadLocal = new ThreadLocal<>();
     private static ThreadLocal<DomainObject> domainObjectThreadLocal = new ThreadLocal<>();
     private static ThreadLocal<Boolean> intoContextThreadLocal = new ThreadLocal<>();
 
@@ -19,7 +19,7 @@ public class DomainObjectSerializeContext {
     }
 
     private static HashSet<DomainObject> current() {
-        HashSet<DomainObject> domainObjects = (HashSet) threadLocal.get();
+        HashSet domainObjects = threadLocal.get();
         if (domainObjects == null) {
             domainObjects = new HashSet();
             threadLocal.set(domainObjects);

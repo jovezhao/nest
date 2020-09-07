@@ -22,8 +22,8 @@ public abstract class BaseEntity<T extends AbstractIdentifier> implements Entity
     //实体生成方式(1 新增、2 删除）
     private transient boolean __new;
 
-    private transient String beginSnapshot;
-    private transient String endSnapshot;
+    private transient String beginSnapshot = "";
+    private transient String endSnapshot = "";
 
     //版本号
     private int _version;
@@ -66,8 +66,11 @@ public abstract class BaseEntity<T extends AbstractIdentifier> implements Entity
         beginSnapshot = JsonCreator.getInstance().toJsonString(this);
     }
 
-    public boolean isChanged() {
+    public void end() {
         endSnapshot = JsonCreator.getInstance().toJsonString(this);
+    }
+
+    public boolean isChanged() {
         return beginSnapshot.hashCode() != endSnapshot.hashCode();
     }
 
