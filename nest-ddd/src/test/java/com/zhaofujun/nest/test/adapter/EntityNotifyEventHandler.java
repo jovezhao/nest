@@ -1,10 +1,12 @@
 package com.zhaofujun.nest.test.adapter;
 
 import com.zhaofujun.nest.context.appservice.EntityNotifyEventData;
+import com.zhaofujun.nest.context.event.EventHandlerAlias;
 import com.zhaofujun.nest.json.JsonCreator;
 import com.zhaofujun.nest.standard.EventArgs;
 import com.zhaofujun.nest.standard.EventHandler;
 
+@EventHandlerAlias("entity_notify_handler")
 public class EntityNotifyEventHandler implements EventHandler<EntityNotifyEventData> {
     @Override
     public String getEventCode() {
