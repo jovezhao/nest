@@ -57,10 +57,6 @@ public class NestApplication {
         this.providerManage.addProvider(containerProvider.getInstances(Provider.class));
         this.listenerManager.addListeners(containerProvider.getInstances(NestEventListener.class));
         this.repositoryManager.addRepository(containerProvider.getInstances(Repository.class));
-        EventBus eventBus = new DefaultEventBus();
-        containerProvider.getInstances(EventHandler.class).forEach(eventHandler -> {
-            eventBus.registerHandler(eventHandler);
-        });
     }
 
     private static NestApplication application = new NestApplication();
