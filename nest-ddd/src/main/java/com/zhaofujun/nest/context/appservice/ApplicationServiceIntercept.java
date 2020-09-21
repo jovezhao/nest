@@ -8,16 +8,16 @@ import com.zhaofujun.nest.standard.SystemExceptionable;
 
 public class ApplicationServiceIntercept {
     private MethodInvoker methodInvoker;
-    private UnitOfWorkCommitor commitor;
+    private TransactionManager transactionManager;
 
-    public ApplicationServiceIntercept(MethodInvoker methodInvoker, UnitOfWorkCommitor commitor) {
+    public ApplicationServiceIntercept(MethodInvoker methodInvoker, TransactionManager transactionManager) {
         this.methodInvoker = methodInvoker;
-        this.commitor = commitor;
+        this.transactionManager = transactionManager;
     }
 
     public Object doInvoke() throws Throwable {
 
-        ServiceContext serviceContext = new ServiceContext(methodInvoker.getTargetClass(), methodInvoker.getTarget(), methodInvoker.getMethodName(), commitor);
+        ServiceContext serviceContext = new ServiceContext(methodInvoker.getTargetClass(), methodInvoker.getTarget(), methodInvoker.getMethodName(), transactionManager);
         NestApplication.current().onServiceContextCreated(serviceContext);
         ServiceContextManager.set(serviceContext);
         Object result = null;

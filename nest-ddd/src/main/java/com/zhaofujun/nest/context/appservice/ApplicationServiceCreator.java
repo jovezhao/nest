@@ -71,7 +71,7 @@ public class ApplicationServiceCreator {
             int modifiers = method.getModifiers();
             if (Modifier.isPublic(modifiers) && !Modifier.isStatic(modifiers)) {
                 MethodInvoker methodInvoker = new CglibMethodInvoker(proxy, method.getName(), obj, obj.getClass(), args);
-                ApplicationServiceIntercept intercept = new ApplicationServiceIntercept(methodInvoker, new UnitOfWorkCommitor());
+                ApplicationServiceIntercept intercept = new ApplicationServiceIntercept(methodInvoker, null);
                 return intercept.doInvoke();
             } else {
                 return proxy.invokeSuper(obj, args);

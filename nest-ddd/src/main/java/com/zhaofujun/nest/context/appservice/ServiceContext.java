@@ -11,14 +11,12 @@ public class ServiceContext {
     private Object applicationService;
     private String method;
     private UnitOfWork unitOfWork;
-    private UnitOfWorkCommitor commitor;
 
-    public ServiceContext(Class serviceClass, Object applicationService, String method, UnitOfWorkCommitor commitor) {
+    public ServiceContext(Class serviceClass, Object applicationService, String method,TransactionManager transactionManager ) {
         this.serviceClass = serviceClass;
         this.applicationService = applicationService;
         this.method = method;
-        this.commitor = commitor;
-        this.unitOfWork = new UnitOfWork(this);
+        this.unitOfWork = new UnitOfWork(this,transactionManager);
     }
 
     public Class getServiceClass() {
@@ -34,8 +32,7 @@ public class ServiceContext {
     }
 
     public void commit() {
-        this.commitor.setUnitOfWork(unitOfWork);
-        this.commitor.commit();
+        unitOfWork.commit();
     }
 
     public void put(BaseEntity entity) {

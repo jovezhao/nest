@@ -25,9 +25,12 @@ public class UnitOfWork {
 
     private Logger logger = LoggerFactory.getLogger(UnitOfWork.class);
     private ServiceContext serviceContext;
+    private TransactionManager transactionManager;
 
-    UnitOfWork(ServiceContext serviceContext) {
+
+    UnitOfWork(ServiceContext serviceContext, TransactionManager transactionManager) {
         this.serviceContext = serviceContext;
+        this.transactionManager = transactionManager;
     }
 
     private Set<BaseEntity> entities = new HashSet<>();
@@ -51,7 +54,7 @@ public class UnitOfWork {
 
     private void commitEntity() {
 
-        Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> repositoryMap = toRepositoryMap(entities);
+        Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> repositoryMap = toRepositoryMap();
         CacheClient cacheClient = CacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
 
         repositoryMap.forEach((p, q) -> {
@@ -103,8 +106,24 @@ public class UnitOfWork {
     void commit() {
         ServiceContext serviceContext = ServiceContextManager.get();
         NestApplication.current().beforeCommit(serviceContext);
+
         try {
-            commitEntity();
+            transactionManager.commit(() -> commitEntity());
+        } catch (CustomException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            if (ex instanceof CustomException) {
+
+                OtherCustomException customException = new OtherCustomException(ex.getMessage(), ex);
+                throw customException;
+            }
+            throw new SystemException("提交工作单元时失败" + ex.getMessage(), ex);
+        } finally {
+            entities.clear();
+        }
+
+        //开始提交消息到消息中间件
+        try {
             commitMessage();
         } catch (CustomException ex) {
             throw ex;
@@ -118,15 +137,14 @@ public class UnitOfWork {
 
             throw new SystemException("提交工作单元时失败", ex);
         } finally {
-            //清空工作单元中的内容
-            entities.clear();
             messageBacklogs.clear();
         }
+
         NestApplication.current().committed(serviceContext);
     }
 
 
-    private Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> toRepositoryMap(Set<BaseEntity> entityMap) {
+    private Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> toRepositoryMap() {
         Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> repositoryMap = new HashMap<>();
 
         entities.forEach(p -> p.end());
