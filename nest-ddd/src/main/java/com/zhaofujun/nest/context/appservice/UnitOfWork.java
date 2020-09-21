@@ -108,6 +108,15 @@ public class UnitOfWork {
         NestApplication.current().beforeCommit(serviceContext);
 
         try {
+            if(transactionManager==null)
+            {
+                transactionManager=new TransactionManager() {
+                    @Override
+                    public void commit(Runnable runnable) {
+                        runnable.run();
+                    }
+                };
+            }
             transactionManager.commit(() -> commitEntity());
         } catch (CustomException ex) {
             throw ex;
