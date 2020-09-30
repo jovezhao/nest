@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.context.loader;
 
+import com.zhaofujun.nest.context.appservice.ServiceContext;
 import com.zhaofujun.nest.context.appservice.ServiceContextManager;
 import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.standard.EntityLoader;
@@ -21,7 +22,9 @@ public class UnitOfWorkEntityLoader<T extends BaseEntity> implements EntityLoade
 
     @Override
     public <U extends T> U create(Class uClass, Identifier id) {
-        U entity = ServiceContextManager.get()
+        ServiceContext serviceContext = ServiceContextManager.get();
+        if(serviceContext==null) return null;
+        U entity = serviceContext
                 .getEntity(uClass, id);
         return entity;
     }
