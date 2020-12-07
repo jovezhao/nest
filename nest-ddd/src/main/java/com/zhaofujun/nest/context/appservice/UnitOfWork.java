@@ -13,6 +13,7 @@ import com.zhaofujun.nest.context.event.resend.MessageResendStore;
 import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.context.model.EntityNotify;
 import com.zhaofujun.nest.exception.OtherCustomException;
+import com.zhaofujun.nest.exception.VersionConflictedException;
 import com.zhaofujun.nest.standard.*;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
 import com.zhaofujun.nest.utils.EntityUtils;
@@ -30,7 +31,17 @@ public class UnitOfWork {
 
     UnitOfWork(ServiceContext serviceContext, TransactionManager transactionManager) {
         this.serviceContext = serviceContext;
-        this.transactionManager = transactionManager;
+
+        if (transactionManager == null) {
+            this.transactionManager = new TransactionManager() {
+                @Override
+                public void commit(Runnable runnable) {
+                    runnable.run();
+                }
+            };
+        } else {
+            this.transactionManager = transactionManager;
+        }
     }
 
     private Set<BaseEntity> entities = new HashSet<>();
@@ -56,27 +67,44 @@ public class UnitOfWork {
 
         Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> repositoryMap = toRepositoryMap();
         CacheClient cacheClient = CacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
+        try {
+            this.transactionManager.commit(() -> {
 
+                repositoryMap.forEach((p, q) -> {
+                    q.forEach((r, s) -> {
+                        switch (r) {
+                            case create:
+                                p.batchInsert(s);
+                                break;
+                            case update:
+                                p.batchUpdate(s);
+                                break;
+                            case remove:
+                                p.batchDelete(s);
+                        }
+
+                    });
+
+                });
+            });
+
+            clearCache(repositoryMap, cacheClient);
+        } catch (VersionConflictedException ex) {
+            clearCache(repositoryMap, cacheClient);
+            throw ex;
+        }
+
+    }
+
+    private void clearCache(Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> repositoryMap, CacheClient cacheClient) {
         repositoryMap.forEach((p, q) -> {
             q.forEach((r, s) -> {
-                switch (r) {
-                    case create:
-                        p.batchInsert(s);
-                        //s.parallelStream().forEach(ss -> cacheClient.put(EntityCacheUtils.getCacheKey(ss), ss));
-                        break;
-                    case update:
-                        p.batchUpdate(s);
-                        // s.parallelStream().forEach(ss -> cacheClient.put(EntityCacheUtils.getCacheKey(ss), ss));
-                        break;
-                    case remove:
-                        p.batchDelete(s);
-                        // s.parallelStream().forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
-                }
                 entityNotify(r, s);
-                s.forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
+                if (!r.equals(EntityOperateEnum.create)) {
+                    s.forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
+                }
             });
         });
-
     }
 
     private Set<MessageBacklog> messageBacklogs = new HashSet<>();
@@ -108,16 +136,7 @@ public class UnitOfWork {
         NestApplication.current().beforeCommit(serviceContext);
 
         try {
-            if(transactionManager==null)
-            {
-                transactionManager=new TransactionManager() {
-                    @Override
-                    public void commit(Runnable runnable) {
-                        runnable.run();
-                    }
-                };
-            }
-            transactionManager.commit(() -> commitEntity());
+            commitEntity();
         } catch (CustomException ex) {
             throw ex;
         } catch (Exception ex) {
