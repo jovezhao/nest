@@ -72,6 +72,7 @@ public class UnitOfWork {
 
                 repositoryMap.forEach((p, q) -> {
                     q.forEach((r, s) -> {
+                        entityNotify(r, s);
                         switch (r) {
                             case create:
                                 p.batchInsert(s);
@@ -93,13 +94,12 @@ public class UnitOfWork {
             clearCache(repositoryMap, cacheClient);
             throw ex;
         }
-
+        
     }
 
     private void clearCache(Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> repositoryMap, CacheClient cacheClient) {
         repositoryMap.forEach((p, q) -> {
             q.forEach((r, s) -> {
-                entityNotify(r, s);
                 if (!r.equals(EntityOperateEnum.create)) {
                     s.forEach(ss -> cacheClient.remove(EntityCacheUtils.getCacheKey(ss)));
                 }
