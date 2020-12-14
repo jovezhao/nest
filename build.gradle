@@ -1,6 +1,6 @@
 allprojects {
     group = 'com.zhaofujun.nest'
-    version = '2.1.16'
+    version = '2.1.17'
 
 }
 
@@ -8,7 +8,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     repositories {
-        mavenLocal()
+        mavenLocal()un
         mavenCentral()
     }
 

@@ -140,7 +140,7 @@ public class UnitOfWork {
         } catch (CustomException ex) {
             throw ex;
         } catch (Exception ex) {
-            if (ex instanceof CustomException) {
+            if (ex instanceof CustomExceptionable) {
 
                 OtherCustomException customException = new OtherCustomException(ex.getMessage(), ex);
                 throw customException;
