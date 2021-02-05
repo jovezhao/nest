@@ -12,6 +12,15 @@ public class MessageInfo<T extends EventData> implements Serializable {
     private Date sendTime;
     private T data;
     private String extendInfo;
+    private long delay;
+
+    public long getDelay() {
+        return delay;
+    }
+
+    public void setDelay(long delay) {
+        this.delay = delay;
+    }
 
     public String getMessageId() {
         return messageId;

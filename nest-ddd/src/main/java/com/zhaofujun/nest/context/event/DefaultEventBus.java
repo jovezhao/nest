@@ -16,11 +16,7 @@ import java.util.UUID;
 public class DefaultEventBus implements EventBus {
 
 
-    public void publish(EventData eventData) {
-        publish(eventData, "?");
-    }
-
-    public void publish(EventData eventData, String eventSource) {
+    public void publish(EventData eventData, String eventSource, long delay) {
         EventConfiguration eventConfiguration = getEventConfigurationByEventCode(eventData.getEventCode());
 
 
@@ -33,6 +29,7 @@ public class DefaultEventBus implements EventBus {
         messageInfo.setData(eventData);
         messageInfo.setEventSource(eventSource);
         messageInfo.setSendTime(new Date());
+        messageInfo.setDelay(delay);
 
         messageProducer.send(eventData.getEventCode(), messageInfo);
 

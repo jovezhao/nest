@@ -5,7 +5,13 @@ public interface EventBus {
 
     void registerHandler(EventHandler eventHandler);
 
-    void publish(EventData eventData);
+    default void publish(EventData eventData, long delay) {
+        publish(eventData, "?", delay);
+    }
 
-    void publish(EventData eventData, String eventSource);
+    default void publish(EventData eventData) {
+        publish(eventData, "?", 0);
+    }
+
+    void publish(EventData eventData, String eventSource, long delay);
 }
