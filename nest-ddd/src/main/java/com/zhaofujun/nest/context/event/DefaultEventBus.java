@@ -5,23 +5,23 @@ import com.zhaofujun.nest.context.event.channel.MessageChannelProvider;
 import com.zhaofujun.nest.context.event.channel.MessageChannelProviderFactory;
 import com.zhaofujun.nest.context.event.channel.MessageConsumer;
 import com.zhaofujun.nest.context.event.channel.MessageProducer;
+import com.zhaofujun.nest.context.event.delay.DelayMessageBacklog;
+import com.zhaofujun.nest.context.event.delay.DelayMessageStore;
+import com.zhaofujun.nest.context.event.delay.DelayMessageStoreFactory;
+import com.zhaofujun.nest.context.event.message.MessageBacklog;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.standard.EventBus;
 import com.zhaofujun.nest.standard.EventData;
 import com.zhaofujun.nest.standard.EventHandler;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
 public class DefaultEventBus implements EventBus {
 
 
-    public void publish(EventData eventData, String eventSource, long delay) {
-        EventConfiguration eventConfiguration = getEventConfigurationByEventCode(eventData.getEventCode());
-
-
-        MessageChannelProvider messageChannel = MessageChannelProviderFactory.create(eventConfiguration.getMessageChannelCode());
-        MessageProducer messageProducer = messageChannel.getMessageProducer();
+    public void publish(EventData eventData, String eventSource, long delaySecond) {
 
 
         MessageInfo messageInfo = new MessageInfo();
@@ -29,10 +29,16 @@ public class DefaultEventBus implements EventBus {
         messageInfo.setData(eventData);
         messageInfo.setEventSource(eventSource);
         messageInfo.setSendTime(new Date());
-        messageInfo.setDelay(delay);
 
-        messageProducer.send(eventData.getEventCode(), messageInfo);
-
+        if (delaySecond == 0) {
+            EventConfiguration eventConfiguration = getEventConfigurationByEventCode(eventData.getEventCode());
+            MessageChannelProvider messageChannel = MessageChannelProviderFactory.create(eventConfiguration.getMessageChannelCode());
+            MessageProducer messageProducer = messageChannel.getMessageProducer();
+            messageProducer.send(eventData.getEventCode(), messageInfo);
+        } else {
+            DelayMessageStore delayMessageStore = DelayMessageStoreFactory.create();
+            delayMessageStore.add(new DelayMessageBacklog(new MessageBacklog(eventData.getEventCode(), messageInfo), LocalDateTime.now().plusSeconds(delaySecond)));
+        }
     }
 
     private EventConfiguration getEventConfigurationByEventCode(String eventCode) {

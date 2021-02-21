@@ -4,6 +4,8 @@ import com.zhaofujun.nest.cache.CacheProvider;
 import com.zhaofujun.nest.cache.DefaultCacheProvider;
 import com.zhaofujun.nest.context.event.channel.MessageChannelProvider;
 import com.zhaofujun.nest.context.event.channel.local.LocalMessageChannel;
+import com.zhaofujun.nest.context.event.delay.DefaultDelayMessageStore;
+import com.zhaofujun.nest.context.event.delay.DelayMessageStore;
 import com.zhaofujun.nest.context.event.message.DefaultMessageConverter;
 import com.zhaofujun.nest.context.event.message.MessageConverter;
 import com.zhaofujun.nest.context.event.resend.DefaultMessageResendStore;
@@ -100,4 +102,14 @@ public class ProviderManage {
         }
         return messageResendStore;
     }
-}
+
+    public DelayMessageStore getDelayMessageStore(String code) {
+
+        DelayMessageStore messageStore = get(DelayMessageStore.class, code);
+
+        if (messageStore == null) {
+            messageStore = new DefaultDelayMessageStore();
+            providerList.add(messageStore);
+        }
+        return messageStore;
+    }}

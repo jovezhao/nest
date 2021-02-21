@@ -1,6 +1,7 @@
 package com.zhaofujun.nest.context.event.resend;
 
 import com.zhaofujun.nest.context.appservice.ApplicationServiceCreator;
+import com.zhaofujun.nest.context.event.ResendAppService;
 import com.zhaofujun.nest.context.event.message.MessageBacklog;
 import com.zhaofujun.nest.standard.EventData;
 import org.slf4j.Logger;
