@@ -12,6 +12,8 @@ import com.zhaofujun.nest.context.event.resend.DefaultMessageResendStore;
 import com.zhaofujun.nest.context.event.resend.MessageResendStore;
 import com.zhaofujun.nest.context.event.store.DefaultMessageStore;
 import com.zhaofujun.nest.context.event.store.MessageStore;
+import com.zhaofujun.nest.lock.DefaultLockProvider;
+import com.zhaofujun.nest.lock.LockProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +58,16 @@ public class ProviderManage {
         }
         return cacheProvider;
     }
+    public LockProvider getLockProvider(String code) {
 
+        LockProvider lockProvider = get(LockProvider.class, code);
+
+        if (lockProvider == null) {
+            lockProvider = new DefaultLockProvider();
+            providerList.add(lockProvider);
+        }
+        return lockProvider;
+    }
     public MessageChannelProvider getMessageChannel(String code) {
 
         MessageChannelProvider channelProvider = get(MessageChannelProvider.class, code);

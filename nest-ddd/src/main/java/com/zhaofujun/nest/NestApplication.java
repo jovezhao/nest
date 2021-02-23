@@ -2,6 +2,7 @@ package com.zhaofujun.nest;
 
 import com.zhaofujun.nest.configuration.ConfigurationItem;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
+import com.zhaofujun.nest.configuration.LockConfiguration;
 import com.zhaofujun.nest.configuration.MessageConfiguration;
 import com.zhaofujun.nest.context.appservice.ServiceContext;
 import com.zhaofujun.nest.context.event.DefaultEventBus;
@@ -22,6 +23,7 @@ import java.util.Timer;
 public class NestApplication {
 
     private MessageConfiguration messageConfiguration;
+    private LockConfiguration lockConfiguration;
     private ConfigurationManager configurationManager;
     private EventListenerManager listenerManager;
     private RepositoryManager repositoryManager;
@@ -31,6 +33,10 @@ public class NestApplication {
 
     public ConfigurationManager getConfigurationManager() {
         return this.configurationManager;
+    }
+
+    public LockConfiguration getLockConfiguration() {
+        return lockConfiguration;
     }
 
     public ProviderManage getProviderManage() {
@@ -47,6 +53,7 @@ public class NestApplication {
 
     NestApplication() {
         this.messageConfiguration = new MessageConfiguration();
+        this.lockConfiguration=new LockConfiguration();
         this.configurationManager = new ConfigurationManager();
         this.providerManage = new ProviderManage();
         this.listenerManager = new EventListenerManager();
