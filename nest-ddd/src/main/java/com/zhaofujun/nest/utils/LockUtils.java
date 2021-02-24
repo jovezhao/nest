@@ -13,7 +13,7 @@ public class LockUtils {
                 try {
                     runnable.run();
                 } finally {
-                    lockProvider.unLock(key);
+                    lockProvider.unlock(key);
                     return true;
                 }
             }

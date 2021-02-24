@@ -5,5 +5,5 @@ import com.zhaofujun.nest.provider.Provider;
 public interface LockProvider extends Provider {
     boolean lock(String key);
 
-    void unLock(String key);
+    void unlock(String key);
 }

@@ -35,7 +35,7 @@ public class DefaultLockProvider implements LockProvider {
     }
 
     @Override
-    public void unLock(String key) {
+    public void unlock(String key) {
         Lock lock = getLock(key);
         lock.unlock();
     }
