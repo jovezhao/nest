@@ -5,7 +5,7 @@ import com.zhaofujun.nest.lock.DefaultLockProvider;
 public class LockConfiguration {
     private String provider= DefaultLockProvider.CODE;
     private int retry=3;
-    private int timeout=100;
+    private int timeout=1000;
 
     public String getProvider() {
         return provider;

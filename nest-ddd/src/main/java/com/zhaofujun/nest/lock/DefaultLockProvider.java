@@ -25,7 +25,7 @@ public class DefaultLockProvider implements LockProvider {
         }
     }
 
-    private Lock getLock(String key) {
+    private synchronized Lock getLock(String key) {
         Lock lock = lockMap.get(key);
         if (lock == null) {
             lock = new ReentrantLock();
