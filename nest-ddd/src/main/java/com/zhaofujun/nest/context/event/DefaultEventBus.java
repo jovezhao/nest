@@ -9,6 +9,7 @@ import com.zhaofujun.nest.context.event.delay.DelayMessageBacklog;
 import com.zhaofujun.nest.context.event.delay.DelayMessageStore;
 import com.zhaofujun.nest.context.event.delay.DelayMessageStoreFactory;
 import com.zhaofujun.nest.context.event.message.MessageBacklog;
+import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.standard.EventBus;
 import com.zhaofujun.nest.standard.EventData;
@@ -30,6 +31,7 @@ public class DefaultEventBus implements EventBus {
         messageInfo.setEventSource(eventSource);
         messageInfo.setSendTime(new Date());
 
+        String messageString= MessageConverterFactory.create().messageToString(messageInfo);
         if (delaySecond == 0) {
             EventConfiguration eventConfiguration = getEventConfigurationByEventCode(eventData.getEventCode());
             MessageChannelProvider messageChannel = MessageChannelProviderFactory.create(eventConfiguration.getMessageChannelCode());
@@ -37,7 +39,7 @@ public class DefaultEventBus implements EventBus {
             messageProducer.send(eventData.getEventCode(), messageInfo);
         } else {
             DelayMessageStore delayMessageStore = DelayMessageStoreFactory.create();
-            delayMessageStore.add(new DelayMessageBacklog(new MessageBacklog(eventData.getEventCode(), messageInfo), LocalDateTime.now().plusSeconds(delaySecond)));
+            delayMessageStore.add(new DelayMessageBacklog(new MessageBacklog(eventData.getEventCode(), messageString,eventData.getClass().getName()), LocalDateTime.now().plusSeconds(delaySecond)));
         }
     }
 

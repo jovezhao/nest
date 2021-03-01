@@ -15,8 +15,7 @@ public class LocalMessageConsumer extends DistributeMessageConsumer {
             @Override
             public void onReceived(LocalEvent e) {
                 String messageText = e.getArgs()[0];
-                MessageInfo messageInfo = MessageConverterFactory.create().jsonToMessage(messageText, eventHandler.getEventDataClass());
-                onReceivedMessage(messageInfo, eventHandler, eventSource);
+                onReceivedMessage(messageText, eventHandler, eventSource);
             }
         });
     }

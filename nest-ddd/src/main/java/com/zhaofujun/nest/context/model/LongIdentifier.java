@@ -1,13 +1,10 @@
 package com.zhaofujun.nest.context.model;
 
 import com.zhaofujun.nest.utils.identifier.LongIdentifierGenerator;
-import com.zhaofujun.nest.utils.identifier.impl.DefaultLongIdentifierGenerator;
-
-import java.util.ServiceLoader;
+import com.zhaofujun.nest.utils.identifier.impl.SnowflakeLongIdentifierGenerator;
 
 public class LongIdentifier extends AbstractIdentifier {
 
-    private static LongIdentifierGenerator longIdentifierGenerator;
 
     private final Long id;
 
@@ -19,8 +16,11 @@ public class LongIdentifier extends AbstractIdentifier {
         return new LongIdentifier(value);
     }
 
+    @Deprecated
     public static LongIdentifier newValue() {
-        return valueOf(getIdentifierGenerator().nextValue());
+        LongIdentifierGenerator generator = new SnowflakeLongIdentifierGenerator();
+        Long nextValue = generator.nextValue("default");
+        return valueOf(nextValue);
     }
 
     public Long getId() {
@@ -32,36 +32,5 @@ public class LongIdentifier extends AbstractIdentifier {
         return id.toString();
     }
 
-    private static LongIdentifierGenerator getIdentifierGenerator() {
-        if (null == longIdentifierGenerator) {
-            synchronized (LongIdentifier.class) {
-                if (null == longIdentifierGenerator) {
-                    initGenerator();
-                }
-            }
-        }
-        return longIdentifierGenerator;
-    }
 
-    private static void initGenerator() {
-        if (null != longIdentifierGenerator) {
-            return;
-        }
-        for (LongIdentifierGenerator first : ServiceLoader.load(LongIdentifierGenerator.class)) {
-            if (null != longIdentifierGenerator) {
-                throw new IllegalStateException("More than 1 implementations of generator are listed in META-INF/services. Consider remove other and keep only one implementation.");
-            }
-            longIdentifierGenerator = first;
-        }
-        if (null == longIdentifierGenerator) {
-            longIdentifierGenerator = new DefaultLongIdentifierGenerator();
-        }
-    }
-
-    public static void setLongIdentifierGenerator(final LongIdentifierGenerator longIdentifierGenerator) {
-        if (null != LongIdentifier.longIdentifierGenerator) {
-            throw new IllegalStateException("LongIdentifierGenerator has already initialized.");
-        }
-        LongIdentifier.longIdentifierGenerator = longIdentifierGenerator;
-    }
 }

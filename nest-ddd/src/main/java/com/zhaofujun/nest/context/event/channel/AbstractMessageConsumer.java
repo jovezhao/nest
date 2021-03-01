@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.context.event.channel;
 
+import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.message.MessageRecord;
 import com.zhaofujun.nest.context.event.store.MessageStore;
@@ -14,7 +15,9 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
 
     public abstract void subscribe(EventHandler eventHandler);
 
-    protected void onReceivedMessage(MessageInfo messageInfo, EventHandler eventHandler, Object context) {
+    protected void onReceivedMessage(String messageInfoString, EventHandler eventHandler, Object context) {
+
+        MessageInfo messageInfo = MessageConverterFactory.create().jsonToMessage(messageInfoString, eventHandler.getEventDataClass());
         EventData eventData = messageInfo.getData();
 
         MessageRecord record = new MessageRecord();

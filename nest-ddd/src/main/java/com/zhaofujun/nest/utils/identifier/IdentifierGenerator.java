@@ -17,6 +17,7 @@ public interface IdentifierGenerator<T extends Serializable> {
      * Get next ID value.
      *
      * @return next ID
+     * @param type
      */
-    T nextValue();
+    T nextValue(String type);
 }

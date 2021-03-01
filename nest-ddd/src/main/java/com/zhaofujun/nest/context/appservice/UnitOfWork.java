@@ -5,8 +5,10 @@ import com.zhaofujun.nest.cache.CacheClient;
 import com.zhaofujun.nest.cache.CacheClientFactory;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
 import com.zhaofujun.nest.context.event.EventConfiguration;
+import com.zhaofujun.nest.context.event.channel.MessageChannelProviderFactory;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
 import com.zhaofujun.nest.context.event.message.MessageBacklog;
+import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.resend.MessageResendFactory;
 import com.zhaofujun.nest.context.event.resend.MessageResendStore;
@@ -14,6 +16,7 @@ import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.context.model.EntityNotify;
 import com.zhaofujun.nest.exception.OtherCustomException;
 import com.zhaofujun.nest.exception.VersionConflictedException;
+import com.zhaofujun.nest.json.JsonCreator;
 import com.zhaofujun.nest.standard.*;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
 import com.zhaofujun.nest.utils.EntityUtils;
@@ -110,7 +113,8 @@ public class UnitOfWork {
     private Set<MessageBacklog> messageBacklogs = new HashSet<>();
 
     public void addMessageBacklog(String eventCode, MessageInfo messageInfo) {
-        messageBacklogs.add(new MessageBacklog(eventCode, messageInfo));
+        String messageInfoString = MessageConverterFactory.create().messageToString(messageInfo);
+        messageBacklogs.add(new MessageBacklog(eventCode, messageInfoString,messageInfo.getData().getClass().getName()));
     }
 
     private void commitMessage() {
@@ -118,9 +122,9 @@ public class UnitOfWork {
             ConfigurationManager configurationManager = NestApplication.current().getConfigurationManager();
             EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(p.getEventCode());
 
-            DistributeMessageChannel messageChannel = (DistributeMessageChannel) NestApplication.current().getProviderManage().getMessageChannel(eventConfiguration.getMessageChannelCode()); //beanFinder.getInstance(DistributeMessageChannel.class, eventConfiguration.getMessageChannelCode());
+            DistributeMessageChannel messageChannel = (DistributeMessageChannel) MessageChannelProviderFactory.create(eventConfiguration.getMessageChannelCode());
             try {
-                messageChannel.getMessageProducer().commit(p.getEventCode(), p.getMessageInfo());
+                messageChannel.getMessageProducer().commit(p.getEventCode(), p.getMessageInfoString());
             } catch (Exception ex) {
                 //投递到消息中间件时发生异常，将有异常的数据存入待发送区域，用于消息补偿
                 logger.warn("提交消息时失败，消息将通过补偿器重试，失败原因：" + ex.getMessage(), ex);

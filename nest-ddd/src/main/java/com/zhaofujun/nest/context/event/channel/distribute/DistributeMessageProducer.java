@@ -4,7 +4,7 @@ import com.zhaofujun.nest.context.appservice.ServiceContextManager;
 import com.zhaofujun.nest.context.event.channel.MessageProducer;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 
-public abstract class DistributeMessageProducer implements MessageProducer {
+public abstract class   DistributeMessageProducer implements MessageProducer {
 
     public void send(String messageGroup, MessageInfo messageInfo) {
 
@@ -12,5 +12,5 @@ public abstract class DistributeMessageProducer implements MessageProducer {
                 .addMessageBacklog(messageGroup, messageInfo);
     }
 
-    public abstract void commit(String messageGroup, MessageInfo messageInfo);
+    public abstract void commit(String messageGroup, String messageInfoString);
 }

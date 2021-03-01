@@ -8,9 +8,8 @@ public class LocalMessageProducer extends DistributeMessageProducer {
 
 
     @Override
-    public void commit(String messageGroup, MessageInfo messageInfo) {
+    public void commit(String messageGroup, String messageInfoString) {
         EventSource eventSource = EventSource.getEventSource(messageGroup);
-        String json = MessageConverterFactory.create().messageToString(messageInfo);
-        eventSource.send(json);
+        eventSource.send(messageInfoString);
     }
 }

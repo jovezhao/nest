@@ -23,9 +23,9 @@ public class DelayMessageBacklog implements Delayed {
     }
 
 
-    public String getMessageId() {
-        return messageBacklog.getMessageInfo().getMessageId();
-    }
+//    public String getMessageId() {
+//        return messageBacklog.getMessageInfo().getMessageId();
+//    }
 
     public DelayMessageBacklog(MessageBacklog messageBacklog, LocalDateTime sendTime) {
         this.messageBacklog = messageBacklog;
