@@ -15,7 +15,7 @@ public class LocalMessageConsumer extends DistributeMessageConsumer {
             @Override
             public void onReceived(LocalEvent e) {
                 String messageText = e.getArgs()[0];
-                onReceivedMessage(messageText, eventHandler, eventSource);
+                onReceivedMessage(messageText, eventHandler, eventSource,null);
             }
         });
     }

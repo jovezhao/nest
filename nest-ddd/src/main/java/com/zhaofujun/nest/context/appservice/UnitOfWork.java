@@ -16,7 +16,6 @@ import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.context.model.EntityNotify;
 import com.zhaofujun.nest.exception.OtherCustomException;
 import com.zhaofujun.nest.exception.VersionConflictedException;
-import com.zhaofujun.nest.json.JsonCreator;
 import com.zhaofujun.nest.standard.*;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
 import com.zhaofujun.nest.utils.EntityUtils;
@@ -114,7 +113,7 @@ public class UnitOfWork {
 
     public void addMessageBacklog(String eventCode, MessageInfo messageInfo) {
         String messageInfoString = MessageConverterFactory.create().messageToString(messageInfo);
-        messageBacklogs.add(new MessageBacklog(eventCode, messageInfoString,messageInfo.getData().getClass().getName()));
+        messageBacklogs.add(new MessageBacklog(eventCode, messageInfoString,messageInfo.getData().getClass().getName(),messageInfo.getMessageId()));
     }
 
     private void commitMessage() {
@@ -124,7 +123,7 @@ public class UnitOfWork {
 
             DistributeMessageChannel messageChannel = (DistributeMessageChannel) MessageChannelProviderFactory.create(eventConfiguration.getMessageChannelCode());
             try {
-                messageChannel.getMessageProducer().commit(p.getEventCode(), p.getMessageInfoString());
+                messageChannel.getMessageProducer().commit(p.getEventCode(),p.getMessageId() , p.getMessageInfoString());
             } catch (Exception ex) {
                 //投递到消息中间件时发生异常，将有异常的数据存入待发送区域，用于消息补偿
                 logger.warn("提交消息时失败，消息将通过补偿器重试，失败原因：" + ex.getMessage(), ex);

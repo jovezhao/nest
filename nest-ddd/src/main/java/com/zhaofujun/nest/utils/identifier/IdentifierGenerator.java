@@ -13,11 +13,6 @@ public interface IdentifierGenerator<T extends Serializable> {
         return getClass().getName();
     }
 
-    /**
-     * Get next ID value.
-     *
-     * @return next ID
-     * @param type
-     */
+
     T nextValue(String type);
 }

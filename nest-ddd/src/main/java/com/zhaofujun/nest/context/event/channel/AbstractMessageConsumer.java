@@ -5,19 +5,31 @@ import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.message.MessageRecord;
 import com.zhaofujun.nest.context.event.store.MessageStore;
 import com.zhaofujun.nest.context.event.store.MessageStoreFactory;
+import com.zhaofujun.nest.exception.JsonAnalysisException;
 import com.zhaofujun.nest.exception.OtherCustomException;
 import com.zhaofujun.nest.standard.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.UUID;
+import java.util.function.Consumer;
+
 
 public abstract class AbstractMessageConsumer implements MessageConsumer {
-
+private Logger logger= LoggerFactory.getLogger(AbstractMessageConsumer.class);
     public abstract void subscribe(EventHandler eventHandler);
 
-    protected void onReceivedMessage(String messageInfoString, EventHandler eventHandler, Object context) {
+    protected void onReceivedMessage(String messageInfoString, EventHandler eventHandler, Object context, Consumer<MessageInfo> consumer) {
+        MessageInfo messageInfo = null;
+        try {
+            messageInfo = MessageConverterFactory.create().jsonToMessage(messageInfoString, eventHandler.getEventDataClass());
+        } catch (Exception ex) {
+            logger.warn("解析消息体失败,MessageInfo："+messageInfoString);
+            throw new JsonAnalysisException("解析消息体失败", messageInfoString);
+        }
 
-        MessageInfo messageInfo = MessageConverterFactory.create().jsonToMessage(messageInfoString, eventHandler.getEventDataClass());
+        consumer.accept(messageInfo);
         EventData eventData = messageInfo.getData();
 
         MessageRecord record = new MessageRecord();

@@ -12,5 +12,5 @@ public abstract class   DistributeMessageProducer implements MessageProducer {
                 .addMessageBacklog(messageGroup, messageInfo);
     }
 
-    public abstract void commit(String messageGroup, String messageInfoString);
+    public abstract void commit(String messageGroup,String messageId, String messageInfoString);
 }

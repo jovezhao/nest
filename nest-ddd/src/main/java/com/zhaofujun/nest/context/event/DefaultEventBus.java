@@ -39,7 +39,7 @@ public class DefaultEventBus implements EventBus {
             messageProducer.send(eventData.getEventCode(), messageInfo);
         } else {
             DelayMessageStore delayMessageStore = DelayMessageStoreFactory.create();
-            delayMessageStore.add(new DelayMessageBacklog(new MessageBacklog(eventData.getEventCode(), messageString,eventData.getClass().getName()), LocalDateTime.now().plusSeconds(delaySecond)));
+            delayMessageStore.add(new DelayMessageBacklog(new MessageBacklog(eventData.getEventCode(), messageString,eventData.getClass().getName(),messageInfo.getMessageId()), LocalDateTime.now().plusSeconds(delaySecond)));
         }
     }
 
