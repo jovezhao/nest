@@ -16,9 +16,9 @@ public class LongIdentifier extends AbstractIdentifier {
         return new LongIdentifier(value);
     }
 
+    static LongIdentifierGenerator generator = new SnowflakeLongIdentifierGenerator();
     @Deprecated
     public static LongIdentifier newValue() {
-        LongIdentifierGenerator generator = new SnowflakeLongIdentifierGenerator();
         Long nextValue = generator.nextValue("default");
         return valueOf(nextValue);
     }
