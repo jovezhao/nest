@@ -2,9 +2,8 @@ package com.zhaofujun.nest.utils.identifier.impl;
 
 import com.zhaofujun.nest.utils.identifier.LongIdentifierGenerator;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Using snowflake with fixed parameters.
@@ -13,15 +12,10 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public final class SnowflakeLongIdentifierGenerator implements LongIdentifierGenerator {
 
-    private Map<String, SnowFlake> sequences = new HashMap<>();
+    private static final Map<String, SnowFlake> SEQUENCES = new ConcurrentHashMap<>(1 << 2);
 
-    private synchronized SnowFlake getSequence(String type){
-        SnowFlake sequence=null;
-        if(sequences.get(type)==null){
-            sequence=new SnowFlake();
-            sequences.put(type,sequence);
-        }
-        return sequence;
+    private SnowFlake getSequence(String type){
+        return SEQUENCES.computeIfAbsent(type, unused -> new SnowFlake());
     }
     @Override
     public Long nextValue(String type) {
