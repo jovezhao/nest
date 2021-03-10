@@ -1,7 +1,7 @@
 package com.zhaofujun.nest.context.model;
 
-import com.zhaofujun.nest.utils.identifier.LongIdentifierGenerator;
-import com.zhaofujun.nest.utils.identifier.impl.SnowflakeLongIdentifierGenerator;
+import com.zhaofujun.nest.utils.identifier.LongGenerator;
+import com.zhaofujun.nest.utils.identifier.impl.SnowflakeLongGenerator;
 
 public class LongIdentifier extends AbstractIdentifier {
 
@@ -16,7 +16,7 @@ public class LongIdentifier extends AbstractIdentifier {
         return new LongIdentifier(value);
     }
 
-    static LongIdentifierGenerator generator = new SnowflakeLongIdentifierGenerator();
+    static LongGenerator generator = new SnowflakeLongGenerator();
     @Deprecated
     public static LongIdentifier newValue() {
         Long nextValue = generator.nextValue("default");

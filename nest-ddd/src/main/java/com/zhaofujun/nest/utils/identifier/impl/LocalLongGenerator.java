@@ -1,23 +1,30 @@
 package com.zhaofujun.nest.utils.identifier.impl;
 
-import com.zhaofujun.nest.utils.identifier.LongIdentifierGenerator;
+import com.zhaofujun.nest.utils.identifier.LongGenerator;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class LocalLongIdentifierGenerator implements LongIdentifierGenerator {
+public class LocalLongGenerator implements LongGenerator {
+
 
     private Map<String,AtomicLong> sequence = new HashMap<>();
 
     private synchronized AtomicLong getAtomicLong(String type){
-        AtomicLong atomicLong=null;
-        if(sequence.get(type)==null){
+        AtomicLong atomicLong= sequence.get(type);
+        if(atomicLong==null){
             atomicLong=new AtomicLong();
             sequence.put(type,atomicLong);
         }
         return atomicLong;
     }
+
+    @Override
+    public String getName() {
+        return "localLongGenerator";
+    }
+
     @Override
     public Long nextValue(String type) {
         return getAtomicLong(type).incrementAndGet();

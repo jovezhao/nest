@@ -1,28 +1,33 @@
 package com.zhaofujun.nest.utils.identifier.impl;
 
-import com.zhaofujun.nest.utils.identifier.LongIdentifierGenerator;
+import com.zhaofujun.nest.utils.identifier.LongGenerator;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Using snowflake with fixed parameters.
  *
- * @see com.zhaofujun.nest.utils.identifier.LongIdentifierGenerator
+ * @see com.zhaofujun.nest.utils.identifier.LongGenerator
  */
-public final class SnowflakeLongIdentifierGenerator implements LongIdentifierGenerator {
+public final class SnowflakeLongGenerator implements LongGenerator {
 
     private Map<String, SnowFlake> sequences = new HashMap<>();
 
     private synchronized SnowFlake getSequence(String type){
-        SnowFlake sequence=null;
-        if(sequences.get(type)==null){
+        SnowFlake sequence=sequences.get(type);
+        if(sequence==null){
             sequence=new SnowFlake();
             sequences.put(type,sequence);
         }
         return sequence;
     }
+
+    @Override
+    public String getName() {
+        return "snowflakeLongGenerator";
+    }
+
     @Override
     public Long nextValue(String type) {
         return getSequence(type).nextValue();

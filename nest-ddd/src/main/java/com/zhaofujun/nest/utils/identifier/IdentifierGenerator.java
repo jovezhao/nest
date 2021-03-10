@@ -4,15 +4,8 @@ import java.io.Serializable;
 
 public interface IdentifierGenerator<T extends Serializable> {
 
-    /**
-     * Generator name.
-     *
-     * @return name
-     */
-    default String name() {
-        return getClass().getName();
-    }
 
+     String getName();
 
     T nextValue(String type);
 }
