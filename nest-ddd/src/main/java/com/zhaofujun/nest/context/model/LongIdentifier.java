@@ -20,10 +20,9 @@ public class LongIdentifier extends AbstractIdentifier {
     static LongGenerator generator = new SnowflakeLongGenerator();
 
     /**
-     * 使用{@link com.zhaofujun.nest.utils.LongIdentifierUtils}替代
+     * 默认使用SnowflakeLongGenerator生成编号
      * @return 返回新的标识
      */
-    @Deprecated
     public static LongIdentifier newValue() {
         Long nextValue = generator.nextValue("default");
         return valueOf(nextValue);
