@@ -5,6 +5,7 @@ import com.zhaofujun.nest.configuration.LockConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -15,13 +16,17 @@ public class DefaultLockProvider implements LockProvider {
     public final static String CODE = "DefaultLockProvider";
 
     @Override
-    public boolean lock(String key) {
+    public String lock(String key) {
+        String requestId = UUID.randomUUID().toString();
         LockConfiguration lockConfiguration = NestApplication.current().getLockConfiguration();
         Lock lock = getLock(key);
         try {
-            return lock.tryLock(lockConfiguration.getTimeout(), TimeUnit.MILLISECONDS);
+            if (lock.tryLock(lockConfiguration.getWaitTime(), TimeUnit.MILLISECONDS))
+                return requestId;
+            else
+                return "";
         } catch (InterruptedException e) {
-            return false;
+            return "";
         }
     }
 
@@ -35,7 +40,7 @@ public class DefaultLockProvider implements LockProvider {
     }
 
     @Override
-    public void unlock(String key) {
+    public void unlock(String key,String requestId) {
         Lock lock = getLock(key);
         lock.unlock();
     }

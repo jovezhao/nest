@@ -1,6 +1,6 @@
-package com.zhaofujun.nest.utils.identifier.impl;
+package com.zhaofujun.nest.provider.identifier;
 
-import com.zhaofujun.nest.utils.identifier.LongGenerator;
+import com.zhaofujun.nest.provider.LongGenerator;
 
 import java.util.HashMap;
 import java.util.Map;

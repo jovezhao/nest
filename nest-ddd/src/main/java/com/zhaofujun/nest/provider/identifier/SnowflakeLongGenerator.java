@@ -1,16 +1,11 @@
-package com.zhaofujun.nest.utils.identifier.impl;
+package com.zhaofujun.nest.provider.identifier;
 
-import com.zhaofujun.nest.utils.identifier.LongGenerator;
 
+import com.zhaofujun.nest.provider.LongGenerator;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Using snowflake with fixed parameters.
- *
- * @see com.zhaofujun.nest.utils.identifier.LongGenerator
- */
-public final class SnowflakeLongGenerator implements LongGenerator {
+public  class SnowflakeLongGenerator implements LongGenerator {
 
     private Map<String, SnowFlake> sequences = new HashMap<>();
 

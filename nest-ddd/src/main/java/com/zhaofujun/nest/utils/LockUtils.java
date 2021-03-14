@@ -9,11 +9,12 @@ public class LockUtils {
         LockProvider lockProvider = LockProviderFactory.create();
 
         for (int i = 0; i < 3; i++) {
-            if (lockProvider.lock(key)) {
+            String requestId= lockProvider.lock(key) ;
+            if (!StringUtils.isEmpty(requestId)) {
                 try {
                     runnable.run();
                 } finally {
-                    lockProvider.unlock(key);
+                    lockProvider.unlock(key,requestId);
                     return true;
                 }
             }
