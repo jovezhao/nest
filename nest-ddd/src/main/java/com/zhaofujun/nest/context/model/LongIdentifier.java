@@ -1,8 +1,7 @@
 package com.zhaofujun.nest.context.model;
 
-import com.zhaofujun.nest.provider.LongGenerator;
-import com.zhaofujun.nest.provider.identifier.SnowflakeLongGenerator;
 
+import com.zhaofujun.nest.utils.LongIdentifierUtils;
 
 public class LongIdentifier extends AbstractIdentifier {
 
@@ -17,15 +16,8 @@ public class LongIdentifier extends AbstractIdentifier {
         return new LongIdentifier(value);
     }
 
-    static LongGenerator generator = new SnowflakeLongGenerator();
-
-    /**
-     * 默认使用SnowflakeLongGenerator生成编号
-     * @return 返回新的标识
-     */
     public static LongIdentifier newValue() {
-        Long nextValue = generator.nextValue("default");
-        return valueOf(nextValue);
+        return LongIdentifierUtils.createLongIdentifier(LongIdentifierUtils.snowflakeCode, "default");
     }
 
     public Long getId() {
