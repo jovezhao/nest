@@ -24,7 +24,7 @@ public class UserApplicationService {
 
 //        change(11);
         EntityNotifyEventData eventData = new EntityNotifyEventData();
-
+        eventData.setServiceName("fdfdfd");
         new DefaultEventBus().publish(eventData,5);
     }
 

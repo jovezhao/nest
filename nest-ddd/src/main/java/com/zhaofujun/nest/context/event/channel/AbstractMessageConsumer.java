@@ -17,19 +17,20 @@ import java.util.function.Consumer;
 
 
 public abstract class AbstractMessageConsumer implements MessageConsumer {
-private Logger logger= LoggerFactory.getLogger(AbstractMessageConsumer.class);
+    private Logger logger = LoggerFactory.getLogger(AbstractMessageConsumer.class);
+
     public abstract void subscribe(EventHandler eventHandler);
 
-    protected void onReceivedMessage(String messageInfoString, EventHandler eventHandler, Object context, Consumer<MessageInfo> consumer) {
+    protected void onReceivedMessage(String messageInfoString, EventHandler eventHandler, Object context, Consumer<MessageInfo> beforeReceive) {
         MessageInfo messageInfo = null;
         try {
             messageInfo = MessageConverterFactory.create().jsonToMessage(messageInfoString, eventHandler.getEventDataClass());
         } catch (Exception ex) {
-            logger.warn("解析消息体失败,MessageInfo："+messageInfoString);
+            logger.warn("解析消息体失败,MessageInfo：" + messageInfoString);
             throw new JsonAnalysisException("解析消息体失败", messageInfoString);
         }
-
-        consumer.accept(messageInfo);
+        if (beforeReceive != null)
+            beforeReceive.accept(messageInfo);
         EventData eventData = messageInfo.getData();
 
         MessageRecord record = new MessageRecord();
