@@ -36,7 +36,7 @@ public class ProviderManage {
     private <T extends Provider> T get(Class<T> tClass, String code) {
         return (T) providerList
                 .stream()
-                .filter(p -> tClass.isAssignableFrom(p.getClass()) && code.equals(code))
+                .filter(p -> tClass.isAssignableFrom(p.getClass()) && p.getCode().equals(code))
                 .findFirst()
                 .orElse(null);
     }
