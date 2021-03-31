@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.context.event.resend;
+package com.zhaofujun.nest.context.event;
 
 import com.zhaofujun.nest.context.event.DefaultEventBus;
 import com.zhaofujun.nest.standard.AppService;

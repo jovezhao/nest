@@ -4,12 +4,16 @@ import com.zhaofujun.nest.cache.CacheProvider;
 import com.zhaofujun.nest.cache.DefaultCacheProvider;
 import com.zhaofujun.nest.context.event.channel.MessageChannelProvider;
 import com.zhaofujun.nest.context.event.channel.local.LocalMessageChannel;
+import com.zhaofujun.nest.context.event.delay.DefaultDelayMessageStore;
+import com.zhaofujun.nest.context.event.delay.DelayMessageStore;
 import com.zhaofujun.nest.context.event.message.DefaultMessageConverter;
 import com.zhaofujun.nest.context.event.message.MessageConverter;
 import com.zhaofujun.nest.context.event.resend.DefaultMessageResendStore;
 import com.zhaofujun.nest.context.event.resend.MessageResendStore;
 import com.zhaofujun.nest.context.event.store.DefaultMessageStore;
 import com.zhaofujun.nest.context.event.store.MessageStore;
+import com.zhaofujun.nest.lock.DefaultLockProvider;
+import com.zhaofujun.nest.lock.LockProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +36,7 @@ public class ProviderManage {
     private <T extends Provider> T get(Class<T> tClass, String code) {
         return (T) providerList
                 .stream()
-                .filter(p -> tClass.isAssignableFrom(p.getClass()) && code.equals(code))
+                .filter(p -> tClass.isAssignableFrom(p.getClass()) && p.getCode().equals(code))
                 .findFirst()
                 .orElse(null);
     }
@@ -54,7 +58,16 @@ public class ProviderManage {
         }
         return cacheProvider;
     }
+    public LockProvider getLockProvider(String code) {
 
+        LockProvider lockProvider = get(LockProvider.class, code);
+
+        if (lockProvider == null) {
+            lockProvider = new DefaultLockProvider();
+            providerList.add(lockProvider);
+        }
+        return lockProvider;
+    }
     public MessageChannelProvider getMessageChannel(String code) {
 
         MessageChannelProvider channelProvider = get(MessageChannelProvider.class, code);
@@ -100,4 +113,14 @@ public class ProviderManage {
         }
         return messageResendStore;
     }
-}
+
+    public DelayMessageStore getDelayMessageStore(String code) {
+
+        DelayMessageStore messageStore = get(DelayMessageStore.class, code);
+
+        if (messageStore == null) {
+            messageStore = new DefaultDelayMessageStore();
+            providerList.add(messageStore);
+        }
+        return messageStore;
+    }}

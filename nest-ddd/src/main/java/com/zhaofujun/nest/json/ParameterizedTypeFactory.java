@@ -1,7 +1,10 @@
 package com.zhaofujun.nest.json;
 
+import com.zhaofujun.nest.standard.SystemException;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 
 public class ParameterizedTypeFactory {
 

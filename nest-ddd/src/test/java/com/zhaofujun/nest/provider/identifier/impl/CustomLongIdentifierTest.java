@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.utils.identifier.impl;
+package com.zhaofujun.nest.provider.identifier.impl;
 
 import com.zhaofujun.nest.context.model.LongIdentifier;
 import org.junit.Test;

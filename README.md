@@ -29,13 +29,13 @@ Nest的设计受DDD战略、战术设计思想指导，使用Nest前需要对DDD
 <dependency>
     <groupId>com.zhaofujun.nest</groupId>
     <artifactId>nest-ddd</artifactId>
-    <version>2.1.0</version>
+    <version>2.2.4</version>
 </dependency>
 ```
 **Gradle引用**
 ```groovy
 // https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd
-compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '2.1.0'
+compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '2.2.4'
 
 ```
 
@@ -155,6 +155,22 @@ MessageStore定义消费成功的消息的存储方式，用于处理消费者�
 
 完成自定义的MessageStore后还需要修改配置项`NestApplication.getMessageConfiguration().setStore(String code)`使其生效。
 
+#### 继承至DelayMessageStore的消息存储器
+
+DelayMessageStore定义延迟消息的存储方式,默认存储方式是使用的内存空间，为了保证可靠性，一般情况需要使用外部存储空间来保存已经消费的消息。
+
+使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的消息存储器。
+
+完成自定义的DelayMessageStore后还需要修改配置项`NestApplication.getMessageConfiguration().setDelayStore(String code)`使其生效。
+
+#### 继承至LockProvider的锁提供者
+
+LockProvider定义锁的实现方式,默认实现使用ReentrantLock实现，在分布式环境下推进使用分布式锁，nest-plus提供了基于redis的分布式锁实现。
+
+使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的锁提供者。
+
+完成自定义的DelayMessageStore后还需要修改配置项`NestApplication.getLockConfiguration().setProvider(String code)`使其生效。
+
 #### 继承至MessageChannelProvider的消息通道提供者
 
 MessageChannelProvider定义了消息通道的实现方式，默认的消息通道是命名用的本地内存的实现方式，不支持分布式，在分布式系统中一般消息通道都需要使用第三方消息中间件来传递消息。
@@ -221,6 +237,15 @@ public interface CacheClient {
 默认缓存提供者使用ehcache支持，我们也可以通过实现`com.zhaofujun.nest.cache.CacheProvider`接口来集成其它缓存中间件，比如`Redis`。
 
 > 缓存中间件集成方案见： [缓存通道扩展与集成](#缓存通道扩展与集成)
+
+### 锁实现
+
+开发过程中往往需要使用锁解决多线程下资源冲突问题，nest提供了简单的锁工具可以简化开发过程。
+调用方式：`LockUtils.runByLock(String key, Runnable runnable)`，配合`LockProvider`可以实现分布式锁的实现。
+
+### 标识生成器
+
+可以实现`IdentifierGenerator`接口定义标识生成方式，nest提供了本地自增，雪花算法生产Long型的实现。参考`LocalLongGenerator`和`SnowflakeLongGenerator`类的实现。
 
 ### Nest与领域驱动设计(DDD)的对应关系
 

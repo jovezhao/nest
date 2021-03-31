@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.configuration;
 
+import com.zhaofujun.nest.context.event.delay.DefaultDelayMessageStore;
 import com.zhaofujun.nest.context.event.message.DefaultMessageConverter;
 import com.zhaofujun.nest.context.event.resend.DefaultMessageResendStore;
 import com.zhaofujun.nest.context.event.store.DefaultMessageStore;
@@ -9,7 +10,7 @@ public class MessageConfiguration {
     private String store = DefaultMessageStore.CACHE_CODE;
     private String converter = DefaultMessageConverter.CODE;
     private String resendStore = DefaultMessageResendStore.CODE;
-
+    private String delayStore = DefaultDelayMessageStore.CODE;
 
     public String getStore() {
         return store;
@@ -33,5 +34,13 @@ public class MessageConfiguration {
 
     public void setResendStore(String resendStore) {
         this.resendStore = resendStore;
+    }
+
+    public String getDelayStore() {
+        return delayStore;
+    }
+
+    public void setDelayStore(String delayStore) {
+        this.delayStore = delayStore;
     }
 }

@@ -1,5 +1,7 @@
 package com.zhaofujun.nest.test.application;
 
+import com.zhaofujun.nest.context.appservice.EntityNotifyEventData;
+import com.zhaofujun.nest.context.event.DefaultEventBus;
 import com.zhaofujun.nest.context.model.EntityFactory;
 import com.zhaofujun.nest.context.model.LongIdentifier;
 import com.zhaofujun.nest.standard.AppService;
@@ -21,6 +23,9 @@ public class UserApplicationService {
 //        user1.delete();
 
 //        change(11);
+        EntityNotifyEventData eventData = new EntityNotifyEventData();
+        eventData.setServiceName("fdfdfd");
+        new DefaultEventBus().publish(eventData,5);
     }
 
     public void change(int age) {

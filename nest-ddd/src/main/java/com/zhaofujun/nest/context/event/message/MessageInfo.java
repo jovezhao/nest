@@ -13,6 +13,7 @@ public class MessageInfo<T extends EventData> implements Serializable {
     private T data;
     private String extendInfo;
 
+
     public String getMessageId() {
         return messageId;
     }
