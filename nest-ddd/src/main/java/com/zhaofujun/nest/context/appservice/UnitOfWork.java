@@ -74,6 +74,9 @@ public class UnitOfWork {
 
                 repositoryMap.forEach((p, q) -> {
                     q.forEach((r, s) -> {
+                        if (s.isEmpty()) {
+                            return;
+                        }
                         entityNotify(r, s);
                         switch (r) {
                             case create:
