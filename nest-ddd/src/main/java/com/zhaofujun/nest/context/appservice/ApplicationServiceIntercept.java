@@ -25,8 +25,9 @@ public class ApplicationServiceIntercept {
             NestApplication.current().serviceMethodStart(serviceContext);
             result = methodInvoker.invoke();
             NestApplication.current().serviceMethodEnd(serviceContext);
-        } catch (
-                CustomException ex) {
+
+            serviceContext.commit();
+        } catch (CustomException ex) {
             //业务处理异常，
             throw ex;
         } catch (SystemException ex) {
@@ -43,11 +44,11 @@ public class ApplicationServiceIntercept {
             } else {
                 throw new SystemException("系统异常", ex);
             }
+        }finally {
+            ServiceContextManager.pop();
+            NestApplication.current().serviceEnd(serviceContext);
         }
-        serviceContext.commit();
 
-        ServiceContextManager.pop();
-        NestApplication.current().serviceEnd(serviceContext);
         return result;
 
     }
