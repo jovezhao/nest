@@ -21,7 +21,7 @@ public class ServiceContextManager {
 
     public static ServiceContext get() {
         Stack<ServiceContext> serviceContexts = serviceContextThreadLocal.get();
-        if (serviceContexts == null) return null;
+        if (serviceContexts == null || serviceContexts.empty()) return null;
         return serviceContexts.peek();
     }
 
