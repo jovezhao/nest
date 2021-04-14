@@ -1,15 +1,21 @@
 package com.zhaofujun.nest.event;
 
 public interface ServiceContextListener extends NestEventListener {
-    void serviceCreated(ServiceEvent serviceEvent);
+    default void serviceCreated(ServiceEvent serviceEvent) {
+    }
 
-    void serviceMethodStart(ServiceEvent serviceEvent, String methodName);
+    default void serviceMethodStart(ServiceEvent serviceEvent, String methodName) {
+    }
 
-    void serviceMethodEnd(ServiceEvent serviceEvent, String methodName);
+    default void serviceMethodEnd(ServiceEvent serviceEvent, String methodName) {
+    }
 
-    void beforeCommit(ServiceEvent serviceEvent);
+    default void beforeCommit(ServiceEvent serviceEvent) {
+    }
 
-    void committed(ServiceEvent serviceEvent);
+    default void committed(ServiceEvent serviceEvent) {
+    }
 
-    void serviceEnd(ServiceEvent serviceEvent);
+    default void serviceEnd(ServiceEvent serviceEvent) {
+    }
 }
