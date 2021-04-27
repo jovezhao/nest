@@ -25,13 +25,13 @@ public class Application {
         UserApplicationService userService = ApplicationServiceCreator.create(UserApplicationService.class);
         userService.create();
 
-
-        long s = System.currentTimeMillis();
-        for (int i = 0; i < 0; i++) {
-            userService.change(i);
-        }
-        Long e = System.currentTimeMillis();
-        System.out.println("耗时：" + (e - s));
+//
+//        long s = System.currentTimeMillis();
+//        for (int i = 0; i < 0; i++) {
+//            userService.change(i);
+//        }
+//        Long e = System.currentTimeMillis();
+//        System.out.println("耗时：" + (e - s));
         //application.close();
 //        System.out.println("end");
 //        String js="{\"CGLIB$BOUND\":true,\"CGLIB$CALLBACK_0\":null,\"name\":\"name1\",\"age\":11,\"id\":{\"id\":10},\"_version\":0,\"__type__\":\"com.zhaofujun.nest.test.domain.User\"}";

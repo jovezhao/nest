@@ -3,6 +3,7 @@ package com.zhaofujun.nest.test.application;
 import com.zhaofujun.nest.context.model.EntityFactory;
 import com.zhaofujun.nest.context.model.LongIdentifier;
 import com.zhaofujun.nest.standard.AppService;
+import com.zhaofujun.nest.standard.AppServiceIgnore;
 import com.zhaofujun.nest.test.domain.Teacher;
 
 @AppService

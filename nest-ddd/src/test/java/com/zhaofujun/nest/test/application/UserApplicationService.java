@@ -5,12 +5,14 @@ import com.zhaofujun.nest.context.event.DefaultEventBus;
 import com.zhaofujun.nest.context.model.EntityFactory;
 import com.zhaofujun.nest.context.model.LongIdentifier;
 import com.zhaofujun.nest.standard.AppService;
+import com.zhaofujun.nest.standard.AppServiceIgnore;
 import com.zhaofujun.nest.test.domain.HomeAddress;
 import com.zhaofujun.nest.test.domain.Teacher;
 import com.zhaofujun.nest.test.domain.User;
 
 @AppService
 public class UserApplicationService {
+
     public void create() {
         User user = EntityFactory.create(User.class, LongIdentifier.valueOf(10L));
         user.init("name1", 11, new HomeAddress(1, 2, "address1"));

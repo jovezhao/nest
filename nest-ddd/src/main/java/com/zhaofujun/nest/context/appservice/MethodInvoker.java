@@ -1,5 +1,7 @@
 package com.zhaofujun.nest.context.appservice;
 
+import java.lang.reflect.Method;
+
 public interface MethodInvoker {
     String getMethodName();
 
@@ -8,4 +10,6 @@ public interface MethodInvoker {
     Class getTargetClass();
 
     Object getTarget();
+
+    Method getMethod();
 }

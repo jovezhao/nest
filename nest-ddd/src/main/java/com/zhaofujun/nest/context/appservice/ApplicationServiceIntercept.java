@@ -1,10 +1,7 @@
 package com.zhaofujun.nest.context.appservice;
 
 import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.standard.CustomException;
-import com.zhaofujun.nest.standard.CustomExceptionable;
-import com.zhaofujun.nest.standard.SystemException;
-import com.zhaofujun.nest.standard.SystemExceptionable;
+import com.zhaofujun.nest.standard.*;
 
 public class ApplicationServiceIntercept {
     private MethodInvoker methodInvoker;
@@ -16,6 +13,13 @@ public class ApplicationServiceIntercept {
     }
 
     public Object doInvoke() throws Throwable {
+
+        AppServiceIgnore appServiceIgnore = methodInvoker.getMethod().getAnnotation(AppServiceIgnore.class);
+        if(appServiceIgnore!=null)
+        {
+            //存在忽略注解
+            return methodInvoker.invoke();
+        }
 
         ServiceContext serviceContext = new ServiceContext(methodInvoker.getTargetClass(), methodInvoker.getTarget(), methodInvoker.getMethodName(), transactionManager);
         NestApplication.current().onServiceContextCreated(serviceContext);

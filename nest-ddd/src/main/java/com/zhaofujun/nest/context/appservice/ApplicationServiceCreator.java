@@ -1,6 +1,7 @@
 package com.zhaofujun.nest.context.appservice;
 
 import com.zhaofujun.nest.standard.AppService;
+import com.zhaofujun.nest.standard.AppServiceIgnore;
 import com.zhaofujun.nest.standard.SystemException;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -31,14 +32,14 @@ public class ApplicationServiceCreator {
         private class CglibMethodInvoker implements MethodInvoker {
 
             private MethodProxy methodProxy;
-            private String methodName;
             private Object target;
             private Class targetClass;
             private Object[] args;
+            private Method method;
 
-            public CglibMethodInvoker(MethodProxy methodProxy, String methodName, Object target, Class targetClass, Object[] args) {
+            public CglibMethodInvoker(MethodProxy methodProxy, Method method, Object target, Class targetClass, Object[] args) {
                 this.methodProxy = methodProxy;
-                this.methodName = methodName;
+                this.method = method;
                 this.target = target;
                 this.targetClass = targetClass;
                 this.args = args;
@@ -46,7 +47,7 @@ public class ApplicationServiceCreator {
 
             @Override
             public String getMethodName() {
-                return this.methodName;
+                return this.method.getName();
             }
 
             @Override
@@ -63,14 +64,20 @@ public class ApplicationServiceCreator {
             public Object getTarget() {
                 return this.target;
             }
+
+            @Override
+            public Method getMethod() {
+                return this.method;
+            }
         }
+
 
         // 实现MethodInterceptor接口方法
         public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
 
             int modifiers = method.getModifiers();
             if (Modifier.isPublic(modifiers) && !Modifier.isStatic(modifiers)) {
-                MethodInvoker methodInvoker = new CglibMethodInvoker(proxy, method.getName(), obj, obj.getClass(), args);
+                MethodInvoker methodInvoker = new CglibMethodInvoker(proxy, method, obj, obj.getClass(), args);
                 ApplicationServiceIntercept intercept = new ApplicationServiceIntercept(methodInvoker, null);
                 return intercept.doInvoke();
             } else {
