@@ -26,7 +26,7 @@ public abstract class BaseEntity<T extends AbstractIdentifier> implements Entity
     private transient String endSnapshot = "";
 
     //版本号
-    private int _version;
+    protected int _version;
 
 
     public boolean is__deleted() {

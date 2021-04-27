@@ -13,13 +13,16 @@ public class LockUtils {
             if (!StringUtils.isEmpty(requestId)) {
                 try {
                     runnable.run();
+                    return true;
                 } finally {
                     lockProvider.unlock(key,requestId);
-                    return true;
                 }
             }
         }
         return false;
     }
+
+
+
 }
 
