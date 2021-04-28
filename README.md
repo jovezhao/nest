@@ -29,13 +29,13 @@ Nest的设计受DDD战略、战术设计思想指导，使用Nest前需要对DDD
 <dependency>
     <groupId>com.zhaofujun.nest</groupId>
     <artifactId>nest-ddd</artifactId>
-    <version>2.2.4</version>
+    <version>2.2.10</version>
 </dependency>
 ```
 **Gradle引用**
 ```groovy
 // https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd
-compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '2.2.4'
+compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '2.2.10'
 
 ```
 
@@ -117,6 +117,13 @@ public class Application {
 没有做任何仓储的实现，框架会提供基于内存的默认仓库来实现，这样可以帮助程序员快速完成业务部分的代码开发与测试，默认仓库使用内存仓储实体的json结构。
 
 ## Nest进阶教程
+
+### 应用服务
+
+使用`@AppService`注解标识一个应用服务类，标注过该注解的类的公共方法将开启服务上下文，上下文内所有实体的变化将通过工作单元记录并校验后调用实体仓储完成持久化。
+
+可以使用`@AppServiceIgnore`注解忽略应用服务下的公共方法使其不开启服务上下文。
+
 
 ### 扩展
 
