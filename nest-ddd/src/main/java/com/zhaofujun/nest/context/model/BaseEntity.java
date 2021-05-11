@@ -66,6 +66,26 @@ public abstract class BaseEntity<T extends AbstractIdentifier> implements Entity
         beginSnapshot = JsonCreator.getInstance().toJsonString(this);
     }
 
+    @Override
+    public String getClassName() {
+        final String PROXY_SPLIT_STR = "$$";
+        final int BEGIN_INDEX = 0;
+
+        String className = this.getClass().getName();
+        int endIndex = className.indexOf(PROXY_SPLIT_STR);
+        return endIndex == -1 ? className : className.substring(BEGIN_INDEX, endIndex);
+    }
+
+    @Override
+    public String getClassSimpleName() {
+        final String PROXY_SPLIT_STR = "$$";
+        final int BEGIN_INDEX = 0;
+
+        String className = this.getClass().getSimpleName();
+        int endIndex = className.indexOf(PROXY_SPLIT_STR);
+        return endIndex == -1 ? className : className.substring(BEGIN_INDEX, endIndex);
+    }
+
     public void end() {
         endSnapshot = JsonCreator.getInstance().toJsonString(this);
     }

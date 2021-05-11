@@ -225,7 +225,7 @@ public class UnitOfWork {
                 MessageInfo<EntityNotifyEventData> messageInfo = new MessageInfo<>();
 
                 EntityNotifyEventData eventData = new EntityNotifyEventData();
-                eventData.setEntityClassName(EntityUtils.getFullClassName(baseEntity));
+                eventData.setEntityClassName(baseEntity.getClassName());
                 eventData.setBeginSnapshot(baseEntity.getBeginSnapshot());
                 eventData.setEndSnapshot(baseEntity.getEndSnapshot());
                 eventData.setServiceName(serviceContext.getServiceClass().getName());

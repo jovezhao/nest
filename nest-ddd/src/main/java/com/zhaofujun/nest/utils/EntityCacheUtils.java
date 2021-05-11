@@ -9,7 +9,7 @@ import com.zhaofujun.nest.standard.Identifier;
 public class EntityCacheUtils {
 
     public static String getCacheKey(Entity entityObject) {
-        return EntityUtils.getClassName(entityObject) + "_" + entityObject.getId();
+        return entityObject.getClassSimpleName() + "_" + entityObject.getId();
     }
 
     public static String getCacheKey(Class clazz, Identifier abstractIdentifier) {

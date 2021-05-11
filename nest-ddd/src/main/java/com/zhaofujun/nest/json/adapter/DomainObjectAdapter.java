@@ -59,7 +59,7 @@ public class DomainObjectAdapter implements JsonSerializer<DomainObject>, JsonDe
     @Override
     public JsonElement serialize(DomainObject src, Type typeOfSrc, JsonSerializationContext context) {
         if (DomainObjectSerializeContext.put(src)) {
-            String fullClassName = EntityUtils.getFullClassName(src);
+            String fullClassName =src.getClassName();
 
             //目标是一个实体，并且不是当前需要序列化的对象，进行特殊处理。
             if (BaseEntity.class.isAssignableFrom(src.getClass()) && !src.equals(DomainObjectSerializeContext.getDomainObject())) {

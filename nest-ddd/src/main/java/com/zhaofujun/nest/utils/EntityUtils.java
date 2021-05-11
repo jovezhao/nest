@@ -33,24 +33,6 @@ public class EntityUtils {
         setValue(BaseEntity.class, entityObject, "id", abstractIdentifier);
     }
 
-    public static String getClassName(DomainObject entityObject) {
-        final String PROXY_SPLIT_STR = "$$";
-        final int BEGIN_INDEX = 0;
-
-        String className = entityObject.getClass().getSimpleName();
-        int endIndex = className.indexOf(PROXY_SPLIT_STR);
-        return endIndex == -1 ? className : className.substring(BEGIN_INDEX, endIndex);
-    }
-
-    public static String getFullClassName(DomainObject entityObject) {
-        final String PROXY_SPLIT_STR = "$$";
-        final int BEGIN_INDEX = 0;
-
-        String className = entityObject.getClass().getName();
-        int endIndex = className.indexOf(PROXY_SPLIT_STR);
-        return endIndex == -1 ? className : className.substring(BEGIN_INDEX, endIndex);
-    }
-
     public static int getEntityHash(BaseEntity domainObject) {
         EntityHashCalculator calculator = new EntityHashCalculator();
         return calculator.getEntityHash(domainObject);
