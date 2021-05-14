@@ -19,11 +19,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class ProviderManage {
 
-    private List<Provider> providerList = new ArrayList<>();
+    private List<Provider> providerList = new CopyOnWriteArrayList<>();
 
     public void addProvider(Provider... providers) {
         providerList.addAll(Arrays.asList(providers));
