@@ -68,6 +68,7 @@ public class UnitOfWork {
     private void commitEntity() {
 
         Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> repositoryMap = toRepositoryMap();
+        NestApplication.current().beforeEntityCommit(serviceContext,repositoryMap);
         CacheClient cacheClient = CacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
         try {
             this.transactionManager.commit(() -> {
@@ -120,6 +121,7 @@ public class UnitOfWork {
     }
 
     private void commitMessage() {
+        NestApplication.current().beforeMessageCommit(serviceContext,messageBacklogs);
         messageBacklogs.forEach(p -> {
             ConfigurationManager configurationManager = NestApplication.current().getConfigurationManager();
             EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(p.getEventCode());
@@ -138,7 +140,7 @@ public class UnitOfWork {
     }
 
     void commit() {
-        ServiceContext serviceContext = ServiceContextManager.get();
+
         NestApplication.current().beforeCommit(serviceContext);
 
         try {

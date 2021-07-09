@@ -46,7 +46,7 @@ public class DefaultRepository implements Repository<BaseEntity> {
         entityItem.tClass = entity.getClass();
         entityItem.value = jsonCreator.toJsonString(entity);
         entityMap.put(entity.getId(), entityItem);
-        System.out.println("insert:" + entityItem.value);
+        System.out.println(Thread.currentThread().getName()+ "- insert:" + entityItem.value);
 
     }
 

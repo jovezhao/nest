@@ -2,8 +2,12 @@ package com.zhaofujun.nest.provider.identifier;
 
 
 import com.zhaofujun.nest.provider.LongGenerator;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public  class SnowflakeLongGenerator implements LongGenerator {
 
@@ -107,8 +111,15 @@ public  class SnowflakeLongGenerator implements LongGenerator {
          * 构造函数
          */
         public SnowFlake() {
-            this.workerId = 0;
-            this.datacenterId = 0;
+            try {
+                InetAddress ia = InetAddress.getLocalHost();
+                this.workerId = (long)Math.abs(ia.getHostAddress().hashCode()) % 32L;
+            } catch (UnknownHostException var2) {
+                this.workerId = (long)Math.abs(ThreadLocalRandom.current().nextInt()) % 32L;
+            }
+
+            this.datacenterId = (long)Math.abs(ThreadLocalRandom.current().nextInt()) % 32L;
+
         }
 
         /**

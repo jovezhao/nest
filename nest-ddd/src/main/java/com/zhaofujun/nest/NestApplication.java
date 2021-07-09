@@ -4,10 +4,13 @@ import com.zhaofujun.nest.configuration.ConfigurationItem;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
 import com.zhaofujun.nest.configuration.LockConfiguration;
 import com.zhaofujun.nest.configuration.MessageConfiguration;
+import com.zhaofujun.nest.context.appservice.EntityOperateEnum;
 import com.zhaofujun.nest.context.appservice.ServiceContext;
 import com.zhaofujun.nest.context.event.channel.MessageChannelApplicationListener;
 import com.zhaofujun.nest.context.event.delay.DelayTimerTask;
+import com.zhaofujun.nest.context.event.message.MessageBacklog;
 import com.zhaofujun.nest.context.event.resend.ResenderTimerTask;
+import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.context.repository.RepositoryManager;
 import com.zhaofujun.nest.event.*;
 import com.zhaofujun.nest.provider.GeneratorManager;
@@ -16,6 +19,9 @@ import com.zhaofujun.nest.provider.ProviderManage;
 import com.zhaofujun.nest.standard.Repository;
 import com.zhaofujun.nest.provider.LongGenerator;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 
 
@@ -58,12 +64,12 @@ public class NestApplication {
 
     NestApplication() {
         this.messageConfiguration = new MessageConfiguration();
-        this.lockConfiguration=new LockConfiguration();
+        this.lockConfiguration = new LockConfiguration();
         this.configurationManager = new ConfigurationManager();
         this.providerManage = new ProviderManage();
         this.listenerManager = new EventListenerManager();
         this.repositoryManager = new RepositoryManager();
-        this.generatorManager=new GeneratorManager();
+        this.generatorManager = new GeneratorManager();
     }
 
     public void setContainerProvider(ContainerProvider containerProvider) {
@@ -89,7 +95,7 @@ public class NestApplication {
         this.getListenerManager().addListeners(new MessageChannelApplicationListener());
         onStarted();
         timer.schedule(new ResenderTimerTask(), 0, 1000);
-        timer.schedule(new DelayTimerTask(),0,1000);
+        timer.schedule(new DelayTimerTask(), 0, 1000);
     }
 
     public void close() {
@@ -132,6 +138,20 @@ public class NestApplication {
         ServiceEvent serviceEvent = new ServiceEvent(this, serviceContext);
         this.listenerManager.publish(ServiceContextListener.class, p -> {
             p.beforeCommit(serviceEvent);
+        });
+    }
+
+    public void beforeEntityCommit(ServiceContext serviceContext, Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> entityMaps) {
+        ServiceEvent serviceEvent = new ServiceEvent(this, serviceContext);
+        this.listenerManager.publish(ServiceContextListener.class, p -> {
+            p.beforeEntityCommit(serviceEvent, entityMaps);
+        });
+    }
+
+    public void beforeMessageCommit(ServiceContext serviceContext, Set<MessageBacklog> messageSet) {
+        ServiceEvent serviceEvent = new ServiceEvent(this, serviceContext);
+        this.listenerManager.publish(ServiceContextListener.class, p -> {
+            p.beforeMessageCommit(serviceEvent, messageSet);
         });
     }
 

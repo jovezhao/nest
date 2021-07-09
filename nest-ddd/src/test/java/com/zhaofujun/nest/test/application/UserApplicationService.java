@@ -13,9 +13,11 @@ import com.zhaofujun.nest.test.domain.User;
 @AppService
 public class UserApplicationService {
 
-    public void create() {
+    public void create() throws InterruptedException {
         User user = EntityFactory.create(User.class, LongIdentifier.valueOf(10L));
         user.init("name1", 11, new HomeAddress(1, 2, "address1"));
+
+        Thread.sleep(100);
 
         Teacher teacher = EntityFactory.create(Teacher.class, LongIdentifier.valueOf(11L));
         teacher.init("teacher 1");
