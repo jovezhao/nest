@@ -59,6 +59,7 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
             messageStore.save(record);
         } catch (CustomException ex) {
             eventHandler.onCustomException(context, ex);
+            throw  ex;
         } catch (SystemException ex) {
             onFailed(eventHandler, context, ex);
             eventHandler.onSystemException(context, ex);
@@ -69,6 +70,7 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
                 //业务异常
                 OtherCustomException customException = new OtherCustomException(ex.getMessage(), ex);
                 eventHandler.onCustomException(context, customException);
+                throw customException;
             } else {
 
                 onFailed(eventHandler, context, ex);
