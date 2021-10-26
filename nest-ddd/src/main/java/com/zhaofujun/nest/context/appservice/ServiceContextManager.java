@@ -23,6 +23,8 @@ public class ServiceContextManager {
         if (serviceContextHashMap == null) {
             serviceContextHashMap = new ConcurrentHashMap<>();
             serviceContextThreadLocal.set(serviceContextHashMap);
+        }
+        if (serviceContextHashMap.isEmpty()) {
             mainNameThreadLocal.set(Thread.currentThread().getName());
         }
         Stack<ServiceContext> serviceContextStack = serviceContextHashMap.get(Thread.currentThread().getName());
@@ -56,12 +58,22 @@ public class ServiceContextManager {
     public static void pop() {
         ConcurrentHashMap<String, Stack<ServiceContext>> serviceContextHashMap = serviceContextThreadLocal.get();
         if (serviceContextHashMap == null || serviceContextHashMap.isEmpty()) {
+            serviceContextThreadLocal.remove();
+            mainNameThreadLocal.remove();
             return;
         }
         Stack<ServiceContext> serviceContextStack = serviceContextHashMap.get(Thread.currentThread().getName());
+        if (serviceContextStack != null && !serviceContextStack.isEmpty()) {
+            serviceContextStack.pop();
+        }
         if (serviceContextStack == null || serviceContextStack.isEmpty()) {
             serviceContextHashMap.remove(Thread.currentThread().getName());
         }
+        if (serviceContextHashMap.isEmpty()) {
+            serviceContextThreadLocal.remove();
+            mainNameThreadLocal.remove();
+        }
     }
+
 
 }
