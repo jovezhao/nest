@@ -1,6 +1,7 @@
 package com.zhaofujun.nest.context.event;
 
 import com.zhaofujun.nest.NestApplication;
+import com.zhaofujun.nest.context.appservice.ServiceContextManager;
 import com.zhaofujun.nest.context.event.channel.MessageChannelProvider;
 import com.zhaofujun.nest.context.event.channel.MessageChannelProviderFactory;
 import com.zhaofujun.nest.context.event.channel.MessageConsumer;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class DefaultEventBus implements EventBus {
 
 
+    @Override
     public void publish(EventData eventData, String eventSource, long delaySecond) {
 
 
@@ -38,8 +40,8 @@ public class DefaultEventBus implements EventBus {
             MessageProducer messageProducer = messageChannel.getMessageProducer();
             messageProducer.send(eventData.getEventCode(), messageInfo);
         } else {
-            DelayMessageStore delayMessageStore = DelayMessageStoreFactory.create();
-            delayMessageStore.add(new DelayMessageBacklog(new MessageBacklog(eventData.getEventCode(), messageString,eventData.getClass().getName(),messageInfo.getMessageId()), LocalDateTime.now().plusSeconds(delaySecond)));
+            //延时事件先提交到当前上下文，待事务提交后再save到DelayMessageStore，保证事务提交成功再发送消息
+            ServiceContextManager.get().addDelayMessageBacklog(new DelayMessageBacklog(new MessageBacklog(eventData.getEventCode(), messageString, eventData.getClass().getName(), messageInfo.getMessageId()), LocalDateTime.now().plusSeconds(delaySecond)));
         }
     }
 
@@ -48,6 +50,7 @@ public class DefaultEventBus implements EventBus {
     }
 
 
+    @Override
     public void registerHandler(EventHandler eventHandler) {
 
         EventConfiguration eventConfiguration = getEventConfigurationByEventCode(eventHandler.getEventCode());

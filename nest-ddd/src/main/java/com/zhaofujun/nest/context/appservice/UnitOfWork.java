@@ -7,6 +7,9 @@ import com.zhaofujun.nest.configuration.ConfigurationManager;
 import com.zhaofujun.nest.context.event.EventConfiguration;
 import com.zhaofujun.nest.context.event.channel.MessageChannelProviderFactory;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
+import com.zhaofujun.nest.context.event.delay.DelayMessageBacklog;
+import com.zhaofujun.nest.context.event.delay.DelayMessageStore;
+import com.zhaofujun.nest.context.event.delay.DelayMessageStoreFactory;
 import com.zhaofujun.nest.context.event.message.MessageBacklog;
 import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
@@ -100,7 +103,7 @@ public class UnitOfWork {
             clearCache(repositoryMap, cacheClient);
             throw ex;
         }
-        
+
     }
 
     private void clearCache(Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> repositoryMap, CacheClient cacheClient) {
@@ -114,6 +117,9 @@ public class UnitOfWork {
     }
 
     private Set<MessageBacklog> messageBacklogs = new HashSet<>();
+
+
+    private Set<DelayMessageBacklog> delayMessageBacklogs = new HashSet<>();
 
     public void addMessageBacklog(String eventCode, MessageInfo messageInfo) {
         String messageInfoString = MessageConverterFactory.create().messageToString(messageInfo);
@@ -135,6 +141,15 @@ public class UnitOfWork {
 
                 MessageResendStore messageResendStore = MessageResendFactory.create();
                 messageResendStore.add(p);
+            }
+        });
+        delayMessageBacklogs.forEach(p -> {
+            try {
+                DelayMessageStore delayMessageStore = DelayMessageStoreFactory.create();
+                delayMessageStore.add(p);
+            } catch (Exception ex) {
+                //考虑一般情况下，DelayMessageStore和MessageResendStore存储中间件相同，所以加到待发送区域也应该会失败，所以暂不做重试逻辑
+                logger.warn("提交延时消息失败，失败原因", ex);
             }
         });
     }
@@ -174,6 +189,7 @@ public class UnitOfWork {
             throw new SystemException("提交工作单元时失败", ex);
         } finally {
             messageBacklogs.clear();
+            delayMessageBacklogs.clear();
         }
 
         NestApplication.current().committed(serviceContext);
@@ -244,6 +260,10 @@ public class UnitOfWork {
         });
 
 
+    }
+
+    public void addDelayMessageBacklog(DelayMessageBacklog delayMessageBacklog) {
+        delayMessageBacklogs.add(delayMessageBacklog);
     }
 }
 
