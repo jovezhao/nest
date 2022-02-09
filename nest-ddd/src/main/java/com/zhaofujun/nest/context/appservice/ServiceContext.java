@@ -1,6 +1,7 @@
 package com.zhaofujun.nest.context.appservice;
 
 
+import com.zhaofujun.nest.context.event.delay.DelayMessageBacklog;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.standard.Identifier;
@@ -45,6 +46,10 @@ public class ServiceContext {
 
     public void addMessageBacklog(String messageGroup, MessageInfo messageInfo) {
         this.unitOfWork.addMessageBacklog(messageGroup, messageInfo);
+    }
+
+    public void addDelayMessageBacklog(DelayMessageBacklog delayMessageBacklog) {
+        this.unitOfWork.addDelayMessageBacklog(delayMessageBacklog);
     }
 }
 
