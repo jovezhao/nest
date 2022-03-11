@@ -20,3 +20,4 @@ modules/logs
 .gradle/
 build/
 **/build/
+bin/
