@@ -19,7 +19,7 @@ public class DefaultMessageStore implements MessageStore {
     @Override
     public void save(MessageRecord messageRecord) {
         try {
-            cacheClient.put(messageRecord.getMessageInfo().getMessageId() + "-" + messageRecord.getHandlerName(), messageRecord);
+            cacheClient.put(messageRecord.getMessageInfo().getMessageId() + "-" + messageRecord.getHandlerName(), "0");
         } catch (Exception ex) {
             logger.warn("缓存通道异常", ex);
         }
