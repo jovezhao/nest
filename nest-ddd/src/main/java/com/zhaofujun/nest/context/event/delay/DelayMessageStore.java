@@ -12,5 +12,23 @@ public interface DelayMessageStore extends Provider {
 
     List<MessageBacklog> getAndLock();
 
-    void  clear(String messageId);
+    void clear(String messageId);
+
+    /**
+     * 初始化拓展信息钩子
+     *
+     * @param extendInfo
+     */
+    default void initExtInfo(String extendInfo) {
+
+    }
+
+    /**
+     * 清除拓展信息钩子
+     *
+     * @param extendInfo
+     */
+    default void clearExtInfo(String extendInfo) {
+
+    }
 }

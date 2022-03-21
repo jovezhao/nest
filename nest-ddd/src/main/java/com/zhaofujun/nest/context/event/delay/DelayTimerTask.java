@@ -36,9 +36,11 @@ public class DelayTimerTask extends TimerTask {
 
                     MessageInfo messageInfo = JsonCreator.getInstance().toObj(messageBacklog.getMessageInfoString(), ParameterizedTypeFactory.make(MessageInfo.class, eventDataType));
                     EventData eventData = messageInfo.getData();
+                    delayMessageStore.initExtInfo(messageInfo.getExtendInfo());
                     ResendAppService appService = ApplicationServiceCreator.create(ResendAppService.class);
                     appService.send(eventData);
                     delayMessageStore.clear(messageInfo.getMessageId());
+                    delayMessageStore.clearExtInfo(messageInfo.getExtendInfo());
                 }
             });
         } catch (CustomException ex) {
