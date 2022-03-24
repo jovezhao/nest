@@ -1,6 +1,10 @@
 package com.zhaofujun.nest.context.event.message;
 
 
+import com.zhaofujun.nest.NestApplication;
+import com.zhaofujun.nest.context.event.EventConfiguration;
+import com.zhaofujun.nest.context.event.channel.MessageChannelProvider;
+import com.zhaofujun.nest.context.event.channel.MessageChannelProviderFactory;
 import com.zhaofujun.nest.standard.EventData;
 
 import java.io.Serializable;
@@ -53,4 +57,5 @@ public class MessageInfo<T extends EventData> implements Serializable {
     public void setExtendInfo(String extendInfo) {
         this.extendInfo = extendInfo;
     }
+
 }

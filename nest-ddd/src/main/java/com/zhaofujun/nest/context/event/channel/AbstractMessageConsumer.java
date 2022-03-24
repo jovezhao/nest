@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.context.event.channel;
 
+import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.context.event.message.MessageConverterFactory;
 import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.message.MessageRecord;
@@ -22,15 +23,20 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
     public abstract void subscribe(EventHandler eventHandler);
 
     protected void onReceivedMessage(String messageInfoString, EventHandler eventHandler, Object context, Consumer<MessageInfo> beforeReceive) {
-        MessageInfo messageInfo = null;
+
+        MessageInfo messageInfo ;
         try {
             messageInfo = MessageConverterFactory.create().jsonToMessage(messageInfoString, eventHandler.getEventDataClass());
         } catch (Exception ex) {
             logger.warn("解析消息体失败,MessageInfo：" + messageInfoString);
             throw new JsonAnalysisException("解析消息体失败", messageInfoString);
         }
+
+        MessageChannelProvider messageChannelProvider = MessageChannelProviderFactory.getMessageChannelProviderByEventCode(eventHandler.getEventCode());
+        NestApplication.current().onMessageReceived(messageChannelProvider, messageInfo);
         if (beforeReceive != null)
             beforeReceive.accept(messageInfo);
+
         EventData eventData = messageInfo.getData();
 
         MessageRecord record = new MessageRecord();
@@ -59,7 +65,7 @@ public abstract class AbstractMessageConsumer implements MessageConsumer {
             messageStore.save(record);
         } catch (CustomException ex) {
             eventHandler.onCustomException(context, ex);
-            throw  ex;
+            throw ex;
         } catch (SystemException ex) {
             onFailed(eventHandler, context, ex);
             eventHandler.onSystemException(context, ex);

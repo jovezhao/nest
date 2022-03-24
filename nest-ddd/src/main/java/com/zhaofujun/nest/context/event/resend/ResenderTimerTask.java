@@ -33,9 +33,10 @@ public class ResenderTimerTask extends TimerTask {
 
                 MessageInfo messageInfo = JsonCreator.getInstance().toObj(messageBacklog.getMessageInfoString(), ParameterizedTypeFactory.make(MessageInfo.class, eventDataType));
 
-                EventData eventData = messageInfo.getData();
+//                EventData eventData = messageInfo.getData();
                 ResendAppService appService = ApplicationServiceCreator.create(ResendAppService.class);
-                appService.send(eventData);
+//                appService.send(eventData);
+                appService.send(messageInfo);
             }
         } catch (CustomException ex) {
             logger.warn("发生业务异常", ex);

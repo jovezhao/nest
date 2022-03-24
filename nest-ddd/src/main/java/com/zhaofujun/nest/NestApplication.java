@@ -7,17 +7,19 @@ import com.zhaofujun.nest.configuration.MessageConfiguration;
 import com.zhaofujun.nest.context.appservice.EntityOperateEnum;
 import com.zhaofujun.nest.context.appservice.ServiceContext;
 import com.zhaofujun.nest.context.event.channel.MessageChannelApplicationListener;
+import com.zhaofujun.nest.context.event.channel.MessageChannelProvider;
 import com.zhaofujun.nest.context.event.delay.DelayTimerTask;
 import com.zhaofujun.nest.context.event.message.MessageBacklog;
+import com.zhaofujun.nest.context.event.message.MessageInfo;
 import com.zhaofujun.nest.context.event.resend.ResenderTimerTask;
 import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.context.repository.RepositoryManager;
 import com.zhaofujun.nest.event.*;
 import com.zhaofujun.nest.provider.GeneratorManager;
+import com.zhaofujun.nest.provider.LongGenerator;
 import com.zhaofujun.nest.provider.Provider;
 import com.zhaofujun.nest.provider.ProviderManage;
 import com.zhaofujun.nest.standard.Repository;
-import com.zhaofujun.nest.provider.LongGenerator;
 
 import java.util.List;
 import java.util.Map;
@@ -180,6 +182,18 @@ public class NestApplication {
         ServiceEvent serviceEvent = new ServiceEvent(this, serviceContext);
         this.listenerManager.publish(ServiceContextListener.class, p -> {
             p.serviceEnd(serviceEvent);
+        });
+    }
+
+    public void beforeMessagePublish(MessageChannelProvider messageChannelProvider , MessageInfo messageInfo) {
+        this.listenerManager.publish(EventBusListener.class, p -> {
+            p.beforePublish(messageChannelProvider,messageInfo);
+        });
+    }
+
+    public void onMessageReceived(MessageChannelProvider messageChannelProvider,MessageInfo messageInfo) {
+        this.listenerManager.publish(EventBusListener.class, p -> {
+            p.onReceived(messageChannelProvider,messageInfo);
         });
     }
 }
