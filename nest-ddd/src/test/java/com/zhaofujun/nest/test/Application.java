@@ -16,6 +16,7 @@ import com.zhaofujun.nest.test.application.TeacherApplicationService;
 import com.zhaofujun.nest.test.application.UserApplicationService;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -76,7 +77,7 @@ public class Application {
 
     static class TestServiceContextListener implements ServiceContextListener {
         @Override
-        public void beforeEntityCommit(ServiceEvent serviceEvent, Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> entityMaps) {
+        public void beforeEntityCommit(ServiceEvent serviceEvent, Map<Repository, Map<EntityOperateEnum, Collection<BaseEntity>>> entityMaps) {
 
         }
     }

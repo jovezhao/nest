@@ -1,7 +1,7 @@
 package com.zhaofujun.nest.standard;
 
 
-import java.util.List;
+import java.util.Collection;
 
 public interface Repository<T extends Entity> {
 
@@ -16,19 +16,19 @@ public interface Repository<T extends Entity> {
     void delete(T t);
 
 
-    default void batchInsert(List<T> ts) {
+    default void batchInsert(Collection<T> ts) {
         for (T t : ts) {
             insert(t);
         }
     }
 
-    default void batchUpdate(List<T> ts) {
+    default void batchUpdate(Collection<T> ts) {
         for (T t : ts) {
             update(t);
         }
     }
 
-    default void batchDelete(List<T> ts) {
+    default void batchDelete(Collection<T> ts) {
         for (T t : ts) {
             delete(t);
         }

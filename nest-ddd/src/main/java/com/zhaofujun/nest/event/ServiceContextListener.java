@@ -5,6 +5,7 @@ import com.zhaofujun.nest.context.event.message.MessageBacklog;
 import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.standard.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +23,7 @@ public interface ServiceContextListener extends NestEventListener {
     default void beforeCommit(ServiceEvent serviceEvent) {
     }
 
-    default void beforeEntityCommit(ServiceEvent serviceEvent, Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> entityMaps) {
+    default void beforeEntityCommit(ServiceEvent serviceEvent, Map<Repository, Map<EntityOperateEnum, Collection<BaseEntity>>> entityMaps) {
 
     }
 

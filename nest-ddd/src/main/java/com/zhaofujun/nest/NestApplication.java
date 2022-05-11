@@ -21,10 +21,7 @@ import com.zhaofujun.nest.provider.Provider;
 import com.zhaofujun.nest.provider.ProviderManage;
 import com.zhaofujun.nest.standard.Repository;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Timer;
+import java.util.*;
 
 
 public class NestApplication {
@@ -143,7 +140,7 @@ public class NestApplication {
         });
     }
 
-    public void beforeEntityCommit(ServiceContext serviceContext, Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> entityMaps) {
+    public void beforeEntityCommit(ServiceContext serviceContext, Map<Repository, Map<EntityOperateEnum, Collection<BaseEntity>>> entityMaps) {
         ServiceEvent serviceEvent = new ServiceEvent(this, serviceContext);
         this.listenerManager.publish(ServiceContextListener.class, p -> {
             p.beforeEntityCommit(serviceEvent, entityMaps);

@@ -70,7 +70,7 @@ public class UnitOfWork {
 
     private void commitEntity() {
 
-        Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> repositoryMap = toRepositoryMap();
+        Map<Repository, Map<EntityOperateEnum, Collection<BaseEntity>>> repositoryMap = toRepositoryMap();
         NestApplication.current().beforeEntityCommit(serviceContext,repositoryMap);
         CacheClient cacheClient = CacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
         try {
@@ -106,7 +106,7 @@ public class UnitOfWork {
 
     }
 
-    private void clearCache(Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> repositoryMap, CacheClient cacheClient) {
+    private void clearCache(Map<Repository, Map<EntityOperateEnum, Collection<BaseEntity>>> repositoryMap, CacheClient cacheClient) {
         repositoryMap.forEach((p, q) -> {
             q.forEach((r, s) -> {
                 if (!r.equals(EntityOperateEnum.create)) {
@@ -196,8 +196,8 @@ public class UnitOfWork {
     }
 
 
-    private Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> toRepositoryMap() {
-        Map<Repository, Map<EntityOperateEnum, List<BaseEntity>>> repositoryMap = new HashMap<>();
+    private Map<Repository, Map<EntityOperateEnum, Collection<BaseEntity>>> toRepositoryMap() {
+        Map<Repository, Map<EntityOperateEnum, Collection<BaseEntity>>> repositoryMap = new TreeMap<>(Comparators.getRepositoryComparator());
 
         entities.forEach(p -> p.end());
 
@@ -207,23 +207,23 @@ public class UnitOfWork {
                 .forEach(p -> {
                     Repository repository = NestApplication.current().getRepositoryManager().create(p.getClass());
 
-                    Map<EntityOperateEnum, List<BaseEntity>> entityOperateEnumListMap = repositoryMap.get(repository);
+                    Map<EntityOperateEnum, Collection<BaseEntity>> entityOperateEnumListMap = repositoryMap.get(repository);
                     if (!repositoryMap.containsKey(repository)) {
                         entityOperateEnumListMap = new HashMap<>();
-                        entityOperateEnumListMap.put(EntityOperateEnum.create, new ArrayList<>());
-                        entityOperateEnumListMap.put(EntityOperateEnum.update, new ArrayList<>());
-                        entityOperateEnumListMap.put(EntityOperateEnum.remove, new ArrayList<>());
+                        entityOperateEnumListMap.put(EntityOperateEnum.create, new TreeSet<>(Comparators.getBaseEntityComparator()));
+                        entityOperateEnumListMap.put(EntityOperateEnum.update, new TreeSet<>(Comparators.getBaseEntityComparator()));
+                        entityOperateEnumListMap.put(EntityOperateEnum.remove, new TreeSet<>(Comparators.getBaseEntityComparator()));
                         repositoryMap.put(repository, entityOperateEnumListMap);
                     }
 
                     if (p.is__new()) {
-                        List<BaseEntity> entityList = entityOperateEnumListMap.get(EntityOperateEnum.create);
+                        Collection<BaseEntity> entityList = entityOperateEnumListMap.get(EntityOperateEnum.create);
                         entityList.add(p);
                     } else if (p.is__deleted()) {
-                        List<BaseEntity> entityList = entityOperateEnumListMap.get(EntityOperateEnum.remove);
+                        Collection<BaseEntity> entityList = entityOperateEnumListMap.get(EntityOperateEnum.remove);
                         entityList.add(p);
                     } else {
-                        List<BaseEntity> entityList = entityOperateEnumListMap.get(EntityOperateEnum.update);
+                        Collection<BaseEntity> entityList = entityOperateEnumListMap.get(EntityOperateEnum.update);
                         entityList.add(p);
                     }
 
@@ -235,7 +235,7 @@ public class UnitOfWork {
     }
 
 
-    private void entityNotify(EntityOperateEnum operateEnum, List<BaseEntity> entities) {
+    private void entityNotify(EntityOperateEnum operateEnum, Collection<BaseEntity> entities) {
         entities.forEach(baseEntity -> {
 
             if (baseEntity instanceof EntityNotify) {
