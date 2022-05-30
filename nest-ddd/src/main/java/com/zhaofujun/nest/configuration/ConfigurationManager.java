@@ -12,6 +12,16 @@ import java.util.stream.Collectors;
 public class ConfigurationManager {
 
     private List<ConfigurationItem> itemList = new ArrayList<>();
+    private MessageConfiguration messageConfiguration=new MessageConfiguration();
+    private LockConfiguration lockConfiguration=new LockConfiguration();
+
+    public MessageConfiguration getMessageConfiguration() {
+        return messageConfiguration;
+    }
+
+    public LockConfiguration getLockConfiguration() {
+        return lockConfiguration;
+    }
 
     public void addConfigurationItem(ConfigurationItem... configurationItems) {
         itemList.addAll(Arrays.asList(configurationItems));

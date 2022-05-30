@@ -26,8 +26,6 @@ import java.util.*;
 
 public class NestApplication {
 
-    private MessageConfiguration messageConfiguration;
-    private LockConfiguration lockConfiguration;
     private ConfigurationManager configurationManager;
     private EventListenerManager listenerManager;
     private RepositoryManager repositoryManager;
@@ -42,7 +40,7 @@ public class NestApplication {
     }
 
     public LockConfiguration getLockConfiguration() {
-        return lockConfiguration;
+        return this.configurationManager.getLockConfiguration();
     }
 
     public GeneratorManager getGeneratorManager() {
@@ -62,8 +60,6 @@ public class NestApplication {
     }
 
     NestApplication() {
-        this.messageConfiguration = new MessageConfiguration();
-        this.lockConfiguration = new LockConfiguration();
         this.configurationManager = new ConfigurationManager();
         this.providerManage = new ProviderManage();
         this.listenerManager = new EventListenerManager();
@@ -87,7 +83,7 @@ public class NestApplication {
 
 
     public MessageConfiguration getMessageConfiguration() {
-        return messageConfiguration;
+        return configurationManager.getMessageConfiguration() ;
     }
 
     public void start() {
