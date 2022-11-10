@@ -4,6 +4,7 @@ import com.zhaofujun.nest.NestApplication;
 import com.zhaofujun.nest.cache.CacheClient;
 import com.zhaofujun.nest.cache.CacheClientFactory;
 import com.zhaofujun.nest.configuration.ConfigurationManager;
+import com.zhaofujun.nest.context.event.DefaultEventBus;
 import com.zhaofujun.nest.context.event.EventConfiguration;
 import com.zhaofujun.nest.context.event.channel.MessageChannelProviderFactory;
 import com.zhaofujun.nest.context.event.channel.distribute.DistributeMessageChannel;
@@ -235,12 +236,12 @@ public class UnitOfWork {
     }
 
 
+    private EventBus eventBus = new DefaultEventBus();
+
     private void entityNotify(EntityOperateEnum operateEnum, Collection<BaseEntity> entities) {
         entities.forEach(baseEntity -> {
 
             if (baseEntity instanceof EntityNotify) {
-
-                MessageInfo<EntityNotifyEventData> messageInfo = new MessageInfo<>();
 
                 EntityNotifyEventData eventData = new EntityNotifyEventData();
                 eventData.setEntityClassName(baseEntity.getClassName());
@@ -250,12 +251,7 @@ public class UnitOfWork {
                 eventData.setMethodName(serviceContext.getMethod());
                 eventData.setOperateEnum(operateEnum);
 
-                messageInfo.setMessageId(UUID.randomUUID().toString());
-                messageInfo.setData(eventData);
-                messageInfo.setEventSource("nest");
-                messageInfo.setSendTime(new Date());
-
-                addMessageBacklog(eventData.getEventCode(), messageInfo);
+                eventBus.publish(eventData, "nest", 0);
             }
         });
 
