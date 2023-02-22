@@ -2,13 +2,14 @@ package com.zhaofujun.nest.json.adapter;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import com.zhaofujun.nest.context.appservice.ServiceContext;
+import com.zhaofujun.nest.context.appservice.ServiceContextManager;
 import com.zhaofujun.nest.context.loader.RepositoryEntityLoader;
 import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.json.DomainObjectSerializeContext;
 import com.zhaofujun.nest.standard.DomainObject;
 import com.zhaofujun.nest.standard.EntityLoader;
 import com.zhaofujun.nest.standard.Identifier;
-import com.zhaofujun.nest.utils.EntityUtils;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -49,17 +50,27 @@ public class DomainObjectAdapter implements JsonSerializer<DomainObject>, JsonDe
             EntityLoader entityLoader = new RepositoryEntityLoader(tClass);
 
             return entityLoader.create(id);//todo 读取ref中的id，根据tclass中id的类型进行赋值。
+        } else if (BaseEntity.class.isAssignableFrom(tClass)) {
+            TypeAdapter<?> typeAdapter = typeAdapterFactory.create(gson, TypeToken.get(tClass));
+            BaseEntity o = (BaseEntity) typeAdapter.fromJsonTree(json);
+
+            ServiceContext serviceContext = ServiceContextManager.get();
+            if (serviceContext != null) {
+                serviceContext.put(o);
+            }
+            return o;
         } else {
             TypeAdapter<?> typeAdapter = typeAdapterFactory.create(gson, TypeToken.get(tClass));
             Object o = typeAdapter.fromJsonTree(json);
             return (DomainObject) o;
+
         }
     }
 
     @Override
     public JsonElement serialize(DomainObject src, Type typeOfSrc, JsonSerializationContext context) {
         if (DomainObjectSerializeContext.put(src)) {
-            String fullClassName =src.getClassName();
+            String fullClassName = src.getClassName();
 
             //目标是一个实体，并且不是当前需要序列化的对象，进行特殊处理。
             if (BaseEntity.class.isAssignableFrom(src.getClass()) && !src.equals(DomainObjectSerializeContext.getDomainObject())) {

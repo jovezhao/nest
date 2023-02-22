@@ -22,7 +22,6 @@ import com.zhaofujun.nest.exception.OtherCustomException;
 import com.zhaofujun.nest.exception.VersionConflictedException;
 import com.zhaofujun.nest.standard.*;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
-import com.zhaofujun.nest.utils.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,29 +49,36 @@ public class UnitOfWork {
         }
     }
 
-    private Set<BaseEntity> entities = new HashSet<>();
+    private HashMap<Integer, BaseEntity> entities = new HashMap<>();
 
+    private int getEntityHash(Class tClass, Identifier identifier) {
+        return tClass.hashCode() + identifier.hashCode();
+    }
 
     public <T extends BaseEntity> T getEntity(Class tClass, Identifier identifier) {
-        Entity entity = entities
-                .stream()
-                .filter(p -> identifier.equals(p.getId()) && tClass.isInstance(p))
-                .filter(p -> !p.is__deleted())
-                .findFirst()
-                .orElse(null);
-        return (T) entity;
+        BaseEntity baseEntity = entities.get(getEntityHash(tClass, identifier));
+        if (baseEntity==null || baseEntity.is__deleted()) return null;
+        return (T) baseEntity;
+
+//        Entity entity = entities.values()
+//                .stream()
+//                .filter(p -> identifier.equals(p.getId()) && tClass.isInstance(p))
+//                .filter(p -> !p.is__deleted())
+//                .findFirst()
+//                .orElse(null);
+//        return (T) entity;
     }
 
 
     public void put(BaseEntity entity) {
         if (entity != null)
-            entities.add(entity);
+            entities.put(getEntityHash(entity.getClass(),entity.getId()),entity);
     }
 
     private void commitEntity() {
 
         Map<Repository, Map<EntityOperateEnum, Collection<BaseEntity>>> repositoryMap = toRepositoryMap();
-        NestApplication.current().beforeEntityCommit(serviceContext,repositoryMap);
+        NestApplication.current().beforeEntityCommit(serviceContext, repositoryMap);
         CacheClient cacheClient = CacheClientFactory.getCacheClient(EntityCacheUtils.getCacheCode());
         try {
             this.transactionManager.commit(() -> {
@@ -124,18 +130,18 @@ public class UnitOfWork {
 
     public void addMessageBacklog(String eventCode, MessageInfo messageInfo) {
         String messageInfoString = MessageConverterFactory.create().messageToString(messageInfo);
-        messageBacklogs.add(new MessageBacklog(eventCode, messageInfoString,messageInfo.getData().getClass().getName(),messageInfo.getMessageId()));
+        messageBacklogs.add(new MessageBacklog(eventCode, messageInfoString, messageInfo.getData().getClass().getName(), messageInfo.getMessageId()));
     }
 
     private void commitMessage() {
-        NestApplication.current().beforeMessageCommit(serviceContext,messageBacklogs);
+        NestApplication.current().beforeMessageCommit(serviceContext, messageBacklogs);
         messageBacklogs.forEach(p -> {
             ConfigurationManager configurationManager = NestApplication.current().getConfigurationManager();
             EventConfiguration eventConfiguration = configurationManager.getEventConfigurationByEventCode(p.getEventCode());
 
             DistributeMessageChannel messageChannel = (DistributeMessageChannel) MessageChannelProviderFactory.create(eventConfiguration.getMessageChannelCode());
             try {
-                messageChannel.getMessageProducer().commit(p.getEventCode(),p.getMessageId() , p.getMessageInfoString());
+                messageChannel.getMessageProducer().commit(p.getEventCode(), p.getMessageId(), p.getMessageInfoString());
             } catch (Exception ex) {
                 //投递到消息中间件时发生异常，将有异常的数据存入待发送区域，用于消息补偿
                 logger.warn("提交消息时失败，消息将通过补偿器重试，失败原因：" + ex.getMessage(), ex);
@@ -200,9 +206,9 @@ public class UnitOfWork {
     private Map<Repository, Map<EntityOperateEnum, Collection<BaseEntity>>> toRepositoryMap() {
         Map<Repository, Map<EntityOperateEnum, Collection<BaseEntity>>> repositoryMap = new TreeMap<>(Comparators.getRepositoryComparator());
 
-        entities.forEach(p -> p.end());
+        entities.values().forEach(p -> p.end());
 
-        entities.stream()
+        entities.values().stream()
                 .filter(p -> !(p.is__new() && p.is__deleted()))//排除又是新增又被删除的
                 .filter(p -> !(!p.isChanged() && !p.is__new() && !p.is__deleted())) //排除没有发生改变并且不是新增类型还没有被删除的
                 .forEach(p -> {

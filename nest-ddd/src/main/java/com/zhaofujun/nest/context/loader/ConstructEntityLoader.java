@@ -1,5 +1,7 @@
 package com.zhaofujun.nest.context.loader;
 
+import com.zhaofujun.nest.context.appservice.ServiceContext;
+import com.zhaofujun.nest.context.appservice.ServiceContextManager;
 import com.zhaofujun.nest.context.model.BaseEntity;
 import com.zhaofujun.nest.exception.EntityExistedException;
 import com.zhaofujun.nest.standard.EntityLoader;
@@ -30,6 +32,10 @@ public class ConstructEntityLoader<T extends BaseEntity> implements EntityLoader
 
         U u = EntityCreate.create(uClass, true);
         EntityUtils.setIdentifier(u, id);
+        ServiceContext serviceContext = ServiceContextManager.get();
+        if (serviceContext != null) {
+            serviceContext.put(u);
+        }
         u.ready();
         return u;
     }

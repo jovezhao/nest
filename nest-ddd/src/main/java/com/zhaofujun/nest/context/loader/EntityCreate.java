@@ -22,10 +22,7 @@ public class EntityCreate {
 
         EntityUtils.setValue(BaseEntity.class, t, "__new", newInstance);
 
-        ServiceContext serviceContext = ServiceContextManager.get();
-        if (serviceContext != null) {
-            serviceContext.put(t);
-        }
+
         return t;
     }
 
