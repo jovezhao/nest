@@ -22,6 +22,7 @@ import com.zhaofujun.nest.exception.OtherCustomException;
 import com.zhaofujun.nest.exception.VersionConflictedException;
 import com.zhaofujun.nest.standard.*;
 import com.zhaofujun.nest.utils.EntityCacheUtils;
+import com.zhaofujun.nest.utils.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +53,15 @@ public class UnitOfWork {
     private HashMap<Integer, BaseEntity> entities = new HashMap<>();
 
     private int getEntityHash(Class tClass, Identifier identifier) {
-        return tClass.hashCode() + identifier.hashCode();
+
+        final String PROXY_SPLIT_STR = "$$";
+        final int BEGIN_INDEX = 0;
+
+        String className = tClass.getName();
+        int endIndex = className.indexOf(PROXY_SPLIT_STR);
+        String cname= endIndex == -1 ? className : className.substring(BEGIN_INDEX, endIndex);
+
+        return cname.hashCode() + identifier.toValue().hashCode();
     }
 
     public <T extends BaseEntity> T getEntity(Class tClass, Identifier identifier) {
