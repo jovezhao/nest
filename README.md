@@ -29,7 +29,7 @@ Nest的设计受DDD战略、战术设计思想指导，使用Nest前需要对DDD
 <dependency>
     <groupId>com.zhaofujun.nest</groupId>
     <artifactId>nest-ddd</artifactId>
-    <version>2.2.29</version>
+    <version>3.0</version>
 </dependency>
 ```
 **Gradle引用**
