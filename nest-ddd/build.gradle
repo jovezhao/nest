@@ -1,0 +1,18 @@
+plugins {
+	id 'java'
+}
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+    
+}
+dependencies{
+    implementation("javax.validation:validation-api:2.0.0.Final")
+    implementation("com.alibaba:transmittable-thread-local:2.11.0")
+    implementation("com.alibaba.fastjson2:fastjson2:2.0.10")
+    implementation("net.sf.ehcache:ehcache-core:2.6.6")
+    implementation("cglib:cglib:3.2.10")
+}
+
+apply from: "${rootProject.projectDir}/publish.gradle"

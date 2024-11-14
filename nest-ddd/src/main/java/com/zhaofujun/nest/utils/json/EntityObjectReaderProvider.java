@@ -1,0 +1,37 @@
+package com.zhaofujun.nest.utils.json;
+
+import com.alibaba.fastjson2.reader.ObjectReader;
+import com.alibaba.fastjson2.reader.ObjectReaderProvider;
+import com.zhaofujun.nest.ddd.Entity;
+
+import java.lang.reflect.Type;
+
+public class EntityObjectReaderProvider extends ObjectReaderProvider {
+    EntityObjectReaderAdapter entityObjectReaderAdapter = new EntityObjectReaderAdapter();
+
+    @Override
+    public ObjectReader getObjectReader(Type objectType, boolean fieldBased) {
+        ObjectReader objectReader = super.getObjectReader(objectType, fieldBased);
+        if (objectReader != null && objectReader.getObjectClass() != null
+                && Entity.class.isAssignableFrom(objectReader.getObjectClass())) {
+            entityObjectReaderAdapter.setObjectReader(objectReader);
+            return entityObjectReaderAdapter;
+        }
+        return objectReader;
+    }
+
+    @Override
+    public ObjectReader getObjectReader(long hashCode) {
+
+        ObjectReader objectReader = super.getObjectReader(hashCode);
+        if (objectReader == null)
+            return null;
+
+        if (objectReader != null && objectReader.getObjectClass() != null
+                && Entity.class.isAssignableFrom(objectReader.getObjectClass())) {
+            entityObjectReaderAdapter.setObjectReader(objectReader);
+            return entityObjectReaderAdapter;
+        }
+        return objectReader;
+    }
+}

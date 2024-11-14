@@ -1,0 +1,8 @@
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation project(':nest-spring-parent:nest-spring-boot-starter')
+    implementation project(':nest-demo-parent:nest-demo-dto')
+}

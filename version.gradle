@@ -1,0 +1,8 @@
+ext{
+    versions = {
+        fastjson : "2.0.10"
+    }
+    dependencies={
+
+    }
+}

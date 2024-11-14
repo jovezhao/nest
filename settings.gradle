@@ -1,0 +1,10 @@
+
+rootProject.name = 'nest'
+include(':nest-ddd')
+include(":nest-spring-parent")
+include(":nest-spring-parent:nest-spring-boot-starter")
+include(':nest-spring-parent:nest-spring-boot-starter-activemq')
+
+include(':nest-demo-parent')
+include(':nest-demo-parent:nest-demo-dto')
+include(':nest-demo-parent:nest-demo-app')

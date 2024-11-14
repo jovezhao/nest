@@ -1,0 +1,13 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:3.3.5'
+    }
+}
+
+allprojects{
+    group 'com.zhaofujun.nest'
+    version '3.0.0'
+}

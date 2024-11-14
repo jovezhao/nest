@@ -1,0 +1,6 @@
+dependencies {
+    // implementation('org.springframework.boot:spring-boot-starter-web')
+    // annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    implementation("org.springframework:spring-tx")
+    implementation 'org.aspectj:aspectjtools'
+}
