@@ -11,6 +11,8 @@ buildNumber.properties
 *.iml
 .idea/
 .idea
+.vscode/
+.vscode
 modules/log
 modules/logs
 .project
