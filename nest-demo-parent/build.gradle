@@ -1,9 +1,0 @@
-subprojects{
-    apply plugin: 'java'
-    
-     java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(17)
-        }
-    }
-}

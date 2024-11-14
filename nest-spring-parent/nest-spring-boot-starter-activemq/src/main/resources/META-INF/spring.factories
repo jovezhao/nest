@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.zhaofujun.nest.springboot.activemq.ActivemqAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.zhaofujun.nest.boot.activemq.ActivemqAutoConfiguration
