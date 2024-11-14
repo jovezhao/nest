@@ -1,5 +1,3 @@
-
-
 target/
 **/target/
 pom.xml.tag
@@ -13,6 +11,8 @@ buildNumber.properties
 *.iml
 .idea/
 .idea
+.vscode/
+.vscode
 modules/log
 modules/logs
 .project
