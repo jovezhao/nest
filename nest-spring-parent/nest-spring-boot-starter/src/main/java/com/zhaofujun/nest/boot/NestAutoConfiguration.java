@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.boot;
 
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,10 +11,14 @@ import com.zhaofujun.nest.ddd.event.EventAppService;
 import com.zhaofujun.nest.ddd.event.EventInfoQuery;
 import com.zhaofujun.nest.inner.DefaultEventInfoRepostory;
 
-@Configuration
-@ComponentScan
 @Import(NestBeanScannerRegistrar.class)
+@AutoConfiguration
 public class NestAutoConfiguration {
+
+    public NestAutoConfiguration() {
+        System.out.println("NestAutoConfiguration init");
+    }
+
     @Bean
     public EventInfoQuery eventInfoQuery() {
         return new DefaultEventInfoRepostory();
@@ -33,6 +38,6 @@ public class NestAutoConfiguration {
 
     // @Bean
     // public SpringTransaction springTransaction(){
-    //     return new SpringTransaction();
+    // return new SpringTransaction();
     // }
 }

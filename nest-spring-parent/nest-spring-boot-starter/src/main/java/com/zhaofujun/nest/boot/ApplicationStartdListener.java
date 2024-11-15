@@ -17,6 +17,7 @@ public class ApplicationStartdListener implements ApplicationListener<ContextSta
     @Autowired
     private Container container;
 
+    @SuppressWarnings("null")
     @Override
     public void onApplicationEvent(ContextStartedEvent event) {
         
@@ -26,5 +27,6 @@ public class ApplicationStartdListener implements ApplicationListener<ContextSta
         nestEngine.init(container);
         nestEngine.start();
     }
+    
 
 }

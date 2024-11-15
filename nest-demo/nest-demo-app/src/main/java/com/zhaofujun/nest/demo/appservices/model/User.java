@@ -6,6 +6,10 @@ import com.zhaofujun.nest.ddd.LongIdentifier;
 public class User extends AggregateRoot<LongIdentifier>  {
     private String name;
     private long age;
+
+    public User(LongIdentifier longIdentifier){
+        super(longIdentifier);
+    }
     public String getName() {
         return name;
     }

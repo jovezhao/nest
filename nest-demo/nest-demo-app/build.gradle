@@ -1,6 +1,6 @@
 
 dependencies {
-    implementation project(':nest-spring-parent:nest-spring-boot-starter')
-    implementation project(':nest-demo:nest-demo-webapi-v1')
-    implementation project(':nest-ddd')
+    // implementation project(':nest-spring-parent:nest-spring-boot-starter')
+    // api project(':nest-demo:nest-demo-webapi-v1')
+    // implementation project(':nest-ddd')
 }

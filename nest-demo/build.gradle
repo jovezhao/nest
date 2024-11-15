@@ -12,9 +12,9 @@ subprojects{
     }
     dependencies {
         implementation('org.springframework.boot:spring-boot-starter-web')
-        // implementation project(':nest-ddd')
-        // implementation project(':nest-spring-parent:nest-spring-boot-starter')
-        implementation('io.springfox:springfox-swagger2')
-        implementation('io.springfox:springfox-swagger-ui')
+        implementation project(':nest-ddd')
+        implementation project(':nest-spring-parent:nest-spring-boot-starter')
+        // implementation('io.springfox:springfox-swagger2')
+        // implementation('io.springfox:springfox-swagger-ui')
     }
 }
