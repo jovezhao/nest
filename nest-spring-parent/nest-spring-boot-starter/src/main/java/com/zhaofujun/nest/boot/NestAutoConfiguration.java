@@ -2,8 +2,6 @@ package com.zhaofujun.nest.boot;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.zhaofujun.nest.ddd.context.Transaction;

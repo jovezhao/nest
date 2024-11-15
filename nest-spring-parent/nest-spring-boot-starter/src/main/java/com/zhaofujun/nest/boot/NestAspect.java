@@ -22,7 +22,7 @@ public class NestAspect {
     @Autowired
     private ApplicationContext applicationContext;
 
-    @Around("execution(public * * (..)) && @within(com.zhaofujun.nest.springboot.AppService)")
+    @Around("execution(public * * (..)) && @within(com.zhaofujun.nest.boot.AppService)")
     public Object aroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodInvoker methodInvoker = new AspectMethodInvoker(joinPoint);
         // 从 appservice 注解中找到配置的事务管理器
