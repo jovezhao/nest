@@ -25,20 +25,17 @@ public class UserRepository implements Repository<User> {
 
     @Override
     public void insert(User t) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insert'");
+        
     }
 
     @Override
     public void update(User t) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        
     }
 
     @Override
     public void delete(User t) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+       
     }
 
 }
