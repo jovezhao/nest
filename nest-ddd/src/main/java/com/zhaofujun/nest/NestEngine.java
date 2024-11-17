@@ -13,14 +13,15 @@ import com.zhaofujun.nest.ddd.context.EntityLoader;
 import com.zhaofujun.nest.ddd.context.ServiceContext;
 import com.zhaofujun.nest.ddd.context.ServiceContextManager;
 import com.zhaofujun.nest.ddd.event.EventAppService;
+import com.zhaofujun.nest.ddd.event.EventChannelProvider;
 import com.zhaofujun.nest.ddd.event.EventHandlerWorker;
 import com.zhaofujun.nest.ddd.event.EventSenderWorker;
 import com.zhaofujun.nest.inner.DefaultCacheProvider;
 import com.zhaofujun.nest.inner.DefaultEventChannelProvider;
 import com.zhaofujun.nest.inner.DefaultEventInfoRepostory;
 import com.zhaofujun.nest.inner.DefaultRepository;
+import com.zhaofujun.nest.inner.DefautLockProvider;
 import com.zhaofujun.nest.manager.CacheManager;
-import com.zhaofujun.nest.manager.EventChannelManager;
 import com.zhaofujun.nest.manager.EventHandlerManager;
 import com.zhaofujun.nest.manager.ProviderManager;
 import com.zhaofujun.nest.manager.RepositoryManager;
@@ -43,15 +44,17 @@ public class NestEngine {
     }
 
     public void init(Container container) {
+        ProviderManager.addProvider(new DefautLockProvider());
+        ProviderManager.addProvider(new DefaultEventChannelProvider());
         // 先加载默认缓存提供者
         ProviderManager.addProvider(new DefaultCacheProvider());
-        //再加载默认缓存
+        // 再加载默认缓存
         CacheManager.addCacheItem(NestConst.defaultCacheItem, NestConst.defaultCacheProvider, 5000);
-        //默认仓储依赖于默认缓存
+        // 默认仓储依赖于默认缓存
         RepositoryManager.addRepository(new DefaultRepository(), new DefaultEventInfoRepostory());
-        //事件
-        EventChannelManager.addEventChannelProvider(new DefaultEventChannelProvider());
-        
+        // 事件
+        // EventChannelManager.addEventChannelProvider(new
+        // DefaultEventChannelProvider());
 
         if (container != null) {
             // 加载仓储
@@ -93,9 +96,8 @@ public class NestEngine {
         eventSendThread = new EventSenderWorker(sendConfig, eventAppService);
         eventSendThread.start();
 
-
         // 启动事件处理线程
-        EventChannelManager.getChannelProviders().forEach(provider -> {
+        ProviderManager.getList(EventChannelProvider.class).forEach(provider -> {
             EventHandlerWorker handlerWorker = new EventHandlerWorker(provider, handlerConfig);
             eventHandleThread.add(handlerWorker);
             handlerWorker.start();

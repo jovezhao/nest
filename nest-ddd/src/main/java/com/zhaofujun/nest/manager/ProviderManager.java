@@ -14,11 +14,10 @@ public class ProviderManager {
     public static void addProvider(Collection<Provider> providers) {
         providerList.addAll(providers);
     }
+
     public static void addProvider(Provider... providers) {
         providerList.addAll(Arrays.asList(providers));
     }
-
-   
 
     public static <T extends Provider> T get(Class<T> tClass, String code) {
         return (T) providerList
@@ -26,6 +25,13 @@ public class ProviderManager {
                 .filter(p -> tClass.isAssignableFrom(p.getClass()) && p.getCode().equals(code))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public static <T extends Provider> T get(Class<T> tClass, String code, String elseCode) {
+        T t = get(tClass, code);
+        if (t == null)
+            t = get(tClass, elseCode);
+        return t;
     }
 
     public static <T extends Provider> List<T> getList(Class<T> tClass) {

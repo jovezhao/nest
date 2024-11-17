@@ -3,9 +3,10 @@ package com.zhaofujun.nest.ddd.event;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.zhaofujun.nest.NestConst;
 import com.zhaofujun.nest.ddd.LongIdentifier;
-import com.zhaofujun.nest.manager.EventChannelManager;
 import com.zhaofujun.nest.manager.EventManager;
+import com.zhaofujun.nest.manager.ProviderManager;
 import com.zhaofujun.nest.utils.EntityUtil;
 import com.zhaofujun.nest.utils.JsonUtil;
 
@@ -31,7 +32,8 @@ public class EventAppService {
 
         // 根据事件名找到通道
         String channelCode = EventManager.getChannelCode(eventInfo.getEventName());
-        EventChannelProvider eventChannelProvider = EventChannelManager.getEventChannelProvider(channelCode);
+        EventChannelProvider eventChannelProvider = ProviderManager.get(EventChannelProvider.class, channelCode,
+                NestConst.defaultChannel);
 
         EventData<? super Object> eventData = new EventData<>();
         eventData.setData(eventInfo.getEventData());
