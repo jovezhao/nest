@@ -4,6 +4,7 @@ public class CacheItem {
     private String code;
     private String cacheProviderCode;
     private long idleSeconds;
+    private boolean disabled;
 
     public String getCode() {
         return code;
@@ -27,6 +28,14 @@ public class CacheItem {
 
     public void setIdleSeconds(long idleSeconds) {
         this.idleSeconds = idleSeconds;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
 }

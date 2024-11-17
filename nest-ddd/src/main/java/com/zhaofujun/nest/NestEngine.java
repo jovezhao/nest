@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.zhaofujun.nest.config.EventConfig;
 import com.zhaofujun.nest.config.EventHandlerConfig;
 import com.zhaofujun.nest.config.EventSenderConfig;
 import com.zhaofujun.nest.ddd.Entity;

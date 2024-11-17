@@ -16,13 +16,14 @@ public class CacheManager {
 
     public static void addCacheItem(String code, String cacheProviderCode, long idleSeconds) {
         CacheProvider cacheProvider = ProviderManager.get(CacheProvider.class, cacheProviderCode);
-        cachMap.put(code, new CacheClientImlp(code, cacheProvider, idleSeconds));
+        cachMap.put(code, new CacheClientImlp(code, cacheProvider, idleSeconds, false));
     }
 
     public static void addCacheItem(CacheItem cacheItem) {
         CacheProvider cacheProvider = ProviderManager.get(CacheProvider.class, cacheItem.getCacheProviderCode());
         cachMap.put(cacheItem.getCode(),
-                new CacheClientImlp(cacheItem.getCode(), cacheProvider, cacheItem.getIdleSeconds()));
+                new CacheClientImlp(cacheItem.getCode(), cacheProvider, cacheItem.getIdleSeconds(),
+                        cacheItem.isDisabled()));
     }
 
     public static void addCacheItem(Collection<CacheItem> cacheItems) {
@@ -51,11 +52,13 @@ class CacheClientImlp implements CacheClient {
     private String code;
 
     private long idleSeconds;
+    private boolean disabled;
 
-    public CacheClientImlp(String code, CacheProvider cacheProvider, long idleSeconds) {
+    public CacheClientImlp(String code, CacheProvider cacheProvider, long idleSeconds, boolean disabled) {
         this.cacheProvider = cacheProvider;
         this.code = code;
         this.idleSeconds = idleSeconds;
+        this.disabled = disabled;
     }
 
     public boolean remove(String key) {
@@ -71,6 +74,8 @@ class CacheClientImlp implements CacheClient {
     }
 
     public String[] getKeys() {
+        if (disabled)
+            return null;
         return cacheProvider.getKeys(code);
     }
 
@@ -81,17 +86,24 @@ class CacheClientImlp implements CacheClient {
 
     @Override
     public <T> T get(Class<T> tClass, String key) {
+        if (disabled)
+            return null;
         String objeString = cacheProvider.get(this.code, key);
         return JsonUtil.parseObject(objeString, tClass);
     }
 
     @Override
     public String get(String key) {
+        if (disabled)
+            return null;
         return cacheProvider.get(this.code, key);
     }
 
     @Override
     public <T> Map<String, T> get(Class<T> tClass, String... keys) {
+        if (disabled)
+            return null;
+
         Map<String, T> tMap = new HashMap<>();
         cacheProvider.get(code, keys).forEach((key, objecString) -> {
             T object = JsonUtil.parseObject(objecString, tClass);
@@ -102,23 +114,35 @@ class CacheClientImlp implements CacheClient {
 
     @Override
     public void put(String key, Object value, long idleSeconds) {
+        if (disabled)
+            return;
+
         String objecString = JsonUtil.toJsonString(value);
         cacheProvider.put(code, key, objecString, idleSeconds);
     }
 
     @Override
     public void put(String key, String value, long idleSeconds) {
+        if (disabled)
+            return;
+
         cacheProvider.put(code, key, value, idleSeconds);
     }
 
     @Override
     public void put(String key, Object value) {
+        if (disabled)
+            return;
+
         String objecString = JsonUtil.toJsonString(value);
         cacheProvider.put(code, key, objecString, 12 * 60);
     }
 
     @Override
     public void put(String key, String value) {
+        if (disabled)
+            return;
+
         cacheProvider.put(code, key, value, idleSeconds);
     }
 }
