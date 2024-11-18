@@ -13,8 +13,8 @@ public abstract class PushChannelConsumer implements ChannelConsumer {
      * @param eventHandlers
      */
     public void register(String eventName, Collection<EventHandler> eventHandlers) {
-        for (EventHandler handler : eventHandlers) {
-            MessageProcessor eventConsumer = new MessageProcessor(handler);
+        for (EventHandler<?> handler : eventHandlers) {
+            MessageProcessor<?> eventConsumer = new MessageProcessor<>(handler);
             subscribe(eventConsumer);
         }
     }
@@ -25,5 +25,5 @@ public abstract class PushChannelConsumer implements ChannelConsumer {
      * 
      * @param consumer
      */
-    protected abstract void subscribe(MessageProcessor<? super EventData> consumer);
+    protected abstract <T> void subscribe(MessageProcessor<T> consumer);
 }

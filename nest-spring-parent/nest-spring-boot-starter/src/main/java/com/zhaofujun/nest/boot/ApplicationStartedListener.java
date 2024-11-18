@@ -12,7 +12,7 @@ import com.zhaofujun.nest.ddd.event.EventAppService;
 import com.zhaofujun.nest.provider.Container;
 
 @Component
-public class ApplicationStartdListener implements ApplicationListener<ApplicationStartedEvent>,Ordered {
+public class ApplicationStartedListener implements ApplicationListener<ApplicationStartedEvent>,Ordered {
 
     @Autowired
     private EventAppService eventAppService;

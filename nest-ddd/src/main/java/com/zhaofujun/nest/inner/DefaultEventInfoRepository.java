@@ -7,38 +7,30 @@ import java.util.stream.Collectors;
 
 import com.zhaofujun.nest.ddd.Identifier;
 import com.zhaofujun.nest.ddd.event.EventMessage;
-import com.zhaofujun.nest.ddd.event.EventInfoRepostory;
+import com.zhaofujun.nest.ddd.event.EventInfoRepository;
 import com.zhaofujun.nest.ddd.event.EventState;
 
-public class DefaultEventInfoRepostory extends EventInfoRepostory {
+public class DefaultEventInfoRepository extends EventInfoRepository {
 
     private static List<EventMessage<?>> eventList = new ArrayList<>();
 
     @Override
-    public EventMessage<?> getEntityById(Class tClass, Identifier identifier) {
-        return eventList.stream()
-                .filter(p -> p.getClass().equals(tClass) && p.getId().equals(identifier))
-                .findFirst()
-                .orElse(null);
-    }
-
-    @Override
-    public void insert(EventMessage t) {
+    public void insert(EventMessage<?> t) {
         eventList.add(t);
     }
 
     @Override
-    public void update(EventMessage t) {
+    public void update(EventMessage<?> t) {
 
     }
 
     @Override
-    public void delete(EventMessage t) {
+    public void delete(EventMessage<?> t) {
         eventList.remove(t);
     }
 
     @Override
-    public List<Long> getPersend(int commonSize, int failSize, int maxFailTime) {
+    public List<Long> getListToBeSent(int commonSize, int failSize, int maxFailTime) {
         List<Long> resuList = new ArrayList<>();
         var preList = eventList.stream()
                 .filter(p -> p.getEventState().equals(EventState.preSend)
@@ -55,6 +47,14 @@ public class DefaultEventInfoRepostory extends EventInfoRepostory {
                 .collect(Collectors.toList());
         resuList.addAll(failList);
         return resuList;
+    }
+
+    @Override
+    public EventMessage<?> getEntityById(Class<? extends EventMessage<?>> tClass, Identifier identifier) {
+        return eventList.stream()
+                .filter(p -> p.getClass().equals(tClass) && p.getId().equals(identifier))
+                .findFirst()
+                .orElse(null);
     }
 
 }

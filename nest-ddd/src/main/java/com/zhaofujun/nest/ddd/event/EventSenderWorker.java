@@ -25,6 +25,7 @@ public class EventSenderWorker extends Thread {
     }
 
 
+    @SuppressWarnings("static-access")
     @Override
     public void run() {
 

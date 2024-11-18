@@ -26,7 +26,7 @@ public class ActivemqPushConsumer extends PushChannelConsumer {
     }
 
     @Override
-    protected void subscribe(MessageProcessor<? super EventData> consumer) {
+    protected <T> void subscribe(MessageProcessor<T> consumer) {
         Queue queue = new ActiveMQQueue(
                 "Consumer." + consumer.getHandlerId() + ".VirtualTopic." + consumer.getEventName());
 
@@ -40,7 +40,7 @@ public class ActivemqPushConsumer extends PushChannelConsumer {
             public void onMessage(Message message) {
                 TextMessage textMessage = (TextMessage) message;
                 try {
-                    EventData<?> eventData = JsonUtil.parseObject(textMessage.getText(), EventData.class);
+                    EventData<T> eventData = JsonUtil.parseObject(textMessage.getText(), EventData.class);
                     MessageAck messageAck = consumer.invoke(eventData);
                     if (messageAck.equals(MessageAck.SUCCESS)) {
                         message.acknowledge();

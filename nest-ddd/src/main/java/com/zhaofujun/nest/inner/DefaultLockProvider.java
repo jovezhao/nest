@@ -10,7 +10,7 @@ import com.zhaofujun.nest.utils.lock.LockProvider;
  * 默认的本地锁实现方式
  * 该方式会为每一个锁维护创建一个静态对象，并且使用该静态对象进行排他处理方式
  */
-public class DefautLockProvider implements LockProvider {
+public class DefaultLockProvider implements LockProvider {
 
     private static Map<String, Object> lockMap = new HashMap<>();
 

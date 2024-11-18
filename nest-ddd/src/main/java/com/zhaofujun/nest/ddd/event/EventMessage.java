@@ -6,7 +6,7 @@ import com.zhaofujun.nest.ddd.AggregateRoot;
 import com.zhaofujun.nest.ddd.LongIdentifier;
 
 /**
- * 事件消息，用于事件信息的存储
+ * 事件消息，用于事件信息的存储，这是发送到消息仓储中的实体
  */
 public class EventMessage<T> extends AggregateRoot<LongIdentifier> {
     private T eventData;

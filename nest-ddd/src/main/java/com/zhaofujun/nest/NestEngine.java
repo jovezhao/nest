@@ -18,9 +18,9 @@ import com.zhaofujun.nest.ddd.event.EventHandlerWorker;
 import com.zhaofujun.nest.ddd.event.EventSenderWorker;
 import com.zhaofujun.nest.inner.DefaultCacheProvider;
 import com.zhaofujun.nest.inner.DefaultEventChannelProvider;
-import com.zhaofujun.nest.inner.DefaultEventInfoRepostory;
+import com.zhaofujun.nest.inner.DefaultEventInfoRepository;
 import com.zhaofujun.nest.inner.DefaultRepository;
-import com.zhaofujun.nest.inner.DefautLockProvider;
+import com.zhaofujun.nest.inner.DefaultLockProvider;
 import com.zhaofujun.nest.manager.CacheManager;
 import com.zhaofujun.nest.manager.EventHandlerManager;
 import com.zhaofujun.nest.manager.ProviderManager;
@@ -43,15 +43,16 @@ public class NestEngine {
         this.eventAppService = eventAppService;
     }
 
+    @SuppressWarnings("unchecked")
     public void init(Container container) {
-        ProviderManager.addProvider(new DefautLockProvider());
+        ProviderManager.addProvider(new DefaultLockProvider());
         ProviderManager.addProvider(new DefaultEventChannelProvider());
         // 先加载默认缓存提供者
         ProviderManager.addProvider(new DefaultCacheProvider());
         // 再加载默认缓存
         CacheManager.addCacheItem(NestConst.defaultCacheItem, NestConst.defaultCacheProvider, 5000);
         // 默认仓储依赖于默认缓存
-        RepositoryManager.addRepository(new DefaultRepository(), new DefaultEventInfoRepostory());
+        RepositoryManager.addRepository(new DefaultRepository(), new DefaultEventInfoRepository());
         // 事件
         // EventChannelManager.addEventChannelProvider(new
         // DefaultEventChannelProvider());
@@ -66,7 +67,7 @@ public class NestEngine {
         }
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void start() {
         // 处理消息事件
         MessageUtil.on(Lifecycle.Entity_New.name(), Entity.class, entity -> {
@@ -76,18 +77,18 @@ public class NestEngine {
                     currentContext.addEntity(entity);
             }
         });
-        MessageUtil.on(Lifecycle.Entity_Updated.name(), (Collection<Entity> entitys) -> {
+        MessageUtil.on(Lifecycle.Entity_Updated.name(), (Collection<Entity> entityList) -> {
             // 删除缓存
             CacheClient cacheClient = CacheManager.getCacheClient(NestConst.entityCache);
-            entitys.forEach(entity -> {
+            entityList.forEach(entity -> {
                 cacheClient.remove(EntityUtil.getKey(entity));
             });
         });
 
-        MessageUtil.on(Lifecycle.Entity_Deleted.name(), (Collection<Entity> entitys) -> {
+        MessageUtil.on(Lifecycle.Entity_Deleted.name(), (Collection<Entity> entityList) -> {
             // 删除缓存
             CacheClient cacheClient = CacheManager.getCacheClient(NestConst.entityCache);
-            entitys.forEach(entity -> {
+            entityList.forEach(entity -> {
                 cacheClient.remove(EntityUtil.getKey(entity));
             });
         });

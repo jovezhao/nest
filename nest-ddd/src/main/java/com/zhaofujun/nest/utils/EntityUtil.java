@@ -7,12 +7,12 @@ import com.zhaofujun.nest.ddd.context.EntityLoader;
 
 public class EntityUtil {
 
-    public static <T extends AggregateRoot> T load(Class<T> clazz, Identifier identifier) {
+    public static <T extends AggregateRoot<? extends Identifier>> T load(Class<T> clazz, Identifier identifier) {
         T entity = (T) EntityLoader.load(clazz, identifier);
         return entity;
     }
 
-    public static String getKey(Class clazz, Identifier identifier) {
+    public static String getKey(Class<?> clazz, Identifier identifier) {
         final String PROXY_SPLIT_STR = "$$";
         final int BEGIN_INDEX = 0;
 
@@ -22,7 +22,7 @@ public class EntityUtil {
         return className + "_" + identifier.toValue();
     }
 
-    public static String getKey(Entity entity) {
+    public static String getKey(Entity<? extends Identifier> entity) {
         return getKey(entity.getClass(), entity.getId());
     }
 

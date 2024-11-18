@@ -1,12 +1,14 @@
 package com.zhaofujun.nest.ddd;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 
+@SuppressWarnings("rawtypes")
 public interface Repository<T extends Entity> {
 
-    Class<T> getEntityClass();
+    Type getEntityType();
 
-    T getEntityById(Class tClass, Identifier identifier);
+    T getEntityById(Class<? extends T> tClass, Identifier identifier);
 
     void insert(T t);
 

@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import com.zhaofujun.nest.NestEngine;
 import com.zhaofujun.nest.ddd.StringIdentifier;
 import com.zhaofujun.nest.ddd.event.EventAppService;
-import com.zhaofujun.nest.inner.DefaultEventInfoRepostory;
+import com.zhaofujun.nest.inner.DefaultEventInfoRepository;
 import com.zhaofujun.nest.utils.EntityUtil;
 import com.zhaofujun.nest.utils.EventUtil;
 
@@ -15,7 +15,7 @@ public class NestTest {
         NestEngine nestEngine = new NestEngine();
 
         EventAppService eventAppService = AppServiceUtil.create(EventAppService.class);
-        eventAppService.setQuery(new DefaultEventInfoRepostory());
+        eventAppService.setQuery(new DefaultEventInfoRepository());
 
         nestEngine.setEventAppService(eventAppService);
         nestEngine.init(null);

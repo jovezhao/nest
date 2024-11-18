@@ -3,14 +3,15 @@ package com.zhaofujun.nest.utils.json;
 import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.writer.ObjectWriter;
 import com.zhaofujun.nest.ddd.Entity;
+import com.zhaofujun.nest.ddd.Identifier;
 
 import java.lang.reflect.Type;
 
-public class EntityObjectWriterAdapter implements ObjectWriter {
+public class EntityObjectWriterAdapter<T extends Entity<? extends Identifier>> implements ObjectWriter<T> {
 
-    private ObjectWriter objectWriter;
+    private ObjectWriter<T> objectWriter;
 
-    public void setObjectWriter(ObjectWriter objectWriter) {
+    public void setObjectWriter(ObjectWriter<T> objectWriter) {
         this.objectWriter = objectWriter;
     }
 
@@ -24,7 +25,8 @@ public class EntityObjectWriterAdapter implements ObjectWriter {
          * 如果当前级别为非顶级level>0，则使用简单模式，只保留id与类型即可。
          *
          */
-        Entity entity = (Entity) object;
+        @SuppressWarnings("unchecked")
+        Entity<? extends Identifier> entity = (Entity<? extends Identifier>) object;
         if (jsonWriter.level() > 0) {
             jsonWriter.startObject();
             writeKeyValue(jsonWriter, "@type", entity.getClassName());

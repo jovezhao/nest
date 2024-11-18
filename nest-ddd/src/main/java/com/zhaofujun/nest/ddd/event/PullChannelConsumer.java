@@ -19,8 +19,8 @@ public abstract class PullChannelConsumer implements ChannelConsumer {
      * @param eventHandlers
      */
     public void register(String eventName, Collection<EventHandler> eventHandlers) {
-        for (EventHandler handler : eventHandlers) {
-            MessageProcessor eventConsumer = new MessageProcessor(handler);
+        for (EventHandler<?> handler : eventHandlers) {
+            MessageProcessor<?> eventConsumer = new MessageProcessor<>(handler);
             ConsumerWorker consumerWorker = new ConsumerWorker(eventConsumer, this);
             workers.add(consumerWorker);
             consumerWorker.start();
@@ -28,19 +28,20 @@ public abstract class PullChannelConsumer implements ChannelConsumer {
     }
 
     // 拉取消息并使用 eventConsumer 处理消息,处理成功返回 true
-    public abstract boolean pull(MessageProcessor eventConsumer);
+    public abstract boolean pull(MessageProcessor<?> eventConsumer);
 
     public class ConsumerWorker extends Thread {
 
-        private MessageProcessor eventConsumer;
+        private MessageProcessor<?> eventConsumer;
         private PullChannelConsumer consumer;
 
-        public ConsumerWorker(MessageProcessor eventConsumer, PullChannelConsumer consumer) {
+        public ConsumerWorker(MessageProcessor<?> eventConsumer, PullChannelConsumer consumer) {
             super("消费者线程启动");
             this.eventConsumer = eventConsumer;
             this.consumer = consumer;
         }
 
+        @SuppressWarnings("static-access")
         @Override
         public void run() {
             while (!Thread.currentThread().interrupted()) {

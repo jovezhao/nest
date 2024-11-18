@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface EventInfoQuery {
 
-    List<Long> getPersend(int commonSize,int failSize, int maxFailTime);
+    List<Long> getListToBeSent(int commonSize,int failSize, int maxFailTime);
 
 }

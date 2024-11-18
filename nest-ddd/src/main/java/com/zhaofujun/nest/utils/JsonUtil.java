@@ -6,6 +6,7 @@ import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.reader.ObjectReader;
 import com.alibaba.fastjson2.writer.ObjectWriter;
 import com.zhaofujun.nest.ddd.Entity;
+import com.zhaofujun.nest.ddd.Identifier;
 import com.zhaofujun.nest.utils.json.EntityObjectReaderProvider;
 import com.zhaofujun.nest.utils.json.EntityObjectWriterProvider;
 
@@ -13,7 +14,7 @@ import java.lang.reflect.Type;
 
 public class JsonUtil {
 
-    public static String toJsonString(Entity entity) {
+    public static String toJsonString(Entity<? extends Identifier> entity) {
         JSONWriter.Context writerContext = new JSONWriter.Context(new EntityObjectWriterProvider());
         writerContext.config(JSONWriter.Feature.FieldBased, JSONWriter.Feature.WriteClassName,
                 JSONWriter.Feature.NotWriteRootClassName);
@@ -22,7 +23,7 @@ public class JsonUtil {
                 writer.writeNull();
             } else {
                 Class<?> valueClass = entity.getClass();
-                ObjectWriter objectWriter = writer.getObjectWriter(valueClass, valueClass);
+                var objectWriter = writer.getObjectWriter(valueClass, valueClass);
                 writer.setRootObject(entity);
                 objectWriter.write(writer, entity, null, null, 0);
             }
@@ -33,7 +34,8 @@ public class JsonUtil {
     public static String toJsonString(Object object) {
         return JSON.toJSONString(object);
     }
-
+    
+    @SuppressWarnings("unchecked")
     public static <T> T parseObject(String text, Type clazz) {
         //
         if (text == null || text.isEmpty()) {

@@ -17,7 +17,7 @@ public class EventAppService {
     }
 
     public List<LongIdentifier> getEventInfoList(int commonSize, int failSize, int maxFailTime) {
-        return query.getPersend(commonSize, failSize, maxFailTime).stream()
+        return query.getListToBeSent(commonSize, failSize, maxFailTime).stream()
                 .map(p -> {
                     EventMessage<?> eventInfo = EntityUtil.load(EventMessage.class, new LongIdentifier(p));
                     eventInfo.readyPublish();

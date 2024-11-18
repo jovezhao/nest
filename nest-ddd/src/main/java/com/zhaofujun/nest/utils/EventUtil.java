@@ -9,7 +9,7 @@ public class EventUtil {
     public static void publish(String eventName, Object eventData, long delaySecond) {
         long idLong = SnowFlakeUtil.nextLong();
         LocalDateTime sendDateTime = LocalDateTime.now().plusSeconds(delaySecond);
-        new EventMessage(new LongIdentifier(idLong), eventName, eventData, sendDateTime);
+        new EventMessage<>(new LongIdentifier(idLong), eventName, eventData, sendDateTime);
     }
 
     public static void publish(String eventName, Object eventData) {

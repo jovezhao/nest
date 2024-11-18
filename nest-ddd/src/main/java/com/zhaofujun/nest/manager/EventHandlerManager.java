@@ -16,12 +16,15 @@ import com.zhaofujun.nest.ddd.EventHandler;
  * 管理所有事件处理器
  */
 public class EventHandlerManager {
+    @SuppressWarnings("rawtypes")
     private static Map<String, Set<EventHandler>> handlerMap = new HashMap<>();
 
+    @SuppressWarnings("rawtypes")
     public static void addEventHandler(EventHandler... eventHandlers) {
         addEventHandler(Arrays.asList(eventHandlers));
     }
 
+    @SuppressWarnings("rawtypes")
     public static void addEventHandler(Collection<EventHandler> eventHandlers) {
         eventHandlers.stream()
                 .collect(Collectors.groupingBy(p -> p.getEventName()))
@@ -39,6 +42,7 @@ public class EventHandlerManager {
                 });
     }
 
+    @SuppressWarnings("rawtypes")
     public static Map<ConsumeMode, List<EventHandler>> getEventHandlers(String eventName) {
         Set<EventHandler> handlerSet = handlerMap.get(eventName);
         if (handlerSet == null)

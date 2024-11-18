@@ -6,6 +6,9 @@ import com.zhaofujun.nest.exception.CustomException;
 import com.zhaofujun.nest.utils.JsonUtil;
 import com.zhaofujun.nest.utils.MessageUtil;
 
+/**
+ * 消息处理器，处理从消息通道拿到的消息体，该消息体一定是 EventData 类型
+ */
 public class MessageProcessor<T> {
     private EventHandler<T> eventHandler;
 
@@ -18,21 +21,22 @@ public class MessageProcessor<T> {
         return false;
     }
 
-    public T toObject(String messageString) {
-        return JsonUtil.parseObject(messageString, eventHandler.getEventDataClass());
+    public EventData<T> toObject(String messageString) {
+        //TODO 这里可能需要用泛型来反序列化
+        return JsonUtil.parseObject(messageString, EventData.class);
     }
 
-    public MessageAck invoke(T eventObject) {
+    public MessageAck invoke(EventData<T> eventObject) {
 
         MessageAck result = null;
         // 幂等验证
-        if (idempotent(eventObject.toString(), getHandlerId())) {
+        if (idempotent(eventObject.getId(), getHandlerId())) {
             result = MessageAck.SUCCESS;
         } else {
             MessageUtil.emit(Lifecycle.Consume_Begin.name(), eventHandler);
             try {
                 // 调用 eventHandler
-                eventHandler.handle(eventObject);
+                eventHandler.handle(eventObject.getData());
             } catch (CustomException ex) {
                 eventHandler.onCustomException(eventObject, ex);
                 result = MessageAck.REFUSE;

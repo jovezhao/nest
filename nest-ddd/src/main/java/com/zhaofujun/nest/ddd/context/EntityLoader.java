@@ -25,7 +25,7 @@ public class EntityLoader {
         return keyList;
     }
 
-    public static <T extends Entity> T load(Class<T> tClass, Identifier identifier) {
+    public static <T extends Entity<? extends Identifier>> T load(Class<T> tClass, Identifier identifier) {
         // 先通过上下文获取
         T entity = null;
         ServiceContext currentContext = ServiceContextManager.getCurrentContext();
@@ -54,7 +54,7 @@ public class EntityLoader {
         return entity;
     }
 
-    public static <T extends Entity> boolean isLoading(Class<T> tClass, Identifier identifier) {
+    public static <T extends Entity<?>> boolean isLoading(Class<T> tClass, Identifier identifier) {
         return getThreadLocalValue().contains(EntityUtil.getKey(tClass, identifier));
     }
 }

@@ -18,13 +18,10 @@ import com.zhaofujun.nest.utils.StringUtil;
 
 public class ServiceContext {
 
-
     private Set<Entity> entities = new HashSet<>();
 
-   
-
     public void begin() {
-      
+
     }
 
     public void submit() {
@@ -32,8 +29,8 @@ public class ServiceContext {
             p._end();
         });
 
-        Map<Repository,Map<EntityOperateEnum,Collection<Entity>>> map = analyse();
-    
+        var map = analyse();
+
         map.forEach((p, q) -> {
             q.forEach((r, s) -> {
                 if (s.isEmpty()) {
@@ -59,13 +56,15 @@ public class ServiceContext {
 
     }
 
-    public void end(){
+    public void end() {
 
     }
+
     public void addEntity(Entity entity) {
         entities.add(entity);
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends Entity> T load(Class<T> tClass, Identifier identifier) {
         return (T) entities.stream()
                 .filter(p -> p.getId().equals(identifier) && p.getClass().equals(tClass))
@@ -95,11 +94,11 @@ public class ServiceContext {
     }
 
     static class EntityInfo {
-        private Entity entity;
+        private Entity<? extends Identifier> entity;
         private EntityOperateEnum operateEnum;
-        private Repository repository;
+        private Repository<? extends Entity<? extends Identifier>> repository;
 
-        public static EntityInfo from(Entity entity) {
+        public static EntityInfo from(Entity<? extends Identifier> entity) {
 
             EntityOperateEnum operateEnum = EntityOperateEnum.create;
             if (StringUtil.isEmpty(entity.getBeginSnapshot()) && !entity.is__deleted())
@@ -112,13 +111,14 @@ public class ServiceContext {
             return new EntityInfo(entity, operateEnum, RepositoryManager.getRepository(entity.getClass()));
         }
 
-        private EntityInfo(Entity entity, EntityOperateEnum operateEnum, Repository repository) {
+        private EntityInfo(Entity<? extends Identifier> entity, EntityOperateEnum operateEnum,
+                Repository<? extends Entity<? extends Identifier>> repository) {
             this.entity = entity;
             this.operateEnum = operateEnum;
             this.repository = repository;
         }
 
-        public Entity getEntity() {
+        public Entity<? extends Identifier> getEntity() {
             return entity;
         }
 
@@ -126,9 +126,10 @@ public class ServiceContext {
             return operateEnum;
         }
 
-        public Repository getRepository() {
+        public Repository<? extends Entity<? extends Identifier>> getRepository() {
             return repository;
         }
+
     }
 
     enum EntityOperateEnum {

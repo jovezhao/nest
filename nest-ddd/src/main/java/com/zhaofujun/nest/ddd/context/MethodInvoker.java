@@ -7,7 +7,7 @@ public interface MethodInvoker {
 
     Object invoke() throws Throwable;
 
-    Class getTargetClass();
+    Class<?> getTargetClass();
 
     Object getTarget();
 
