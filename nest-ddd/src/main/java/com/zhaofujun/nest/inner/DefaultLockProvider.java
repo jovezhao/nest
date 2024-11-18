@@ -2,9 +2,10 @@ package com.zhaofujun.nest.inner;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.zhaofujun.nest.NestConst;
-import com.zhaofujun.nest.utils.lock.LockProvider;
+import com.zhaofujun.nest.provider.LockProvider;
 
 /**
  * 默认的本地锁实现方式
@@ -36,10 +37,10 @@ public class DefaultLockProvider implements LockProvider {
     }
 
     @Override
-    public void lock(String name, Runnable runnable) {
+    public <T> T lock(String name, Supplier<T> runnable) {
         Object lockObject = getLockObject(name);
         synchronized (lockObject) {
-            runnable.run();
+            return runnable.get();
         }
     }
 

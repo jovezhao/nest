@@ -2,10 +2,11 @@ package com.zhaofujun.nest.boot.redis.provider;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import com.zhaofujun.nest.utils.lock.LockProvider;
+import com.zhaofujun.nest.provider.LockProvider;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 public class RedisLockProvider implements LockProvider {
 
@@ -26,7 +27,7 @@ public class RedisLockProvider implements LockProvider {
     }
 
     @Override
-    public void lock(String name, Runnable runnable) {
+    public <T> T lock(String name, Supplier<T> runnable) {
         /**
          * 生成一个随机数
          * 开启循环
@@ -41,7 +42,7 @@ public class RedisLockProvider implements LockProvider {
                     TimeUnit.MILLISECONDS);
             if (ret != null && ret.booleanValue()) {
                 try {
-                    runnable.run();
+                    return runnable.get();
                 } finally {
                     redisTemplate.delete(prefix + name);
                 }

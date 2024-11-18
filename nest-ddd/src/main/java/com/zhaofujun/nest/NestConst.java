@@ -7,4 +7,5 @@ public class NestConst {
     public static final String defaultChannel = "Default_Channel";
     public static final String defaultRepositoryCache = "Default_Repository_Cache";
     public static final String defaultLockProvider="Default_Lock_Provider";
+    public static final String eventSenderLock="event_sender_lock";
 }
