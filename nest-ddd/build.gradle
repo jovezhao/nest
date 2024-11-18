@@ -12,6 +12,7 @@ dependencies{
     implementation("com.alibaba:transmittable-thread-local:2.11.0")
     implementation("com.alibaba.fastjson2:fastjson2:2.0.10")
     implementation("net.sf.ehcache:ehcache-core:2.6.6")
+    // implementation 'com.google.guava:guava:31.0.1-jre'
     implementation("cglib:cglib:3.2.10")
 }
 

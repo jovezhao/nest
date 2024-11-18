@@ -1,10 +1,13 @@
 package com.zhaofujun.nest.ddd.event;
 
+import java.lang.reflect.Type;
+
 import com.zhaofujun.nest.Lifecycle;
 import com.zhaofujun.nest.ddd.EventHandler;
 import com.zhaofujun.nest.exception.CustomException;
 import com.zhaofujun.nest.utils.JsonUtil;
 import com.zhaofujun.nest.utils.MessageUtil;
+import com.zhaofujun.nest.NestParameterizedType;
 
 /**
  * 消息处理器，处理从消息通道拿到的消息体，该消息体一定是 EventData 类型
@@ -22,8 +25,8 @@ public class MessageProcessor<T> {
     }
 
     public EventData<T> toObject(String messageString) {
-        //TODO 这里可能需要用泛型来反序列化
-        return JsonUtil.parseObject(messageString, EventData.class);
+        Type type = NestParameterizedType.make(EventData.class, eventHandler.getEventDataClass());
+        return JsonUtil.parseObject(messageString, type);
     }
 
     public MessageAck invoke(EventData<T> eventObject) {

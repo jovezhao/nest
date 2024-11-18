@@ -19,7 +19,6 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
     @Autowired
     private Container container;
 
-    @SuppressWarnings("null")
     @Override
     public void onApplicationEvent(ApplicationStartedEvent event) {
         
