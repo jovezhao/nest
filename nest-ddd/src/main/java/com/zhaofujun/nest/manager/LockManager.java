@@ -1,16 +1,10 @@
 package com.zhaofujun.nest.manager;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.zhaofujun.nest.NestConst;
-import com.zhaofujun.nest.inner.DefautLockProvider;
-import com.zhaofujun.nest.utils.cache.CacheClient;
-import com.zhaofujun.nest.utils.cache.CacheItem;
-import com.zhaofujun.nest.utils.cache.CacheProvider;
 import com.zhaofujun.nest.utils.lock.LockItem;
 import com.zhaofujun.nest.utils.lock.LockProvider;
 

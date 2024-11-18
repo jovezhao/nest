@@ -1,9 +1,7 @@
-package com.zhaofujun.nest.utils.cache;
+package com.zhaofujun.nest.provider;
 
 
 import java.util.Map;
-
-import com.zhaofujun.nest.provider.Provider;
 
 /**
  * 缓存策略

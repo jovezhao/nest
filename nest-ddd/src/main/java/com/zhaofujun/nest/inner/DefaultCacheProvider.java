@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.zhaofujun.nest.NestConst;
-import com.zhaofujun.nest.utils.cache.CacheProvider;
+import com.zhaofujun.nest.provider.CacheProvider;
 
 /**
  * EhCache 缓存提供者的实现

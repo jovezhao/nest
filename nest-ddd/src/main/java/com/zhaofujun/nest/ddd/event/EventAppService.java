@@ -8,7 +8,6 @@ import com.zhaofujun.nest.ddd.LongIdentifier;
 import com.zhaofujun.nest.manager.EventManager;
 import com.zhaofujun.nest.manager.ProviderManager;
 import com.zhaofujun.nest.utils.EntityUtil;
-import com.zhaofujun.nest.utils.JsonUtil;
 
 public class EventAppService {
     private EventInfoQuery query;

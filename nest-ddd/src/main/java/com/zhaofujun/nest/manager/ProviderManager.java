@@ -19,6 +19,7 @@ public class ProviderManager {
         providerList.addAll(Arrays.asList(providers));
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends Provider> T get(Class<T> tClass, String code) {
         return (T) providerList
                 .stream()
@@ -34,6 +35,7 @@ public class ProviderManager {
         return t;
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends Provider> List<T> getList(Class<T> tClass) {
         return providerList.stream()
                 .filter(p -> tClass.isAssignableFrom(p.getClass()))
