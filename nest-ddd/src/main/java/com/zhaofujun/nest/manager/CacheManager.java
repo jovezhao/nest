@@ -21,7 +21,7 @@ public class CacheManager {
     public static void addCacheItem(CacheItem cacheItem) {
         CacheProvider cacheProvider = ProviderManager.get(CacheProvider.class, cacheItem.getCacheProviderCode());
         cachMap.put(cacheItem.getCode(),
-                new CacheClientImlp(cacheItem.getCode(), cacheProvider, cacheItem.getIdleSeconds(),
+                new CacheClientImlp(cacheItem.getCode(), cacheProvider, cacheItem.getMaxLiveSeconds(),
                         cacheItem.isDisabled()));
     }
 
