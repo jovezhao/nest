@@ -14,14 +14,20 @@ import com.zhaofujun.nest.NestParameterizedType;
  */
 public class MessageProcessor<T> {
     private EventHandler<T> eventHandler;
+    private EventAppService appService;
 
-    public MessageProcessor(EventHandler<T> eventHandler) {
+    public MessageProcessor(EventHandler<T> eventHandler, EventAppService appService) {
         this.eventHandler = eventHandler;
+        this.appService = appService;
     }
 
     private boolean idempotent(String messageId, String handlerId) {
-        // TODO 通过调用Message仓储来记录处理成功的信息
-        return false;
+        boolean tags = appService.isCompleted(new ProcessIdentifier(messageId, handlerId));
+        return tags;
+    }
+
+    private void complete(String messageId, String handlerId) {
+        appService.complete(new ProcessIdentifier(messageId, handlerId));
     }
 
     public EventData<T> toObject(String messageString) {
@@ -48,6 +54,7 @@ public class MessageProcessor<T> {
                 result = MessageAck.REFUSE;
             } finally {
                 MessageUtil.emit(Lifecycle.Consume_End.name(), eventHandler);
+                complete(eventObject.getId(), getHandlerId());
             }
         }
         return result;

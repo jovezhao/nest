@@ -6,4 +6,5 @@ import com.zhaofujun.nest.ddd.EventHandler;
 public interface ChannelConsumer {
 
     void register(String eventName, Collection<EventHandler> eventHandlers);
+    void setEventAppService(EventAppService appService);
 }

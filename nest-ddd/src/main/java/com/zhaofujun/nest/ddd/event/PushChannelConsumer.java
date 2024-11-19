@@ -5,6 +5,12 @@ import com.zhaofujun.nest.ddd.EventHandler;
 
 public abstract class PushChannelConsumer implements ChannelConsumer {
 
+    private EventAppService appService;
+
+    @Override
+    public void setEventAppService(EventAppService appService) {
+        this.appService = appService;
+    }
     /**
      * 并且为每eventHandler创建一个EventConsumer，
      * 
@@ -14,7 +20,7 @@ public abstract class PushChannelConsumer implements ChannelConsumer {
      */
     public void register(String eventName, Collection<EventHandler> eventHandlers) {
         for (EventHandler<?> handler : eventHandlers) {
-            MessageProcessor<?> eventConsumer = new MessageProcessor<>(handler);
+            MessageProcessor<?> eventConsumer = new MessageProcessor<>(handler,appService);
             subscribe(eventConsumer);
         }
     }

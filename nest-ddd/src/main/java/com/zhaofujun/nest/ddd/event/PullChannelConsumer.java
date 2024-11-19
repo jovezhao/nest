@@ -7,7 +7,13 @@ import com.zhaofujun.nest.ddd.EventHandler;
 
 public abstract class PullChannelConsumer implements ChannelConsumer {
 
-    List<Thread> workers = new ArrayList<>();
+    private List<Thread> workers = new ArrayList<>();
+    private EventAppService appService;
+
+    @Override
+    public void setEventAppService(EventAppService appService) {
+        this.appService = appService;
+    }
 
     /**
      * 将每一个eventHandler 创建一个 eventConsumer
@@ -20,7 +26,7 @@ public abstract class PullChannelConsumer implements ChannelConsumer {
      */
     public void register(String eventName, Collection<EventHandler> eventHandlers) {
         for (EventHandler<?> handler : eventHandlers) {
-            MessageProcessor<?> eventConsumer = new MessageProcessor<>(handler);
+            MessageProcessor<?> eventConsumer = new MessageProcessor<>(handler,appService);
             ConsumerWorker consumerWorker = new ConsumerWorker(eventConsumer, this);
             workers.add(consumerWorker);
             consumerWorker.start();
@@ -53,7 +59,7 @@ public abstract class PullChannelConsumer implements ChannelConsumer {
                         Thread.interrupted();
                     }
                 } else {
-                    //处理失败，休息1000ms
+                    // 处理失败，休息1000ms
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {

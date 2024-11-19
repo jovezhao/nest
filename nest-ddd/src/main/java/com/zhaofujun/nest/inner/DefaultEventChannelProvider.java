@@ -1,6 +1,7 @@
 package com.zhaofujun.nest.inner;
 
 import com.zhaofujun.nest.NestConst;
+import com.zhaofujun.nest.ddd.event.EventAppService;
 import com.zhaofujun.nest.ddd.event.EventChannelProvider;
 import com.zhaofujun.nest.ddd.event.EventData;
 import com.zhaofujun.nest.ddd.event.MessageAck;

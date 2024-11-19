@@ -19,7 +19,7 @@ public class EventAppService {
     public List<LongIdentifier> getEventInfoList(int commonSize, int failSize, int maxFailTime) {
         return query.getListToBeSent(commonSize, failSize, maxFailTime).stream()
                 .map(p -> {
-                    EventMessage<?> eventInfo = EntityUtil.load(EventMessage.class, new LongIdentifier(p));
+                    EventMessageModel<?> eventInfo = EntityUtil.load(EventMessageModel.class, new LongIdentifier(p));
                     eventInfo.readyPublish();
                     return eventInfo.getId();
                 })
@@ -27,7 +27,7 @@ public class EventAppService {
     }
 
     public void sendEventInfo(LongIdentifier identifier) {
-        EventMessage<?> eventInfo = EntityUtil.load(EventMessage.class, identifier);
+        EventMessageModel<?> eventInfo = EntityUtil.load(EventMessageModel.class, identifier);
 
         // 根据事件名找到通道
         String channelCode = EventManager.getChannelCode(eventInfo.getEventName());
@@ -45,5 +45,25 @@ public class EventAppService {
             eventInfo.fail();
         }
 
+    }
+
+    /**
+     * 检查是否处理过当前消息
+     * 
+     * @param processIdentifier 处理记录标识
+     * @return
+     */
+    public boolean isCompleted(ProcessIdentifier processIdentifier) {
+        EventProcessRecordModel eventProcessRecord = EntityUtil.load(EventProcessRecordModel.class, processIdentifier);
+        if(eventProcessRecord==null)
+        {
+            eventProcessRecord=new EventProcessRecordModel(processIdentifier);
+        }
+        return !eventProcessRecord.getProcessState().equals(ProcessState.completed);
+    }
+
+    public void complete(ProcessIdentifier processIdentifier) {
+        EventProcessRecordModel eventProcessRecord = EntityUtil.load(EventProcessRecordModel.class, processIdentifier);
+        eventProcessRecord.process();
     }
 }

@@ -8,7 +8,7 @@ import com.zhaofujun.nest.ddd.LongIdentifier;
 /**
  * 事件消息，用于事件信息的存储，这是发送到消息仓储中的实体
  */
-public class EventMessage<T> extends AggregateRoot<LongIdentifier> {
+public class EventMessageModel<T> extends AggregateRoot<LongIdentifier> {
     private T eventData;
     private String eventName;
     private LocalDateTime sendTime;
@@ -16,7 +16,7 @@ public class EventMessage<T> extends AggregateRoot<LongIdentifier> {
     private int sendTimes;
     private LocalDateTime realTime;
 
-    public EventMessage(LongIdentifier id, String eventName, T eventData, LocalDateTime sendTime) {
+    public EventMessageModel(LongIdentifier id, String eventName, T eventData, LocalDateTime sendTime) {
         super(id);
         this.eventData = eventData;
         this.eventName = eventName;

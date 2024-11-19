@@ -11,11 +11,13 @@ import com.zhaofujun.nest.manager.EventManager;
 public class EventHandlerWorker extends Thread {
     private EventChannelProvider provider;
     private EventHandlerConfig config;
+    private EventAppService appService;
 
-    public EventHandlerWorker(EventChannelProvider provider, EventHandlerConfig config) {
+    public EventHandlerWorker(EventChannelProvider provider, EventHandlerConfig config, EventAppService appService) {
         super("消息处理器-" + provider.getCode());
         this.provider = provider;
         this.config = config;
+        this.appService = appService;
     }
 
     @Override
@@ -29,6 +31,7 @@ public class EventHandlerWorker extends Thread {
             Map<ConsumeMode, List<EventHandler>> eventHandlers = EventHandlerManager.getEventHandlers(eventName);
             eventHandlers.forEach((p, q) -> {
                 ChannelConsumer consumer = provider.getConsumer(p);
+                consumer.setEventAppService(appService);
                 consumer.register(eventName, q);
             });
         });

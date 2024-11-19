@@ -4,10 +4,10 @@ import java.lang.reflect.Type;
 
 import com.zhaofujun.nest.ddd.Repository;
 
-public abstract class EventInfoRepository implements EventInfoQuery, Repository<EventMessage<?>> {
+public abstract class EventInfoRepository implements EventInfoQuery, Repository<EventMessageModel<?>> {
     @Override
     public Type getEntityType() {
-        return EventMessage.class;
+        return EventMessageModel.class;
     }
     
 }

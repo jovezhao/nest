@@ -140,7 +140,7 @@ public class NestEngine {
 
         // 启动事件处理线程
         ProviderManager.getList(EventChannelProvider.class).forEach(provider -> {
-            EventHandlerWorker handlerWorker = new EventHandlerWorker(provider, handlerConfig);
+            EventHandlerWorker handlerWorker = new EventHandlerWorker(provider, handlerConfig, eventAppService);
             eventHandleThread.add(handlerWorker);
             handlerWorker.start();
         });
