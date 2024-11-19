@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.zhaofujun.nest.ddd.Identifier;
-import com.zhaofujun.nest.ddd.event.EventInfoRepository;
+import com.zhaofujun.nest.ddd.event.EventMessageRepository;
 import com.zhaofujun.nest.ddd.event.EventState;
 import com.zhaofujun.nest.ddd.event.EventMessageModel;
 
-public class DefaultEventInfoRepository extends EventInfoRepository {
+public class DefaultEventInfoRepository extends EventMessageRepository {
 
     private static List<EventMessageModel<?>> eventList = new ArrayList<>();
 
