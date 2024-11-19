@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.zhaofujun.nest.NestConst;
+import com.zhaofujun.nest.ddd.ApplicationService;
 import com.zhaofujun.nest.ddd.LongIdentifier;
+import com.zhaofujun.nest.ddd.context.Transaction;
 import com.zhaofujun.nest.manager.EventManager;
 import com.zhaofujun.nest.manager.ProviderManager;
 import com.zhaofujun.nest.utils.EntityUtil;
@@ -12,7 +14,7 @@ import com.zhaofujun.nest.utils.EntityUtil;
 /**
  * 事件应用服务类，负责事件的发送和处理。
  */
-public class EventAppService {
+public class EventAppService implements ApplicationService {
     private EventMessageQuery query;
 
     /**
@@ -72,15 +74,14 @@ public class EventAppService {
      * 检查是否处理过当前消息。
      *
      * @param processIdentifier 处理记录标识
-     * @return true 如果处理过，false 否则
+     * @return true处理过，false 没有处理
      */
     public boolean isCompleted(ProcessIdentifier processIdentifier) {
         EventProcessRecordModel eventProcessRecord = EntityUtil.load(EventProcessRecordModel.class, processIdentifier);
-        if(eventProcessRecord==null)
-        {
-            eventProcessRecord=new EventProcessRecordModel(processIdentifier);
+        if (eventProcessRecord == null) {
+            eventProcessRecord = new EventProcessRecordModel(processIdentifier);
         }
-        return !eventProcessRecord.getProcessState().equals(ProcessState.completed);
+        return eventProcessRecord.getProcessState().equals(ProcessState.completed);
     }
 
     /**
@@ -92,4 +93,5 @@ public class EventAppService {
         EventProcessRecordModel eventProcessRecord = EntityUtil.load(EventProcessRecordModel.class, processIdentifier);
         eventProcessRecord.process();
     }
+
 }

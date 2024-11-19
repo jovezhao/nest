@@ -34,7 +34,7 @@ public class RepositoryManager {
         Repository<T> repository = (Repository<T>) repositoryMap.get(entityType);
 
         if (repository == null) {
-            Type superType = ((Class<?>) entityType).getGenericSuperclass();
+            Type superType = ((Class)entityType).getSuperclass();
             return getRepository(superType);
 
         }

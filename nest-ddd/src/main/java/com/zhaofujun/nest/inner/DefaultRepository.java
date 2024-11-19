@@ -33,14 +33,14 @@ public class DefaultRepository implements Repository<Entity<? extends Identifier
     @Override
     public void insert(Entity<?> entity) {
         String entityString = JsonUtil.toJsonString(entity);
-        System.out.println("insert" + entityString);
+        System.out.println("insert "+ entity.getClass().getName() + ":"  + entityString);
         cacheClient.put(EntityUtil.getKey(entity), entityString);
     }
 
     @Override
     public void update(Entity<?> entity) {
         String entityString = JsonUtil.toJsonString(entity);
-        System.out.println("update" + entityString);
+        System.out.println("update "+ entity.getClass().getName() + ":"  + entityString);
 
         cacheClient.put(EntityUtil.getKey(entity), entityString);
     }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.zhaofujun.nest.ddd.ApplicationService;
 import com.zhaofujun.nest.ddd.context.MethodInvoker;
 import com.zhaofujun.nest.ddd.context.ServiceMethodProcesser;
 import com.zhaofujun.nest.ddd.context.Transaction;
@@ -31,7 +32,7 @@ public class NestAspect {
     private ApplicationContext applicationContext;
 
     /**
-     * 切面方法
+     * 
      * 处理带有 @AppService 注解的方法的执行逻辑。
      * 包括事务管理和服务方法的拦截处理。
      *
@@ -40,11 +41,21 @@ public class NestAspect {
      * @throws Throwable 方法执行过程中可能抛出的异常
      */
     @Around("execution(public * * (..)) && @within(com.zhaofujun.nest.boot.AppService)")
-    public Object aroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object aroundFromAnnotation(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodInvoker methodInvoker = new AspectMethodInvoker(joinPoint);
         // 从 appservice 注解中找到配置的事务管理器
         AppService appService = joinPoint.getTarget().getClass().getAnnotation(AppService.class);
         Class transactionClass = appService.transaction();
+        Transaction transaction = (Transaction) applicationContext.getBean(transactionClass);
+        ServiceMethodProcesser intercept = new ServiceMethodProcesser(methodInvoker, transaction);
+        return intercept.doInvoke();
+    }
+
+    @Around("execution(public * com.zhaofujun.nest.ddd.ApplicationService+.* (..))")
+    public Object aroundFromInterface(ProceedingJoinPoint joinPoint) throws Throwable {
+        MethodInvoker methodInvoker = new AspectMethodInvoker(joinPoint);
+        var appService = (ApplicationService) joinPoint.getTarget();
+        Class transactionClass = appService.getTransactionClass();
         Transaction transaction = (Transaction) applicationContext.getBean(transactionClass);
         ServiceMethodProcesser intercept = new ServiceMethodProcesser(methodInvoker, transaction);
         return intercept.doInvoke();
