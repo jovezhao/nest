@@ -7,11 +7,11 @@ import com.zhaofujun.nest.exception.SystemException;
 /**
  * 服务方法处理器，当执行应用服务方法后会执行本方法
  */
-public class ServiceMethodProcesser {
+public class ServiceMethodProcessor {
     private MethodInvoker methodInvoker;
     private Transaction transaction;
 
-    public ServiceMethodProcesser(MethodInvoker methodInvoker, Transaction transaction) {
+    public ServiceMethodProcessor(MethodInvoker methodInvoker, Transaction transaction) {
         this.methodInvoker = methodInvoker;
         this.transaction = transaction;
     }

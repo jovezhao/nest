@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.zhaofujun.nest.ddd.ApplicationService;
 import com.zhaofujun.nest.ddd.context.MethodInvoker;
-import com.zhaofujun.nest.ddd.context.ServiceMethodProcesser;
+import com.zhaofujun.nest.ddd.context.ServiceMethodProcessor;
 import com.zhaofujun.nest.ddd.context.Transaction;
 
 import java.lang.reflect.Method;
@@ -47,7 +47,7 @@ public class NestAspect {
         AppService appService = joinPoint.getTarget().getClass().getAnnotation(AppService.class);
         Class transactionClass = appService.transaction();
         Transaction transaction = (Transaction) applicationContext.getBean(transactionClass);
-        ServiceMethodProcesser intercept = new ServiceMethodProcesser(methodInvoker, transaction);
+        ServiceMethodProcessor intercept = new ServiceMethodProcessor(methodInvoker, transaction);
         return intercept.doInvoke();
     }
 
@@ -57,7 +57,7 @@ public class NestAspect {
         var appService = (ApplicationService) joinPoint.getTarget();
         Class transactionClass = appService.getTransactionClass();
         Transaction transaction = (Transaction) applicationContext.getBean(transactionClass);
-        ServiceMethodProcesser intercept = new ServiceMethodProcesser(methodInvoker, transaction);
+        ServiceMethodProcessor intercept = new ServiceMethodProcessor(methodInvoker, transaction);
         return intercept.doInvoke();
     }
 

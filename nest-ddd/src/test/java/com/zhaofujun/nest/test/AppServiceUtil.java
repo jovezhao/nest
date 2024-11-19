@@ -10,13 +10,14 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import com.zhaofujun.nest.ddd.AppServiceIgnore;
+import com.zhaofujun.nest.ddd.ApplicationService;
 import com.zhaofujun.nest.ddd.context.MethodInvoker;
-import com.zhaofujun.nest.ddd.context.ServiceMethodProcesser;
+import com.zhaofujun.nest.ddd.context.ServiceMethodProcessor;
 import com.zhaofujun.nest.ddd.context.Transaction;
 
 public class AppServiceUtil {
 
-    public static <T> T create(Class<T> tClass) throws InstantiationException, IllegalAccessException,
+    public static <T extends ApplicationService> T create(Class<T> tClass) throws InstantiationException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
         Transaction transaction = new Transaction.DefaultTransaction();
@@ -92,7 +93,7 @@ public class AppServiceUtil {
             int modifiers = method.getModifiers();
             if (Modifier.isPublic(modifiers) && !Modifier.isStatic(modifiers)) {
                 MethodInvoker methodInvoker = new CglibMethodInvoker(proxy, method, obj, obj.getClass(), args);
-                ServiceMethodProcesser intercept = new ServiceMethodProcesser(methodInvoker, transaction);
+                ServiceMethodProcessor intercept = new ServiceMethodProcessor(methodInvoker, transaction);
                 return intercept.doInvoke();
             } else {
                 return proxy.invokeSuper(obj, args);
