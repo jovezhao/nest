@@ -88,9 +88,7 @@ public class NestEngine {
         CacheManager.addCacheItem(NestConst.defaultCacheItem, NestConst.defaultCacheProvider, 5000);
         // 默认仓储依赖于默认缓存
         RepositoryManager.addRepository(new DefaultRepository(), new DefaultEventInfoRepository());
-        // 事件
-        // EventChannelManager.addEventChannelProvider(new
-        // DefaultEventChannelProvider());
+        
 
         if (container != null) {
             // 加载仓储
