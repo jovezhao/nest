@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.test;
+package com.zhaofujun.nest.utils;
 
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;

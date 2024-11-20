@@ -148,4 +148,32 @@ Nest 框架是一个帮助开发人员快速实现基于领域驱动设计的技
 
 
 ## 仓储
-仓储是领域驱动设计（DDD）架构中
+
+在领域驱动设计（DDD）中，仓储（Repository）是一个用于管理领域对象持久化和检索的组件。它提供了一种统一的方式来访问数据存储（如数据库、文件系统等），使得领域层能够与底层的数据存储技术相分离，专注于业务逻辑的实现。
+
+仓储位于数据访问层之上，数据访问层直接面向存储器而仓储使用数据访问层的能力将实体持久化到具体的存储器中。
+
+# 快速入门
+## 获取 Nest
+Nest已经通过Maven中央仓库托管，你可以在项目中直接引用依赖。
+**Maven引用**
+```xml
+<!-- https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd -->
+<dependency>
+    <groupId>com.zhaofujun.nest</groupId>
+    <artifactId>nest-ddd</artifactId>
+    <version>3.0.0</version>
+</dependency>
+```
+**Gradle引用**
+```groovy
+// https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd
+compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '3.0.0'
+
+```
+
+## 快速上手演练-使用nest创建可运行的项目
+
+本案例使用nest-ddd快速创建基于DDD的项目，并且完成创建用户的演示操作
+
+项目由领域模型、应用服务和应用程序组成。

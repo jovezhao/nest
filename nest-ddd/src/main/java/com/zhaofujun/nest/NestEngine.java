@@ -62,22 +62,7 @@ public class NestEngine {
      */
     private EventAppService eventAppService;
 
-    /**
-     * 设置事件应用服务
-     *
-     * @param eventAppService 事件应用服务
-     */
-    public void setEventAppService(EventAppService eventAppService) {
-        this.eventAppService = eventAppService;
-    }
-
-    /**
-     * 初始化 NestEngine
-     *
-     * @param container 容器，用于加载各种组件
-     */
-    @SuppressWarnings("unchecked")
-    public void init(Container container) {
+    public NestEngine() {
         // 添加默认锁提供者
         ProviderManager.addProvider(new DefaultLockProvider());
         // 添加默认事件通道提供者
@@ -88,8 +73,24 @@ public class NestEngine {
         CacheManager.addCacheItem(NestConst.defaultCacheItem, NestConst.defaultCacheProvider, 5000);
         // 默认仓储依赖于默认缓存
         RepositoryManager.addRepository(new DefaultRepository(), new DefaultEventInfoRepository());
-        
+    }
 
+    /**
+     * 设置事件应用服务
+     *
+     * @param eventAppService 事件应用服务
+     */
+    public void setEventAppService(EventAppService eventAppService) {
+        this.eventAppService = eventAppService;
+    }
+
+    /**
+     * 使用容器 初始化 NestEngine
+     *
+     * @param container 容器，用于加载各种组件
+     */
+    @SuppressWarnings("unchecked")
+    public void initByContainer(Container container) {
         if (container != null) {
             // 加载仓储
             RepositoryManager.addRepository(container.getInstances(Repository.class));
