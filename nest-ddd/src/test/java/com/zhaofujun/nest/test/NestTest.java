@@ -3,6 +3,7 @@ package com.zhaofujun.nest.test;
 import java.lang.reflect.InvocationTargetException;
 
 import com.zhaofujun.nest.NestEngine;
+import com.zhaofujun.nest.ddd.ApplicationService;
 import com.zhaofujun.nest.ddd.StringIdentifier;
 import com.zhaofujun.nest.ddd.event.EventAppService;
 import com.zhaofujun.nest.inner.DefaultEventInfoRepository;
@@ -29,7 +30,7 @@ public class NestTest {
 }
 
 
-class UserAppService {
+class UserAppService implements ApplicationService {
     public void test() {
         User user = new User(new StringIdentifier("111"));
         user.setName("name");
