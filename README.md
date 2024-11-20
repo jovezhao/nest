@@ -1,569 +1,145 @@
-# 概述
+# Nest 框架使用手册
 
 ## 简介
 
-Nest是一套帮助开发人员基于领域驱动设计（DDD）开发系统的一套技术框架。他定义了领域驱动设计中新工具（实体、值对象、工厂、仓储、应用服务、事件），并且通过服务上下文、工作单元、缓存等模块将整个体系串联。
-
-## 优势
-
-Nest基于DDD理论设计。
-
-扩展性强，可以自由扩展任何Ioc容器、消息中间件、缓存中间件等。
-
-简单易用，不加入过多配置，一个注解便可以无缝对接，节省大量开发配置时间。
-
-
-# 设计原则
-
-Nest本身的设计不依赖于spring等ioc容器，而是定义了一个Ioc容器的标准接入接口。可以基于这一个标准接入接口实现不同Ioc容器的集成。
-
-Nest的设计受DDD战略、战术设计思想指导，使用Nest前需要对DDD有一定的了解。可以参考[Nest与领域驱动设计(DDD)的对应关系](#Nest与领域驱动设计(DDD)的对应关系)
-
-# 开发手册
-
-## 如何获取 nest
-
-**Maven引用**
-```xml
-<!-- https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd -->
-<dependency>
-    <groupId>com.zhaofujun.nest</groupId>
-    <artifactId>nest-ddd</artifactId>
-    <version>3.0</version>
-</dependency>
-```
-**Gradle引用**
-```groovy
-// https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd
-compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '2.2.10'
-
-```
-
-## 快速上手演练-使用nest创建可运行的项目
-
-本案例使用nest-ddd快速创建基于DDD的项目，并且完成创建用户的演示操作，源码参考nest-ddd项目test目录。
-
-项目由领域模型、应用服务和应用程序组成。
-
-**领域模型代码：**
-```java
-package com.zhaofujun.nest.test.domain;
-
-import com.zhaofujun.nest.context.model.BaseEntity;
-import com.zhaofujun.nest.context.model.LongIdentifier;
-
-public abstract class Teacher extends BaseEntity<LongIdentifier> {
-    private String name;
-
-    public void init(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-}
-
-
-```
-**应用服务代码：**
-```java
-package com.zhaofujun.nest.test.application;
-
-import com.zhaofujun.nest.context.model.EntityFactory;
-import com.zhaofujun.nest.context.model.LongIdentifier;
-import com.zhaofujun.nest.standard.AppService;
-import com.zhaofujun.nest.test.domain.Teacher;
-
-@AppService
-public class TeacherApplicationService {
-
-    public void teachCreate() {
-        Teacher teacher = EntityFactory.create(Teacher.class, LongIdentifier.valueOf(11L));
-        teacher.init("teacher 1");
-    }
-}
-
-```
-
-**应用程序代码**
-
-```java
-package com.zhaofujun.nest.test;
-
-import com.zhaofujun.nest.NestApplication;
-import com.zhaofujun.nest.context.appservice.ApplicationServiceCreator;
-import com.zhaofujun.nest.test.application.TeacherApplicationService;
-
-
-public class Application {
-    public static void main(String[] args)   {
-
-
-        NestApplication application = NestApplication.current();
-        application.start();
-
-        TeacherApplicationService teacherApplicationService=ApplicationServiceCreator.create(TeacherApplicationService.class);
-        teacherApplicationService.teachCreate();
-
-        application.close();
-    }
-}
-
-```
-
-
-在本案例中，我们只是简单的对演示了如何对领域模型User的创建过程。
-没有做任何仓储的实现，框架会提供基于内存的默认仓库来实现，这样可以帮助程序员快速完成业务部分的代码开发与测试，默认仓库使用内存仓储实体的json结构。
-
-## Nest进阶教程
-
-### 应用服务
-
-使用`@AppService`注解标识一个应用服务类，标注过该注解的类的公共方法将开启服务上下文，上下文内所有实体的变化将通过工作单元记录并校验后调用实体仓储完成持久化。
-
-可以使用`@AppServiceIgnore`注解忽略应用服务下的公共方法使其不开启服务上下文。
-
-
-### 扩展
-
-Nest本身具有丰富的可扩展性，并且扩展起来也相当简单。
-
-#### 继承至CacheProvider的缓存提供者
-
-CacheProvider定义了一个缓存的提供者，nest-plus集成了redis。如果用户需要集成其它缓存提供者只需要实现CacheProvider接口并且添加到配置中。
-
-使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的缓存提供者。
-
-可以使用IOC定义一个继承至CacheProvider的Bean，系统将自动集成该类型的缓存提供方式。
-
-#### 继承至MessageConverter的消息转换器
-
-MessageConverter定义了MessageInfo与字符串的互相转换过程，用户可以通过MessageConverter来实现自定义转换的过程。
-
-使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的消息转换器。
-
-完成自定义的MessageConverter后还需要修改配置项`NestApplication.getMessageConfiguration().setConverter(String code)`使其生效。
-
-
-#### 继承至MessageResendStore的消息暂存器
-
-MessageResendStore定义了投递失败的消息存储方式，默认投递失败的消息使用内存空间暂存，为了保证可靠性，一般情况需要使用外部存储空间来保存投递失败的消息。
-
-使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的消息暂存器。
-
-完成自定义的MessageResendStore后还需要修改配置项`NestApplication.getMessageConfiguration().setResendStore(String code)`使其生效。
-
-#### 继承至MessageStore的消息存储器
-
-MessageStore定义消费成功的消息的存储方式，用于处理消费者的幂等性，使消息不被重复消费。默认存储方式是使用的内存空间，为了保证可靠性，一般情况需要使用外部存储空间来保存已经消费的消息。
-
-使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的消息存储器。
-
-完成自定义的MessageStore后还需要修改配置项`NestApplication.getMessageConfiguration().setStore(String code)`使其生效。
-
-#### 继承至DelayMessageStore的消息存储器
-
-DelayMessageStore定义延迟消息的存储方式,默认存储方式是使用的内存空间，为了保证可靠性，一般情况需要使用外部存储空间来保存已经消费的消息。
-
-使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的消息存储器。
-
-完成自定义的DelayMessageStore后还需要修改配置项`NestApplication.getMessageConfiguration().setDelayStore(String code)`使其生效。
-
-#### 继承至LockProvider的锁提供者
-
-LockProvider定义锁的实现方式,默认实现使用ReentrantLock实现，在分布式环境下推进使用分布式锁，nest-plus提供了基于redis的分布式锁实现。
-
-使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的锁提供者。
-
-完成自定义的DelayMessageStore后还需要修改配置项`NestApplication.getLockConfiguration().setProvider(String code)`使其生效。
-
-#### 继承至MessageChannelProvider的消息通道提供者
-
-MessageChannelProvider定义了消息通道的实现方式，默认的消息通道是命名用的本地内存的实现方式，不支持分布式，在分布式系统中一般消息通道都需要使用第三方消息中间件来传递消息。
-
-使用`NestApplication.getProviderManage().addProvider(Provider... providers)` 可以注册新的消息通道提供者。
-
-nest-plus实现了常用消息中间件集成方式，包括ActiveMQ、RocketMQ、RabbitMQ，用户也可以自己实现相应的消息通道，并且配置通道的参数。
-
-#### 继承至ApplicationListener的应用监听器
-
-ApplicationListener 定义了应用程序的监听器，当应用程序启动或者停止时将回调该监听器相关方法。
-
-实现该应用监听器接口后需要使用`NestApplication.getListenerManager().addListeners(NestEventListener ... eventListeners)`注册监听器，也可以将ApplicationListener注册到IOC容器中，由IOC容器自动注册。
-
-#### 继承至ServiceContextListener的服务上下文监听器
-
-ServiceContextListener 定义了服务调用的过程，包括服务创建、服务方法开始、服务方法结束、开始提交工作单元、完成工作单元提交、服务结束等回调过程。
-
-实现该应用监听器接口后需要使用`NestApplication.getListenerManager().addListeners(NestEventListener ... eventListeners)`注册监听器，也可以将ServiceContextListener注册到IOC容器中，由IOC容器自动注册。
-
-
-### 实现spring的集成
-> 见[集成Spring与Spring boot](#集成Spring与Spring-boot)
-
-### 缓存管理
-
-Nest 将不同场景下用到缓存的信息进行了分组，为每一个分组指定了一个代号`cacheCode`。
-
-在使用时，通过`com.zhaofujun.nest.cache.CacheClientFactory`的getCacheClient方法获取一个`CacheClient`。
-
-`CacheClient`对缓存的操作见如下定义
-
-```java
-
-public interface CacheClient {
-    <T> T get(Class<T> clazz, String key);
-
-
-    <T> Map<String, T> get(Class<T> clazz, String... keys);
-
-
-    void put(String key, Object value, long idleSeconds);
-
-    void put(String key, Object value);
-
-    boolean remove(String key);
-
-    void removeAll();
-
-    boolean containsKey(String key);
-
-    String[] getKeys();
-}
-
-```
-缓存分组信息通过`com.zhaofujun.nest.configuration.ConfigurationManager`管理。
-
-开发人员可以通过`NestApplication.getConfigurationManager().addConfigurationItem(ConfigurationItem... configurationItems)`方法手动注册一组缓存配置，也可以将`CacheConfiguration`的bean配置到ioc容器中实现自动注册。
-
-`CacheConfiguration` 可以配置缓存组的代号、名称、使用的缓存提供者和统一的过期时间。
-
-如果配置的缓存提供者无法找到，系统将使用默认的缓存提供者。
-
-默认缓存提供者使用ehcache支持，我们也可以通过实现`com.zhaofujun.nest.cache.CacheProvider`接口来集成其它缓存中间件，比如`Redis`。
-
-> 缓存中间件集成方案见： [缓存通道扩展与集成](#缓存通道扩展与集成)
-
-### 锁实现
-
-开发过程中往往需要使用锁解决多线程下资源冲突问题，nest提供了简单的锁工具可以简化开发过程。
-调用方式：`LockUtils.runByLock(String key, Runnable runnable)`，配合`LockProvider`可以实现分布式锁的实现。
-
-### 标识生成器
-
-可以实现`IdentifierGenerator`接口定义标识生成方式，nest提供了本地自增，雪花算法生产Long型的实现。参考`LocalLongGenerator`和`SnowflakeLongGenerator`类的实现。
-
-### Nest与领域驱动设计(DDD)的对应关系
-
-在DDD中，有几个重要概念，它们分别是实体、实体标识、值对象、聚合、仓储、工厂、限界上下文、应用服务、领域服务、事件、域&子域等。
-
+Nest 框架是一个帮助开发人员快速实现基于领域驱动设计的技术框架。在 Nest 中定义了领域驱动设计的基本概念，包括聚合根、实体、值对、领域服务、应用服务、服务事件、仓储等，使用 Nest 可以帮助你全面执行你在领域模型建模中的面向对象思维。有效指导开发人员按模型编写代码，为代码检查等提供必要的依据。
+
+### 什么是领域驱动设计
+领域驱动设计（Domain-Driven Design，DDD）是一种软件开发方法，旨在将软件项目的核心关注点放在业务领域上，通过对业务领域的深入理解和建模，来指导软件的设计和开发，从而使软件系统能够更好地满足业务需求，并具有更好的可维护性、可扩展性和可理解性。
+
+领域驱动设计通过聚焦业务领域、建立清晰的模型和架构，以及促进团队协作等方式，为软件开发带来了诸多好处，能够有效地提高软件系统的质量和适应性，助力企业更好地实现业务目标和战略发展。
+
+### 领域驱动设计与传统开发方式对比
+#### 领域驱动设计
+优点：
+- 紧密围绕业务领域建模：DDD 强调以业务领域为核心进行软件设计和开发，使得软件模型能够更准确地反映业务逻辑和规则，提高了软件与业务的契合度。例如，在一个电商系统中，通过领域驱动设计，可以清晰地构建出订单、商品、用户等领域模型，以及它们之间的复杂业务关系，从而更好地满足电商业务的多样化需求。
+- 增强代码的可维护性和可扩展性：由于领域模型的清晰划分和明确职责，使得代码结构更加模块化，易于理解和维护。当业务需求发生变化时，开发人员可以更准确地定位到需要修改的代码位置，降低了修改的难度和风险。比如，当电商系统需要增加新的商品类型或促销规则时，基于领域驱动设计的代码结构能够更方便地进行扩展和修改，而不会对其他无关的模块产生过多的影响。
+- 提升团队沟通效率：DDD 提供了一套通用的语言和概念体系，使得业务人员、领域专家和开发人员能够在同一个层面上进行有效的沟通和交流。大家可以使用统一的领域术语来描述业务需求和软件功能，减少了因沟通不畅而导致的误解和错误。例如，在讨论电商系统的订单处理流程时，业务人员和开发人员都能够基于 “订单”“支付”“发货” 等领域概念进行清晰的沟通，提高了项目的推进效率。
+
+缺点：
+- 学习曲线较陡峭：领域驱动设计涉及到许多新的概念、原则和方法，如领域模型、限界上下文、聚合根等，对于开发团队来说，需要花费一定的时间和精力去学习和理解这些知识，才能熟练掌握和运用 DDD 进行开发。这可能会在项目初期增加一定的学习成本和时间成本。
+- 设计和开发复杂度相对较高：与传统的面向数据库开发相比，DDD 需要更加深入地分析和理解业务领域，进行更细致的领域建模和设计，这无疑增加了设计和开发的复杂度。在实际项目中，可能需要更多的时间和精力来进行领域模型的构建、验证和优化，以确保其准确性和有效性。
+- 对团队协作要求较高：DDD 强调团队成员之间的紧密协作和沟通，需要业务人员、领域专家和开发人员等多角色的深度参与和配合。如果团队协作不够顺畅，或者成员之间对领域知识的理解存在偏差，可能会导致项目出现问题。例如，业务人员未能准确地传达业务需求，或者开发人员对领域模型的理解不够深入，都可能影响软件的最终质量和交付时间。
+
+#### 传统面向数据库设计
+优点：
+- 简单直接：对于一些简单的业务场景，传统面向数据库开发的方式较为直接和易于理解。开发人员可以快速地根据业务需求设计数据库表结构，然后通过编写 SQL 语句和简单的代码逻辑来实现业务功能。这种方式在小型项目或业务逻辑不太复杂的情况下，能够快速地完成开发任务，节省时间和成本。
+- 技术门槛较低：相对于领域驱动设计，传统面向数据库开发所涉及的技术和概念相对较为基础和常见，如数据库操作、编程语言的基本语法等，开发人员更容易上手和掌握。对于初学者或技术能力较弱的团队来说，这种开发方式更容易实现和维护。
+- 数据一致性保障较好：由于传统面向数据库开发主要以数据库为核心，通过数据库的事务机制和约束条件等，可以较好地保证数据的一致性和完整性。在数据操作较为频繁和复杂的系统中，这一点尤为重要，可以有效地避免数据不一致的问题，确保系统的稳定运行。
+缺点：
+- 业务与技术耦合度高：传统面向数据库开发往往将业务逻辑和数据库操作紧密地耦合在一起，导致代码的可维护性和可扩展性较差。当业务需求发生变化时，可能需要对大量的 SQL 语句和相关的代码逻辑进行修改，容易引发错误和漏洞，增加了维护成本和风险。
+- 难以应对复杂业务场景：随着业务的不断发展和复杂度的增加，传统面向数据库开发的局限性逐渐显现。由于缺乏对业务领域的深入建模和抽象，难以有效地组织和管理复杂的业务逻辑，容易导致代码混乱、难以理解和维护。在处理复杂的业务流程、多业务模块之间的交互等问题时，传统开发方式往往显得力不从心。
+- 不利于团队沟通和协作：在传统面向数据库开发中，开发人员主要关注数据库表结构和 SQL 语句的编写，与业务人员之间的沟通往往存在一定的障碍。业务人员可能难以理解技术细节，而开发人员也可能对业务需求的理解不够深入，从而影响项目的顺利进行和软件质量。
+
+#### 一点点建议
+如果你面向对项目业务领域复杂、业务需求变更频繁、多团队协作开发、需要长期维护和演进的系统时，我强烈建议你采用领域驱动设计方法，领域驱动设计能够更好的帮助理解和梳理业务，有效应对频繁变更的业务需求，明确多个团队间的业务边界，特别适合指导微服务中的服务划分问题，帮助你建立高可维护性与可扩展性的系统奠定基础。
+
+如果你只需要处理简单的业务场景、需求明确且时间紧迫的短期项目，使用领域驱动设计给你带来的效益将大打折扣，甚至还会带来额外的成本。
+
+## 目录
+
+* [领域驱动设计的概念](#领域驱动设计的概念)
+* [快速入门](#快速入门)
+* [使用Spring boot](#使用Spring boot)
+* [领域建模](#领域建模)
+* [应用服务](#应用服务)
+* [事件驱动](#事件驱动)
+* [仓储实现](#仓储实现)
+* [CQRS](#CQRS)
+* [分层架构](#分层架构)
+* [异常处理](#异常处理)
+* [单元测试](#单元测试)
+* [生命周期管理](#生命周期管理)
+* [缓存管理](#缓存管理)
+* [事件管理](#事件管理)
+* [锁管理](#锁管理)
+* [Json序列化](#Json序列化)
+* [Provider 扩展](#Provider 扩展)
+* [更多工具](#更多工具)
+
+# 领域驱动设计的概念
+
+在DDD中，有几个重要概念，它们分别是实体、聚合根、实体标识、值对象、仓储、工厂、限界上下文、应用服务、领域服务、事件、域&子域等。
 
 其中域&子域是战略设计的重要成果，用来表达一个问题空间。一个子域可能会有一个或多个限界上下文组成，共同协调解决问题空间中的问题域。
 
 限界上下文常常可以定义为一个可以独立部署的应用程序，对应于问题空间，限界上下文代表了一个问题空间的解决方案。
 
-将限界上下文当成一个独立的黑盒系统，这个限界上下文所具备的能力由应用服务与事件来表达。这也是多个限界上下文之间交互的重要手段。
+将限界上下文当成一个独立的黑盒系统，这个限界上下文所具备的能力由应用服务与事件来表达,可使用用例来表达。这也是多个限界上下文之间交互的重要手段。
 
 而限界上下文的核心能力都是由内部的领域模型提供，领域模型是基于当前问题空间进行战术设计的产物。所以对领域模型的建模便是战术设计的工作核心。
 
-领域模型由实体、实体标识、值对象、聚合、领域服务组成。
+领域模型由实体、实体标识、值对象、聚合根、领域服务组成。
 
 而仓储、工厂分别是对领域模型的生命周期而服务，仓储负责对模型的持久化与重新加载，工厂封装了实体被创建的一系列细节。
 
-#### 领域建模
+## 领域建模
+领域建模是战术设计的工作核心，为了让大家更好完成领域建模，这里将对实体、值对象、聚合根、领域服务进行简单的介绍。
 
-为了让大家更好完成领域建模，这里将对实体、值对象、聚合、领域服务进行简单的介绍。
+### 实体
 
-**实体**
+领域实体是领域模型中的核心概念，它是从通用语言中提炼出来的名词，它代表了业务领域中具有唯一标识且生命周期较长的事物。领域实体通常具有自己的属性和行为，并且其状态可以随着时间和业务操作而发生变化。
 
-通过在通用语言中提练出来的一些重要名词，并且这些名词将在后继业务中被使用，我们往往通过一个唯一标识来表达（引用）这个名词，并且关注这个名词的生命周期，在战术设计建模中，我们常常用实体来标识这些名词。
+特性:
 
-所以实体具有两个重要特性，一是它需要有唯一标识，并且可以通过这个唯一标识来引用这个实体，二是我们需要关注他的生命周期（构建、状态变化、持久化、重新加载）。
+- 唯一标识，并且可以通过这个唯一标识来引用这个实体
+- 可变性，实体状态(实体的各类属性)可以随着时间和业务操作而发生变化
+- 行为和业务逻辑，领域实体通常包含与自身相关的业务逻辑和行为方法。这些方法用于操作实体的属性，执行与实体相关的业务操作
+
+### 值对象
+
+与实体相似的另一个概念是值对象，它也是从通用语言中提炼出来的名词。区别于实体，它没有唯一标识，其主要目的是为了传递和表示一些不可变的值，所以值对象往往不会独立存在，它常常用来描述实体的一些特性。值对象从创建之后就不应该有状态变化，他对于实体而言应该是没有负作用的，如果需要对一个值对象进行修改，常常是创建一个新的值对象去替代原来的值对象。
+
+特点：
+
+- 不可变性：值对象一旦创建，其内部的值就不能被修改。如果需要修改值对象的值，就需要创建一个新的值对象。这种不可变性使得值对象在多线程环境下更加安全，也更容易进行缓存和共享。
+- 无唯一标识：与领域实体不同，值对象不需要有唯一的标识符。因为值对象的主要作用是表示一个值，而不是代表一个具有独立生命周期的事物。例如，一个表示颜色的值对象 “红色”，它不需要有一个特定的标识来区分它与其他 “红色” 值对象。
+- 值相等性：对于值对象，判断两个值对象是否相等通常是通过比较它们内部的所有属性值是否相等来确定的。如果两个值对象的所有属性值都相等，那么它们就被认为是相等的值对象。
+
+### 聚合根
+
+将一系列关系密切的实体、值对象联系在一起，组成的一个比较大的实体,我们将其称为一个聚合。而能够访问聚合内实体的根实体我们将之称为聚合根，聚合根负责维护聚合内其他实体和值对象的一致性.
+
+特点：
+
+- 聚合边界：聚合根定义了一个聚合的范围，聚合内的所有实体和值对象都与聚合根存在着紧密的关联关系。聚合根将相关的领域对象组合在一起，形成一个高内聚的业务单元。例如，在一个订单聚合中，订单实体作为聚合根，它包含了订单项实体、收货地址值对象等，这些对象共同构成了一个完整的订单业务概念。
+- 一致性维护：聚合根负责确保聚合内对象的一致性。当对聚合内的任何对象进行操作时，都必须通过聚合根来进行，以保证操作的原子性和一致性。比如在修改订单的某个订单项时，必须通过订单聚合根来执行相应的操作，以确保订单的整体状态和数据的一致性。
+- 数据持久化：在数据持久化方面，聚合根通常是作为一个整体进行存储和检索的。也就是说，当将聚合持久化到数据库时，通常是将整个聚合根及其包含的所有实体和值对象一起存储到数据库中，以保证聚合内数据的完整性和一致性。
+
+tips1: 一个聚合内可能只有一个聚合根，也可能有多个聚合根。聚合可以很小，小到只有一个实体，那么该实体本身也但是一个聚合根。
+tips2: 聚合与实体的关系和实体与值对象的关系相对于UML中的聚合与组合关系。实体可以独立于聚合存在，弱引用关系，而实体与值对象是组合关系，值对象跟随实体的生命周期，是包含关系。
+tips3: 虽然聚合才关注持久化，但在实现过程中往往会给实体提供仓储功能，由聚合统一调配。为了快速聚合对象的创建，往往推荐大家设计更小的聚合。
+
+### 领域服务
+
+在通用语言中抽象出来的一些动作，这些动作往往需要协调多个聚合才能完成，而这样的行为放在其中任何一个聚合中都不那么和谐时，便可以用领域服务来处理。 但是我们不要太过于依赖领域服务，只有在没有办法的情况下才用领域服务，否则容易产生贫血模式。
 
 
-在领域建模中，实体不单单通过属性来表达自己的形态，还存在一系列行为，这些行为可以自组织的管理实体内部的属性变化。
-
-**值对象**
-
-与实体相似的另一个概念是值对象，它也是从通用语言中提炼出来的名词。区别于实体，我们对值对象不关注它的生命周期，正因为如此，值对象往往不会独立存在，它常常用来描述实体的一些特性。值对象从创建之后就不应该有状态变化，他对于实体而言应该是没有负作用的，如果需要对一个值对象进行修改，常常是创建一个新的值对象去替代原来的值对象。
-
-值对象更像是一个复杂结构，由一系列的基本属性组合成的结构体，服务于实体。
-
-**聚合**
-
-将一系列关系密切的实体、值对象联系在一起，组成的一个比较大的实体。我们将其称为一个聚合，但聚合过大时往往会带来一些不好的影响。
-
-**领域服务**
-
-在通用语言中抽象出来的一些动作，这些动作往往需要协调多个实体才能完成，而这样的行为放在其中任何一个实体中都不那么和谐时，便可以用领域服务来处理。 但是我们不要太过于依赖领域服务，只有在没有办法的情况下才用领域服务，否则容易产生贫血模式。
-
-
-**领域建模原则**
+### 领域建模原则
 
 领域建模是DDD战术设计的重要内容。其中最基础的模型过程便是区分实体与值对象。
 
 分析一个名词是否是实体时需要在当前业务场景中来分析，比如同样是商品信息，在商品上下文中，他是一个实体，我们可以对这个商品进行上下架操作。我们可以通过商品的编号来唯一标识该商品信息。而在订单上下文中，他就成了一个值对象，他只是用来描述订单信息的一个组成部分，在订单被创建之后，这些商品信息就不会再发生变化，即使原来的商品已经被删除，这里的商品信息也不会受到影响。因为值对象的存储方式是一份副本，而不是基于实体标识的引用。
 
-领域模型应该包括实体、值对象、领域服务。并且可以通过领域模型图完成业务演练与代码开发指导。
+领域模型应该包括聚合根、实体、值对象、领域服务。并且可以通过领域模型图完成业务演练与代码开发指导。
 
-#### 应用服务与事件
+领域建模可以使用UML语言，为了区分这四类模型，可以采用四种不同的颜色来区分，称之为四色原型法。
 
-应用服务与事件代表了当前上下文具有的能力及交互方式。应用服务的定义应该基于用例，并且一个应用服务代表了一个事务。应用服务通封装领域模型中的能力组装业务逻辑。事件的发布也需要通过应用服务来触发。
+## 应用服务
 
-#### 四色原型建模
-暂略...
+应用服务是领域驱动设计（DDD）架构中的一个重要组成部分。它位于领域层之上，主要负责接收来自外部（如用户界面、其他系统等）的请求，协调领域层中的领域服务、领域实体和值对象来完成具体的业务操作，然后将处理结果返回给外部请求者。应用服务充当了外部世界与领域模型之间的桥梁。
 
-#### 使用Nest关于DDD的定义
+职责：
+- 请求接收与转发：应用服务接收来自外部（如用户界面、其他系统等）的请求，通过领域层的领域服务、聚合或值对象完成业务封装。
+- 发起事件：多个系统之间的交互关系除常用的请求/响应模式外，还应支持事件驱动模式，可以通过应用服务发起事件
+- 数据转换与适配：应用服务需要将来自外部的请求数据结构转换为领域对象或将领域对象转换为外部的响应数据。
+- 事务管理：应用服务对应一个业务用例，用例内的所有业务操作应该在一个事务内处理以保证其一致性与完整性。
+- 安全与权限控制：应用服务应该对业务请求进行安全性验证，以保证该应用有执行特定业务的操作权限。
 
-根据DDD的术语，Nest的支持对应关系如下：
+tips1: 应用服务区别于领域服务，
+> 应用服务是封装业务而领域服务是实现业务
+> 应用服务面向业务用例设计而领域服务面向业务行为而设计
+> 应用服务位于领域服务上层，应用服务可调用领域服务而领域服务不能调用应用服务
 
-DDD术语 | Nest
----|---
-限界上下文 | 应用程序
-应用服务 | AppService
-实体 | Entity
-实体标识 | Identifier
-值对象 | ValueObject
-实体工厂 | EntityLoader
-领域事件 | EventBus
-仓储 | Repository
-
-**定义一个实体**
-
-要定义一个实体，只需要将该类继承`com.zhaofujun.nest.context.model.BaseEntity<T extends AbstractIdentifier>`。
-
-实体的标识可以按要求自定义。系统还提供了`com.zhaofujun.nest.context.model.UUIdentifier`、`com.zhaofujun.nest.context.model.LongIdentifier`、`com.zhaofujun.nest.context.model.StringIdentifier`给开发人员选择.
-
-开发人员也可以继承`com.zhaofujun.nest.context.model.AbstractIdentifier`实现自定义的实体标识。
-
-**为实体实现仓储**
-
-实体是需要关注基生命周期的，可以通过实现`com.zhaofujun.nest.standard.Repository<T extends Entity>`完成实体的持久化处理。该接口定义了`insert`、`update`、`delete`方法用于对数据库的操作。同时还定义了`batchInsert`、`batchUpdate`、`batchDelete`方法用于批量处理，批量处理方法都提供了默认的实现，如果需要批量处理的数据量较大，建议使用数据库的batch方式提交。
-
-自定义的仓储实现需要使用`NestApplication.getRepositoryManager().addRepository(Repository... repositories)`方法向系统注册仓储，也可以将仓储注册到IOC从容器，由IOC容器自动注册。
-
-
-**如何加载或创建实体**
-
-可以使用实体工厂`com.zhaofujun.nest.context.model.EntityFactory`来加载或创建一个实体。
-
-`load`方法将通过仓储来加载，在仓储加载之前优先使用当前工作单元中的实体，如果当前工作单元中找不到，就会去缓存加载，如果缓存也没有才会使用仓储在数据库中去加载。
-
-`create`方法将创建一个全新的实体，建议按实体的标识建立数据库唯一索引，可以有效利用数据库的一些额外能力，比如提升查询性能、处理重复数据等。
-
-
-### 事件总线
-
-当系统需要接受外部的异步消息或发布事件时，可以通过事件总线`com.zhaofujun.nest.standard.EventBus`来处理。 
-
-事件总线的定义如下：
-```java
-package com.zhaofujun.nest.core;
-
-
-import com.zhaofujun.nest.context.event.EventData;
-
-
-public interface EventBus{
-    void registerHandler(EventHandler eventHandler);
-    void publish(EventData eventData);
-}
-
-```
-**事件订阅**
-
-通过`registerHandler`手动注册一个EventHandler。当然在IOC容器下，也可以将EventHandler注册到IOC容器中，由IOC容器自动注册。
-
-**事件发布**
-
-`publish`方法发布一个事件，发布一个事件需要实现`com.zhaofujun.nest.core.EventData`抽象类做为事件发布的内容。 其中`getEventCode`抽象方法定义当前事件代号。
-
-事件的发布应该在应用服务层发起，事件提交并不是立刻进行，而是与实体的提交一起进行，如果实体提交失败，事件将不会提交，如果实体提交成功而事件提交失败时，事件消息将通过补偿机制重新发起以达到最终一致性。
-
-**事件管道配置**
-
-事件管道配置由`com.zhaofujun.nest.context.event.EventConfiguration`定义，事件代号对应EventData中的Code，管道对应于`MessageChannelProvider`的实现。表示当前事件使用才能方式发出。
-
-使用`NestApplication.getConfigurationManager().addConfigurationItem(ConfigurationItem... configurationItems)`向应用程序注册新的配置项。
-
-可在IOC容器下，可以使用IOC定义一个EventConfiguration的Bean，系统将自动注册该配置。
-
-**监听实体变更**
-
-如果实体实现了`EntityNotify`接口，当该实体向仓储提交数据时将自动发起事件`EntityNotifyEventData`事件，该事件可以根据项目需求配置到指定的消息通道。
-
-#### 代码演示
-
-**事件数据 PasswordChangedEventData**
-
-```java
-package com.zhaofujun.nest.ioc.test.models;
-
-import com.zhaofujun.nest.core.EventData;
-
-public class PasswordChangedEventData extends EventData {
-    public static final String EVENT_CODE = "PASSWORD_CHANGED";
-
-    @Override
-    public String getEventCode() {
-        return EVENT_CODE;
-    }
-    private String newPassword;
-    private String oldPassword;
-    private String userId;
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public PasswordChangedEventData(String newPassword, String oldPassword, String userId) {
-        this.newPassword = newPassword;
-        this.oldPassword = oldPassword;
-        this.userId = userId;
-    }
-}
-```
-
-**从应用服务发布事件TestAppservices**
-```java
-package com.zhaofujun.nest.ioc.test.appservices;
-
-import com.zhaofujun.nest.standard.EventBus;
-import com.zhaofujun.nest.context.model.StringIdentifier;
-import com.zhaofujun.nest.context.loader.ConstructEntityLoader;
-import com.zhaofujun.nest.standard.EntityLoader;
-import com.zhaofujun.nest.context.loader.RepositoryEntityLoader;
-
-@AppService
-public class TestAppservices {
-
-    @Autowired
-    EventBus eventBus;
-
-
-    public void changPwd(String userName, String newPwd) {
-        EntityLoader<User> entityLoader = new RepositoryEntityLoader<>(User.class);
-        User user = entityLoader.create(StringIdentifier.valueOf(userName));
-        user.changPwd(newPwd);
-
-        PasswordChangedEventData eventObject = new PasswordChangedEventData("newpwd", "oldpwd", "111");
-
-        eventBus.publish(eventObject);
-    }
-
-
-    public void createUser(String usrName, String pwd) {
-        EntityLoader<User> entityLoader = new ConstructEntityLoader<>(User.class);
-        User user = entityLoader.create(StringIdentifier.valueOf(usrName));
-        user.changPwd(pwd);
-
-        PasswordChangedEventData eventObject = new PasswordChangedEventData("newpwd", "oldpwd", "111");
-
-        eventBus.publish(eventObject);
-    }
-}
-
-
-```
-
-**事件处理器PwdChangedEventHandler**
-
-```java
-package com.zhaofujun.nest.ioc.test;
-
-import com.zhaofujun.nest.standard.EventArgs;
-import com.zhaofujun.nest.standard.EventHandler;
-import com.zhaofujun.nest.ioc.test.models.PasswordChangedEventData;
-
-@Component
-public class PwdChangedEventHandler implements EventHandler<PasswordChangedEventData> {
-    public static final String EVENT_CODE = "PASSWORD_CHANGED";
-
-    @Override
-    public String getEventCode() {
-        return EVENT_CODE;
-    }
-
-    @Override
-    public Class<PasswordChangedEventData> getEventDataClass() {
-        return PasswordChangedEventData.class;
-    }
-
-    @Override
-    public void handle(PasswordChangedEventData eventData, EventArgs eventArgs) {
-        System.out.println(eventData.toString());
-    }
-}
-
-```
-
-
-### 应用及服务全生命周期
-
-一个系统称为一个应用，每一个用例对应的请求都将启动一个服务上下文。
-
-Nest可以通过监听器`com.zhaofujun.nest.event.ApplicationListener`和`com.zhaofujun.nest.event.ServiceContextListener`来监听应用与服务的事件。
-
-
-**`ApplicationListener`定义如下**
-
-```java
-package com.zhaofujun.nest.event;
-
-import java.util.EventListener;
-
-public interface ApplicationListener extends EventListener {
-
-    void applicationStarted(ApplicationEvent applicationEvent);
-
-    void applicationClosed(ApplicationEvent applicationEvent);
-}
-```
-
-**`ServiceContextListener`定义如下**
-
-```java
-
-public interface ServiceContextListener extends EventListener {
-    void serviceCreated(ServiceEvent serviceEvent);
-
-    void serviceMethodStart(ServiceEvent serviceEvent, Method method);
-
-    void serviceMethodEnd(ServiceEvent serviceEvent, Method method);
-
-    void beforeCommit(ServiceEvent serviceEvent);
-    void committed(ServiceEvent serviceEvent);
-
-    void serviceEnd(ServiceEvent serviceEvent);
-}
-
-```
-
-## Nest最佳实践
-
-推荐使用nest-plus来扩展nest
-
-[点击进入](https://github.com/jovezhao/nest-plus)
-
-# 常见问题汇总
+## 仓储
+仓储是领域驱动设计（DDD）架构中
