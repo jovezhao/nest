@@ -1,4 +1,4 @@
-package com.zhaofujun.nest.demo.webapi.dto;
+package com.zhaofujun.nest.demo.appservices;
 
 public class UserDto {
     private String id;

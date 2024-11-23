@@ -3,13 +3,13 @@ package com.zhaofujun.nest.demo.handlers;
 import org.springframework.stereotype.Component;
 
 import com.zhaofujun.nest.ddd.EventHandler;
-import com.zhaofujun.nest.demo.webapi.dto.UserDto;
+import com.zhaofujun.nest.demo.appservices.UserDto;
 @Component
 public class UserEventHandler implements EventHandler<UserDto> {
 
     @Override
     public String getEventName() {
-        return "test";
+        return "user_name_changed";
     }
 
     @Override

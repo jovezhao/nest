@@ -40,7 +40,6 @@ Nest 框架是一个帮助开发人员快速实现基于领域驱动设计的技
 
 * [领域驱动设计的概念](#领域驱动设计的概念)
 * [快速入门](#快速入门)
-* [使用Springboot](#使用Springboot)
 * [领域建模](#领域建模)
 * [应用服务](#应用服务)
 * [事件驱动](#事件驱动)
@@ -339,7 +338,254 @@ public class UserCreatedHandler implements EventHandler<UserDto> {
 ```
 在本例中没有创建用户模型的仓储实现，Nest 将使用默认的仓储实现，默认仓储使用本地缓存存储数据，可用于单元测试或集成测试，请勿用于生产环境。
 
-# 使用Springboot
+## 使用Springboot
 
-添加`nest-spring-boot-starter`依赖
-nest-spring-boot-starter
+本例将使用Springboot3.0创建入门应用，案例创建通过仓储加载一个`User`模型，修改name属性后发布事件。并且使用两个事务处理器处理事件。
+
+**添加`nest-spring-boot-starter`依赖**
+
+Nest已经通过Maven中央仓库托管，你可以在项目中直接引用依赖。
+**Maven引用**
+```xml
+<!-- https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd -->
+<dependency>
+    <groupId>com.zhaofujun.nest</groupId>
+    <artifactId>nest-spring-boot-starter</artifactId>
+    <version>3.0.0</version>
+</dependency>
+```
+**Gradle引用**
+```groovy
+// https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd
+compile group: 'com.zhaofujun.nest', name: 'nest-spring-boot-starter', version: '3.0.0'
+
+```
+**创建`User`模型**
+
+```java
+package com.zhaofujun.nest.demo.appservices.model;
+
+import com.zhaofujun.nest.ddd.AggregateRoot;
+import com.zhaofujun.nest.ddd.LongIdentifier;
+
+public class User extends AggregateRoot<LongIdentifier>  {
+    private String name;
+    private long age;
+
+    public User(LongIdentifier longIdentifier){
+        super(longIdentifier);
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public long getAge() {
+        return age;
+    }
+    public void setAge(long age) {
+        this.age = age;
+    }
+
+}
+```
+创建模型方式与之前一样，需继承至`AggregateRoot`
+
+**创建应用服务**
+
+```java
+package com.zhaofujun.nest.demo.appservices;
+
+public class UserDto {
+    private String id;
+    private String name;
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+}
+
+```
+
+```java
+package com.zhaofujun.nest.demo.appservices;
+
+import com.zhaofujun.nest.boot.AppService;
+import com.zhaofujun.nest.ddd.LongIdentifier;
+import com.zhaofujun.nest.demo.appservices.model.User;
+import com.zhaofujun.nest.utils.EntityUtil;
+import com.zhaofujun.nest.utils.EventUtil;
+
+@AppService
+public class UserAppservice {
+    
+    public UserDto changeName(long id) {
+        User user = EntityUtil.load(User.class, new LongIdentifier(id));
+        user.setName("name1");
+
+        var result = new UserDto();
+        result.setId(user.getId().toValue());
+        result.setName(user.getName());
+
+        EventUtil.publish("user_name_changed", result);
+
+        return result;
+    }
+}
+```
+在Spring环境中有两种方式标识应用服务，可使用`@AppService`注解或通过继承`ApplicationService`接口。使用后者需要为应用服务类注解`@Component`使其被Spring容器管理，而使用前者将自动被注册到Spring容器。
+
+**创建User仓储**
+
+```java
+package com.zhaofujun.nest.demo.repositories;
+
+import java.lang.reflect.Type;
+
+import org.springframework.stereotype.Component;
+
+import com.zhaofujun.nest.ddd.Identifier;
+import com.zhaofujun.nest.ddd.LongIdentifier;
+import com.zhaofujun.nest.ddd.Repository;
+import com.zhaofujun.nest.demo.appservices.model.User;
+
+@Component
+public class UserRepository implements Repository<User> {
+
+    @Override
+    public void insert(User t) {
+        System.out.println("新增 User，可以使用 DAO 方式操作数据库");
+    }
+
+    @Override
+    public void update(User t) {
+        System.out.println("修改 User，可以使用 DAO 方式操作数据库");
+
+    }
+
+    @Override
+    public void delete(User t) {
+
+    }
+
+    @Override
+    public Type getEntityType() {
+        return User.class;
+    }
+
+    @Override
+    public User getEntityById(Class<? extends User> tClass, Identifier identifier) {
+        System.out.println("直接创建一个 User 类，模拟数据库查询");
+
+        User user = new User((LongIdentifier) identifier);
+        user.setName("test");
+        user.setAge(10);
+        return user;
+
+    }
+
+}
+```
+仓储的定义需要继承至`Repository`接口并实现`insert`,`update`,`delete`,`getEntityType` 和`getEntityById`方法。
+
+在Spring环境中需要为仓储类添加`@Component`注解以便容器管理。
+
+**创建RestController**
+
+```java
+package com.zhaofujun.nest.demo.webapi;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.zhaofujun.nest.demo.appservices.UserAppservice;
+import com.zhaofujun.nest.demo.appservices.UserDto;
+
+@RestController
+public class UserController {
+    @Autowired
+    private UserAppservice userAppservice;
+
+    @PostMapping("/user/{id}")
+    public UserDto changeName(@PathVariable Long id) {
+        return userAppservice.changeName(id);
+    }
+}
+```
+**创建事务处理器**
+本案例使用两种方式处理事件，分别使用`EventHandler`接口方式和`@EventListener`注解方式。
+
+```java
+package com.zhaofujun.nest.demo.handlers;
+
+import org.springframework.stereotype.Component;
+
+import com.zhaofujun.nest.ddd.EventHandler;
+import com.zhaofujun.nest.demo.appservices.UserDto;
+@Component
+public class UserEventHandler implements EventHandler<UserDto> {
+
+    @Override
+    public String getEventName() {
+        return "user_name_changed";
+    }
+
+    @Override
+    public Class<UserDto> getEventDataClass() {
+        return UserDto.class;
+    }
+
+    @Override
+    public void handle(UserDto eventData) {
+        System.out.println("event handler");
+    }
+
+}
+```
+
+```java
+package com.zhaofujun.nest.demo.handlers;
+
+import org.springframework.stereotype.Component;
+import com.zhaofujun.nest.boot.EventListener;
+import com.zhaofujun.nest.demo.appservices.UserDto;
+
+@Component
+public class UserEventHandlerListener {
+    @EventListener(eventDataClass = UserDto.class, eventName = "user_name_changed")
+    public void userCreate(UserDto userDto) {
+        System.out.println("event listener");
+    }
+}
+
+```
+
+**启动Springboot应用程序**
+
+```java
+package com.zhaofujun.nest.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+```
+
+在使用了SpringBoot后，我们将不再关注 NestEngine 的初始化过程，`nest-spring-boot-starter`将自动初始化NestEngine。
