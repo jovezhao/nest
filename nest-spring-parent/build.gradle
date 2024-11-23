@@ -13,6 +13,7 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter")
         annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
         api(project(":nest-ddd"))
+        testImplementation('org.springframework.boot:spring-boot-starter-test')
     }
 
     apply from: "${rootProject.projectDir}/publish.gradle"

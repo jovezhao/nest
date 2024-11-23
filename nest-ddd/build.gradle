@@ -13,7 +13,18 @@ dependencies{
     implementation("com.alibaba.fastjson2:fastjson2:2.0.10")
     implementation("net.sf.ehcache:ehcache-core:2.6.6")
     // implementation 'com.google.guava:guava:31.0.1-jre'
-    implementation("cglib:cglib:3.2.10")
+    implementation("cglib:cglib:3.3.0")
+   
+    testImplementation(platform('org.junit:junit-bom:5.11.3'))
+	testImplementation('org.junit.jupiter:junit-jupiter')
+	testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+
+}
+test {
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
 }
 
 apply from: "${rootProject.projectDir}/publish.gradle"

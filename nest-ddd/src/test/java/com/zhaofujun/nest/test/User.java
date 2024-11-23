@@ -1,9 +1,9 @@
 package com.zhaofujun.nest.test;
 
-import com.zhaofujun.nest.ddd.Entity;
+import com.zhaofujun.nest.ddd.AggregateRoot;
 import com.zhaofujun.nest.ddd.StringIdentifier;
 
-public class User extends Entity<StringIdentifier> {
+public class User extends AggregateRoot<StringIdentifier> {
     public User(StringIdentifier identifier) {
         super(identifier);
     }

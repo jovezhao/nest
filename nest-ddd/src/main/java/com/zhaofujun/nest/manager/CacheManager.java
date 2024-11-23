@@ -18,11 +18,13 @@ public class CacheManager {
         cachMap.put(code, new CacheClientImlp(code, cacheProvider, idleSeconds, false));
     }
 
-    public static void addCacheItem(CacheItem cacheItem) {
-        CacheProvider cacheProvider = ProviderManager.get(CacheProvider.class, cacheItem.getCacheProviderCode());
-        cachMap.put(cacheItem.getCode(),
-                new CacheClientImlp(cacheItem.getCode(), cacheProvider, cacheItem.getMaxLiveSeconds(),
-                        cacheItem.isDisabled()));
+    public static void addCacheItem(CacheItem... cacheItems) {
+        for (CacheItem cacheItem : cacheItems) {
+            CacheProvider cacheProvider = ProviderManager.get(CacheProvider.class, cacheItem.getCacheProviderCode());
+            cachMap.put(cacheItem.getCode(),
+                    new CacheClientImlp(cacheItem.getCode(), cacheProvider, cacheItem.getMaxLiveSeconds(),
+                            cacheItem.isDisabled()));
+        }
     }
 
     public static void addCacheItem(Collection<CacheItem> cacheItems) {

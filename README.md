@@ -174,6 +174,165 @@ compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '3.0.0'
 
 ## 快速上手演练-使用nest创建可运行的项目
 
-本案例使用nest-ddd快速创建基于DDD的项目，并且完成创建用户的演示操作
+本案例使用nest-ddd快速创建基于DDD的项目，并且完成创建用户，发送创建用户成功的事件，并且自己作为消费者处理事件。
 
-项目由领域模型、应用服务和应用程序组成。
+项目由领域模型、应用服务和应用程序、事件处理器组成。
+
+
+
+**创建用户领域模型**
+```java
+package com.zhaofujun.nest.test;
+
+import com.zhaofujun.nest.ddd.AggregateRoot;
+import com.zhaofujun.nest.ddd.StringIdentifier;
+
+public class User extends AggregateRoot<StringIdentifier> {
+    public User(StringIdentifier identifier) {
+        super(identifier);
+    }
+
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "User [name=" + name + ", id=" + id.toValue() + "]"+this.hashCode();
+    }
+
+    
+}
+```
+User类从AggregateRoot聚合根继承，并且指定了User类使用String类型的标识为唯一标识。
+**创建应用服务**
+
+应用服务包括一个服务类以及一个DTO类。
+
+```java
+package com.zhaofujun.nest.test;
+
+public class UserDto {
+    private String id;
+    private String name;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+}
+```java
+package com.zhaofujun.nest.test;
+
+import com.zhaofujun.nest.ddd.ApplicationService;
+import com.zhaofujun.nest.ddd.StringIdentifier;
+import com.zhaofujun.nest.utils.EventUtil;
+
+public class DefaultUserAppService implements ApplicationService {
+    public UserDto create() {
+        User user = new User(new StringIdentifier("111"));
+        user.setName("name");
+
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId().toValue());
+        userDto.setName(user.getName());
+        EventUtil.publish("user_created", userDto，100);
+
+        return userDto;
+    }
+}
+```
+应用服务需要继承至'ApplicationService'类，在应用服务内创建用户模型、将用户模型转换为 DTO，并且通过'EventUtil'发布用户创建完成的事件
+
+**创建应用**
+应用可以是 web，也可以是命令行工具等。 本例使用 junit
+```java 
+package com.zhaofujun.nest.test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import com.zhaofujun.nest.NestEngine;
+import com.zhaofujun.nest.ddd.event.EventAppService;
+import com.zhaofujun.nest.inner.DefaultEventInfoRepository;
+import com.zhaofujun.nest.utils.AppServiceUtil;
+
+public class UserTest {
+
+    @BeforeAll
+    public void initEngine() throws Throwable {
+        NestEngine nestEngine = new NestEngine();
+
+        EventAppService eventAppService = AppServiceUtil.create(EventAppService.class);
+        eventAppService.setQuery(new DefaultEventInfoRepository());
+
+        nestEngine.setEventAppService(eventAppService);
+
+        // 注册事件处理器
+        nestEngine.registerEventHandler(new UserCreatedHandler());
+
+        // 启动引擎
+        nestEngine.start();
+
+    }
+
+    @Test
+    public void createUser() throws Throwable {
+
+        // 创建化用户应用服务
+        DefaultUserAppService userAppService = AppServiceUtil.create(DefaultUserAppService.class);
+        UserDto userDto = userAppService.create("1111", "Li lei");
+
+        assertEquals("111", userDto.getId());
+        assertEquals("Li lei", userDto.getName());
+
+    }
+
+}
+```
+```java
+
+package com.zhaofujun.nest.test;
+
+import com.zhaofujun.nest.ddd.EventHandler;
+
+public class UserCreatedHandler implements EventHandler<UserDto> {
+
+    @Override
+    public String getEventName() {
+        return "user_created";
+    }
+
+    @Override
+    public Class<UserDto> getEventDataClass() {
+        return UserDto.class;
+    }
+
+    @Override
+    public void handle(UserDto eventData) {
+        System.out.println("接收到用户创建成功的事件：" + eventData.toString());
+    }
+
+}
+
+```

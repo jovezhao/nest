@@ -30,6 +30,7 @@ import com.zhaofujun.nest.provider.Provider;
 import com.zhaofujun.nest.utils.EntityUtil;
 import com.zhaofujun.nest.utils.MessageUtil;
 import com.zhaofujun.nest.utils.cache.CacheClient;
+import com.zhaofujun.nest.utils.cache.CacheItem;
 
 /**
  * NestEngine 类
@@ -99,6 +100,22 @@ public class NestEngine {
             // 加载provider(包括缓存提供者、事件通道提供者)
             ProviderManager.addProvider(container.getInstances(Provider.class));
         }
+    }
+
+    public void registerProviders(Provider... providers) {
+        ProviderManager.addProvider(providers);
+    }
+
+    public void registerCacheItem(CacheItem... cacheItems) {
+        CacheManager.addCacheItem(cacheItems);
+    }
+
+    public void registerRepository(Repository... repositories) {
+        RepositoryManager.addRepository(repositories);
+    }
+
+    public void registerEventHandler(EventHandler... eventHandlers) {
+        EventHandlerManager.addEventHandler(eventHandlers);
     }
 
     /**
