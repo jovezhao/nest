@@ -599,3 +599,23 @@ public class Application {
 领域建模可以使用UML语言，为了区分这四类模型，可以采用四种不同的颜色来区分，称之为四色原型法。
 
 ## 使用nest-ddd定义模型
+
+**`DomainObject`类**
+
+领域对象类，是值对象、实体、聚合根的基类。
+
+**`ValueObject`类**
+
+值对象类，根据值对象的定义，重写了`equals`和`hashCode`方法，使其对比两个值对象值是否相同的方式不按引用，而是对比每个属性的值是否相同。为了不使用反射影响性能，定义为值对象的类继承`ValueObject`的类时需要实现`Object[] getPropertiesForComparison()`抽象方法。例如：
+```java 
+public class ConcreteValueObject extends ValueObject  {
+    private String name;
+    private int age;
+    @Override
+    public Object[] getPropertiesForComparison() {
+        return new Object[]{name, age};
+    }
+}
+```
+**`Identifier`类**
+

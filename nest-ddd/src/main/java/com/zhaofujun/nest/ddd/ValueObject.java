@@ -1,20 +1,39 @@
 package com.zhaofujun.nest.ddd;
 
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * 值对象抽象类，继承自 DomainObject 类。
  */
-public abstract class ValueObject extends DomainObject {
-    /**
-     * 重写 equals 方法，用于比较两个值对象是否相等。
-     *
-     * @param obj 要比较的对象
-     * @return true 如果两个对象相等，false 否则
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof ValueObject)) return false;
-        if (!this.getClass().equals(obj.getClass())) return false;
+public abstract class ValueObject extends DomainObject implements Serializable {
+    protected abstract Object[] getPropertiesForComparison();
 
-        return this.hashCode() == obj.hashCode();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || !(o instanceof ValueObject))
+            return false;
+
+        ValueObject other = (ValueObject) o;
+
+        Object[] thisProperties = this.getPropertiesForComparison();
+        Object[] otherProperties = other.getPropertiesForComparison();
+        if (thisProperties.length != otherProperties.length)
+            return false;
+        for (int i = 0; i < thisProperties.length; i++) {
+            if (!Objects.equals(thisProperties[i], otherProperties[i]))
+                return false;
+        }
+        return true;
+
+    }
+
+    @Override
+    public int hashCode() {
+        Object[] properties = this.getPropertiesForComparison();
+        return Arrays.hashCode(properties);
     }
 }
