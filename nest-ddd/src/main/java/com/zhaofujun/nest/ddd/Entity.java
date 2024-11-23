@@ -171,8 +171,8 @@ public abstract class Entity<T extends Identifier> extends DomainObject {
         return Objects.equals(this.id, ((Entity<?>) obj).id);
     }
 
-    // @Override
-    // public int hashCode() {
-    //     return Objects.hash(this.id, getClassName());
-    // }
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, getClassName());
+    }
 }

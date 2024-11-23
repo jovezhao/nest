@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * UUID 标识符类，继承自 Identifier 类。
  */
-public class UUIdentifier extends Identifier {
+public class UUIDIdentifier extends Identifier {
     /**
      * UUID 值。
      */
@@ -26,7 +26,7 @@ public class UUIdentifier extends Identifier {
      *
      * @param id UUID 值
      */
-    public UUIdentifier(UUID id) {
+    public UUIDIdentifier(UUID id) {
         this.id = id;
     }
 
@@ -35,7 +35,7 @@ public class UUIdentifier extends Identifier {
      *
      * @return 新的 UUID 标识符
      */
-    private static UUIdentifier newId() {
-        return new UUIdentifier(UUID.randomUUID());
+    private static UUIDIdentifier newId() {
+        return new UUIDIdentifier(UUID.randomUUID());
     }
 }

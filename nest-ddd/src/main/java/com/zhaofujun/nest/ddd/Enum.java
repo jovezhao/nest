@@ -1,5 +1,7 @@
 package com.zhaofujun.nest.ddd;
 
+import javax.validation.constraints.Email;
+
 /**
  * 表示枚举的接口。
  * 枚举是一种特殊的类型，它代表了一组命名的值。
