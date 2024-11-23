@@ -310,6 +310,8 @@ public class UserTest {
 
 }
 ```
+应用服务的创建不能直接使用使用`new`关键字，必须使用`AppServiceUtil.create`方法创建，因为`Nest`框架将使用`AOP`处理方法切面。
+
 ```java
 
 package com.zhaofujun.nest.test;
@@ -444,6 +446,8 @@ public class UserAppservice {
 }
 ```
 在Spring环境中有两种方式标识应用服务，可使用`@AppService`注解或通过继承`ApplicationService`接口。使用后者需要为应用服务类注解`@Component`使其被Spring容器管理，而使用前者将自动被注册到Spring容器。
+
+另外获取应用服务实例时使用Spring自动注入即可，不再需要`AppServiceUtil.create`方法创建。
 
 **创建User仓储**
 
@@ -588,4 +592,4 @@ public class Application {
 }
 ```
 
-在使用了SpringBoot后，我们将不再关注 NestEngine 的初始化过程，`nest-spring-boot-starter`将自动初始化NestEngine。
+在使用了SpringBoot后，我们将不再关注 NestEngine 的初始化过程，`nest-spring-boot-starter`将自动初始化NestEngine。也不需要手动注册事件处理器，只需要将处理器放入Spring容器中管理即可
