@@ -208,7 +208,8 @@ public class User extends AggregateRoot<StringIdentifier> {
     
 }
 ```
-User类从AggregateRoot聚合根继承，并且指定了User类使用String类型的标识为唯一标识。
+`User`类从`AggregateRoot`聚合根继承，并且指定了`User`类使用`String`类型的标识为唯一标识。
+
 **创建应用服务**
 
 应用服务包括一个服务类以及一个DTO类。
@@ -260,7 +261,7 @@ public class DefaultUserAppService implements ApplicationService {
     }
 }
 ```
-应用服务需要继承至'ApplicationService'类，在应用服务内创建用户模型、将用户模型转换为 DTO，并且通过'EventUtil'发布用户创建完成的事件
+应用服务需要继承至`ApplicationService`类，在应用服务内创建用户模型、将用户模型转换为 DTO，并且通过`EventUtil`发布用户创建完成的事件
 
 **创建应用**
 应用可以是 web，也可以是命令行工具等。 本例使用 junit
@@ -339,3 +340,6 @@ public class UserCreatedHandler implements EventHandler<UserDto> {
 在本例中没有创建用户模型的仓储实现，Nest 将使用默认的仓储实现，默认仓储使用本地缓存存储数据，可用于单元测试或集成测试，请勿用于生产环境。
 
 # 使用Springboot
+
+添加`nest-spring-boot-starter`依赖
+nest-spring-boot-starter
