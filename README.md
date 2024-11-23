@@ -40,7 +40,7 @@ Nest 框架是一个帮助开发人员快速实现基于领域驱动设计的技
 
 * [领域驱动设计的概念](#领域驱动设计的概念)
 * [快速入门](#快速入门)
-* [使用Spring boot](#使用Spring boot)
+* [使用Springboot](#使用Springboot)
 * [领域建模](#领域建模)
 * [应用服务](#应用服务)
 * [事件驱动](#事件驱动)
@@ -178,8 +178,6 @@ compile group: 'com.zhaofujun.nest', name: 'nest-ddd', version: '3.0.0'
 
 项目由领域模型、应用服务和应用程序、事件处理器组成。
 
-
-
 **创建用户领域模型**
 ```java
 package com.zhaofujun.nest.test;
@@ -239,6 +237,8 @@ public class UserDto {
     }
 
 }
+```
+
 ```java
 package com.zhaofujun.nest.test;
 
@@ -336,3 +336,6 @@ public class UserCreatedHandler implements EventHandler<UserDto> {
 }
 
 ```
+在本例中没有创建用户模型的仓储实现，Nest 将使用默认的仓储实现，默认仓储使用本地缓存存储数据，可用于单元测试或集成测试，请勿用于生产环境。
+
+# 使用Springboot
