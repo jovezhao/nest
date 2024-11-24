@@ -19,7 +19,7 @@ Nest 框架是一个帮助开发人员快速实现基于领域驱动设计的技
 * [事件管理](#事件管理)
 * [锁管理](#锁管理)
 * [Json序列化](#Json序列化)
-* [Provider 扩展](#Provider 扩展)
+* [Nest扩展](#Nest扩展)
 * [更多工具](#更多工具)
 
 
@@ -739,12 +739,103 @@ public interface EventMessageQuery extends Query {
 > - 应用服务位于领域服务上层，应用服务可调用领域服务而领域服务不能调用应用服务
 
 ## 事件驱动
-事件驱动是领域驱动设计（DDD）架构中的另一个重要组成部分。 它一般由应用服务引发，用于其它界限上下文异步处理业务以达到解耦的作用。
 
-事件传递的消息与应用服务一样，都以数据传输对象（DTO）形式表达。
+事件驱动架构（Event - Driven Architecture，EDA）是一种软件架构风格,是领域驱动设计（DDD）架构中的另一个重要组成部分。 它一般由事件生产者、事件消费者和事件通道组成，事件生产者一般由应用服务引发，用于与其它界限上下文异步处理业务以达到解耦的作用。
+
+事件传递的消息与应用服务一样，都以数据传输对象（DTO）形式承载数据对象。
 
 ## 使用nest-ddd实现应用服务和事件驱动。
 
-**`ApplicationService`**
+**`ApplicationService`** 接口
 
-标识一个类是应用服务，
+标识一个类是应用服务，使用`nest-spring-boot-starter`组件的情况下，需要使用`@Component` 标识为spring bean。也可以用`@AppService` 注解标识应用服务，此时可以不用实现接口`ApplicationService`。
+
+> tips1，可使用`ApplicationService`或`@AppService`标识应用服务，如果服务类无任何标识，Nest将不会跟踪服务方法内对实体的任何操作行为。可能会导致事件和实体无法进入仓储而丢失数据。
+
+- `getTransactionClass()` 方法，定义该应用服务所使用的事务方法， 默认值`Transaction.DefaultTransaction.class`，该方式不处理任何事务。使用`nest-spring-boot-starter`组件的情况下，可以使用`SpringTransaction.class`，该方式使用`spring`的事务管理机制处理，你也可以实现`Transaction`接口自定义你的事务管理方式，比如扩展一些分布式事务方法。
+
+**`@AppService`** 注解
+
+该注解是nest-spring的增强，需要先引入`nest-spring-boot-starter`组件。
+
+与`ApplicationService`接口一样，用于标识一个类为应用服务，使用`ApplicationService`接口标识的应用服务需要手动将服务类注册或添加`@Component`注解，以方便`Spring IOC`统一管理，而使用`@AppService`将自动注册到`Spring IOC`。
+
+- `transaction`属性，定义应用服务所使用的事务方法，默认值`Transaction.DefaultTransaction.class`，该方式不处理任何事务。也可以使用`SpringTransaction.class`，该方式使用`spring`的事务管理机制处理，你也可以实现`Transaction`接口自定义你的事务管理方式，比如扩展一些分布式事务方法。
+
+**`@AppServiceIgnore`** 注解
+
+标识为忽略应用服务，标识该注解的方法在被调用时不会被Nest跟踪管理。
+
+如果一个正常的应用服务方法内调用了一个注解该类的服务方法时，注解该类的服务方法内部的实体操作会被正常的应用服务方法接管而统一管理。
+
+**`EventUtil`** 工具类
+
+用于发布事件，使用该类发布的事件将通过消息中间件发布到不同应用的消费者。
+
+在Nest 中，EventUtil 发布一个事件后，事件消息将跟随业务数据一起持久化到本地事件表，然后由 NestEngine 启动的事件发布工作线程从业务库的本地事件表获取未发布的事件并提交到对应的消息中间件。
+
+- `publish`方法，用于发布一个事件，该方法有两个重载，区别在于可指定延迟发布事件的时间。事件发布时只需要指定事件名称和事件需要传递的 DTO对象。Nest将通过配置信息查找该事件将使用的事件通道，并使用相同的事件通道发布事件。 如果未配置通道，Nest使用默认的本地通道发布，这将可能导致跨应用的消费者无法获得事件通道。
+
+**`EventHandler`** 接口
+
+定义一个事件处理器（事件消费者），用于接受并处理事件消息。
+
+- `getEventName()`方法，定义该处理器处理的事件名称
+- `getEventDataClass()`方法，定义该处理器处理的事件数据的类型
+- `getConsumeMode()`方法，定义该处理器使用的消费模式，模式分推和拉两种
+- `handle()`方法，具体的处理事件消息的处理器
+
+在Nest中，定义了处理器后需要使用`NestEngine.registerEventHandler()`方法注册。注意，注册事件需要在`NestEngine.start()`前执行。在使用了`nest-spring-boot-starter`组件情况下， 只需要将`EventHandler`的实现类注册到`Spring Ioc`中即可，比如`@Component`注解。
+
+```java
+package com.zhaofujun.nest.test;
+
+import com.zhaofujun.nest.ddd.EventHandler;
+
+public class UserCreatedHandler implements EventHandler<UserDto> {
+
+    @Override
+    public String getEventName() {
+        return "user_created";
+    }
+
+    @Override
+    public Class<UserDto> getEventDataClass() {
+        return UserDto.class;
+    }
+
+    @Override
+    public void handle(UserDto eventData) {
+        System.out.println("接收到用户创建成功的事件：" + eventData.toString());
+    }
+
+}
+
+```
+**`@EventListener`** 注解
+
+该注解是nest-spring的增强，需要先引入`nest-spring-boot-starter`组件。
+
+与`EventHandler`一样，用于标识一个方法是消费者。标识该注解的类需要被 Spring 容器管理。服务方法签名是固定的
+
+- `eventName` 定义事件名称
+- `eventDataClass` 定义事件接收消息的类型
+- `consumeMode` 定义事件获取模式，包括推和拉两种模式
+
+
+```java
+package com.zhaofujun.nest.demo.handlers;
+
+import org.springframework.stereotype.Component;
+import com.zhaofujun.nest.boot.EventListener;
+import com.zhaofujun.nest.demo.appservices.UserDto;
+
+@Component
+public class UserEventHandlerListener {
+    @EventListener(eventDataClass = UserDto.class, eventName = "user_created")
+    public void userCreate(UserDto userDto) {
+        System.out.println("event listener");
+    }
+}
+
+```
