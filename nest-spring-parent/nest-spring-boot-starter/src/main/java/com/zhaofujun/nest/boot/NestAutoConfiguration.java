@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Import;
 import com.zhaofujun.nest.ddd.context.Transaction;
 import com.zhaofujun.nest.ddd.event.EventAppService;
 import com.zhaofujun.nest.ddd.event.EventMessageQuery;
+import com.zhaofujun.nest.ddd.event.EventMessageRepository;
 import com.zhaofujun.nest.inner.DefaultEventInfoRepository;
 
 @Import(NestBeanScannerRegistrar.class)
@@ -20,7 +21,7 @@ public class NestAutoConfiguration {
     }
 
     @Bean
-    public EventMessageQuery eventInfoQuery() {
+    public EventMessageRepository eventInfoQuery() {
         return new DefaultEventInfoRepository();
     }
 
