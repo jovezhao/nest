@@ -21,7 +21,7 @@ public interface Repository<T extends Entity> {
     /**
      * 根据 ID 获取实体。
      *
-     * @param tClass    实体类
+     * @param tClass     实体类
      * @param identifier ID
      * @return 实体
      */

@@ -15,6 +15,7 @@ import com.zhaofujun.nest.ddd.context.ServiceContextManager;
 import com.zhaofujun.nest.ddd.event.EventAppService;
 import com.zhaofujun.nest.ddd.event.EventChannelProvider;
 import com.zhaofujun.nest.ddd.event.EventHandlerWorker;
+import com.zhaofujun.nest.ddd.event.EventMessageRepository;
 import com.zhaofujun.nest.ddd.event.EventSenderWorker;
 import com.zhaofujun.nest.inner.DefaultCacheProvider;
 import com.zhaofujun.nest.inner.DefaultEventChannelProvider;
@@ -73,16 +74,20 @@ public class NestEngine {
         // 再加载默认缓存
         CacheManager.addCacheItem(NestConst.defaultCacheItem, NestConst.defaultCacheProvider, 5000);
         // 默认仓储依赖于默认缓存
-        RepositoryManager.addRepository(new DefaultRepository(), new DefaultEventInfoRepository());
+        RepositoryManager.addRepository(new DefaultRepository());
     }
 
     /**
-     * 设置事件应用服务
+     * 设置事件环境
      *
-     * @param eventAppService 事件应用服务
+     * @param eventAppService        事件应用服务
+     * @param eventMessageRepository 事件仓储实现
      */
-    public void setEventAppService(EventAppService eventAppService) {
+    public void initEventEnvironment(EventAppService eventAppService, EventMessageRepository eventMessageRepository) {
+        RepositoryManager.addRepository(eventMessageRepository);
         this.eventAppService = eventAppService;
+        this.eventAppService.setQuery(eventMessageRepository);
+
     }
 
     /**
@@ -123,14 +128,7 @@ public class NestEngine {
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void start() {
-        // 处理实体创建事件
-        MessageUtil.on(Lifecycle.Entity_New.name(), Entity.class, entity -> {
-            if (!EntityLoader.isLoading(entity.getClass(), entity.getId())) {
-                ServiceContext currentContext = ServiceContextManager.getCurrentContext();
-                if (currentContext != null)
-                    currentContext.addEntity(entity);
-            }
-        });
+        
 
         // 处理实体更新事件
         MessageUtil.on(Lifecycle.Entity_Updated.name(), (Collection<Entity> entityList) -> {

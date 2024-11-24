@@ -8,6 +8,10 @@ import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 
 import com.zhaofujun.nest.Lifecycle;
+import com.zhaofujun.nest.ddd.context.QueryContext;
+import com.zhaofujun.nest.ddd.context.QueryContextManager;
+import com.zhaofujun.nest.ddd.context.ServiceContext;
+import com.zhaofujun.nest.ddd.context.ServiceContextManager;
 import com.zhaofujun.nest.exception.VerifyFailedException;
 import com.zhaofujun.nest.utils.JsonUtil;
 import com.zhaofujun.nest.utils.MessageUtil;
@@ -17,7 +21,7 @@ import com.zhaofujun.nest.utils.MessageUtil;
  * 扩展自 DomainObject，用于表示领域模型中的实体对象。
  * 提供了基本的实体操作方法，如创建、删除、验证等。
  */
-public abstract class Entity<T extends Identifier> extends DomainObject {
+public abstract class Entity<T extends Identifier> implements DomainObject {
     /**
      * 实体的唯一标识符
      */
@@ -25,13 +29,23 @@ public abstract class Entity<T extends Identifier> extends DomainObject {
 
     /**
      * 构造函数
+     * 
      * 初始化实体的 ID，并在创建实体时发出消息通知。
-     *
+     * 
      * @param id 实体的唯一标识符
      */
     public Entity(T id) {
         this.id = id;
         // 创建实体时，发起消息通知
+        QueryContext currentContext = QueryContextManager.getCurrentContext();
+        ServiceContext serviceContext = ServiceContextManager.getCurrentContext();
+        // 完成实体的构造时，查看当前实体是否存在查询上下文，如果有，写入查询上下文。如果没有，再看是否存在服务上下文，如果有写入服务上下文，如果没有，不做处理。
+        if (currentContext != null) {
+            currentContext.addEntity(this);
+        } else if (serviceContext != null) {
+            serviceContext.addEntity(this);
+        }
+
         MessageUtil.emit(Lifecycle.Entity_New.name(), this);
     }
 
@@ -46,12 +60,14 @@ public abstract class Entity<T extends Identifier> extends DomainObject {
 
     /**
      * 实体加载完成后的初始化方法
-     * 发出消息通知，并保存当前状态的快照。
+     * 将产生加载时的快照
+     * 
      */
     public void _ready() {
         // 加载完成后，发起消息通知
-        MessageUtil.emit(Lifecycle.Entity_New.name(), this);
         this.beginSnapshot = JsonUtil.toJsonString(this);
+        MessageUtil.emit(Lifecycle.Entity_Ready.name(), this);
+
     }
 
     /**
@@ -66,7 +82,7 @@ public abstract class Entity<T extends Identifier> extends DomainObject {
      * 设置实体的属性值
      *
      * @param fieldName 属性名称
-     * @param value 属性值
+     * @param value     属性值
      */
     public void _setValue(String fieldName, Object value) {
         try {

@@ -18,7 +18,7 @@ public class ServiceMethodProcessor {
 
     public Object doInvoke() throws Throwable {
 
-        ServiceContext serviceContext = ServiceContextManager.newServiceContext(methodInvoker);
+        ServiceContext serviceContext = ServiceContextManager.newServiceContext();
 
         Object result = null;
 

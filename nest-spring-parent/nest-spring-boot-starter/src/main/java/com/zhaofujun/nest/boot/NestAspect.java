@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.zhaofujun.nest.ddd.ApplicationService;
 import com.zhaofujun.nest.ddd.context.MethodInvoker;
+import com.zhaofujun.nest.ddd.context.QueryMethodProcessor;
 import com.zhaofujun.nest.ddd.context.ServiceMethodProcessor;
 import com.zhaofujun.nest.ddd.context.Transaction;
 
@@ -41,7 +42,7 @@ public class NestAspect {
      * @throws Throwable 方法执行过程中可能抛出的异常
      */
     @Around("execution(public * * (..)) && @within(com.zhaofujun.nest.boot.AppService)")
-    public Object aroundFromAnnotation(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object aroundFromAnnotationForAppService(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodInvoker methodInvoker = new AspectMethodInvoker(joinPoint);
         // 从 appservice 注解中找到配置的事务管理器
         AppService appService = joinPoint.getTarget().getClass().getAnnotation(AppService.class);
@@ -52,12 +53,19 @@ public class NestAspect {
     }
 
     @Around("execution(public * com.zhaofujun.nest.ddd.ApplicationService+.* (..))")
-    public Object aroundFromInterface(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object aroundFromInterfaceForAppService(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodInvoker methodInvoker = new AspectMethodInvoker(joinPoint);
         var appService = (ApplicationService) joinPoint.getTarget();
         Class transactionClass = appService.getTransactionClass();
         Transaction transaction = (Transaction) applicationContext.getBean(transactionClass);
         ServiceMethodProcessor intercept = new ServiceMethodProcessor(methodInvoker, transaction);
+        return intercept.doInvoke();
+    }
+
+    @Around("execution(public * com.zhaofujun.nest.ddd.Query+.* (..))")
+    public Object aroundFromInterfaceForQuery(ProceedingJoinPoint joinPoint) throws Throwable {
+        MethodInvoker methodInvoker = new AspectMethodInvoker(joinPoint);
+        QueryMethodProcessor intercept = new QueryMethodProcessor(methodInvoker);
         return intercept.doInvoke();
     }
 

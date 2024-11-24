@@ -3,7 +3,6 @@ package com.zhaofujun.nest.ddd.context;
 import java.util.Comparator;
 
 import com.zhaofujun.nest.ddd.Entity;
-import com.zhaofujun.nest.ddd.Identifier;
 import com.zhaofujun.nest.ddd.Repository;
 
 public class Comparators {

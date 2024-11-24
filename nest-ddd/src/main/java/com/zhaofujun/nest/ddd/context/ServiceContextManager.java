@@ -9,7 +9,7 @@ public class ServiceContextManager {
 
     private static TransmittableThreadLocal<ServiceContextBox> threadLocal = new TransmittableThreadLocal<>();
 
-    public static ServiceContext newServiceContext(MethodInvoker methodInvoker) {
+    public static ServiceContext newServiceContext( ) {
         ServiceContext serviceContext = new ServiceContext();
         ServiceContextBox serviceContextBox = threadLocal.get();
         if (serviceContextBox == null) {

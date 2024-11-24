@@ -17,10 +17,8 @@ public class UserTest {
         NestEngine nestEngine = new NestEngine();
 
         EventAppService eventAppService = AppServiceUtil.create(EventAppService.class);
-        eventAppService.setQuery(new DefaultEventInfoRepository());
 
-        nestEngine.setEventAppService(eventAppService);
-
+        nestEngine.initEventEnvironment(eventAppService,new DefaultEventInfoRepository());
         // 注册事件处理器
         nestEngine.registerEventHandler(new UserCreatedHandler());
 

@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * 值对象抽象类，继承自 DomainObject 类。
  */
-public abstract class ValueObject extends DomainObject implements Serializable {
+public abstract class ValueObject implements DomainObject , Serializable {
     protected abstract Object[] getPropertiesForComparison();
 
     @Override
