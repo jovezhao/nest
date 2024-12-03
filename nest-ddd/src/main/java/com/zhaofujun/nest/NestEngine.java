@@ -9,21 +9,19 @@ import com.zhaofujun.nest.config.EventSenderConfig;
 import com.zhaofujun.nest.ddd.Entity;
 import com.zhaofujun.nest.ddd.EventHandler;
 import com.zhaofujun.nest.ddd.Repository;
-import com.zhaofujun.nest.ddd.context.EntityLoader;
-import com.zhaofujun.nest.ddd.context.ServiceContext;
-import com.zhaofujun.nest.ddd.context.ServiceContextManager;
 import com.zhaofujun.nest.ddd.event.EventAppService;
 import com.zhaofujun.nest.ddd.event.EventChannelProvider;
 import com.zhaofujun.nest.ddd.event.EventHandlerWorker;
+import com.zhaofujun.nest.ddd.event.EventItem;
 import com.zhaofujun.nest.ddd.event.EventMessageRepository;
 import com.zhaofujun.nest.ddd.event.EventSenderWorker;
 import com.zhaofujun.nest.inner.DefaultCacheProvider;
 import com.zhaofujun.nest.inner.DefaultEventChannelProvider;
-import com.zhaofujun.nest.inner.DefaultEventInfoRepository;
 import com.zhaofujun.nest.inner.DefaultRepository;
 import com.zhaofujun.nest.inner.DefaultLockProvider;
 import com.zhaofujun.nest.manager.CacheManager;
 import com.zhaofujun.nest.manager.EventHandlerManager;
+import com.zhaofujun.nest.manager.EventManager;
 import com.zhaofujun.nest.manager.ProviderManager;
 import com.zhaofujun.nest.manager.RepositoryManager;
 import com.zhaofujun.nest.provider.Container;
@@ -96,7 +94,7 @@ public class NestEngine {
      * @param container 容器，用于加载各种组件
      */
     @SuppressWarnings("unchecked")
-    public void initByContainer(Container container) {
+    public void registerByContainer(Container container) {
         if (container != null) {
             // 加载仓储
             RepositoryManager.addRepository(container.getInstances(Repository.class));
@@ -104,6 +102,8 @@ public class NestEngine {
             EventHandlerManager.addEventHandler(container.getInstances(EventHandler.class));
             // 加载provider(包括缓存提供者、事件通道提供者)
             ProviderManager.addProvider(container.getInstances(Provider.class));
+            // 加载事件
+            EventManager.addEventItem(container.getInstances(EventItem.class));
         }
     }
 
@@ -115,7 +115,17 @@ public class NestEngine {
         CacheManager.addCacheItem(cacheItems);
     }
 
+    public void registerEventItem(EventItem... eventItems) {
+        EventManager.addEventItem(eventItems);
+    }
+
+    /**
+     * 注册一个或多个仓储到仓储管理器中
+     * 
+     * @param repositories 一个或多个仓储实例
+     */
     public void registerRepository(Repository... repositories) {
+        // 将传入的一个或多个仓储实例添加到仓储管理器中
         RepositoryManager.addRepository(repositories);
     }
 
@@ -128,7 +138,6 @@ public class NestEngine {
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void start() {
-        
 
         // 处理实体更新事件
         MessageUtil.on(Lifecycle.Entity_Updated.name(), (Collection<Entity> entityList) -> {

@@ -28,7 +28,7 @@ public class ApplicationStartedListener implements ApplicationListener<Applicati
         // 容器启动成功后， 初始化 NestEngine
         NestEngine nestEngine = new NestEngine();
         nestEngine.initEventEnvironment(eventAppService, eventMessageRepository);
-        nestEngine.initByContainer(container);
+        nestEngine.registerByContainer(container);
         nestEngine.start();
     }
 
