@@ -4,11 +4,14 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:3.3.5'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:3.2.2'
     }
 }
 
 allprojects{
     group 'com.zhaofujun.nest'
-    version '3.0.0'
+    version 'SNAPSHOT'
+}
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }

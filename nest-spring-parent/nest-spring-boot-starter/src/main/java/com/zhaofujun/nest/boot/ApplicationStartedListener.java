@@ -15,15 +15,20 @@ import com.zhaofujun.nest.provider.Container;
 @Component
 public class ApplicationStartedListener implements ApplicationListener<ApplicationStartedEvent>, Ordered {
 
-    @Autowired
-    private EventAppService eventAppService;
-    @Autowired
-    private EventMessageRepository eventMessageRepository;
-    @Autowired
-    private Container container;
+    
+
+
+    
+
 
     @Override
     public void onApplicationEvent(ApplicationStartedEvent event) {
+
+         EventAppService eventAppService=event.getApplicationContext().getBean(EventAppService.class);
+
+        EventMessageRepository eventMessageRepository = event.getApplicationContext().getBean(EventMessageRepository.class);
+
+        Container container = event.getApplicationContext().getBean(Container.class);
 
         // 容器启动成功后， 初始化 NestEngine
         NestEngine nestEngine = new NestEngine();

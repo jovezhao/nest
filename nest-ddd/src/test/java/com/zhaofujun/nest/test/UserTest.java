@@ -13,18 +13,19 @@ import com.zhaofujun.nest.utils.AppServiceUtil;
 public class UserTest {
 
     @BeforeAll
-    public void initEngine() throws Throwable {
+    public static void initEngine() throws Throwable {
         NestEngine nestEngine = new NestEngine();
 
         EventAppService eventAppService = AppServiceUtil.create(EventAppService.class);
-
-        nestEngine.initEventEnvironment(eventAppService,new DefaultEventInfoRepository());
+        DefaultEventInfoRepository eventInfoRepository = new DefaultEventInfoRepository();
+        
+        nestEngine.initEventEnvironment(eventAppService, eventInfoRepository);
+        
         // 注册事件处理器
         nestEngine.registerEventHandler(new UserCreatedHandler());
 
         // 启动引擎
         nestEngine.start();
-
     }
 
     @Test
