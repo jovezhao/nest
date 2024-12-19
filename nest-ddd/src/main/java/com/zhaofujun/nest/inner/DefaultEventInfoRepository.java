@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.zhaofujun.nest.ddd.Identifier;
+import com.zhaofujun.nest.ddd.LongIdentifier;
 import com.zhaofujun.nest.ddd.event.EventMessageRepository;
 import com.zhaofujun.nest.ddd.event.EventState;
 import com.zhaofujun.nest.ddd.event.EventMessageModel;
@@ -50,7 +51,7 @@ public class DefaultEventInfoRepository extends EventMessageRepository {
     }
 
     @Override
-    public EventMessageModel<?> getEntityById(Class<? extends EventMessageModel<?>> tClass, Identifier identifier) {
+    public EventMessageModel<?> getEntityById(Class<EventMessageModel<?>> tClass, LongIdentifier identifier) {
         return eventList.stream()
                 .filter(p -> p.getClass().equals(tClass) && p.getId().equals(identifier))
                 .findFirst()

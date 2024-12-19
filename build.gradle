@@ -1,17 +1,46 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:3.2.2'
-    }
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'io.spring.dependency-management' version '1.1.6'
 }
 
 allprojects{
     group 'com.zhaofujun.nest'
-    version 'SNAPSHOT'
+    version '3.0.1'
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://repo.spring.io/milestone' }
+        maven { url 'https://repo.spring.io/snapshot' }
+    }
 }
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+
+    }
+    dependencyManagement {
+        imports {
+//            mavenBom "org.springframework.cloud:spring-cloud-dependencies:2022.0.0"
+//            mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:2022.0.0.0"
+            mavenBom "org.springframework.boot:spring-boot-dependencies:3.2.4"
+        }
+        dependencies {
+            dependency("javax.validation:validation-api:2.0.0.Final")
+            dependency("com.alibaba:transmittable-thread-local:2.11.0")
+            dependency("com.alibaba.fastjson2:fastjson2:2.0.10")
+            dependency("net.sf.ehcache:ehcache-core:2.6.6")
+            // implementation 'com.google.guava:guava:31.0.1-jre'
+            dependency("cglib:cglib:3.3.0")
+        }
+    }
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '-parameters'  // 添加这行
+        options.encoding = 'UTF-8'
+    }
 }

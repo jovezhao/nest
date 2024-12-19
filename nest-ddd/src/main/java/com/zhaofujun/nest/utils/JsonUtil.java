@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 
 public class JsonUtil {
 
-    public static String toJsonString(Entity<? extends Identifier> entity) {
+    public static String toJsonString(Entity entity) {
         JSONWriter.Context writerContext = new JSONWriter.Context(new EntityObjectWriterProvider());
         writerContext.config(JSONWriter.Feature.FieldBased, JSONWriter.Feature.WriteClassName,
                 JSONWriter.Feature.NotWriteRootClassName);
@@ -35,7 +35,6 @@ public class JsonUtil {
         return JSON.toJSONString(object);
     }
     
-    @SuppressWarnings("unchecked")
     public static <T> T parseObject(String text, Type clazz) {
         //
         if (text == null || text.isEmpty()) {

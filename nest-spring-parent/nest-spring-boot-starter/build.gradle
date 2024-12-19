@@ -1,5 +1,4 @@
 dependencies {
-    // implementation('org.springframework.boot:spring-boot-starter-web')
-    implementation("org.springframework:spring-tx")
-    implementation 'org.aspectj:aspectjtools'
+    api("org.springframework:spring-tx")
+    api 'org.aspectj:aspectjtools'
 }

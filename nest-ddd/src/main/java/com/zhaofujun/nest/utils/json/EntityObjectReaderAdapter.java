@@ -9,19 +9,19 @@ import com.zhaofujun.nest.ddd.Entity;
 import com.zhaofujun.nest.ddd.Identifier;
 import com.zhaofujun.nest.ddd.context.EntityLoader;
 
-public class EntityObjectReaderAdapter implements ObjectReader<Entity<? extends Identifier>> {
+public class EntityObjectReaderAdapter implements ObjectReader<Entity> {
 
-    private ObjectReader<Entity<? extends Identifier>> objectReader;
+    private ObjectReader<Entity> objectReader;
 
-    public void setObjectReader(ObjectReader<Entity<? extends Identifier>> objectReader) {
+    public void setObjectReader(ObjectReader<Entity> objectReader) {
         this.objectReader = objectReader;
     }
 
     @Override
-    public Entity<? extends Identifier> readObject(JSONReader jsonReader, Type fieldType, Object fieldName,
+    public Entity readObject(JSONReader jsonReader, Type fieldType, Object fieldName,
             long features) {
 
-        Entity<? extends Identifier> entity = null;
+        Entity entity = null;
         JSONObject objectMap = (JSONObject) jsonReader.readObject();
         try (JSONReader entityReader = JSONReader.of(jsonReader.getContext(), objectMap.toString())) {
             if (!objectMap.containsKey("__shorthand__")) {

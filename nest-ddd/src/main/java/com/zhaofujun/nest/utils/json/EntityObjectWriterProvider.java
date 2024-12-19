@@ -9,9 +9,8 @@ import java.lang.reflect.Type;
 @SuppressWarnings("rawtypes")
 public class EntityObjectWriterProvider extends ObjectWriterProvider {
 
-    EntityObjectWriterAdapter<Entity<? extends Identifier>> objectWriterAdapter = new EntityObjectWriterAdapter<>();
+    EntityObjectWriterAdapter<Entity> objectWriterAdapter = new EntityObjectWriterAdapter<>();
 
-    @SuppressWarnings("unchecked")
     @Override
     public ObjectWriter getObjectWriter(Type objectType, Class objectClass, boolean fieldBased) {
         ObjectWriter objectWriter = super.getObjectWriter(objectType, objectClass, fieldBased);

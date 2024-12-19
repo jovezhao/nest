@@ -1,19 +1,8 @@
 subprojects{
-    apply plugin: 'java'
-    apply plugin: 'java-library'
-
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
-    
-     java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(17)
-        }
-    }
     dependencies {
         implementation('org.springframework.boot:spring-boot-starter-web')
         // implementation project(':nest-ddd')
-        api project(':nest-spring-parent:nest-spring-boot-starter')
+        implementation project(':nest-spring-parent:nest-spring-boot-starter')
         // implementation('io.springfox:springfox-swagger2')
         // implementation('io.springfox:springfox-swagger-ui')
     }

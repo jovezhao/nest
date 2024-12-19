@@ -7,8 +7,8 @@ import com.zhaofujun.nest.ddd.context.EntityLoader;
 
 public class EntityUtil {
 
-    public static <T extends AggregateRoot<? extends Identifier>> T load(Class<T> clazz, Identifier identifier) {
-        T entity = (T) EntityLoader.load(clazz, identifier);
+    public static <T extends AggregateRoot<I>, I extends Identifier> T load(Class<T> clazz, I identifier) {
+        T entity = EntityLoader.load(clazz, identifier);
         return entity;
     }
 
@@ -22,7 +22,7 @@ public class EntityUtil {
         return className + "_" + identifier.toValue();
     }
 
-    public static String getKey(Entity<? extends Identifier> entity) {
+    public static String getKey(Entity entity) {
         return getKey(entity.getClass(), entity.getId());
     }
 

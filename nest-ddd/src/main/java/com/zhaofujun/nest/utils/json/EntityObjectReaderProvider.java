@@ -10,7 +10,6 @@ import java.lang.reflect.Type;
 public class EntityObjectReaderProvider extends ObjectReaderProvider {
     EntityObjectReaderAdapter entityObjectReaderAdapter = new EntityObjectReaderAdapter();
 
-    @SuppressWarnings("unchecked")
     @Override
     public ObjectReader getObjectReader(Type objectType, boolean fieldBased) {
         ObjectReader objectReader = super.getObjectReader(objectType, fieldBased);
@@ -22,7 +21,6 @@ public class EntityObjectReaderProvider extends ObjectReaderProvider {
         return objectReader;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public ObjectReader getObjectReader(long hashCode) {
 

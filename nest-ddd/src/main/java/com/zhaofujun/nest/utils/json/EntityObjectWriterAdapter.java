@@ -7,7 +7,7 @@ import com.zhaofujun.nest.ddd.Identifier;
 
 import java.lang.reflect.Type;
 
-public class EntityObjectWriterAdapter<T extends Entity<? extends Identifier>> implements ObjectWriter<T> {
+public class EntityObjectWriterAdapter<T extends Entity> implements ObjectWriter<T> {
 
     private ObjectWriter<T> objectWriter;
 
@@ -25,8 +25,7 @@ public class EntityObjectWriterAdapter<T extends Entity<? extends Identifier>> i
          * 如果当前级别为非顶级level>0，则使用简单模式，只保留id与类型即可。
          *
          */
-        @SuppressWarnings("unchecked")
-        Entity<? extends Identifier> entity = (Entity<? extends Identifier>) object;
+        Entity entity = (Entity) object;
         if (jsonWriter.level() > 0) {
             jsonWriter.startObject();
             writeKeyValue(jsonWriter, "@type", entity.getClassName());

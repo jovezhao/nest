@@ -93,7 +93,6 @@ public class NestEngine {
      *
      * @param container 容器，用于加载各种组件
      */
-    @SuppressWarnings("unchecked")
     public void registerByContainer(Container container) {
         if (container != null) {
             // 加载仓储
@@ -136,7 +135,7 @@ public class NestEngine {
     /**
      * 启动 NestEngine
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "rawtypes" })
     public void start() {
 
         // 处理实体更新事件

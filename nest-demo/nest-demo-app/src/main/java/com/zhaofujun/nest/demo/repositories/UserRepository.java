@@ -3,13 +3,12 @@ package com.zhaofujun.nest.demo.repositories;
 import java.lang.reflect.Type;
 import org.springframework.stereotype.Component;
 
-import com.zhaofujun.nest.ddd.Identifier;
 import com.zhaofujun.nest.ddd.LongIdentifier;
 import com.zhaofujun.nest.ddd.Repository;
 import com.zhaofujun.nest.demo.appservices.model.User;
 
 @Component
-public class UserRepository implements Repository<User> {
+public class UserRepository implements Repository<User, LongIdentifier> {
 
     @Override
     public void insert(User t) {
@@ -28,12 +27,12 @@ public class UserRepository implements Repository<User> {
     }
 
     @Override
-    public Type getEntityType() {
+    public Class getEntityClass() {
         return User.class;
     }
 
     @Override
-    public User getEntityById(Class<? extends User> tClass, Identifier identifier) {
+    public User getEntityById(Class<User> tClass, LongIdentifier identifier) {
         System.out.println("直接创建一个 User 类，模拟数据库查询");
 
         User user = new User((LongIdentifier) identifier);

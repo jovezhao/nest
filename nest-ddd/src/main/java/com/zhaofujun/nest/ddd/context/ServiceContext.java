@@ -64,7 +64,6 @@ public class ServiceContext {
         entities.add(entity);
     }
 
-    @SuppressWarnings("unchecked")
     public <T extends Entity> T load(Class<T> tClass, Identifier identifier) {
         return (T) entities.stream()
                 .filter(p -> p.getId().equals(identifier) && p.getClass().equals(tClass))
@@ -94,11 +93,11 @@ public class ServiceContext {
     }
 
     static class EntityInfo {
-        private Entity<? extends Identifier> entity;
+        private Entity entity;
         private EntityOperateEnum operateEnum;
-        private Repository<? extends Entity<? extends Identifier>> repository;
+        private Repository repository;
 
-        public static EntityInfo from(Entity<? extends Identifier> entity) {
+        public static EntityInfo from(Entity entity) {
 
             EntityOperateEnum operateEnum = EntityOperateEnum.create;
             if (StringUtil.isEmpty(entity.getBeginSnapshot()) && !entity.is__deleted())
@@ -111,14 +110,14 @@ public class ServiceContext {
             return new EntityInfo(entity, operateEnum, RepositoryManager.getRepository(entity.getClass()));
         }
 
-        private EntityInfo(Entity<? extends Identifier> entity, EntityOperateEnum operateEnum,
-                Repository<? extends Entity<? extends Identifier>> repository) {
+        private EntityInfo(Entity entity, EntityOperateEnum operateEnum,
+                Repository repository) {
             this.entity = entity;
             this.operateEnum = operateEnum;
             this.repository = repository;
         }
 
-        public Entity<? extends Identifier> getEntity() {
+        public Entity getEntity() {
             return entity;
         }
 
@@ -126,7 +125,7 @@ public class ServiceContext {
             return operateEnum;
         }
 
-        public Repository<? extends Entity<? extends Identifier>> getRepository() {
+        public Repository getRepository() {
             return repository;
         }
 

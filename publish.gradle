@@ -27,7 +27,14 @@
                 from components.java
                 artifact sourcesJar
                 artifact javadocJar
-
+                versionMapping {
+                    usage('java-api') {
+                        fromResolutionOf('runtimeClasspath')
+                    }
+                    usage('java-runtime') {
+                        fromResolutionResult()
+                    }
+                }
                 // https://docs.gradle.org/current/dsl/org.gradle.api.publish.maven.MavenPublication.html
                 pom {
                     name = "Nest"

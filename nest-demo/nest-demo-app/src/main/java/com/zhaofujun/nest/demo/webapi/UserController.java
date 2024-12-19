@@ -1,8 +1,8 @@
 package com.zhaofujun.nest.demo.webapi;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zhaofujun.nest.demo.appservices.UserAppservice;
@@ -13,8 +13,8 @@ public class UserController {
     @Autowired
     private UserAppservice userAppservice;
 
-    @PostMapping("/user/{id}")
-    public UserDto changeName(@PathVariable Long id) {
+    @GetMapping("/user/{id}")
+    public UserDto changeName(@PathVariable Long id) {  
         return userAppservice.changeName(id);
     }
 }

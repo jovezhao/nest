@@ -9,14 +9,14 @@ import java.util.Collection;
  * @param <T> 实体类型
  */
 @SuppressWarnings("rawtypes")
-public interface Repository<T extends Entity> {
+public interface Repository<T extends Entity<I>, I extends Identifier> {
 
     /**
      * 获取实体类型。
      *
      * @return 实体类型
      */
-    Type getEntityType();
+    Class getEntityClass();
 
     /**
      * 根据 ID 获取实体。
@@ -25,7 +25,7 @@ public interface Repository<T extends Entity> {
      * @param identifier ID
      * @return 实体
      */
-    T getEntityById(Class<? extends T> tClass, Identifier identifier);
+    T getEntityById(Class<T> tClass, I identifier);
 
     /**
      * 插入实体。

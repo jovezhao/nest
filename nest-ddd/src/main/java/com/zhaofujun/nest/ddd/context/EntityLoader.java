@@ -1,12 +1,9 @@
 package com.zhaofujun.nest.ddd.context;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.alibaba.ttl.TransmittableThreadLocal;
 import com.zhaofujun.nest.NestConst;
 import com.zhaofujun.nest.ddd.Entity;
 import com.zhaofujun.nest.ddd.Identifier;
+import com.zhaofujun.nest.ddd.Repository;
 import com.zhaofujun.nest.manager.CacheManager;
 import com.zhaofujun.nest.manager.RepositoryManager;
 import com.zhaofujun.nest.utils.EntityUtil;
@@ -14,7 +11,7 @@ import com.zhaofujun.nest.utils.cache.CacheClient;
 
 public class EntityLoader {
 
-    public static <T extends Entity<? extends Identifier>> T load(Class<T> tClass, Identifier identifier) {
+    public static <T extends Entity<I>, I extends Identifier> T load(Class<T> tClass, I identifier) {
         // 先通过上下文获取
         T entity = null;
         ServiceContext currentContext = ServiceContextManager.getCurrentContext();
@@ -32,7 +29,8 @@ public class EntityLoader {
             entity = cacheClient.get(tClass, EntityUtil.getKey(tClass, identifier));
             if (entity == null) {
                 // 最后通过仓储获取
-                entity = (T) RepositoryManager.getRepository(tClass).getEntityById(tClass, identifier);
+                Repository<T, I> repository = RepositoryManager.getRepository(tClass);
+                entity = repository.getEntityById(tClass, identifier);
                 if (entity != null)
                     // 获取成功后写入缓存
                     cacheClient.put(EntityUtil.getKey(entity), entity);
