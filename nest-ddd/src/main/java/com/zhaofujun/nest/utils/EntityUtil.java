@@ -5,6 +5,8 @@ import com.zhaofujun.nest.ddd.Entity;
 import com.zhaofujun.nest.ddd.Identifier;
 import com.zhaofujun.nest.ddd.context.EntityLoader;
 
+import java.util.Collection;
+
 public class EntityUtil {
 
     public static <T extends AggregateRoot<I>, I extends Identifier> T load(Class<T> clazz, I identifier) {

@@ -7,6 +7,7 @@ import java.util.Map;
 import com.zhaofujun.nest.NestConst;
 import com.zhaofujun.nest.provider.CacheProvider;
 import com.zhaofujun.nest.utils.JsonUtil;
+import com.zhaofujun.nest.utils.StringUtil;
 import com.zhaofujun.nest.utils.cache.CacheClient;
 import com.zhaofujun.nest.utils.cache.CacheItem;
 
@@ -15,14 +16,14 @@ public class CacheManager {
 
     public static void addCacheItem(String code, String cacheProviderCode, long idleSeconds) {
         CacheProvider cacheProvider = ProviderManager.get(CacheProvider.class, cacheProviderCode);
-        cachMap.put(code, new CacheClientImlp(code, cacheProvider, idleSeconds, false));
+        cachMap.put(code, new CacheClientImpl(code, cacheProvider, idleSeconds, false));
     }
 
     public static void addCacheItem(CacheItem... cacheItems) {
         for (CacheItem cacheItem : cacheItems) {
             CacheProvider cacheProvider = ProviderManager.get(CacheProvider.class, cacheItem.getCacheProviderCode());
             cachMap.put(cacheItem.getCode(),
-                    new CacheClientImlp(cacheItem.getCode(), cacheProvider, cacheItem.getMaxLiveSeconds(),
+                    new CacheClientImpl(cacheItem.getCode(), cacheProvider, cacheItem.getMaxLiveSeconds(),
                             cacheItem.isDisabled()));
         }
     }
@@ -46,16 +47,16 @@ public class CacheManager {
  *
  * @author Jove
  */
-class CacheClientImlp implements CacheClient {
+class CacheClientImpl implements CacheClient {
 
     private CacheProvider cacheProvider;
 
     private String code;
 
-    private long idleSeconds;
-    private boolean disabled;
+    private final long idleSeconds;
+    private final boolean disabled;
 
-    public CacheClientImlp(String code, CacheProvider cacheProvider, long idleSeconds, boolean disabled) {
+    public CacheClientImpl(String code, CacheProvider cacheProvider, long idleSeconds, boolean disabled) {
         this.cacheProvider = cacheProvider;
         this.code = code;
         this.idleSeconds = idleSeconds;
@@ -107,8 +108,10 @@ class CacheClientImlp implements CacheClient {
 
         Map<String, T> tMap = new HashMap<>();
         cacheProvider.get(code, keys).forEach((key, objecString) -> {
-            T object = JsonUtil.parseObject(objecString, tClass);
-            tMap.put(key, object);
+            if (!StringUtil.isEmpty(objecString)) {
+                T object = JsonUtil.parseObject(objecString, tClass);
+                tMap.put(key, object);
+            }
         });
         return tMap;
     }

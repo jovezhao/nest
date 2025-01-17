@@ -1,5 +1,6 @@
 package com.zhaofujun.nest.ddd;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.Collection;
 
@@ -8,15 +9,14 @@ import java.util.Collection;
  *
  * @param <T> 实体类型
  */
-@SuppressWarnings("rawtypes")
-public interface Repository<T extends Entity<I>, I extends Identifier> {
+public interface Repository<T extends Entity<I>, I extends Identifier> extends Query {
 
     /**
      * 获取实体类型。
      *
      * @return 实体类型
      */
-    Class getEntityClass();
+    Class<T> getEntityClass();
 
     /**
      * 根据 ID 获取实体。
@@ -26,6 +26,10 @@ public interface Repository<T extends Entity<I>, I extends Identifier> {
      * @return 实体
      */
     T getEntityById(Class<T> tClass, I identifier);
+
+    default Collection<T> getEntityByIds(Class<T> tClass, Collection<I> identifiers) {
+        return identifiers.stream().map(p -> getEntityById(tClass, p)).toList();
+    }
 
     /**
      * 插入实体。

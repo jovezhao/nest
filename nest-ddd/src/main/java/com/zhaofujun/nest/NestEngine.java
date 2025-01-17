@@ -45,17 +45,17 @@ public class NestEngine {
     /**
      * 事件处理线程列表
      */
-    private List<Thread> eventHandleThread = new ArrayList<>();
+    private final List<Thread> eventHandleThread = new ArrayList<>();
 
     /**
      * 事件发送配置
      */
-    private EventSenderConfig sendConfig = new EventSenderConfig();
+    private final EventSenderConfig sendConfig = new EventSenderConfig();
 
     /**
      * 事件处理配置
      */
-    private EventHandlerConfig handlerConfig = new EventHandlerConfig();
+    private final EventHandlerConfig handlerConfig = new EventHandlerConfig();
 
     /**
      * 事件应用服务
@@ -142,18 +142,14 @@ public class NestEngine {
         MessageUtil.on(Lifecycle.Entity_Updated.name(), (Collection<Entity> entityList) -> {
             // 删除缓存
             CacheClient cacheClient = CacheManager.getCacheClient(NestConst.entityCache);
-            entityList.forEach(entity -> {
-                cacheClient.remove(EntityUtil.getKey(entity));
-            });
+            entityList.forEach(entity -> cacheClient.remove(EntityUtil.getKey(entity)));
         });
 
         // 处理实体删除事件
         MessageUtil.on(Lifecycle.Entity_Deleted.name(), (Collection<Entity> entityList) -> {
             // 删除缓存
             CacheClient cacheClient = CacheManager.getCacheClient(NestConst.entityCache);
-            entityList.forEach(entity -> {
-                cacheClient.remove(EntityUtil.getKey(entity));
-            });
+            entityList.forEach(entity -> cacheClient.remove(EntityUtil.getKey(entity)));
         });
 
         // 启动消息发布线程
@@ -173,6 +169,6 @@ public class NestEngine {
      */
     public void stop() {
         eventSendThread.interrupt();
-        eventHandleThread.forEach(p -> p.interrupt());
+        eventHandleThread.forEach(Thread::interrupt);
     }
 }

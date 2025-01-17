@@ -1,11 +1,6 @@
 package com.zhaofujun.nest.ddd.context;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.zhaofujun.nest.Lifecycle;
@@ -18,16 +13,14 @@ import com.zhaofujun.nest.utils.StringUtil;
 
 public class ServiceContext {
 
-    private Set<Entity> entities = new HashSet<>();
+    private Set<Entity<? extends Identifier>> entities = new HashSet<>();
 
     public void begin() {
 
     }
 
     public void submit() {
-        entities.forEach(p -> {
-            p._end();
-        });
+        entities.forEach(Entity::_end);
 
         var map = analyse();
 
@@ -60,15 +53,25 @@ public class ServiceContext {
 
     }
 
-    public void addEntity(Entity entity) {
+    public void addEntity(Entity<?> entity) {
         entities.add(entity);
     }
 
-    public <T extends Entity> T load(Class<T> tClass, Identifier identifier) {
-        return (T) entities.stream()
+    public <T extends Entity<I>, I extends Identifier> T load(Class<T> tClass, I identifier) {
+        Entity<? extends Identifier> entity = entities.stream()
                 .filter(p -> p.getId().equals(identifier) && p.getClass().equals(tClass))
                 .findFirst()
                 .orElse(null);
+        return (T) entity;
+    }
+
+    public <T extends Entity<? extends I>, I extends Identifier> Map<I, T> load(Class<T> tClass, Collection<I> identifiers) {
+        Map<Identifier, T> map = new TreeMap<>();
+        Map<? extends Identifier, ? extends Entity<? extends Identifier>> entityMap = entities.stream()
+                .filter(p -> p.getClass().equals(tClass))
+                .filter(p -> identifiers.contains(p.getId()))
+                .collect(Collectors.toMap(Entity::getId, p -> p));
+        return (Map<I, T>) entityMap;
     }
 
     private Map<Repository, Map<EntityOperateEnum, Collection<Entity>>> analyse() {
@@ -111,7 +114,7 @@ public class ServiceContext {
         }
 
         private EntityInfo(Entity entity, EntityOperateEnum operateEnum,
-                Repository repository) {
+                           Repository repository) {
             this.entity = entity;
             this.operateEnum = operateEnum;
             this.repository = repository;

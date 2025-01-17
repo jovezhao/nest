@@ -4,9 +4,11 @@ import com.zhaofujun.nest.provider.CacheProvider;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class RedisCacheProvider implements CacheProvider {
     public final static String CODE = "REDIS_CACHE_PROVIDER";
@@ -29,22 +31,20 @@ public class RedisCacheProvider implements CacheProvider {
     @Override
     public String get(String groupName, String key) {
         String redisKey = getRedisKey(groupName, key);
-        String json = redisTemplate.opsForValue().get(redisKey);
-        return json;
+        return redisTemplate.opsForValue().get(redisKey);
 
     }
 
     @Override
-    public  Map<String, String> get(String groupName,  String... keys) {
+    public Map<String, String> get(String groupName, String... keys) {
 
         Map<String, String> result = new HashMap<>();
-
-        for (String key : keys) {
-            String t = get(groupName, key);
-            if (t != null)
-                result.put(key, t);
+        List<String> values = redisTemplate.opsForValue().multiGet(List.of(keys));
+        if (values != null) {
+            for (int i = 0; i < keys.length; i++) {
+                result.put(keys[i], values.get(i));
+            }
         }
-
         return result;
     }
 
@@ -77,6 +77,6 @@ public class RedisCacheProvider implements CacheProvider {
 
     @Override
     public String[] getKeys(String groupName) {
-        return redisTemplate.keys(groupName + "_*").toArray(new String[] {});
+        return redisTemplate.keys(groupName + "_*").toArray(new String[]{});
     }
 }
