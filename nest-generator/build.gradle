@@ -2,6 +2,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.freemarker/freemarker
     implementation 'org.freemarker:freemarker:2.3.31'
     implementation project(":nest-ddd")
+    implementation 'org.reflections:reflections:0.10.2'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 

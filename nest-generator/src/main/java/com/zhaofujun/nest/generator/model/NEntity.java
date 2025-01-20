@@ -1,15 +1,14 @@
 package com.zhaofujun.nest.generator.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class  NEntity extends NModel{
-    private final NIdentifier nIdentifier;
-    private final boolean _abstract;
-
-    public NEntity(String packageName, String name, NIdentifier nIdentifier, boolean _abstract) {
+    private  NIdentifier nIdentifier;
+    private  boolean _abstract;
+    public NEntity(String packageName, String name) {
         super(packageName, name);
-        this.nIdentifier = nIdentifier;
-        this._abstract = _abstract;
-    }
+    }    
 }

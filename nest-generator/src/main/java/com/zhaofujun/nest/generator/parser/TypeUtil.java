@@ -31,6 +31,7 @@ public class TypeUtil {
     public static boolean isPrimitive(final Class<?> clazz) {
         return clazz.isPrimitive();
     }
+   
     public static boolean isWrapper(Class<?> clazz) {
         return WRAPPER.contains(clazz);
     }

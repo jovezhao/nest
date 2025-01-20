@@ -2,13 +2,11 @@ package com.zhaofujun.nest.generator.model;
 
 import lombok.Getter;
 
-import java.util.List;
-
 /**
  * 定义类型
  */
 @Getter
-public class NClass {
+public abstract class NClass {
     private final String packageName;
     private final String name;
 
@@ -17,4 +15,3 @@ public class NClass {
         this.name = name;
     }
 }
-
